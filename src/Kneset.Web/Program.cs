@@ -152,6 +152,10 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+// Проверка живости для хостинга. Намеренно не обращается к БД: недоступность Supabase
+// не должна помечать деплой упавшим и перезапускать работающий инстанс.
+app.MapGet("/healthz", () => Results.Text("ok"));
+
 // Динамические OG-картинки (кэш 1 час: краулеры мессенджеров ходят часто).
 app.MapGet("/og/bills/{id:int}.png", async (
     int id, OgImageService og,
