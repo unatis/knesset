@@ -7,20 +7,26 @@ namespace Kneset.Web.Services;
 
 /// <summary>
 /// Фоновая синхронизация с API Кнессета: статусы → депутаты → фракции → законопроекты → инициаторы.
-/// Запускается при старте и далее каждые 6 часов. Инкрементальная: фильтрует по LastUpdatedDate
-/// с момента последней успешной синхронизации (SyncLogs).
+/// Запускается через 5 секунд после старта и далее повторяется каждые Sync:IntervalHours часов.
+/// Инкрементальная: фильтрует по LastUpdatedDate с момента последней успешной синхронизации (SyncLogs).
 /// </summary>
 public class KnessetSyncService(
     IDbContextFactory<AppDbContext> dbFactory,
     KnessetODataClient client,
     KnessetWebsiteClient websiteClient,
+    IConfiguration configuration,
     ILogger<KnessetSyncService> logger) : BackgroundService
 {
-    private static readonly TimeSpan Interval = TimeSpan.FromHours(6);
     private Dictionary<int, string> _statusDescById = [];
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        // Sync:IntervalHours=0 — режим «один прогон на холодный старт». Нужен там, где
+        // инстанс засыпает без трафика: во сне таймер не тикает, поэтому периодический цикл
+        // всё равно не сработает, а однократный прогон обновляет данные при каждом пробуждении.
+        var intervalHours = configuration.GetValue("Sync:IntervalHours", 6d);
+        var interval = intervalHours > 0 ? TimeSpan.FromHours(intervalHours) : (TimeSpan?)null;
+
         await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
 
         while (!stoppingToken.IsCancellationRequested)
@@ -38,7 +44,15 @@ public class KnessetSyncService(
                 logger.LogError(ex, "Синхронизация с Кнессетом завершилась ошибкой");
             }
 
-            await Task.Delay(Interval, stoppingToken);
+            if (interval is null)
+            {
+                logger.LogInformation(
+                    "Синхронизация выполнена однократно (Sync:IntervalHours=0), " +
+                    "следующая — при следующем запуске приложения");
+                return;
+            }
+
+            await Task.Delay(interval.Value, stoppingToken);
         }
     }
 
