@@ -1,11 +1,21 @@
 using Kneset.Core.Entities;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kneset.Infrastructure.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<AppUser>(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options)
+    : IdentityDbContext<AppUser>(options), IDataProtectionKeyContext
 {
+    /// <summary>
+    /// Ключи, которыми ASP.NET Core шифрует cookie аутентификации, антифорджери-токены
+    /// и ссылки для сброса пароля. В контейнере файловая система эфемерная, поэтому
+    /// связка ключей живёт в базе: иначе после каждого перезапуска все пользователи
+    /// оказываются разлогинены, а открытые формы перестают отправляться.
+    /// </summary>
+    public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
+
     public DbSet<Bill> Bills => Set<Bill>();
     public DbSet<Person> Persons => Set<Person>();
     public DbSet<BillInitiator> BillInitiators => Set<BillInitiator>();

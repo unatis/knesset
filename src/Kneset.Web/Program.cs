@@ -8,6 +8,7 @@ using Kneset.Web.Components;
 using Kneset.Web.Components.Account;
 using Kneset.Web.Services;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,13 @@ var connectionString = PostgresConnectionString.Normalize(
 
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+// Связка ключей шифрования — в базе, а не в файловой системе контейнера.
+// SetApplicationName фиксирует имя приложения: по умолчанию оно выводится из пути
+// к содержимому, а он на хостинге может измениться — и тогда ключи «потеряются».
+builder.Services.AddDataProtection()
+    .PersistKeysToDbContext<AppDbContext>()
+    .SetApplicationName("kneset-tracker");
 
 // --- Аутентификация (ASP.NET Identity, cookie) ---
 builder.Services.AddCascadingAuthenticationState();
