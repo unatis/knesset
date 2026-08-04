@@ -26,8 +26,15 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IStringLocalizer<SharedResource>, DbBackedLocalizer>();
 builder.Services.AddHostedService<UiTranslationSeedService>();
 
+// Normalize принимает и формат Npgsql, и URI «postgresql://…», который показывает Supabase.
+var connectionString = PostgresConnectionString.Normalize(
+    builder.Configuration.GetConnectionString("Default")
+    ?? throw new InvalidOperationException(
+        "Не задана строка подключения ConnectionStrings:Default " +
+        "(переменная окружения ConnectionStrings__Default)"));
+
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+    options.UseNpgsql(connectionString));
 
 // --- Аутентификация (ASP.NET Identity, cookie) ---
 builder.Services.AddCascadingAuthenticationState();
