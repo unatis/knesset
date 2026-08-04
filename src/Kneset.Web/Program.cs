@@ -8,6 +8,7 @@ using Kneset.Web.Components;
 using Kneset.Web.Components.Account;
 using Kneset.Web.Services;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -101,7 +102,21 @@ builder.Services.AddHostedService<ContextSeedService>();
 // Динамические OG-превью для шеринга.
 builder.Services.AddSingleton<OgImageService>();
 
+// На хостинге TLS обрывается на прокси, и приложению приходит обычный http,
+// а исходная схема передаётся в X-Forwarded-Proto. Без её учёта UseHttpsRedirection
+// зацикливает редиректы, а Navigation.BaseUri отдаёт http:// в абсолютных og:image —
+// краулеры мессенджеров такие превью игнорируют.
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    // Адрес прокси заранее неизвестен, доверяем заголовкам от него.
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
 var app = builder.Build();
+
+app.UseForwardedHeaders();
 
 string[] supportedCultures = ["ru", "en", "he", "ar"];
 app.UseRequestLocalization(new RequestLocalizationOptions()

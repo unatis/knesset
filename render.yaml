@@ -1,0 +1,16 @@
+services:
+  - name: kneset
+    type: web
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: frankfurt
+    plan: starter
+    # Blazor Server держит состояние страницы в цепи SignalR на конкретном инстансе,
+    # а балансировщик Render раскидывает запросы равномерно и не умеет закреплять
+    # сессию за инстансом. Поэтому масштабировать вширь нельзя — только один инстанс.
+    numInstances: 1
+    healthCheckPath: /
+    envVars:
+      # Строка подключения к Supabase задаётся в дашборде Render, в репозиторий не попадает.
+      - key: ConnectionStrings__Default
+        sync: false
