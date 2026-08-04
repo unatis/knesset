@@ -44,10 +44,7 @@ src/Kneset.Web             Blazor-приложение, фоновые серв�
 dotnet user-secrets set "ConnectionStrings:Default" "Host=...;Database=postgres;Username=...;Password=..." --project src/Kneset.Web
 ```
 
-2. Шрифты для OG-картинок не в репозитории по лицензионным причинам — положите два TTF
-   в `src/Kneset.Web/Fonts/`, см. [Fonts/README.md](src/Kneset.Web/Fonts/README.md).
-
-3. Применить миграции и запустить:
+2. Применить миграции и запустить:
 
 ```bash
 dotnet ef database update --project src/Kneset.Infrastructure --startup-project src/Kneset.Web

@@ -42,11 +42,10 @@ public class OgImageService
         _dbFactory = dbFactory;
 
         var fonts = new FontCollection();
-        // ВАЖНО: весь текст рендерится ОДНИМ мультискриптовым шрифтом (иврит + кириллица +
-        // латиница + цифры в одном файле). Смена шрифта внутри строки (fallback на отдельный
-        // ивритский шрифт) ломает bidi-порядок цифр, а сабсет NotoSansHebrew имел битые метрики.
-        // TODO: сейчас это копия Arial (Fonts/Title-Multiscript.ttf) — перед публичным деплоем
-        // заменить на свободный мультискриптовый шрифт (например, полную сборку Rubik).
+        // ВАЖНО: весь текст рендерится ОДНИМ мультискриптовым шрифтом (иврит, арабский,
+        // кириллица, латиница и цифры в одном файле) — Rubik под OFL, см. Fonts/README.md.
+        // Смешивать шрифты внутри строки нельзя: при fallback'е на отдельный ивритский шрифт
+        // bidi-движок переставляет цифры («2026» → «0226»).
         var multiBold = fonts.Add(Path.Combine(env.ContentRootPath, "Fonts", "Title-Multiscript.ttf"));
         var multiRegular = fonts.Add(Path.Combine(env.ContentRootPath, "Fonts", "Body-Multiscript.ttf"));
 
