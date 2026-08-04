@@ -20,6 +20,14 @@ WORKDIR /app
 COPY --from=build /app ./
 
 ENV ASPNETCORE_ENVIRONMENT=Production
+
+# По умолчанию хост следит за appsettings.json через inotify, чтобы подхватывать
+# правки на лету. В контейнере файлы не меняются за время его жизни, а лимит
+# inotify-наблюдателей на хосте общий и на маленьких инстансах быстро исчерпан —
+# приложение падало при старте с «user limit (128) on the number of inotify
+# instances has been reached».
+ENV DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
+
 EXPOSE 10000
 
 # Render передаёт порт в переменной PORT и ждёт, что сервис слушает 0.0.0.0.
