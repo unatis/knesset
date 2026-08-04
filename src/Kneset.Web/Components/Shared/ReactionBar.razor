@@ -1,0 +1,58 @@
+@inject IStringLocalizer<SharedResource> L
+
+@* Трёхцветный бар реакций: зелёный (за) → жёлтый (не определился) → красный (против).
+   Всегда показывает размер выборки — процент без числа участников вводит в заблуждение. *@
+@if (Total > 0)
+{
+    <div>
+        <div class="progress" style="height:@(Compact ? 6 : 12)px">
+            <div class="progress-bar bg-success" style="width:@Percent(Support)%"
+                 title="@L["For"]: @Support"></div>
+            <div class="progress-bar bg-warning" style="width:@Percent(Undecided)%"
+                 title="@L["DontKnow"]: @Undecided"></div>
+            <div class="progress-bar bg-danger" style="width:@Percent(Oppose)%"
+                 title="@L["Against"]: @Oppose"></div>
+        </div>
+        @if (!Compact)
+        {
+            <div class="d-flex justify-content-between mt-1">
+                <small><span class="text-success">●</span> @L["For"] @Support (@Percent(Support)%)</small>
+                <small><span class="text-warning">●</span> 🤔 @Undecided (@Percent(Undecided)%)</small>
+                <small><span class="text-danger">●</span> @L["Against"] @Oppose (@Percent(Oppose)%)</small>
+            </div>
+            <small class="text-muted d-block mt-1">
+                @L["Votes"] @Total
+                @if (Decided > 0)
+                {
+                    <span> · @L["AmongDecided"] @(Support * 100 / Decided)%</span>
+                }
+                @if (Total < 10)
+                {
+                    <span> · ⚠ @L["SmallSample"]</span>
+                }
+            </small>
+        }
+        else
+        {
+            <small class="text-muted">@Total 🗳</small>
+        }
+    </div>
+}
+else if (!Compact)
+{
+    <small class="text-muted">@L["NoVotes"]</small>
+}
+
+@code {
+    [Parameter] public int Support { get; set; }
+    [Parameter] public int Oppose { get; set; }
+    [Parameter] public int Undecided { get; set; }
+
+    /// <summary>Компактный режим для списков: только полоска и число голосов.</summary>
+    [Parameter] public bool Compact { get; set; }
+
+    private int Total => Support + Oppose + Undecided;
+    private int Decided => Support + Oppose;
+
+    private int Percent(int part) => Total == 0 ? 0 : (int)Math.Round(part * 100.0 / Total);
+}

@@ -1,0 +1,102 @@
+﻿@page "/members/{Id:int}"
+@rendermode InteractiveServer
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@(_member?.FullName ?? L["Nav_Members"])</PageTitle>
+
+@if (_member is null)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else
+{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/members">@L["Nav_Members"]</a></li>
+            <li class="breadcrumb-item active" dir="rtl" lang="he">@_member.FullName</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex align-items-center gap-3 mb-2">
+        <MemberPhoto Member="_member" Size="96" />
+        <div>
+            <h2 dir="rtl" lang="he" class="d-inline-block mb-0">@_member.FullName</h2>
+            @if (_member.IsCurrent)
+            {
+                <span class="badge bg-success ms-2 align-middle">@L["Members_Current"]</span>
+            }
+        </div>
+    </div>
+
+    <table class="table mt-3" style="max-width:600px">
+        <tbody>
+            @if (_member.FactionName is not null)
+            {
+                <tr>
+                    <th style="width:180px">@L["Faction"]</th>
+                    <td dir="rtl" lang="he" style="text-align:left">@_member.FactionName</td>
+                </tr>
+            }
+            @if (_member.Email is not null)
+            {
+                <tr>
+                    <th>Email</th>
+                    <td><a href="mailto:@_member.Email">@_member.Email</a></td>
+                </tr>
+            }
+            @if (_member.KnessetSiteId is not null)
+            {
+                <tr>
+                    <th>@L["MemberProfile"]</th>
+                    <td>
+                        <a href="https://main.knesset.gov.il/mk/apps/mk/mk-personal-details/@_member.KnessetSiteId"
+                           target="_blank" rel="noopener">@L["OpenAtKnesset"]</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h5 class="mt-4">@L["Nav_Bills"] (@_bills.Count)</h5>
+    @if (_bills.Count == 0)
+    {
+        <p class="text-muted">@L["Member_NoBills"]</p>
+    }
+    else
+    {
+        <div class="list-group">
+            @foreach (var bill in _bills)
+            {
+                <a href="/bills/@bill.Id" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <span dir="rtl" lang="he">@bill.Name</span>
+                        <BillStatusBadge StatusDesc="@bill.StatusDesc" />
+                    </div>
+                    <small class="text-muted">@L["Knesset"] @bill.KnessetNum</small>
+                </a>
+            }
+        </div>
+    }
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private Person? _member;
+    private List<Bill> _bills = [];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        _member = await db.Persons.AsNoTracking().FirstOrDefaultAsync(p => p.Id == Id);
+        if (_member is not null)
+        {
+            _bills = await db.BillInitiators.AsNoTracking()
+                .Where(bi => bi.PersonId == Id)
+                .Select(bi => bi.Bill)
+                .OrderByDescending(b => b.LastUpdatedDate)
+                .ToListAsync();
+        }
+    }
+}

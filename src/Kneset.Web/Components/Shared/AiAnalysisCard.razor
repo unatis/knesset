@@ -1,0 +1,126 @@
+@using System.Globalization
+@using System.Text.Json
+@implements IDisposable
+@inject IStringLocalizer<SharedResource> L
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject Kneset.Web.Services.AnalysisQueue Queue
+
+<div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>@L["Ai_Header"]</span>
+        @if (_analysis is not null)
+        {
+            <small class="text-muted">
+                <span class="badge bg-light text-dark border">@_shownLang.ToUpperInvariant()</span>
+                @_generatedAt?.ToLocalTime().ToString("dd.MM.yyyy HH:mm") · @_modelVersion
+            </small>
+        }
+    </div>
+    <div class="card-body">
+        @if (_loading)
+        {
+            <div class="text-center p-3"><div class="spinner-border spinner-border-sm"></div></div>
+        }
+        else if (_analysis is null && _generating)
+        {
+            <div class="d-flex align-items-center gap-2 text-muted">
+                <div class="spinner-border spinner-border-sm"></div>
+                <span>@L["Ai_Generating"]</span>
+            </div>
+        }
+        else if (_analysis is null)
+        {
+            <p class="text-muted mb-0">@L["Ai_Unavailable"] <button class="btn btn-sm btn-outline-primary" @onclick="RequestAnalysis">@L["Ai_Retry"]</button></p>
+        }
+        else
+        {
+            @if (_shownLang != UserLang && _generating)
+            {
+                <div class="alert alert-info py-2 d-flex align-items-center gap-2">
+                    <div class="spinner-border spinner-border-sm"></div>
+                    <span>@L["Ai_TranslationPending"]</span>
+                </div>
+            }
+
+            <AnalysisView Analysis="_analysis" />
+
+            <hr />
+            <small class="text-muted">@L["Ai_Disclaimer"]</small>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public int BillId { get; set; }
+
+    private bool _loading = true;
+    private bool _generating;
+    private BillAnalysisResult? _analysis;
+    private DateTime? _generatedAt;
+    private string? _modelVersion;
+    private string _shownLang = "";
+
+    private static string UserLang => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Queue.Completed += OnAnalysisCompleted;
+        await LoadAsync();
+        _loading = false;
+
+        // Свежего анализа на языке пользователя нет — ставим в очередь
+        // (воркер сам сгенерирует мастер и/или перевод).
+        if (_shownLang != UserLang || _analysis is null)
+        {
+            RequestAnalysis();
+        }
+    }
+
+    private async Task LoadAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        var fresh = await db.BillAnalyses.AsNoTracking()
+            .Where(a => a.BillId == BillId && !a.IsStale)
+            .OrderByDescending(a => a.GeneratedAt)
+            .ToListAsync();
+
+        // Фолбэк: язык пользователя → английский мастер → любой свежий.
+        var entity = fresh.FirstOrDefault(a => a.LanguageCode == UserLang)
+                     ?? fresh.FirstOrDefault(a => a.LanguageCode == "en")
+                     ?? fresh.FirstOrDefault();
+
+        if (entity is not null)
+        {
+            try
+            {
+                _analysis = JsonSerializer.Deserialize<BillAnalysisResult>(entity.AnalysisJson);
+                _generatedAt = entity.GeneratedAt;
+                _modelVersion = entity.ModelVersion;
+                _shownLang = entity.LanguageCode;
+            }
+            catch (JsonException)
+            {
+                _analysis = null;
+            }
+        }
+        _generating = Queue.IsPendingAnyLang(BillId);
+    }
+
+    private void RequestAnalysis()
+    {
+        Queue.TryEnqueue(BillId, UserLang);
+        _generating = true;
+    }
+
+    private void OnAnalysisCompleted(int billId, string lang)
+    {
+        if (billId != BillId) return;
+        _ = InvokeAsync(async () =>
+        {
+            await LoadAsync();
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose() => Queue.Completed -= OnAnalysisCompleted;
+}

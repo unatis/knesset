@@ -1,0 +1,116 @@
+@using Kneset.Core.Entities
+@inject IStringLocalizer<SharedResource> L
+@inject IDbContextFactory<AppDbContext> DbFactory
+
+<div class="card mb-3">
+    <div class="card-header">@L["Reaction_Header"]</div>
+    <div class="card-body">
+        <ReactionBar Support="_support" Oppose="_oppose" Undecided="_undecided" />
+
+        <AuthorizeView>
+            <Authorized>
+                <div class="btn-group w-100 mt-3" role="group">
+                    <button class="btn @(_myReaction == ReactionKind.Support ? "btn-success" : "btn-outline-success")"
+                            disabled="@_busy" @onclick="() => VoteAsync(ReactionKind.Support)">
+                        👍 @L["For"]
+                    </button>
+                    <button class="btn @(_myReaction == ReactionKind.Undecided ? "btn-warning" : "btn-outline-warning")"
+                            disabled="@_busy" @onclick="() => VoteAsync(ReactionKind.Undecided)">
+                        🤔 @L["DontKnow"]
+                    </button>
+                    <button class="btn @(_myReaction == ReactionKind.Oppose ? "btn-danger" : "btn-outline-danger")"
+                            disabled="@_busy" @onclick="() => VoteAsync(ReactionKind.Oppose)">
+                        👎 @L["Against"]
+                    </button>
+                </div>
+                <small class="text-muted d-block mt-2">@L["Reaction_InitiativeNote"]</small>
+            </Authorized>
+            <NotAuthorized>
+                <a class="btn btn-outline-primary w-100 mt-3" href="Account/Login?returnUrl=/initiatives/@InitiativeId">
+                    @L["LoginToVote"]
+                </a>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public int InitiativeId { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private int _support;
+    private int _oppose;
+    private int _undecided;
+    private ReactionKind? _myReaction;
+    private string? _userId;
+    private bool _busy;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (AuthState is not null)
+        {
+            var auth = await AuthState;
+            _userId = auth.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        }
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        var counts = await db.InitiativeReactions
+            .Where(r => r.InitiativeId == InitiativeId)
+            .GroupBy(r => r.Kind)
+            .Select(g => new { Kind = g.Key, Count = g.Count() })
+            .ToListAsync();
+
+        _support = counts.FirstOrDefault(c => c.Kind == ReactionKind.Support)?.Count ?? 0;
+        _oppose = counts.FirstOrDefault(c => c.Kind == ReactionKind.Oppose)?.Count ?? 0;
+        _undecided = counts.FirstOrDefault(c => c.Kind == ReactionKind.Undecided)?.Count ?? 0;
+
+        _myReaction = _userId is null
+            ? null
+            : await db.InitiativeReactions
+                .Where(r => r.InitiativeId == InitiativeId && r.UserId == _userId)
+                .Select(r => (ReactionKind?)r.Kind)
+                .FirstOrDefaultAsync();
+    }
+
+    private async Task VoteAsync(ReactionKind kind)
+    {
+        if (_userId is null || _busy) return;
+        _busy = true;
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+        var existing = await db.InitiativeReactions
+            .FirstOrDefaultAsync(r => r.InitiativeId == InitiativeId && r.UserId == _userId);
+
+        try
+        {
+            if (existing is null)
+            {
+                db.InitiativeReactions.Add(new InitiativeReaction
+                {
+                    InitiativeId = InitiativeId,
+                    UserId = _userId,
+                    Kind = kind,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
+            }
+            else if (existing.Kind != kind)
+            {
+                existing.Kind = kind;
+                existing.UpdatedAt = DateTime.UtcNow;
+            }
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            // Гонка двойного клика с уникальным индексом — перечитываем состояние.
+        }
+
+        await LoadAsync();
+        _busy = false;
+    }
+}

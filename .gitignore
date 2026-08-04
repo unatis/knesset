@@ -1,0 +1,18 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+artifacts/
+
+## Локальные настройки инструментов
+.claude/settings.local.json
+
+## Проприетарные шрифты
+# Сейчас Fonts/*-Multiscript.ttf — копии Arial из C:\Windows\Fonts (см. Fonts/README.md).
+# Лицензия Arial не разрешает распространение, поэтому файлы не коммитятся.
+# Разработчику нужно положить свои TTF под этими именами; после замены на свободный
+# мультискриптовый шрифт эти строки можно удалить и закоммитить шрифты в репозиторий.
+src/Kneset.Web/Fonts/Title-Multiscript.ttf
+src/Kneset.Web/Fonts/Body-Multiscript.ttf

@@ -1,0 +1,150 @@
+﻿@using System.Text.Json
+@inject IStringLocalizer<SharedResource> L
+@implements IDisposable
+@inject Kneset.Web.Services.DraftQueue Queue
+
+<div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>@L["Draft_Header"]</span>
+        @if (_draft is not null && Initiative?.ModelVersion is not null)
+        {
+            <small class="text-muted">@Initiative.ModelVersion</small>
+        }
+    </div>
+    <div class="card-body">
+        @if (_generating)
+        {
+            <div class="d-flex align-items-center gap-2 text-muted">
+                <div class="spinner-border spinner-border-sm"></div>
+                <span>@L["Draft_Generating"]</span>
+            </div>
+        }
+        else if (_draft is null)
+        {
+            @if (IsAuthor)
+            {
+                <p class="text-muted">@L["Draft_Intro"]</p>
+                <button class="btn btn-outline-primary" @onclick="RequestDraft">
+                    @L["Draft_Generate"]
+                </button>
+            }
+            else
+            {
+                <p class="text-muted mb-0">@L["Draft_NotYet"]</p>
+            }
+        }
+        else
+        {
+            @if (_draft.ProviderNote is not null)
+            {
+                <div class="alert alert-warning py-2">@_draft.ProviderNote</div>
+            }
+
+            <h6>@L["Draft_Goal"]</h6>
+            <p>@_draft.Goal</p>
+
+            @if (_draft.ProposedChanges.Count > 0)
+            {
+                <h6>@L["Draft_Changes"]</h6>
+                <ol>
+                    @foreach (var change in _draft.ProposedChanges)
+                    {
+                        <li>@change</li>
+                    }
+                </ol>
+            }
+
+            @if (_draft.AffectedLaws.Count > 0)
+            {
+                <h6>@L["Draft_Laws"]</h6>
+                <ul>
+                    @foreach (var law in _draft.AffectedLaws)
+                    {
+                        <li>@law</li>
+                    }
+                </ul>
+            }
+
+            <h6>@L["Draft_Note"]</h6>
+            <p style="white-space:pre-line">@_draft.ExplanatoryNote</p>
+
+            @if (_draft.FinancialImpactNote is not null || _draft.SocialImpactNote is not null)
+            {
+                <h6>@L["Draft_Impact"]</h6>
+                <ul>
+                    @if (_draft.FinancialImpactNote is not null)
+                    {
+                        <li><strong>@L["Draft_Financial"]:</strong> @_draft.FinancialImpactNote</li>
+                    }
+                    @if (_draft.SocialImpactNote is not null)
+                    {
+                        <li><strong>@L["Draft_Social"]:</strong> @_draft.SocialImpactNote</li>
+                    }
+                </ul>
+            }
+
+            @if (_draft.Risks.Count > 0)
+            {
+                <h6>@L["Draft_Risks"]</h6>
+                <ul>
+                    @foreach (var risk in _draft.Risks)
+                    {
+                        <li>@risk</li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public CitizenInitiative? Initiative { get; set; }
+    [Parameter] public bool IsAuthor { get; set; }
+    [Parameter] public EventCallback OnChanged { get; set; }
+
+    private InitiativeDraftResult? _draft;
+    private bool _generating;
+
+    protected override void OnParametersSet()
+    {
+        Queue.Completed -= OnDraftCompleted;
+        Queue.Completed += OnDraftCompleted;
+
+        if (Initiative?.StructuredJson is not null)
+        {
+            try
+            {
+                _draft = JsonSerializer.Deserialize<InitiativeDraftResult>(Initiative.StructuredJson);
+            }
+            catch (JsonException)
+            {
+                _draft = null;
+            }
+        }
+        else
+        {
+            _draft = null;
+        }
+        _generating = Initiative is not null && Queue.IsPending(Initiative.Id);
+    }
+
+    private void RequestDraft()
+    {
+        if (Initiative is null) return;
+        Queue.TryEnqueue(Initiative.Id);
+        _generating = true;
+    }
+
+    private void OnDraftCompleted(int initiativeId)
+    {
+        if (Initiative is null || initiativeId != Initiative.Id) return;
+        _ = InvokeAsync(async () =>
+        {
+            _generating = false;
+            await OnChanged.InvokeAsync(); // родитель перезагрузит Initiative с StructuredJson
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose() => Queue.Completed -= OnDraftCompleted;
+}

@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Kneset.Core/Kneset.Core.csproj" />
+    <Project Path="src/Kneset.Infrastructure/Kneset.Infrastructure.csproj" />
+    <Project Path="src/Kneset.Web/Kneset.Web.csproj" />
+  </Folder>
+</Solution>

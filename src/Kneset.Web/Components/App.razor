@@ -1,0 +1,44 @@
+@using System.Globalization
+
+<!DOCTYPE html>
+<html lang="@Lang" dir="@Dir">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <ResourcePreloader />
+    @if (Dir == "rtl")
+    {
+        <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.rtl.min.css"]" />
+    }
+    else
+    {
+        <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
+    }
+    <link rel="stylesheet" href="@Assets["app.css"]" />
+    <link rel="stylesheet" href="@Assets["Kneset.Web.styles.css"]" />
+    <ImportMap />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    @* HeadOutlet ПЕРЕД дефолтными og-тегами: краулеры берут первый og:image,
+       поэтому страничные теги (HeadContent) должны идти раньше. *@
+    <HeadOutlet />
+    <meta property="og:site_name" content="Kneset Tracker" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og-cover.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+</head>
+
+<body>
+    <Routes />
+    <ReconnectModal />
+    <script src="@Assets["_framework/blazor.web.js"]"></script>
+    <script src="js/share.js"></script>
+</body>
+
+</html>
+
+@code {
+    private static string Lang => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    private static string Dir => Lang is "he" or "ar" ? "rtl" : "ltr";
+}

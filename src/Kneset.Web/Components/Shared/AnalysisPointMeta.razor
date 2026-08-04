@@ -1,0 +1,30 @@
+﻿@inject IStringLocalizer<SharedResource> L
+@* Метаданные пункта анализа: тип утверждения, источник, уверенность. *@
+@if (Point is not null)
+{
+    <small class="text-muted">
+        @KindLabel
+        @if (Point.SourceRef is not null)
+        {
+            <span> · @L["Meta_Source"]: @Point.SourceRef</span>
+        }
+        @if (Point.Confidence is not null)
+        {
+            <span> · @L["Meta_Confidence"] @((int)(Point.Confidence.Value * 100))%</span>
+        }
+    </small>
+}
+
+@code {
+    [Parameter] public AnalysisPoint? Point { get; set; }
+
+    private string KindLabel => Point?.Kind switch
+    {
+        "fact" => L["Meta_Fact"],
+        "inference" => L["Meta_Inference"],
+        "risk" => L["Meta_Risk"],
+        "position" => L["Meta_Position"],
+        "insufficient_data" => L["Meta_NoData"],
+        _ => Point?.Kind ?? ""
+    };
+}

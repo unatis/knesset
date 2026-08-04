@@ -1,0 +1,30 @@
+@* Круглое фото депутата с заглушкой-инициалами, когда фото нет. *@
+@if (Member?.PhotoUrl is not null)
+{
+    <img src="@Member.PhotoUrl" alt="@Member.FullName" loading="lazy"
+         style="width:@(Size)px;height:@(Size)px;border-radius:50%;object-fit:cover;flex-shrink:0" />
+}
+else
+{
+    <div class="d-flex align-items-center justify-content-center bg-secondary-subtle text-secondary"
+         style="width:@(Size)px;height:@(Size)px;border-radius:50%;flex-shrink:0;font-size:@(Size / 2.5)px">
+        @Initials
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired] public Person? Member { get; set; }
+    [Parameter] public int Size { get; set; } = 64;
+
+    private string Initials
+    {
+        get
+        {
+            if (Member is null) return "?";
+            var first = Member.FirstName.Length > 0 ? Member.FirstName[..1] : "";
+            var last = Member.LastName.Length > 0 ? Member.LastName[..1] : "";
+            var initials = first + last;
+            return initials.Length > 0 ? initials : "👤";
+        }
+    }
+}

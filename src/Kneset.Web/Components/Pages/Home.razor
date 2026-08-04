@@ -1,0 +1,57 @@
+@page "/"
+@rendermode InteractiveServer
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["Brand"]</PageTitle>
+
+<h1>@L["Brand"]</h1>
+<p class="lead">@L["Home_Lead"]</p>
+
+<div class="row g-3 mt-2" style="max-width:700px">
+    <div class="col-md-6">
+        <a href="/bills" class="card text-decoration-none h-100">
+            <div class="card-body text-center">
+                <div style="font-size:2rem">📜</div>
+                <h5 class="card-title">@L["Nav_Bills"]</h5>
+                <p class="display-6 mb-0">@(_billCount?.ToString() ?? "…")</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a href="/members" class="card text-decoration-none h-100">
+            <div class="card-body text-center">
+                <div style="font-size:2rem">🧑‍⚖️</div>
+                <h5 class="card-title">@L["Home_MembersCard"]</h5>
+                <p class="display-6 mb-0">@(_memberCount?.ToString() ?? "…")</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+@if (_lastSync is not null)
+{
+    <p class="text-muted mt-4">@L["Home_LastSync"] @_lastSync.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+}
+else if (_billCount == 0)
+{
+    <div class="alert alert-warning mt-4" style="max-width:700px">
+        @L["Home_FirstSync"]
+    </div>
+}
+
+@code {
+    private int? _billCount;
+    private int? _memberCount;
+    private DateTime? _lastSync;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        _billCount = await db.Bills.CountAsync();
+        _memberCount = await db.Persons.CountAsync(p => p.IsCurrent);
+        _lastSync = await db.SyncLogs
+            .Where(s => s.Error == null && s.FinishedUtc != null)
+            .MaxAsync(s => (DateTime?)s.FinishedUtc);
+    }
+}

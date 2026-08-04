@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "kneset-web",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "src/Kneset.Web", "--launch-profile", "http"],
+      "port": 5164
+    }
+  ]
+}

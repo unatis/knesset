@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Brand" xml:space="preserve"><value>🏛️ מעקב הכנסת</value></data>
+  <data name="Nav_Home" xml:space="preserve"><value>ראשי</value></data>
+  <data name="Nav_Bills" xml:space="preserve"><value>הצעות חוק</value></data>
+  <data name="Nav_Members" xml:space="preserve"><value>חברי הכנסת</value></data>
+  <data name="Nav_Initiatives" xml:space="preserve"><value>יוזמות</value></data>
+  <data name="Nav_Register" xml:space="preserve"><value>הרשמה</value></data>
+  <data name="Nav_Login" xml:space="preserve"><value>כניסה</value></data>
+  <data name="Nav_Logout" xml:space="preserve"><value>יציאה</value></data>
+
+  <data name="Home_Lead" xml:space="preserve"><value>הצעות חוק וחברי כנסת — עם ניתוח AI ברור לכל יוזמה. הנתונים מה-API הרשמי של הכנסת.</value></data>
+  <data name="Home_MembersCard" xml:space="preserve"><value>חברי כנסת מכהנים</value></data>
+  <data name="Home_LastSync" xml:space="preserve"><value>סנכרון אחרון עם הכנסת:</value></data>
+  <data name="Home_FirstSync" xml:space="preserve"><value>מתבצע סנכרון ראשון עם ה-API של הכנסת — הנתונים יופיעו בעוד מספר דקות.</value></data>
+
+  <data name="Bills_Search" xml:space="preserve"><value>חיפוש לפי שם...</value></data>
+  <data name="Bills_AllStatuses" xml:space="preserve"><value>כל הסטטוסים</value></data>
+  <data name="Bills_AllKnessets" xml:space="preserve"><value>כל הכנסות</value></data>
+  <data name="Knesset" xml:space="preserve"><value>כנסת</value></data>
+  <data name="Bills_Found" xml:space="preserve"><value>נמצאו:</value></data>
+  <data name="Updated" xml:space="preserve"><value>עודכן</value></data>
+  <data name="Bills_Empty" xml:space="preserve"><value>לא נמצאו תוצאות.</value></data>
+  <data name="Page" xml:space="preserve"><value>עמ'</value></data>
+  <data name="Of" xml:space="preserve"><value>מתוך</value></data>
+
+  <data name="Status" xml:space="preserve"><value>סטטוס</value></data>
+  <data name="InfluenceWindow" xml:space="preserve"><value>חלון השפעה</value></data>
+  <data name="Type" xml:space="preserve"><value>סוג</value></data>
+  <data name="PubDate" xml:space="preserve"><value>תאריך פרסום</value></data>
+  <data name="UpdatedInKnesset" xml:space="preserve"><value>עודכן בכנסת</value></data>
+  <data name="Source" xml:space="preserve"><value>מקור</value></data>
+  <data name="OpenAtKnesset" xml:space="preserve"><value>פתיחה באתר הכנסת ↗</value></data>
+  <data name="Description" xml:space="preserve"><value>תיאור (מהכנסת)</value></data>
+  <data name="Initiators" xml:space="preserve"><value>יוזמים</value></data>
+  <data name="NoInitiators" xml:space="preserve"><value>אין נתונים — הצעות חוק ממשלתיות מוגשות ללא יוזמים אישיים.</value></data>
+  <data name="InitiatorBadge" xml:space="preserve"><value>יוזם</value></data>
+
+  <data name="Reaction_Header" xml:space="preserve"><value>תגובת הציבור</value></data>
+  <data name="For" xml:space="preserve"><value>בעד</value></data>
+  <data name="DontKnow" xml:space="preserve"><value>לא בטוח</value></data>
+  <data name="Against" xml:space="preserve"><value>נגד</value></data>
+  <data name="Votes" xml:space="preserve"><value>קולות:</value></data>
+  <data name="AmongDecided" xml:space="preserve"><value>מבין המחליטים בעד:</value></data>
+  <data name="SmallSample" xml:space="preserve"><value>המדגם קטן, לא מייצג</value></data>
+  <data name="NoVotes" xml:space="preserve"><value>עדיין אין קולות — היו הראשונים.</value></data>
+  <data name="VoteSaved" xml:space="preserve"><value>הקול שלך נשמר — לחצו על כפתור אחר כדי לשנות.</value></data>
+  <data name="LoginToVote" xml:space="preserve"><value>התחברו כדי להצביע</value></data>
+  <data name="Reaction_InitiativeNote" xml:space="preserve"><value>התגובה היא תמונת דעות כללית (כולל מתנגדים); החתימה למטה היא תמיכה רשמית לקראת הסף.</value></data>
+
+  <data name="Inf_Open" xml:space="preserve"><value>🟢 חלון ההשפעה פתוח</value></data>
+  <data name="Inf_Open_Hint" xml:space="preserve"><value>הצעת החוק בוועדה: הדיונים פתוחים, הוועדה מקבלת ניירות עמדה, הנוסח משתנה. הזמן הטוב ביותר לפעול.</value></data>
+  <data name="Inf_Limited" xml:space="preserve"><value>🟡 השפעה מוגבלת</value></data>
+  <data name="Inf_Limited_Hint" xml:space="preserve"><value>ממתין לקריאה במליאה — השפעה רק דרך חברי כנסת: הסתייגויות והצבעה.</value></data>
+  <data name="Inf_Late" xml:space="preserve"><value>🔴 מאוחר מדי</value></data>
+  <data name="Inf_Late_Hint" xml:space="preserve"><value>החוק התקבל. שינוי אפשרי רק בחוק מתקן — למשל דרך יוזמה אזרחית.</value></data>
+  <data name="Inf_Frozen" xml:space="preserve"><value>⚪ מוקפא</value></data>
+  <data name="Inf_Frozen_Hint" xml:space="preserve"><value>ההליך אינו מתקדם — אין על מה להשפיע, אך אפשר לעקוב אחר חידושו.</value></data>
+
+  <data name="Com_Header" xml:space="preserve"><value>דיון</value></data>
+  <data name="Com_All" xml:space="preserve"><value>הכל</value></data>
+  <data name="Com_Questions" xml:space="preserve"><value>שאלות</value></data>
+  <data name="Com_Suggestions" xml:space="preserve"><value>הצעות</value></data>
+  <data name="Com_Placeholder" xml:space="preserve"><value>התגובה שלך...</value></data>
+  <data name="Com_Send" xml:space="preserve"><value>שליחה</value></data>
+  <data name="Com_LoginPrompt" xml:space="preserve"><value>התחברו כדי להשתתף בדיון.</value></data>
+  <data name="Com_Empty" xml:space="preserve"><value>אין תגובות עדיין — פתחו את הדיון.</value></data>
+  <data name="Com_Delete" xml:space="preserve"><value>מחיקה</value></data>
+  <data name="Kind_General" xml:space="preserve"><value>💬 תגובה</value></data>
+  <data name="Kind_For" xml:space="preserve"><value>✅ טיעון בעד</value></data>
+  <data name="Kind_Against" xml:space="preserve"><value>❌ טיעון נגד</value></data>
+  <data name="Kind_Question" xml:space="preserve"><value>❓ שאלה</value></data>
+  <data name="Kind_Suggestion" xml:space="preserve"><value>💡 הצעה</value></data>
+
+  <data name="Members_Title" xml:space="preserve"><value>חברי הכנסת</value></data>
+  <data name="Members_Search" xml:space="preserve"><value>חיפוש לפי שם...</value></data>
+  <data name="Members_CurrentOnly" xml:space="preserve"><value>מכהנים בלבד</value></data>
+  <data name="Members_Current" xml:space="preserve"><value>מכהן</value></data>
+  <data name="Faction" xml:space="preserve"><value>סיעה</value></data>
+  <data name="MemberProfile" xml:space="preserve"><value>פרופיל בכנסת</value></data>
+  <data name="Member_NoBills" xml:space="preserve"><value>לא נמצאו הצעות חוק בכנסות שנטענו.</value></data>
+
+  <data name="Init_Title" xml:space="preserve"><value>יוזמות אזרחיות</value></data>
+  <data name="Init_Create" xml:space="preserve"><value>＋ יצירת יוזמה</value></data>
+  <data name="Init_Disclaimer" xml:space="preserve"><value>יוזמה אזרחית אינה הצעת חוק רשמית. בישראל הצעות חוק מוגשות על ידי הממשלה, חברי כנסת או ועדות. יוזמה עם תמיכה רחבה היא טיעון שאפשר להביא לחבר כנסת.</value></data>
+  <data name="Init_Empty" xml:space="preserve"><value>אין עדיין יוזמות שפורסמו. היו הראשונים!</value></data>
+  <data name="Init_Signatures" xml:space="preserve"><value>{0} מתוך {1} חתימות</value></data>
+  <data name="Init_Author" xml:space="preserve"><value>מאת</value></data>
+  <data name="Init_ThresholdBadge" xml:space="preserve"><value>הסף הושג</value></data>
+
+  <data name="Ai_Header" xml:space="preserve"><value>🤖 ניתוח AI</value></data>
+  <data name="Ai_Generating" xml:space="preserve"><value>הניתוח נוצר — זה ייקח מספר שניות...</value></data>
+  <data name="Ai_Unavailable" xml:space="preserve"><value>הניתוח אינו זמין.</value></data>
+  <data name="Ai_Retry" xml:space="preserve"><value>נסו שוב</value></data>
+  <data name="Ai_WhatProposes" xml:space="preserve"><value>מה מציעה היוזמה</value></data>
+  <data name="Ai_Affected" xml:space="preserve"><value>על מי זה משפיע</value></data>
+  <data name="Ai_Benefits" xml:space="preserve"><value>יתרונות אפשריים</value></data>
+  <data name="Ai_Risks" xml:space="preserve"><value>סיכונים אפשריים</value></data>
+  <data name="Ai_Arguments" xml:space="preserve"><value>טיעוני הצדדים</value></data>
+  <data name="Ai_Financial" xml:space="preserve"><value>השלכות כלכליות</value></data>
+  <data name="Ai_Citizens" xml:space="preserve"><value>אזרחים</value></data>
+  <data name="Ai_Budget" xml:space="preserve"><value>תקציב</value></data>
+  <data name="Ai_OpenQuestions" xml:space="preserve"><value>שאלות פתוחות</value></data>
+  <data name="Ai_Disclaimer" xml:space="preserve"><value>הניתוח נוצר אוטומטית ואינו ייעוץ משפטי. בדקו את המסקנות מול המקורות באתר הכנסת.</value></data>
+
+  <data name="Meta_Fact" xml:space="preserve"><value>עובדה</value></data>
+  <data name="Meta_Inference" xml:space="preserve"><value>מסקנה</value></data>
+  <data name="Meta_Risk" xml:space="preserve"><value>סיכון אפשרי</value></data>
+  <data name="Meta_Position" xml:space="preserve"><value>עמדה</value></data>
+  <data name="Meta_NoData" xml:space="preserve"><value>אין מספיק נתונים</value></data>
+  <data name="Meta_Source" xml:space="preserve"><value>מקור</value></data>
+  <data name="Meta_Confidence" xml:space="preserve"><value>ביטחון</value></data>
+
+  <data name="Ctx_Header" xml:space="preserve"><value>🧭 הקשר ופרשנויות</value></data>
+  <data name="Ctx_Warning" xml:space="preserve"><value>⚠️ כל מה שבחלק זה הוא פרשנות ולא עובדות: ניתוח אינטרסים, הקשר ומקבילות היסטוריות לפי כללי הפלטפורמה (סימטריה בין הצדדים, ייחוס כל עמדה, מגוון דעות בתוך כל צד). תיאור עמדה אינו הסכמה איתה.</value></data>
+  <data name="Ctx_WhoBenefits" xml:space="preserve"><value>מי מרוויח</value></data>
+  <data name="Ctx_WhoConcerned" xml:space="preserve"><value>מי חושש</value></data>
+  <data name="Ctx_DeFacto" xml:space="preserve"><value>מטרות בפועל</value></data>
+  <data name="Ctx_Interp" xml:space="preserve"><value>פרשנות</value></data>
+  <data name="Ctx_Parallels" xml:space="preserve"><value>מקבילות היסטוריות</value></data>
+  <data name="Ctx_Case" xml:space="preserve"><value>מקרה</value></data>
+  <data name="Ctx_Lesson" xml:space="preserve"><value>לקח</value></data>
+  <data name="Ctx_Perspectives" xml:space="preserve"><value>עמדות הצדדים</value></data>
+  <data name="Ctx_PerspNote" xml:space="preserve"><value>(מגוון בתוך כל צד)</value></data>
+  <data name="Ctx_Impact" xml:space="preserve"><value>השפעה על החברה</value></data>
+  <data name="Ctx_Footer" xml:space="preserve"><value>חלק אנליטי. אינו קביעה עובדתית של הפלטפורמה, ייעוץ משפטי או המלצה פוליטית.</value></data>
+
+  <data name="Draft_Header" xml:space="preserve"><value>⚖️ מבנה משפטי (AI)</value></data>
+  <data name="Draft_Generating" xml:space="preserve"><value>ה-AI מנסח את המבנה המשפטי...</value></data>
+  <data name="Draft_Intro" xml:space="preserve"><value>ה-AI יסייע להפוך את התיאור למבנה קרוב לפורמט של יוזמת חקיקה: מטרה, שינויים, דברי הסבר.</value></data>
+  <data name="Draft_Generate" xml:space="preserve"><value>⚡ ניסוח המבנה</value></data>
+  <data name="Draft_NotYet" xml:space="preserve"><value>המחבר טרם ניסח את המבנה המשפטי.</value></data>
+  <data name="Draft_Goal" xml:space="preserve"><value>מטרת היוזמה</value></data>
+  <data name="Draft_Changes" xml:space="preserve"><value>שינויים מוצעים</value></data>
+  <data name="Draft_Laws" xml:space="preserve"><value>חוקים מושפעים</value></data>
+  <data name="Draft_Note" xml:space="preserve"><value>דברי הסבר</value></data>
+  <data name="Draft_Impact" xml:space="preserve"><value>השלכות</value></data>
+  <data name="Draft_Financial" xml:space="preserve"><value>כלכליות</value></data>
+  <data name="Draft_Social" xml:space="preserve"><value>חברתיות</value></data>
+  <data name="Draft_Risks" xml:space="preserve"><value>סיכונים והתנגדויות</value></data>
+
+  <data name="New_Title" xml:space="preserve"><value>יוזמה אזרחית חדשה</value></data>
+  <data name="New_Intro" xml:space="preserve"><value>תארו את הבעיה והפתרון במילים פשוטות — ה-AI יסייע לנסח את המבנה המשפטי בשלב הבא. היוזמה נוצרת כטיוטה: פרסמו אותה כשתהיו מוכנים לאסוף חתימות.</value></data>
+  <data name="New_Name" xml:space="preserve"><value>שם היוזמה</value></data>
+  <data name="New_NamePh" xml:space="preserve"><value>לדוגמה: ביטול מס דירה שלישית למשפחות מרובות ילדים</value></data>
+  <data name="New_Problem" xml:space="preserve"><value>איזו בעיה פותרים?</value></data>
+  <data name="New_ProblemPh" xml:space="preserve"><value>תארו את הבעיה: את מי היא נוגעת ולמה המצב הקיים אינו הוגן או יעיל...</value></data>
+  <data name="New_Solution" xml:space="preserve"><value>מה מציעים לשנות?</value></data>
+  <data name="New_SolutionPh" xml:space="preserve"><value>תארו את הפתרון המוצע: מה צריך להשתנות בחוק...</value></data>
+  <data name="New_Create" xml:space="preserve"><value>יצירת טיוטה</value></data>
+  <data name="New_Saving" xml:space="preserve"><value>שומרים...</value></data>
+
+  <data name="Init_NotFound" xml:space="preserve"><value>היוזמה לא נמצאה או שטרם פורסמה.</value></data>
+  <data name="Init_DraftBanner" xml:space="preserve"><value>📝 טיוטה — גלויה רק לכם. פרסמו כדי להתחיל באיסוף חתימות.</value></data>
+  <data name="Init_Created" xml:space="preserve"><value>נוצרה</value></data>
+  <data name="Init_PublishedAt" xml:space="preserve"><value>פורסמה</value></data>
+  <data name="Init_DetailDisclaimer" xml:space="preserve"><value>⚖️ זוהי יוזמה אזרחית ולא הצעת חוק רשמית של הכנסת. רק הממשלה, חברי כנסת או ועדות יכולים להגיש חוק — מטרת הפלטפורמה: להכין יוזמה חזקה ולמצוא חבר כנסת שמוכן לקדם אותה.</value></data>
+  <data name="Init_Problem" xml:space="preserve"><value>הבעיה</value></data>
+  <data name="Init_Solution" xml:space="preserve"><value>הפתרון המוצע</value></data>
+  <data name="Init_Support" xml:space="preserve"><value>תמיכה</value></data>
+  <data name="Init_SigCount" xml:space="preserve"><value>חתימות</value></data>
+  <data name="Init_Threshold" xml:space="preserve"><value>סף:</value></data>
+  <data name="Init_ReachedMsg" xml:space="preserve"><value>🎉 הסף הושג — חבילת היוזמה מוכנה להעברה לחברי הכנסת.</value></data>
+  <data name="Init_Publish" xml:space="preserve"><value>פרסום והתחלת איסוף חתימות</value></data>
+  <data name="Init_Signed" xml:space="preserve"><value>✓ חתמתם</value></data>
+  <data name="Init_Sign" xml:space="preserve"><value>✍ חתימה על היוזמה</value></data>
+  <data name="Init_LoginToSign" xml:space="preserve"><value>התחברו כדי לחתום</value></data>
+
+  <data name="Hist_Header" xml:space="preserve"><value>📜 היסטוריית ניתוחים</value></data>
+  <data name="Hist_Stale" xml:space="preserve"><value>לא עדכני — הצעת החוק השתנתה</value></data>
+  <data name="Hist_Current" xml:space="preserve"><value>עדכני</value></data>
+  <data name="Hist_Show" xml:space="preserve"><value>הצגה</value></data>
+  <data name="Hist_Hide" xml:space="preserve"><value>הסתרה</value></data>
+  <data name="Ai_TranslationPending" xml:space="preserve"><value>התרגום לשפתך בהכנה — בינתיים מוצג הניתוח בשפה אחרת.</value></data>
+
+  <data name="Share_Header" xml:space="preserve"><value>שיתוף</value></data>
+  <data name="Share_Copy" xml:space="preserve"><value>העתקת קישור</value></data>
+  <data name="Share_Copied" xml:space="preserve"><value>הועתק</value></data>
+  <data name="Share_Native" xml:space="preserve"><value>שיתוף…</value></data>
+  <data name="Share_CommentLink" xml:space="preserve"><value>קישור לתגובה</value></data>
+  <data name="Share_BillText" xml:space="preserve"><value>{0} — דיון, תגובות וניתוח AI במעקב הכנסת</value></data>
+  <data name="Share_InitText" xml:space="preserve"><value>חתמו על היוזמה האזרחית: {0}</value></data>
+  <data name="Share_DiscussText" xml:space="preserve"><value>דיון מתנהל: {0}</value></data>
+</root>

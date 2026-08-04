@@ -1,0 +1,110 @@
+@inject IStringLocalizer<SharedResource> L
+
+@* Чистое отображение BillAnalysisResult — используется актуальной карточкой и историей. *@
+@if (Analysis is not null)
+{
+    @if (Analysis.ProviderNote is not null)
+    {
+        <div class="alert alert-warning py-2">@Analysis.ProviderNote</div>
+    }
+
+    <h6>@L["Ai_WhatProposes"]</h6>
+    <p>@Analysis.Summary</p>
+
+    @if (Analysis.AffectedGroups.Count > 0)
+    {
+        <h6>@L["Ai_Affected"]</h6>
+        <p>
+            @foreach (var group in Analysis.AffectedGroups)
+            {
+                <span class="badge bg-light text-dark border me-1">@group</span>
+            }
+        </p>
+    }
+
+    <div class="row">
+        @if (Analysis.PotentialBenefits.Count > 0)
+        {
+            <div class="col-md-6">
+                <h6 class="text-success">@L["Ai_Benefits"]</h6>
+                <ul>
+                    @foreach (var point in Analysis.PotentialBenefits)
+                    {
+                        <li>@point.Text <AnalysisPointMeta Point="point" /></li>
+                    }
+                </ul>
+            </div>
+        }
+        @if (Analysis.PotentialRisks.Count > 0)
+        {
+            <div class="col-md-6">
+                <h6 class="text-danger">@L["Ai_Risks"]</h6>
+                <ul>
+                    @foreach (var point in Analysis.PotentialRisks)
+                    {
+                        <li>@point.Text <AnalysisPointMeta Point="point" /></li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+
+    @if (Analysis.ArgumentsFor.Count > 0 || Analysis.ArgumentsAgainst.Count > 0)
+    {
+        <h6>@L["Ai_Arguments"]</h6>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <div class="border rounded p-2 h-100">
+                    <strong class="text-success">@L["For"]</strong>
+                    <ul class="mb-0">
+                        @foreach (var point in Analysis.ArgumentsFor)
+                        {
+                            <li>@point.Text</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="border rounded p-2 h-100">
+                    <strong class="text-danger">@L["Against"]</strong>
+                    <ul class="mb-0">
+                        @foreach (var point in Analysis.ArgumentsAgainst)
+                        {
+                            <li>@point.Text</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Analysis.FinancialImpact is not null)
+    {
+        <h6>@L["Ai_Financial"]</h6>
+        <ul>
+            @if (Analysis.FinancialImpact.Citizens is not null)
+            {
+                <li><strong>@L["Ai_Citizens"]:</strong> @Analysis.FinancialImpact.Citizens</li>
+            }
+            @if (Analysis.FinancialImpact.Government is not null)
+            {
+                <li><strong>@L["Ai_Budget"]:</strong> @Analysis.FinancialImpact.Government</li>
+            }
+        </ul>
+    }
+
+    @if (Analysis.OpenQuestions.Count > 0)
+    {
+        <h6>@L["Ai_OpenQuestions"]</h6>
+        <ul>
+            @foreach (var question in Analysis.OpenQuestions)
+            {
+                <li>@question</li>
+            }
+        </ul>
+    }
+}
+
+@code {
+    [Parameter, EditorRequired] public BillAnalysisResult? Analysis { get; set; }
+}

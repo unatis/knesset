@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Brand" xml:space="preserve"><value>🏛️ متتبع الكنيست</value></data>
+  <data name="Nav_Home" xml:space="preserve"><value>الرئيسية</value></data>
+  <data name="Nav_Bills" xml:space="preserve"><value>مشاريع القوانين</value></data>
+  <data name="Nav_Members" xml:space="preserve"><value>أعضاء الكنيست</value></data>
+  <data name="Nav_Initiatives" xml:space="preserve"><value>المبادرات</value></data>
+  <data name="Nav_Register" xml:space="preserve"><value>التسجيل</value></data>
+  <data name="Nav_Login" xml:space="preserve"><value>تسجيل الدخول</value></data>
+  <data name="Nav_Logout" xml:space="preserve"><value>تسجيل الخروج</value></data>
+
+  <data name="Home_Lead" xml:space="preserve"><value>مشاريع قوانين وأعضاء الكنيست — مع تحليل ذكاء اصطناعي واضح لكل مبادرة. البيانات من الواجهة الرسمية للكنيست.</value></data>
+  <data name="Home_MembersCard" xml:space="preserve"><value>الأعضاء الحاليون</value></data>
+  <data name="Home_LastSync" xml:space="preserve"><value>آخر مزامنة مع الكنيست:</value></data>
+  <data name="Home_FirstSync" xml:space="preserve"><value>تجري المزامنة الأولى مع واجهة الكنيست — ستظهر البيانات خلال دقائق.</value></data>
+
+  <data name="Bills_Search" xml:space="preserve"><value>بحث حسب العنوان...</value></data>
+  <data name="Bills_AllStatuses" xml:space="preserve"><value>كل الحالات</value></data>
+  <data name="Bills_AllKnessets" xml:space="preserve"><value>كل الدورات</value></data>
+  <data name="Knesset" xml:space="preserve"><value>الكنيست</value></data>
+  <data name="Bills_Found" xml:space="preserve"><value>النتائج:</value></data>
+  <data name="Updated" xml:space="preserve"><value>حُدِّث</value></data>
+  <data name="Bills_Empty" xml:space="preserve"><value>لا توجد نتائج.</value></data>
+  <data name="Page" xml:space="preserve"><value>صفحة</value></data>
+  <data name="Of" xml:space="preserve"><value>من</value></data>
+
+  <data name="Status" xml:space="preserve"><value>الحالة</value></data>
+  <data name="InfluenceWindow" xml:space="preserve"><value>نافذة التأثير</value></data>
+  <data name="Type" xml:space="preserve"><value>النوع</value></data>
+  <data name="PubDate" xml:space="preserve"><value>تاريخ النشر</value></data>
+  <data name="UpdatedInKnesset" xml:space="preserve"><value>حُدِّث في الكنيست</value></data>
+  <data name="Source" xml:space="preserve"><value>المصدر</value></data>
+  <data name="OpenAtKnesset" xml:space="preserve"><value>فتح في موقع الكنيست ↗</value></data>
+  <data name="Description" xml:space="preserve"><value>الوصف (من الكنيست)</value></data>
+  <data name="Initiators" xml:space="preserve"><value>المبادرون</value></data>
+  <data name="NoInitiators" xml:space="preserve"><value>لا بيانات — مشاريع القوانين الحكومية تُقدَّم دون مبادرين أفراد.</value></data>
+  <data name="InitiatorBadge" xml:space="preserve"><value>مبادر</value></data>
+
+  <data name="Reaction_Header" xml:space="preserve"><value>تفاعل الجمهور</value></data>
+  <data name="For" xml:space="preserve"><value>مع</value></data>
+  <data name="DontKnow" xml:space="preserve"><value>غير متأكد</value></data>
+  <data name="Against" xml:space="preserve"><value>ضد</value></data>
+  <data name="Votes" xml:space="preserve"><value>الأصوات:</value></data>
+  <data name="AmongDecided" xml:space="preserve"><value>بين الحاسمين مع:</value></data>
+  <data name="SmallSample" xml:space="preserve"><value>العيّنة صغيرة وغير ممثِّلة</value></data>
+  <data name="NoVotes" xml:space="preserve"><value>لا أصوات بعد — كن الأول.</value></data>
+  <data name="VoteSaved" xml:space="preserve"><value>تم حفظ صوتك — اضغط زرًا آخر للتغيير.</value></data>
+  <data name="LoginToVote" xml:space="preserve"><value>سجّل الدخول للتصويت</value></data>
+  <data name="Reaction_InitiativeNote" xml:space="preserve"><value>التفاعل لمحة عامة عن الآراء (بمن فيهم المعارضون)؛ التوقيع أدناه دعم رسمي نحو الحد المطلوب.</value></data>
+
+  <data name="Inf_Open" xml:space="preserve"><value>🟢 نافذة التأثير مفتوحة</value></data>
+  <data name="Inf_Open_Hint" xml:space="preserve"><value>مشروع القانون في اللجنة: الجلسات علنية وتُقبل المواقف المكتوبة والنص يتغيّر. أفضل وقت للتحرّك.</value></data>
+  <data name="Inf_Limited" xml:space="preserve"><value>🟡 تأثير محدود</value></data>
+  <data name="Inf_Limited_Hint" xml:space="preserve"><value>بانتظار القراءة في الهيئة العامة — التأثير فقط عبر أعضاء الكنيست: تحفّظات وتصويت.</value></data>
+  <data name="Inf_Late" xml:space="preserve"><value>🔴 فات الأوان</value></data>
+  <data name="Inf_Late_Hint" xml:space="preserve"><value>أُقرّ القانون. لا يمكن تغييره إلا بقانون معدِّل — مثلًا عبر مبادرة مدنية.</value></data>
+  <data name="Inf_Frozen" xml:space="preserve"><value>⚪ مجمّد</value></data>
+  <data name="Inf_Frozen_Hint" xml:space="preserve"><value>العملية متوقفة — لا شيء للتأثير عليه، لكن يمكن متابعة استئنافها.</value></data>
+
+  <data name="Com_Header" xml:space="preserve"><value>نقاش</value></data>
+  <data name="Com_All" xml:space="preserve"><value>الكل</value></data>
+  <data name="Com_Questions" xml:space="preserve"><value>أسئلة</value></data>
+  <data name="Com_Suggestions" xml:space="preserve"><value>اقتراحات</value></data>
+  <data name="Com_Placeholder" xml:space="preserve"><value>تعليقك...</value></data>
+  <data name="Com_Send" xml:space="preserve"><value>إرسال</value></data>
+  <data name="Com_LoginPrompt" xml:space="preserve"><value>سجّل الدخول للمشاركة في النقاش.</value></data>
+  <data name="Com_Empty" xml:space="preserve"><value>لا تعليقات بعد — ابدأ النقاش.</value></data>
+  <data name="Com_Delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="Kind_General" xml:space="preserve"><value>💬 تعليق</value></data>
+  <data name="Kind_For" xml:space="preserve"><value>✅ حجة مع</value></data>
+  <data name="Kind_Against" xml:space="preserve"><value>❌ حجة ضد</value></data>
+  <data name="Kind_Question" xml:space="preserve"><value>❓ سؤال</value></data>
+  <data name="Kind_Suggestion" xml:space="preserve"><value>💡 اقتراح</value></data>
+
+  <data name="Members_Title" xml:space="preserve"><value>أعضاء الكنيست</value></data>
+  <data name="Members_Search" xml:space="preserve"><value>بحث بالاسم...</value></data>
+  <data name="Members_CurrentOnly" xml:space="preserve"><value>الحاليون فقط</value></data>
+  <data name="Members_Current" xml:space="preserve"><value>حالي</value></data>
+  <data name="Faction" xml:space="preserve"><value>كتلة</value></data>
+  <data name="MemberProfile" xml:space="preserve"><value>الملف في الكنيست</value></data>
+  <data name="Member_NoBills" xml:space="preserve"><value>لم يُعثر على مشاريع قوانين في الدورات المحمَّلة.</value></data>
+
+  <data name="Init_Title" xml:space="preserve"><value>مبادرات مدنية</value></data>
+  <data name="Init_Create" xml:space="preserve"><value>＋ إنشاء مبادرة</value></data>
+  <data name="Init_Disclaimer" xml:space="preserve"><value>المبادرة المدنية ليست مشروع قانون رسميًا. في إسرائيل تُقدَّم مشاريع القوانين من الحكومة أو أعضاء الكنيست أو اللجان. المبادرة ذات الدعم الواسع حجّة تُقدَّم إلى عضو كنيست.</value></data>
+  <data name="Init_Empty" xml:space="preserve"><value>لا مبادرات منشورة بعد. كن الأول!</value></data>
+  <data name="Init_Signatures" xml:space="preserve"><value>{0} من {1} توقيعًا</value></data>
+  <data name="Init_Author" xml:space="preserve"><value>بواسطة</value></data>
+  <data name="Init_ThresholdBadge" xml:space="preserve"><value>تم بلوغ الحد</value></data>
+
+  <data name="Ai_Header" xml:space="preserve"><value>🤖 تحليل الذكاء الاصطناعي</value></data>
+  <data name="Ai_Generating" xml:space="preserve"><value>يجري إنشاء التحليل — سيستغرق بضع ثوانٍ...</value></data>
+  <data name="Ai_Unavailable" xml:space="preserve"><value>التحليل غير متاح.</value></data>
+  <data name="Ai_Retry" xml:space="preserve"><value>حاول مجددًا</value></data>
+  <data name="Ai_WhatProposes" xml:space="preserve"><value>ما الذي تقترحه المبادرة</value></data>
+  <data name="Ai_Affected" xml:space="preserve"><value>مَن يتأثر</value></data>
+  <data name="Ai_Benefits" xml:space="preserve"><value>فوائد محتملة</value></data>
+  <data name="Ai_Risks" xml:space="preserve"><value>مخاطر محتملة</value></data>
+  <data name="Ai_Arguments" xml:space="preserve"><value>حجج الأطراف</value></data>
+  <data name="Ai_Financial" xml:space="preserve"><value>الآثار الاقتصادية</value></data>
+  <data name="Ai_Citizens" xml:space="preserve"><value>المواطنون</value></data>
+  <data name="Ai_Budget" xml:space="preserve"><value>الميزانية</value></data>
+  <data name="Ai_OpenQuestions" xml:space="preserve"><value>أسئلة مفتوحة</value></data>
+  <data name="Ai_Disclaimer" xml:space="preserve"><value>أُنشئ التحليل تلقائيًا وليس استشارة قانونية. تحقق من الاستنتاجات مقابل المصادر في موقع الكنيست.</value></data>
+
+  <data name="Meta_Fact" xml:space="preserve"><value>حقيقة</value></data>
+  <data name="Meta_Inference" xml:space="preserve"><value>استنتاج</value></data>
+  <data name="Meta_Risk" xml:space="preserve"><value>خطر محتمل</value></data>
+  <data name="Meta_Position" xml:space="preserve"><value>موقف</value></data>
+  <data name="Meta_NoData" xml:space="preserve"><value>بيانات غير كافية</value></data>
+  <data name="Meta_Source" xml:space="preserve"><value>مصدر</value></data>
+  <data name="Meta_Confidence" xml:space="preserve"><value>الثقة</value></data>
+
+  <data name="Ctx_Header" xml:space="preserve"><value>🧭 السياق والتفسيرات</value></data>
+  <data name="Ctx_Warning" xml:space="preserve"><value>⚠️ كل ما في هذا القسم تفسير وليس حقائق: تحليل للمصالح والسياق والموازيات التاريخية وفق قواعد المنصة (تناظر الأطراف، إسناد كل موقف، طيف الآراء داخل كل طرف). وصفُ موقفٍ ما ليس تأييدًا له.</value></data>
+  <data name="Ctx_WhoBenefits" xml:space="preserve"><value>من يستفيد</value></data>
+  <data name="Ctx_WhoConcerned" xml:space="preserve"><value>من يتوجّس</value></data>
+  <data name="Ctx_DeFacto" xml:space="preserve"><value>الأهداف الفعلية</value></data>
+  <data name="Ctx_Interp" xml:space="preserve"><value>تفسير</value></data>
+  <data name="Ctx_Parallels" xml:space="preserve"><value>موازيات تاريخية</value></data>
+  <data name="Ctx_Case" xml:space="preserve"><value>حالة</value></data>
+  <data name="Ctx_Lesson" xml:space="preserve"><value>درس</value></data>
+  <data name="Ctx_Perspectives" xml:space="preserve"><value>مواقف الأطراف</value></data>
+  <data name="Ctx_PerspNote" xml:space="preserve"><value>(طيف داخل كل طرف)</value></data>
+  <data name="Ctx_Impact" xml:space="preserve"><value>الأثر على المجتمع</value></data>
+  <data name="Ctx_Footer" xml:space="preserve"><value>قسم تحليلي. ليس تأكيدًا واقعيًا من المنصة ولا استشارة قانونية ولا توصية سياسية.</value></data>
+
+  <data name="Draft_Header" xml:space="preserve"><value>⚖️ البنية القانونية (AI)</value></data>
+  <data name="Draft_Generating" xml:space="preserve"><value>الذكاء الاصطناعي يصوغ البنية القانونية...</value></data>
+  <data name="Draft_Intro" xml:space="preserve"><value>سيساعد الذكاء الاصطناعي في تحويل الوصف إلى بنية قريبة من صيغة مبادرة تشريعية: الهدف، التغييرات، المذكرة التفسيرية.</value></data>
+  <data name="Draft_Generate" xml:space="preserve"><value>⚡ صياغة البنية</value></data>
+  <data name="Draft_NotYet" xml:space="preserve"><value>لم يصغ المؤلف البنية القانونية بعد.</value></data>
+  <data name="Draft_Goal" xml:space="preserve"><value>هدف المبادرة</value></data>
+  <data name="Draft_Changes" xml:space="preserve"><value>التغييرات المقترحة</value></data>
+  <data name="Draft_Laws" xml:space="preserve"><value>القوانين المتأثرة</value></data>
+  <data name="Draft_Note" xml:space="preserve"><value>المذكرة التفسيرية</value></data>
+  <data name="Draft_Impact" xml:space="preserve"><value>الآثار</value></data>
+  <data name="Draft_Financial" xml:space="preserve"><value>مالية</value></data>
+  <data name="Draft_Social" xml:space="preserve"><value>اجتماعية</value></data>
+  <data name="Draft_Risks" xml:space="preserve"><value>مخاطر واعتراضات</value></data>
+
+  <data name="New_Title" xml:space="preserve"><value>مبادرة مدنية جديدة</value></data>
+  <data name="New_Intro" xml:space="preserve"><value>صف المشكلة والحل بكلمات بسيطة — سيساعد الذكاء الاصطناعي في صياغة البنية القانونية في الخطوة التالية. تُنشأ المبادرة كمسودة: انشرها عندما تكون جاهزًا لجمع التوقيعات.</value></data>
+  <data name="New_Name" xml:space="preserve"><value>عنوان المبادرة</value></data>
+  <data name="New_NamePh" xml:space="preserve"><value>مثلًا: إلغاء ضريبة الشقة الثالثة للعائلات كثيرة الأولاد</value></data>
+  <data name="New_Problem" xml:space="preserve"><value>ما المشكلة التي نحلّها؟</value></data>
+  <data name="New_ProblemPh" xml:space="preserve"><value>صف المشكلة: من تمسّ ولماذا الوضع الحالي غير عادل أو غير فعّال...</value></data>
+  <data name="New_Solution" xml:space="preserve"><value>ما الذي تقترح تغييره؟</value></data>
+  <data name="New_SolutionPh" xml:space="preserve"><value>صف الحل المقترح: ما الذي يجب أن يتغيّر في القانون...</value></data>
+  <data name="New_Create" xml:space="preserve"><value>إنشاء مسودة</value></data>
+  <data name="New_Saving" xml:space="preserve"><value>جارٍ الحفظ...</value></data>
+
+  <data name="Init_NotFound" xml:space="preserve"><value>المبادرة غير موجودة أو لم تُنشر بعد.</value></data>
+  <data name="Init_DraftBanner" xml:space="preserve"><value>📝 مسودة — مرئية لك فقط. انشرها لبدء جمع التوقيعات.</value></data>
+  <data name="Init_Created" xml:space="preserve"><value>أُنشئت</value></data>
+  <data name="Init_PublishedAt" xml:space="preserve"><value>نُشرت</value></data>
+  <data name="Init_DetailDisclaimer" xml:space="preserve"><value>⚖️ هذه مبادرة مدنية تشريعية وليست مشروع قانون رسميًا في الكنيست. لا يقدّم القانون رسميًا إلا الحكومة أو أعضاء الكنيست أو اللجان — هدف المنصة: إعداد مبادرة قوية وإيجاد عضو كنيست مستعد لدفعها.</value></data>
+  <data name="Init_Problem" xml:space="preserve"><value>المشكلة</value></data>
+  <data name="Init_Solution" xml:space="preserve"><value>الحل المقترح</value></data>
+  <data name="Init_Support" xml:space="preserve"><value>الدعم</value></data>
+  <data name="Init_SigCount" xml:space="preserve"><value>توقيعات</value></data>
+  <data name="Init_Threshold" xml:space="preserve"><value>الحد:</value></data>
+  <data name="Init_ReachedMsg" xml:space="preserve"><value>🎉 تم بلوغ الحد — حزمة المبادرة جاهزة لتسليمها لأعضاء الكنيست.</value></data>
+  <data name="Init_Publish" xml:space="preserve"><value>النشر وبدء جمع التوقيعات</value></data>
+  <data name="Init_Signed" xml:space="preserve"><value>✓ لقد وقّعت</value></data>
+  <data name="Init_Sign" xml:space="preserve"><value>✍ التوقيع على المبادرة</value></data>
+  <data name="Init_LoginToSign" xml:space="preserve"><value>سجّل الدخول للتوقيع</value></data>
+
+  <data name="Hist_Header" xml:space="preserve"><value>📜 سجل التحليلات</value></data>
+  <data name="Hist_Stale" xml:space="preserve"><value>قديم — تغيّر مشروع القانون</value></data>
+  <data name="Hist_Current" xml:space="preserve"><value>حالي</value></data>
+  <data name="Hist_Show" xml:space="preserve"><value>عرض</value></data>
+  <data name="Hist_Hide" xml:space="preserve"><value>إخفاء</value></data>
+  <data name="Ai_TranslationPending" xml:space="preserve"><value>تجري ترجمة إلى لغتك — يُعرض التحليل بلغة أخرى مؤقتًا.</value></data>
+
+  <data name="Share_Header" xml:space="preserve"><value>مشاركة</value></data>
+  <data name="Share_Copy" xml:space="preserve"><value>نسخ الرابط</value></data>
+  <data name="Share_Copied" xml:space="preserve"><value>تم النسخ</value></data>
+  <data name="Share_Native" xml:space="preserve"><value>مشاركة…</value></data>
+  <data name="Share_CommentLink" xml:space="preserve"><value>رابط التعليق</value></data>
+  <data name="Share_BillText" xml:space="preserve"><value>{0} — نقاش وتفاعلات وتحليل ذكاء اصطناعي على متتبع الكنيست</value></data>
+  <data name="Share_InitText" xml:space="preserve"><value>وقّع المبادرة المدنية: {0}</value></data>
+  <data name="Share_DiscussText" xml:space="preserve"><value>نقاش جارٍ: {0}</value></data>
+</root>

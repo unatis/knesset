@@ -1,0 +1,75 @@
+@using System.Text.Json
+@inject IStringLocalizer<SharedResource> L
+@inject IDbContextFactory<AppDbContext> DbFactory
+
+@* Полная история AI-анализов закона: все версии на всех языках, с пометками
+   «актуальный/устарел». Устаревшие версии остаются доступными навсегда —
+   можно сравнить, как менялся анализ вместе с редакциями закона. *@
+@if (_items is { Count: > 0 })
+{
+    <div class="card mt-4">
+        <div class="card-header">@L["Hist_Header"] (@_items.Count)</div>
+        <ul class="list-group list-group-flush">
+            @foreach (var item in _items)
+            {
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <span>
+                            <span class="badge bg-light text-dark border">@item.LanguageCode.ToUpperInvariant()</span>
+                            <strong>@item.GeneratedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</strong>
+                            <small class="text-muted"> · @item.ModelVersion</small>
+                            @if (item.IsStale)
+                            {
+                                <span class="badge bg-secondary ms-1">@L["Hist_Stale"]</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success ms-1">@L["Hist_Current"]</span>
+                            }
+                        </span>
+                        <button class="btn btn-sm btn-outline-secondary"
+                                @onclick="() => Toggle(item.Id)">
+                            @(_expandedId == item.Id ? L["Hist_Hide"] : L["Hist_Show"])
+                        </button>
+                    </div>
+                    @if (_expandedId == item.Id)
+                    {
+                        <div class="mt-3 border-top pt-3">
+                            <AnalysisView Analysis="item.Analysis" />
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired] public int BillId { get; set; }
+
+    private List<HistoryItem>? _items;
+    private int? _expandedId;
+
+    private record HistoryItem(
+        int Id, string LanguageCode, string ModelVersion,
+        DateTime GeneratedAt, bool IsStale, BillAnalysisResult? Analysis);
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        var entities = await db.BillAnalyses.AsNoTracking()
+            .Where(a => a.BillId == BillId)
+            .OrderByDescending(a => a.GeneratedAt)
+            .ToListAsync();
+
+        _items = entities.Select(e =>
+        {
+            BillAnalysisResult? parsed = null;
+            try { parsed = JsonSerializer.Deserialize<BillAnalysisResult>(e.AnalysisJson); }
+            catch (JsonException) { /* повреждённая запись — показываем без содержимого */ }
+            return new HistoryItem(e.Id, e.LanguageCode, e.ModelVersion, e.GeneratedAt, e.IsStale, parsed);
+        }).ToList();
+    }
+
+    private void Toggle(int id) => _expandedId = _expandedId == id ? null : id;
+}

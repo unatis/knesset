@@ -1,0 +1,231 @@
+﻿@using Kneset.Core.Entities
+@inject IStringLocalizer<SharedResource> L
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>💬 @L["Com_Header"] (@(_comments?.Count ?? 0))</span>
+        @if (_comments is { Count: > 0 })
+        {
+            <small class="text-muted">
+                ✅ @_comments.Count(c => c.Kind == CommentKind.ArgumentFor) ·
+                ❌ @_comments.Count(c => c.Kind == CommentKind.ArgumentAgainst) ·
+                ❓ @_comments.Count(c => c.Kind == CommentKind.Question) ·
+                💡 @_comments.Count(c => c.Kind == CommentKind.Suggestion)
+            </small>
+        }
+    </div>
+    <div class="card-body">
+        <AuthorizeView>
+            <Authorized>
+                <div class="mb-3">
+                    <textarea class="form-control mb-2" rows="3" placeholder="@L["Com_Placeholder"]"
+                              @bind="_newText" @bind:event="oninput"></textarea>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <select class="form-select" style="max-width:260px" @bind="_newKind">
+                            <option value="@CommentKind.General">@L["Kind_General"]</option>
+                            <option value="@CommentKind.ArgumentFor">@L["Kind_For"]</option>
+                            <option value="@CommentKind.ArgumentAgainst">@L["Kind_Against"]</option>
+                            <option value="@CommentKind.Question">@L["Kind_Question"]</option>
+                            <option value="@CommentKind.Suggestion">@L["Kind_Suggestion"]</option>
+                        </select>
+                        <button class="btn btn-primary" @onclick="PostAsync"
+                                disabled="@(_busy || string.IsNullOrWhiteSpace(_newText))">
+                            @L["Com_Send"]
+                        </button>
+                    </div>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <p class="text-muted">
+                    <a href="Account/Login?returnUrl=@ReturnUrl">@L["Com_LoginPrompt"]</a>
+                </p>
+            </NotAuthorized>
+        </AuthorizeView>
+
+        <div class="btn-group btn-group-sm mb-3" role="group" aria-label="Фильтр">
+            <button class="btn @(_filter is null ? "btn-secondary" : "btn-outline-secondary")"
+                    @onclick="() => SetFilter(null)">@L["Com_All"]</button>
+            <button class="btn @(_filter == CommentKind.ArgumentFor ? "btn-success" : "btn-outline-success")"
+                    @onclick="() => SetFilter(CommentKind.ArgumentFor)">✅ @L["For"]</button>
+            <button class="btn @(_filter == CommentKind.ArgumentAgainst ? "btn-danger" : "btn-outline-danger")"
+                    @onclick="() => SetFilter(CommentKind.ArgumentAgainst)">❌ @L["Against"]</button>
+            <button class="btn @(_filter == CommentKind.Question ? "btn-info" : "btn-outline-info")"
+                    @onclick="() => SetFilter(CommentKind.Question)">❓ @L["Com_Questions"]</button>
+            <button class="btn @(_filter == CommentKind.Suggestion ? "btn-primary" : "btn-outline-primary")"
+                    @onclick="() => SetFilter(CommentKind.Suggestion)">💡 @L["Com_Suggestions"]</button>
+        </div>
+
+        @if (_comments is null)
+        {
+            <div class="text-center p-3"><div class="spinner-border spinner-border-sm"></div></div>
+        }
+        else if (Filtered.Count == 0)
+        {
+            <p class="text-muted mb-0">@L["Com_Empty"]</p>
+        }
+        else
+        {
+            @foreach (var comment in Filtered)
+            {
+                <div class="border rounded p-2 mb-2 comment-anchor @KindBorder(comment.Kind)"
+                     id="comment-@comment.Id">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="badge @KindBadge(comment.Kind) me-1">@KindLabel(comment.Kind)</span>
+                            <strong>@comment.AuthorName</strong>
+                            <small class="text-muted"> · @comment.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
+                        </div>
+                        <span class="text-nowrap">
+                            <button class="btn btn-sm btn-link p-0 me-2" title="@L["Share_CommentLink"]"
+                                    @onclick="() => CopyCommentLinkAsync(comment.Id)">
+                                @(_copiedCommentId == comment.Id ? "✓" : "🔗")
+                            </button>
+                            @if (comment.UserId == _userId)
+                            {
+                                <button class="btn btn-sm btn-link text-danger p-0"
+                                        @onclick="() => DeleteAsync(comment.Id)">@L["Com_Delete"]</button>
+                            }
+                        </span>
+                    </div>
+                    <div style="white-space:pre-line">@comment.Text</div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    /// <summary>Ровно один из BillId/InitiativeId должен быть задан.</summary>
+    [Parameter] public int? BillId { get; set; }
+    [Parameter] public int? InitiativeId { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private List<CommentRow>? _comments;
+    private string _newText = "";
+    private CommentKind _newKind = CommentKind.General;
+    private CommentKind? _filter;
+    private string? _userId;
+    private bool _busy;
+
+    private record CommentRow(int Id, string UserId, string AuthorName, CommentKind Kind, string Text, DateTime CreatedAt);
+
+    private string ReturnUrl => BillId is not null ? $"/bills/{BillId}" : $"/initiatives/{InitiativeId}";
+
+    private List<CommentRow> Filtered =>
+        _comments is null ? [] : _filter is null ? _comments : _comments.Where(c => c.Kind == _filter).ToList();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (AuthState is not null)
+        {
+            var auth = await AuthState;
+            _userId = auth.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        }
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        var query = db.Comments.AsNoTracking();
+        query = BillId is not null
+            ? query.Where(c => c.BillId == BillId)
+            : query.Where(c => c.InitiativeId == InitiativeId);
+
+        _comments = await query
+            .OrderByDescending(c => c.CreatedAt)
+            .Select(c => new CommentRow(
+                c.Id, c.UserId,
+                c.User.DisplayName ?? c.User.UserName ?? "аноним",
+                c.Kind, c.Text, c.CreatedAt))
+            .ToListAsync();
+    }
+
+    private int? _copiedCommentId;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Открытие ссылки с якорем #comment-N — прокрутка к комментарию.
+        if (firstRender && _comments is not null)
+        {
+            await JS.InvokeVoidAsync("knesetShare.scrollToHash");
+        }
+    }
+
+    private async Task CopyCommentLinkAsync(int commentId)
+    {
+        var url = new Uri(new Uri(Navigation.BaseUri), $"{ReturnUrl}#comment-{commentId}").ToString();
+        var ok = await JS.InvokeAsync<bool>("knesetShare.copy", url);
+        if (ok)
+        {
+            _copiedCommentId = commentId;
+            StateHasChanged();
+            await Task.Delay(2000);
+            _copiedCommentId = null;
+        }
+    }
+
+    private void SetFilter(CommentKind? kind) => _filter = kind;
+
+    private async Task PostAsync()
+    {
+        if (_userId is null || string.IsNullOrWhiteSpace(_newText)) return;
+        _busy = true;
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+        db.Comments.Add(new Comment
+        {
+            BillId = BillId,
+            InitiativeId = InitiativeId,
+            UserId = _userId,
+            Kind = _newKind,
+            Text = _newText.Trim(),
+            CreatedAt = DateTime.UtcNow
+        });
+        await db.SaveChangesAsync();
+
+        _newText = "";
+        _newKind = CommentKind.General;
+        await LoadAsync();
+        _busy = false;
+    }
+
+    private async Task DeleteAsync(int commentId)
+    {
+        if (_userId is null) return;
+        await using var db = await DbFactory.CreateDbContextAsync();
+        // Удалять можно только свои комментарии.
+        await db.Comments
+            .Where(c => c.Id == commentId && c.UserId == _userId)
+            .ExecuteDeleteAsync();
+        await LoadAsync();
+    }
+
+    private string KindLabel(CommentKind kind) => kind switch
+    {
+        CommentKind.ArgumentFor => $"✅ {L["For"]}",
+        CommentKind.ArgumentAgainst => $"❌ {L["Against"]}",
+        CommentKind.Question => $"❓ {L["Com_Questions"]}",
+        CommentKind.Suggestion => $"💡 {L["Com_Suggestions"]}",
+        _ => "💬"
+    };
+
+    private static string KindBadge(CommentKind kind) => kind switch
+    {
+        CommentKind.ArgumentFor => "bg-success",
+        CommentKind.ArgumentAgainst => "bg-danger",
+        CommentKind.Question => "bg-info text-dark",
+        CommentKind.Suggestion => "bg-primary",
+        _ => "bg-light text-dark border"
+    };
+
+    private static string KindBorder(CommentKind kind) => kind switch
+    {
+        CommentKind.ArgumentFor => "border-success-subtle",
+        CommentKind.ArgumentAgainst => "border-danger-subtle",
+        _ => ""
+    };
+}

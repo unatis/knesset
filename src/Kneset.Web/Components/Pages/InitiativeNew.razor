@@ -1,0 +1,92 @@
+﻿@page "/initiatives/new"
+@rendermode InteractiveServer
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject NavigationManager Navigation
+@inject IConfiguration Configuration
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["New_Title"]</PageTitle>
+
+<h1>@L["New_Title"]</h1>
+<p class="text-muted" style="max-width:700px">@L["New_Intro"]</p>
+
+<EditForm Model="_model" OnValidSubmit="CreateAsync" style="max-width:700px">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label class="form-label">@L["New_Name"]</label>
+        <InputText class="form-control" @bind-Value="_model.Title"
+                   placeholder="@L["New_NamePh"]" />
+        <ValidationMessage For="() => _model.Title" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@L["New_Problem"]</label>
+        <InputTextArea class="form-control" rows="5" @bind-Value="_model.Problem"
+                       placeholder="@L["New_ProblemPh"]" />
+        <ValidationMessage For="() => _model.Problem" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@L["New_Solution"]</label>
+        <InputTextArea class="form-control" rows="5" @bind-Value="_model.Solution"
+                       placeholder="@L["New_SolutionPh"]" />
+        <ValidationMessage For="() => _model.Solution" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" disabled="@_saving">
+        @(_saving ? L["New_Saving"] : L["New_Create"])
+    </button>
+</EditForm>
+
+@code {
+    private readonly FormModel _model = new();
+    private bool _saving;
+
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private async Task CreateAsync()
+    {
+        if (AuthState is null) return;
+        _saving = true;
+
+        var auth = await AuthState;
+        var userId = auth.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (userId is null) return;
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+        var initiative = new CitizenInitiative
+        {
+            Title = _model.Title.Trim(),
+            ProblemDescription = _model.Problem.Trim(),
+            ProposedSolution = _model.Solution.Trim(),
+            AuthorId = userId,
+            Status = InitiativeStatus.Draft,
+            SignatureThreshold = Configuration.GetValue("Initiatives:SignatureThreshold", 10000),
+            CreatedAt = DateTime.UtcNow
+        };
+        db.CitizenInitiatives.Add(initiative);
+        await db.SaveChangesAsync();
+
+        Navigation.NavigateTo($"/initiatives/{initiative.Id}");
+    }
+
+    private class FormModel
+    {
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Укажите название")]
+        [System.ComponentModel.DataAnnotations.StringLength(300, MinimumLength = 10,
+            ErrorMessage = "Название: от 10 до 300 символов")]
+        public string Title { get; set; } = "";
+
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Опишите проблему")]
+        [System.ComponentModel.DataAnnotations.MinLength(50,
+            ErrorMessage = "Опишите проблему подробнее (минимум 50 символов)")]
+        public string Problem { get; set; } = "";
+
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Опишите решение")]
+        [System.ComponentModel.DataAnnotations.MinLength(50,
+            ErrorMessage = "Опишите решение подробнее (минимум 50 символов)")]
+        public string Solution { get; set; } = "";
+    }
+}

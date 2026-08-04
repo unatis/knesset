@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Brand" xml:space="preserve"><value>🏛️ Кнессет-Трекер</value></data>
+  <data name="Nav_Home" xml:space="preserve"><value>Главная</value></data>
+  <data name="Nav_Bills" xml:space="preserve"><value>Законопроекты</value></data>
+  <data name="Nav_Members" xml:space="preserve"><value>Депутаты</value></data>
+  <data name="Nav_Initiatives" xml:space="preserve"><value>Инициативы</value></data>
+  <data name="Nav_Register" xml:space="preserve"><value>Регистрация</value></data>
+  <data name="Nav_Login" xml:space="preserve"><value>Войти</value></data>
+  <data name="Nav_Logout" xml:space="preserve"><value>Выйти</value></data>
+
+  <data name="Home_Lead" xml:space="preserve"><value>Законопроекты и депутаты Кнессета — с понятным AI-анализом каждой инициативы. Данные из официального API Кнессета.</value></data>
+  <data name="Home_MembersCard" xml:space="preserve"><value>Действующие депутаты</value></data>
+  <data name="Home_LastSync" xml:space="preserve"><value>Последняя синхронизация с Кнессетом:</value></data>
+  <data name="Home_FirstSync" xml:space="preserve"><value>Идёт первая синхронизация с API Кнессета — данные появятся через несколько минут.</value></data>
+
+  <data name="Bills_Search" xml:space="preserve"><value>Поиск по названию...</value></data>
+  <data name="Bills_AllStatuses" xml:space="preserve"><value>Все статусы</value></data>
+  <data name="Bills_AllKnessets" xml:space="preserve"><value>Все созывы</value></data>
+  <data name="Knesset" xml:space="preserve"><value>Кнессет</value></data>
+  <data name="Bills_Found" xml:space="preserve"><value>Найдено:</value></data>
+  <data name="Updated" xml:space="preserve"><value>обновлён</value></data>
+  <data name="Bills_Empty" xml:space="preserve"><value>Ничего не найдено.</value></data>
+  <data name="Page" xml:space="preserve"><value>Стр.</value></data>
+  <data name="Of" xml:space="preserve"><value>из</value></data>
+
+  <data name="Status" xml:space="preserve"><value>Статус</value></data>
+  <data name="InfluenceWindow" xml:space="preserve"><value>Окно влияния</value></data>
+  <data name="Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="PubDate" xml:space="preserve"><value>Дата публикации</value></data>
+  <data name="UpdatedInKnesset" xml:space="preserve"><value>Обновлён в Кнессете</value></data>
+  <data name="Source" xml:space="preserve"><value>Первоисточник</value></data>
+  <data name="OpenAtKnesset" xml:space="preserve"><value>Открыть на сайте Кнессета ↗</value></data>
+  <data name="Description" xml:space="preserve"><value>Описание (из Кнессета)</value></data>
+  <data name="Initiators" xml:space="preserve"><value>Инициаторы</value></data>
+  <data name="NoInitiators" xml:space="preserve"><value>Нет данных — правительственные законопроекты вносятся без личных инициаторов.</value></data>
+  <data name="InitiatorBadge" xml:space="preserve"><value>инициатор</value></data>
+
+  <data name="Reaction_Header" xml:space="preserve"><value>Реакция общества</value></data>
+  <data name="For" xml:space="preserve"><value>За</value></data>
+  <data name="DontKnow" xml:space="preserve"><value>Не знаю</value></data>
+  <data name="Against" xml:space="preserve"><value>Против</value></data>
+  <data name="Votes" xml:space="preserve"><value>Голосов:</value></data>
+  <data name="AmongDecided" xml:space="preserve"><value>среди определившихся за:</value></data>
+  <data name="SmallSample" xml:space="preserve"><value>выборка мала, не репрезентативно</value></data>
+  <data name="NoVotes" xml:space="preserve"><value>Пока никто не голосовал — будьте первым.</value></data>
+  <data name="VoteSaved" xml:space="preserve"><value>Ваш голос учтён — нажмите другую кнопку, чтобы изменить.</value></data>
+  <data name="LoginToVote" xml:space="preserve"><value>Войдите, чтобы выразить позицию</value></data>
+  <data name="Reaction_InitiativeNote" xml:space="preserve"><value>Реакция — общий срез мнений (включая несогласных); подпись ниже — формальная поддержка к порогу.</value></data>
+
+  <data name="Inf_Open" xml:space="preserve"><value>🟢 Окно влияния открыто</value></data>
+  <data name="Inf_Open_Hint" xml:space="preserve"><value>Законопроект в комиссии: заседания открыты, комиссия принимает письменные позиции, текст активно переписывается. Лучший момент для обращения.</value></data>
+  <data name="Inf_Limited" xml:space="preserve"><value>🟡 Влияние ограничено</value></data>
+  <data name="Inf_Limited_Hint" xml:space="preserve"><value>Ждёт чтения в зале — влиять можно только через депутатов: оговорки и голосование.</value></data>
+  <data name="Inf_Late" xml:space="preserve"><value>🔴 Поздно</value></data>
+  <data name="Inf_Late_Hint" xml:space="preserve"><value>Закон принят. Изменить можно только новым законом-поправкой — например, через гражданскую инициативу.</value></data>
+  <data name="Inf_Frozen" xml:space="preserve"><value>⚪ Заморожен</value></data>
+  <data name="Inf_Frozen_Hint" xml:space="preserve"><value>Процесс не движется — влиять не на что, но можно следить за возобновлением.</value></data>
+
+  <data name="Com_Header" xml:space="preserve"><value>Обсуждение</value></data>
+  <data name="Com_All" xml:space="preserve"><value>Все</value></data>
+  <data name="Com_Questions" xml:space="preserve"><value>Вопросы</value></data>
+  <data name="Com_Suggestions" xml:space="preserve"><value>Предложения</value></data>
+  <data name="Com_Placeholder" xml:space="preserve"><value>Ваш комментарий...</value></data>
+  <data name="Com_Send" xml:space="preserve"><value>Отправить</value></data>
+  <data name="Com_LoginPrompt" xml:space="preserve"><value>Войдите, чтобы участвовать в обсуждении.</value></data>
+  <data name="Com_Empty" xml:space="preserve"><value>Пока нет комментариев — начните обсуждение.</value></data>
+  <data name="Com_Delete" xml:space="preserve"><value>удалить</value></data>
+  <data name="Kind_General" xml:space="preserve"><value>💬 Комментарий</value></data>
+  <data name="Kind_For" xml:space="preserve"><value>✅ Аргумент «за»</value></data>
+  <data name="Kind_Against" xml:space="preserve"><value>❌ Аргумент «против»</value></data>
+  <data name="Kind_Question" xml:space="preserve"><value>❓ Вопрос</value></data>
+  <data name="Kind_Suggestion" xml:space="preserve"><value>💡 Предложение</value></data>
+
+  <data name="Members_Title" xml:space="preserve"><value>Депутаты Кнессета</value></data>
+  <data name="Members_Search" xml:space="preserve"><value>Поиск по имени...</value></data>
+  <data name="Members_CurrentOnly" xml:space="preserve"><value>Только действующие</value></data>
+  <data name="Members_Current" xml:space="preserve"><value>действующий</value></data>
+  <data name="Faction" xml:space="preserve"><value>Фракция</value></data>
+  <data name="MemberProfile" xml:space="preserve"><value>Профиль в Кнессете</value></data>
+  <data name="Member_NoBills" xml:space="preserve"><value>В загруженных созывах законопроектов не найдено.</value></data>
+
+  <data name="Init_Title" xml:space="preserve"><value>Гражданские инициативы</value></data>
+  <data name="Init_Create" xml:space="preserve"><value>＋ Создать инициативу</value></data>
+  <data name="Init_Disclaimer" xml:space="preserve"><value>Гражданская законодательная инициатива — не официальный законопроект. В Израиле законопроекты вносят правительство, депутаты Кнессета или комиссии. Инициатива с широкой поддержкой — это аргумент, с которым можно прийти к депутату.</value></data>
+  <data name="Init_Empty" xml:space="preserve"><value>Пока нет опубликованных инициатив. Станьте первым!</value></data>
+  <data name="Init_Signatures" xml:space="preserve"><value>{0} из {1} подписей</value></data>
+  <data name="Init_Author" xml:space="preserve"><value>автор</value></data>
+  <data name="Init_ThresholdBadge" xml:space="preserve"><value>порог достигнут</value></data>
+
+  <data name="Ai_Header" xml:space="preserve"><value>🤖 AI-анализ инициативы</value></data>
+  <data name="Ai_Generating" xml:space="preserve"><value>Анализ генерируется — это займёт несколько секунд...</value></data>
+  <data name="Ai_Unavailable" xml:space="preserve"><value>Анализ недоступен.</value></data>
+  <data name="Ai_Retry" xml:space="preserve"><value>Попробовать снова</value></data>
+  <data name="Ai_WhatProposes" xml:space="preserve"><value>Что предлагает инициатива</value></data>
+  <data name="Ai_Affected" xml:space="preserve"><value>Кого затрагивает</value></data>
+  <data name="Ai_Benefits" xml:space="preserve"><value>Возможные преимущества</value></data>
+  <data name="Ai_Risks" xml:space="preserve"><value>Возможные риски</value></data>
+  <data name="Ai_Arguments" xml:space="preserve"><value>Аргументы сторон</value></data>
+  <data name="Ai_Financial" xml:space="preserve"><value>Экономические последствия</value></data>
+  <data name="Ai_Citizens" xml:space="preserve"><value>Граждане</value></data>
+  <data name="Ai_Budget" xml:space="preserve"><value>Бюджет</value></data>
+  <data name="Ai_OpenQuestions" xml:space="preserve"><value>Открытые вопросы</value></data>
+  <data name="Ai_Disclaimer" xml:space="preserve"><value>Анализ сгенерирован автоматически и не является юридической консультацией. Проверяйте выводы по первоисточникам на сайте Кнессета.</value></data>
+
+  <data name="Meta_Fact" xml:space="preserve"><value>факт</value></data>
+  <data name="Meta_Inference" xml:space="preserve"><value>вывод</value></data>
+  <data name="Meta_Risk" xml:space="preserve"><value>возможный риск</value></data>
+  <data name="Meta_Position" xml:space="preserve"><value>позиция сторон</value></data>
+  <data name="Meta_NoData" xml:space="preserve"><value>недостаточно данных</value></data>
+  <data name="Meta_Source" xml:space="preserve"><value>источник</value></data>
+  <data name="Meta_Confidence" xml:space="preserve"><value>уверенность</value></data>
+
+  <data name="Ctx_Header" xml:space="preserve"><value>🧭 Контекст и интерпретации</value></data>
+  <data name="Ctx_Warning" xml:space="preserve"><value>⚠️ Всё в этой секции — интерпретация, а не факты: анализ интересов, контекста и исторических параллелей по правилам платформы (симметрия сторон, атрибуция каждой позиции, спектр мнений внутри каждой стороны). Описание чьей-либо позиции не является её одобрением.</value></data>
+  <data name="Ctx_WhoBenefits" xml:space="preserve"><value>Кому выгодно</value></data>
+  <data name="Ctx_WhoConcerned" xml:space="preserve"><value>Кто настороженно</value></data>
+  <data name="Ctx_DeFacto" xml:space="preserve"><value>Цели де-факто</value></data>
+  <data name="Ctx_Interp" xml:space="preserve"><value>интерпретация</value></data>
+  <data name="Ctx_Parallels" xml:space="preserve"><value>Исторические параллели</value></data>
+  <data name="Ctx_Case" xml:space="preserve"><value>Кейс</value></data>
+  <data name="Ctx_Lesson" xml:space="preserve"><value>Урок</value></data>
+  <data name="Ctx_Perspectives" xml:space="preserve"><value>Позиции сторон</value></data>
+  <data name="Ctx_PerspNote" xml:space="preserve"><value>(спектр внутри каждой стороны)</value></data>
+  <data name="Ctx_Impact" xml:space="preserve"><value>Влияние на общество</value></data>
+  <data name="Ctx_Footer" xml:space="preserve"><value>Аналитическая секция. Не является фактическим утверждением платформы, юридической консультацией или политической рекомендацией.</value></data>
+
+  <data name="Draft_Header" xml:space="preserve"><value>⚖️ Юридическая структура (AI)</value></data>
+  <data name="Draft_Generating" xml:space="preserve"><value>AI формирует юридическую структуру...</value></data>
+  <data name="Draft_Intro" xml:space="preserve"><value>AI поможет превратить описание в структуру, близкую к формату законодательной инициативы: цель, изменения, пояснительная записка.</value></data>
+  <data name="Draft_Generate" xml:space="preserve"><value>⚡ Сформировать структуру</value></data>
+  <data name="Draft_NotYet" xml:space="preserve"><value>Автор ещё не сформировал юридическую структуру.</value></data>
+  <data name="Draft_Goal" xml:space="preserve"><value>Цель инициативы</value></data>
+  <data name="Draft_Changes" xml:space="preserve"><value>Предлагаемые изменения</value></data>
+  <data name="Draft_Laws" xml:space="preserve"><value>Затрагиваемые законы</value></data>
+  <data name="Draft_Note" xml:space="preserve"><value>Пояснительная записка</value></data>
+  <data name="Draft_Impact" xml:space="preserve"><value>Последствия</value></data>
+  <data name="Draft_Financial" xml:space="preserve"><value>Финансовые</value></data>
+  <data name="Draft_Social" xml:space="preserve"><value>Социальные</value></data>
+  <data name="Draft_Risks" xml:space="preserve"><value>Риски и возражения</value></data>
+
+  <data name="New_Title" xml:space="preserve"><value>Новая гражданская инициатива</value></data>
+  <data name="New_Intro" xml:space="preserve"><value>Опишите проблему и решение обычными словами — AI поможет оформить юридическую структуру на следующем шаге. Инициатива создаётся как черновик: опубликуете, когда будете готовы собирать подписи.</value></data>
+  <data name="New_Name" xml:space="preserve"><value>Название инициативы</value></data>
+  <data name="New_NamePh" xml:space="preserve"><value>Например: Отменить налог на третью квартиру для многодетных семей</value></data>
+  <data name="New_Problem" xml:space="preserve"><value>Какую проблему решаем?</value></data>
+  <data name="New_ProblemPh" xml:space="preserve"><value>Опишите проблему: кого она касается, почему текущее положение дел несправедливо или неэффективно...</value></data>
+  <data name="New_Solution" xml:space="preserve"><value>Что предлагаете изменить?</value></data>
+  <data name="New_SolutionPh" xml:space="preserve"><value>Опишите предлагаемое решение: что должно измениться в законе...</value></data>
+  <data name="New_Create" xml:space="preserve"><value>Создать черновик</value></data>
+  <data name="New_Saving" xml:space="preserve"><value>Сохраняем...</value></data>
+
+  <data name="Init_NotFound" xml:space="preserve"><value>Инициатива не найдена или ещё не опубликована.</value></data>
+  <data name="Init_DraftBanner" xml:space="preserve"><value>📝 Черновик — виден только вам. Опубликуйте, чтобы начать сбор подписей.</value></data>
+  <data name="Init_Created" xml:space="preserve"><value>создана</value></data>
+  <data name="Init_PublishedAt" xml:space="preserve"><value>опубликована</value></data>
+  <data name="Init_DetailDisclaimer" xml:space="preserve"><value>⚖️ Это гражданская законодательная инициатива, а не официальный законопроект Кнессета. Официально внести закон могут только правительство, депутаты или комиссии — цель платформы: подготовить сильную инициативу и найти депутата, готового её продвигать.</value></data>
+  <data name="Init_Problem" xml:space="preserve"><value>Проблема</value></data>
+  <data name="Init_Solution" xml:space="preserve"><value>Предлагаемое решение</value></data>
+  <data name="Init_Support" xml:space="preserve"><value>Поддержка</value></data>
+  <data name="Init_SigCount" xml:space="preserve"><value>подписей</value></data>
+  <data name="Init_Threshold" xml:space="preserve"><value>порог:</value></data>
+  <data name="Init_ReachedMsg" xml:space="preserve"><value>🎉 Порог достигнут — пакет инициативы готов для передачи депутатам.</value></data>
+  <data name="Init_Publish" xml:space="preserve"><value>Опубликовать и начать сбор подписей</value></data>
+  <data name="Init_Signed" xml:space="preserve"><value>✓ Вы подписали</value></data>
+  <data name="Init_Sign" xml:space="preserve"><value>✍ Подписать инициативу</value></data>
+  <data name="Init_LoginToSign" xml:space="preserve"><value>Войдите, чтобы подписать</value></data>
+
+  <data name="Hist_Header" xml:space="preserve"><value>📜 История анализов</value></data>
+  <data name="Hist_Stale" xml:space="preserve"><value>устарел — закон изменился</value></data>
+  <data name="Hist_Current" xml:space="preserve"><value>актуальный</value></data>
+  <data name="Hist_Show" xml:space="preserve"><value>показать</value></data>
+  <data name="Hist_Hide" xml:space="preserve"><value>скрыть</value></data>
+  <data name="Ai_TranslationPending" xml:space="preserve"><value>Перевод на ваш язык готовится — пока показан анализ на другом языке.</value></data>
+
+  <data name="Share_Header" xml:space="preserve"><value>Поделиться</value></data>
+  <data name="Share_Copy" xml:space="preserve"><value>Копировать ссылку</value></data>
+  <data name="Share_Copied" xml:space="preserve"><value>Скопировано</value></data>
+  <data name="Share_Native" xml:space="preserve"><value>Поделиться…</value></data>
+  <data name="Share_CommentLink" xml:space="preserve"><value>Ссылка на комментарий</value></data>
+  <data name="Share_BillText" xml:space="preserve"><value>{0} — обсуждение, реакции и AI-анализ на Кнессет-Трекере</value></data>
+  <data name="Share_InitText" xml:space="preserve"><value>Подпишите гражданскую инициативу: {0}</value></data>
+  <data name="Share_DiscussText" xml:space="preserve"><value>Идёт обсуждение: {0}</value></data>
+</root>

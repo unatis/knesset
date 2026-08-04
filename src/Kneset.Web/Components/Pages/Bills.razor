@@ -1,0 +1,183 @@
+@page "/bills"
+@rendermode InteractiveServer
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["Nav_Bills"]</PageTitle>
+
+<h1>@L["Nav_Bills"]</h1>
+
+<div class="row g-2 mb-3">
+    <div class="col-md-5">
+        <input class="form-control" placeholder="@L["Bills_Search"]"
+               value="@_search" @oninput="OnSearchChanged" />
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" value="@_statusFilter" @onchange="OnStatusChanged">
+            <option value="">@L["Bills_AllStatuses"]</option>
+            @foreach (var status in _statuses)
+            {
+                <option value="@status">@status</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select class="form-select" value="@_knessetFilter" @onchange="OnKnessetChanged">
+            <option value="">@L["Bills_AllKnessets"]</option>
+            @foreach (var num in _knessetNums)
+            {
+                <option value="@num">@L["Knesset"] @num</option>
+            }
+        </select>
+    </div>
+</div>
+
+@if (_bills is null)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else if (_bills.Count == 0)
+{
+    <div class="alert alert-info">@L["Bills_Empty"]</div>
+}
+else
+{
+    <p class="text-muted">@L["Bills_Found"] @_totalCount</p>
+    <div class="list-group mb-3">
+        @foreach (var bill in _bills)
+        {
+            <a href="/bills/@bill.Bill.Id" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1" dir="rtl" lang="he">@bill.Bill.Name</h6>
+                    <span class="text-nowrap">
+                        <InfluenceWindowBadge StatusDesc="@bill.Bill.StatusDesc" />
+                        <BillStatusBadge StatusDesc="@bill.Bill.StatusDesc" />
+                    </span>
+                </div>
+                @if (bill.Bill.NameRu is not null)
+                {
+                    <div class="text-muted small">@bill.Bill.NameRu</div>
+                }
+                <small class="text-muted">
+                    @L["Knesset"] @bill.Bill.KnessetNum
+                    @if (bill.Bill.SubTypeDesc is not null)
+                    {
+                        <span> · <span dir="rtl" lang="he">@bill.Bill.SubTypeDesc</span></span>
+                    }
+                    · @L["Updated"] @bill.Bill.LastUpdatedDate.ToString("dd.MM.yyyy")
+                </small>
+                @if (bill.Support + bill.Oppose + bill.Undecided > 0)
+                {
+                    <div style="max-width:300px">
+                        <ReactionBar Support="@bill.Support" Oppose="@bill.Oppose"
+                                     Undecided="@bill.Undecided" Compact="true" />
+                    </div>
+                }
+            </a>
+        }
+    </div>
+
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(_page == 0 ? "disabled" : "")">
+                <button class="page-link" @onclick="() => GoToPage(_page - 1)">←</button>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link">@L["Page"] @(_page + 1) @L["Of"] @Math.Max(1, (_totalCount + PageSize - 1) / PageSize)</span>
+            </li>
+            <li class="page-item @((_page + 1) * PageSize >= _totalCount ? "disabled" : "")">
+                <button class="page-link" @onclick="() => GoToPage(_page + 1)">→</button>
+            </li>
+        </ul>
+    </nav>
+}
+
+@code {
+    private const int PageSize = 25;
+
+    private List<BillRow>? _bills;
+
+    private record BillRow(Bill Bill, int Support, int Oppose, int Undecided);
+    private int _totalCount;
+    private int _page;
+    private string _search = "";
+    private string _statusFilter = "";
+    private string _knessetFilter = "";
+    private List<string> _statuses = [];
+    private List<int> _knessetNums = [];
+    private System.Timers.Timer? _debounce;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        _statuses = await db.Bills.Where(b => b.StatusDesc != null)
+            .Select(b => b.StatusDesc!).Distinct().OrderBy(s => s).ToListAsync();
+        _knessetNums = await db.Bills.Select(b => b.KnessetNum).Distinct()
+            .OrderByDescending(n => n).ToListAsync();
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        var query = db.Bills.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(_search))
+        {
+            var pattern = $"%{_search.Trim()}%";
+            query = query.Where(b =>
+                EF.Functions.ILike(b.Name, pattern) ||
+                (b.NameRu != null && EF.Functions.ILike(b.NameRu, pattern)));
+        }
+        if (!string.IsNullOrEmpty(_statusFilter))
+            query = query.Where(b => b.StatusDesc == _statusFilter);
+        if (int.TryParse(_knessetFilter, out var knesset))
+            query = query.Where(b => b.KnessetNum == knesset);
+
+        _totalCount = await query.CountAsync();
+        _bills = await query
+            .OrderByDescending(b => b.LastUpdatedDate)
+            .Skip(_page * PageSize).Take(PageSize)
+            .Select(b => new BillRow(
+                b,
+                b.Reactions.Count(r => r.Kind == ReactionKind.Support),
+                b.Reactions.Count(r => r.Kind == ReactionKind.Oppose),
+                b.Reactions.Count(r => r.Kind == ReactionKind.Undecided)))
+            .ToListAsync();
+    }
+
+    private void OnSearchChanged(ChangeEventArgs e)
+    {
+        _search = e.Value?.ToString() ?? "";
+        _debounce?.Stop();
+        _debounce?.Dispose();
+        _debounce = new System.Timers.Timer(400) { AutoReset = false };
+        _debounce.Elapsed += async (_, _) => await InvokeAsync(async () =>
+        {
+            _page = 0;
+            await LoadAsync();
+            StateHasChanged();
+        });
+        _debounce.Start();
+    }
+
+    private async Task OnStatusChanged(ChangeEventArgs e)
+    {
+        _statusFilter = e.Value?.ToString() ?? "";
+        _page = 0;
+        await LoadAsync();
+    }
+
+    private async Task OnKnessetChanged(ChangeEventArgs e)
+    {
+        _knessetFilter = e.Value?.ToString() ?? "";
+        _page = 0;
+        await LoadAsync();
+    }
+
+    private async Task GoToPage(int page)
+    {
+        _page = Math.Max(0, page);
+        await LoadAsync();
+    }
+}

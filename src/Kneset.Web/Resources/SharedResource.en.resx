@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Brand" xml:space="preserve"><value>🏛️ Knesset Tracker</value></data>
+  <data name="Nav_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Nav_Bills" xml:space="preserve"><value>Bills</value></data>
+  <data name="Nav_Members" xml:space="preserve"><value>Members</value></data>
+  <data name="Nav_Initiatives" xml:space="preserve"><value>Initiatives</value></data>
+  <data name="Nav_Register" xml:space="preserve"><value>Register</value></data>
+  <data name="Nav_Login" xml:space="preserve"><value>Log in</value></data>
+  <data name="Nav_Logout" xml:space="preserve"><value>Log out</value></data>
+
+  <data name="Home_Lead" xml:space="preserve"><value>Knesset bills and members — with clear AI analysis of every initiative. Data from the official Knesset API.</value></data>
+  <data name="Home_MembersCard" xml:space="preserve"><value>Current members</value></data>
+  <data name="Home_LastSync" xml:space="preserve"><value>Last sync with the Knesset:</value></data>
+  <data name="Home_FirstSync" xml:space="preserve"><value>First synchronization with the Knesset API is in progress — data will appear in a few minutes.</value></data>
+
+  <data name="Bills_Search" xml:space="preserve"><value>Search by title...</value></data>
+  <data name="Bills_AllStatuses" xml:space="preserve"><value>All statuses</value></data>
+  <data name="Bills_AllKnessets" xml:space="preserve"><value>All Knessets</value></data>
+  <data name="Knesset" xml:space="preserve"><value>Knesset</value></data>
+  <data name="Bills_Found" xml:space="preserve"><value>Found:</value></data>
+  <data name="Updated" xml:space="preserve"><value>updated</value></data>
+  <data name="Bills_Empty" xml:space="preserve"><value>Nothing found.</value></data>
+  <data name="Page" xml:space="preserve"><value>Page</value></data>
+  <data name="Of" xml:space="preserve"><value>of</value></data>
+
+  <data name="Status" xml:space="preserve"><value>Status</value></data>
+  <data name="InfluenceWindow" xml:space="preserve"><value>Influence window</value></data>
+  <data name="Type" xml:space="preserve"><value>Type</value></data>
+  <data name="PubDate" xml:space="preserve"><value>Publication date</value></data>
+  <data name="UpdatedInKnesset" xml:space="preserve"><value>Updated in the Knesset</value></data>
+  <data name="Source" xml:space="preserve"><value>Source</value></data>
+  <data name="OpenAtKnesset" xml:space="preserve"><value>Open on the Knesset website ↗</value></data>
+  <data name="Description" xml:space="preserve"><value>Description (from the Knesset)</value></data>
+  <data name="Initiators" xml:space="preserve"><value>Initiators</value></data>
+  <data name="NoInitiators" xml:space="preserve"><value>No data — government bills are submitted without individual initiators.</value></data>
+  <data name="InitiatorBadge" xml:space="preserve"><value>initiator</value></data>
+
+  <data name="Reaction_Header" xml:space="preserve"><value>Public reaction</value></data>
+  <data name="For" xml:space="preserve"><value>For</value></data>
+  <data name="DontKnow" xml:space="preserve"><value>Undecided</value></data>
+  <data name="Against" xml:space="preserve"><value>Against</value></data>
+  <data name="Votes" xml:space="preserve"><value>Votes:</value></data>
+  <data name="AmongDecided" xml:space="preserve"><value>among decided, for:</value></data>
+  <data name="SmallSample" xml:space="preserve"><value>small sample, not representative</value></data>
+  <data name="NoVotes" xml:space="preserve"><value>No votes yet — be the first.</value></data>
+  <data name="VoteSaved" xml:space="preserve"><value>Your vote is saved — press another button to change it.</value></data>
+  <data name="LoginToVote" xml:space="preserve"><value>Log in to vote</value></data>
+  <data name="Reaction_InitiativeNote" xml:space="preserve"><value>Reactions are an overall opinion snapshot (including opponents); the signature below is formal support toward the threshold.</value></data>
+
+  <data name="Inf_Open" xml:space="preserve"><value>🟢 Influence window open</value></data>
+  <data name="Inf_Open_Hint" xml:space="preserve"><value>The bill is in committee: sessions are public, written positions are accepted, the text is actively rewritten. The best moment to act.</value></data>
+  <data name="Inf_Limited" xml:space="preserve"><value>🟡 Influence limited</value></data>
+  <data name="Inf_Limited_Hint" xml:space="preserve"><value>Awaiting a plenum reading — influence only through MKs: reservations and votes.</value></data>
+  <data name="Inf_Late" xml:space="preserve"><value>🔴 Too late</value></data>
+  <data name="Inf_Late_Hint" xml:space="preserve"><value>The law is passed. It can only be changed by a new amending law — for example, via a civic initiative.</value></data>
+  <data name="Inf_Frozen" xml:space="preserve"><value>⚪ Frozen</value></data>
+  <data name="Inf_Frozen_Hint" xml:space="preserve"><value>The process is stalled — nothing to influence, but you can watch for resumption.</value></data>
+
+  <data name="Com_Header" xml:space="preserve"><value>Discussion</value></data>
+  <data name="Com_All" xml:space="preserve"><value>All</value></data>
+  <data name="Com_Questions" xml:space="preserve"><value>Questions</value></data>
+  <data name="Com_Suggestions" xml:space="preserve"><value>Suggestions</value></data>
+  <data name="Com_Placeholder" xml:space="preserve"><value>Your comment...</value></data>
+  <data name="Com_Send" xml:space="preserve"><value>Send</value></data>
+  <data name="Com_LoginPrompt" xml:space="preserve"><value>Log in to join the discussion.</value></data>
+  <data name="Com_Empty" xml:space="preserve"><value>No comments yet — start the discussion.</value></data>
+  <data name="Com_Delete" xml:space="preserve"><value>delete</value></data>
+  <data name="Kind_General" xml:space="preserve"><value>💬 Comment</value></data>
+  <data name="Kind_For" xml:space="preserve"><value>✅ Argument for</value></data>
+  <data name="Kind_Against" xml:space="preserve"><value>❌ Argument against</value></data>
+  <data name="Kind_Question" xml:space="preserve"><value>❓ Question</value></data>
+  <data name="Kind_Suggestion" xml:space="preserve"><value>💡 Suggestion</value></data>
+
+  <data name="Members_Title" xml:space="preserve"><value>Knesset Members</value></data>
+  <data name="Members_Search" xml:space="preserve"><value>Search by name...</value></data>
+  <data name="Members_CurrentOnly" xml:space="preserve"><value>Current only</value></data>
+  <data name="Members_Current" xml:space="preserve"><value>current</value></data>
+  <data name="Faction" xml:space="preserve"><value>Faction</value></data>
+  <data name="MemberProfile" xml:space="preserve"><value>Knesset profile</value></data>
+  <data name="Member_NoBills" xml:space="preserve"><value>No bills found in the loaded Knesset terms.</value></data>
+
+  <data name="Init_Title" xml:space="preserve"><value>Civic Initiatives</value></data>
+  <data name="Init_Create" xml:space="preserve"><value>＋ Create initiative</value></data>
+  <data name="Init_Disclaimer" xml:space="preserve"><value>A civic legislative initiative is not an official bill. In Israel, bills are submitted by the government, Knesset members, or committees. An initiative with broad support is an argument to bring to an MK.</value></data>
+  <data name="Init_Empty" xml:space="preserve"><value>No published initiatives yet. Be the first!</value></data>
+  <data name="Init_Signatures" xml:space="preserve"><value>{0} of {1} signatures</value></data>
+  <data name="Init_Author" xml:space="preserve"><value>by</value></data>
+  <data name="Init_ThresholdBadge" xml:space="preserve"><value>threshold reached</value></data>
+
+  <data name="Ai_Header" xml:space="preserve"><value>🤖 AI Analysis</value></data>
+  <data name="Ai_Generating" xml:space="preserve"><value>Generating the analysis — this takes a few seconds...</value></data>
+  <data name="Ai_Unavailable" xml:space="preserve"><value>Analysis unavailable.</value></data>
+  <data name="Ai_Retry" xml:space="preserve"><value>Try again</value></data>
+  <data name="Ai_WhatProposes" xml:space="preserve"><value>What the initiative proposes</value></data>
+  <data name="Ai_Affected" xml:space="preserve"><value>Who is affected</value></data>
+  <data name="Ai_Benefits" xml:space="preserve"><value>Potential benefits</value></data>
+  <data name="Ai_Risks" xml:space="preserve"><value>Potential risks</value></data>
+  <data name="Ai_Arguments" xml:space="preserve"><value>Arguments of the sides</value></data>
+  <data name="Ai_Financial" xml:space="preserve"><value>Financial impact</value></data>
+  <data name="Ai_Citizens" xml:space="preserve"><value>Citizens</value></data>
+  <data name="Ai_Budget" xml:space="preserve"><value>Budget</value></data>
+  <data name="Ai_OpenQuestions" xml:space="preserve"><value>Open questions</value></data>
+  <data name="Ai_Disclaimer" xml:space="preserve"><value>The analysis is generated automatically and is not legal advice. Verify conclusions against primary sources on the Knesset website.</value></data>
+
+  <data name="Meta_Fact" xml:space="preserve"><value>fact</value></data>
+  <data name="Meta_Inference" xml:space="preserve"><value>inference</value></data>
+  <data name="Meta_Risk" xml:space="preserve"><value>potential risk</value></data>
+  <data name="Meta_Position" xml:space="preserve"><value>position</value></data>
+  <data name="Meta_NoData" xml:space="preserve"><value>insufficient data</value></data>
+  <data name="Meta_Source" xml:space="preserve"><value>source</value></data>
+  <data name="Meta_Confidence" xml:space="preserve"><value>confidence</value></data>
+
+  <data name="Ctx_Header" xml:space="preserve"><value>🧭 Context and Interpretations</value></data>
+  <data name="Ctx_Warning" xml:space="preserve"><value>⚠️ Everything in this section is interpretation, not fact: an analysis of interests, context, and historical parallels under the platform's rules (symmetry of sides, attribution of every position, a spectrum of opinions within each side). Describing a position is not endorsing it.</value></data>
+  <data name="Ctx_WhoBenefits" xml:space="preserve"><value>Who benefits</value></data>
+  <data name="Ctx_WhoConcerned" xml:space="preserve"><value>Who is wary</value></data>
+  <data name="Ctx_DeFacto" xml:space="preserve"><value>De facto goals</value></data>
+  <data name="Ctx_Interp" xml:space="preserve"><value>interpretation</value></data>
+  <data name="Ctx_Parallels" xml:space="preserve"><value>Historical parallels</value></data>
+  <data name="Ctx_Case" xml:space="preserve"><value>Case</value></data>
+  <data name="Ctx_Lesson" xml:space="preserve"><value>Lesson</value></data>
+  <data name="Ctx_Perspectives" xml:space="preserve"><value>Positions of the sides</value></data>
+  <data name="Ctx_PerspNote" xml:space="preserve"><value>(spectrum within each side)</value></data>
+  <data name="Ctx_Impact" xml:space="preserve"><value>Impact on society</value></data>
+  <data name="Ctx_Footer" xml:space="preserve"><value>Analytical section. Not a factual claim by the platform, legal advice, or a political recommendation.</value></data>
+
+  <data name="Draft_Header" xml:space="preserve"><value>⚖️ Legal structure (AI)</value></data>
+  <data name="Draft_Generating" xml:space="preserve"><value>AI is drafting the legal structure...</value></data>
+  <data name="Draft_Intro" xml:space="preserve"><value>AI will help turn the description into a structure close to a legislative initiative format: goal, changes, explanatory note.</value></data>
+  <data name="Draft_Generate" xml:space="preserve"><value>⚡ Draft the structure</value></data>
+  <data name="Draft_NotYet" xml:space="preserve"><value>The author has not drafted the legal structure yet.</value></data>
+  <data name="Draft_Goal" xml:space="preserve"><value>Goal of the initiative</value></data>
+  <data name="Draft_Changes" xml:space="preserve"><value>Proposed changes</value></data>
+  <data name="Draft_Laws" xml:space="preserve"><value>Affected laws</value></data>
+  <data name="Draft_Note" xml:space="preserve"><value>Explanatory note</value></data>
+  <data name="Draft_Impact" xml:space="preserve"><value>Impact</value></data>
+  <data name="Draft_Financial" xml:space="preserve"><value>Financial</value></data>
+  <data name="Draft_Social" xml:space="preserve"><value>Social</value></data>
+  <data name="Draft_Risks" xml:space="preserve"><value>Risks and objections</value></data>
+
+  <data name="New_Title" xml:space="preserve"><value>New civic initiative</value></data>
+  <data name="New_Intro" xml:space="preserve"><value>Describe the problem and solution in plain words — AI will help draft the legal structure at the next step. The initiative is created as a draft: publish it when you are ready to collect signatures.</value></data>
+  <data name="New_Name" xml:space="preserve"><value>Initiative title</value></data>
+  <data name="New_NamePh" xml:space="preserve"><value>For example: Abolish the third-apartment tax for large families</value></data>
+  <data name="New_Problem" xml:space="preserve"><value>What problem are we solving?</value></data>
+  <data name="New_ProblemPh" xml:space="preserve"><value>Describe the problem: who it affects and why the current state of affairs is unfair or inefficient...</value></data>
+  <data name="New_Solution" xml:space="preserve"><value>What do you propose to change?</value></data>
+  <data name="New_SolutionPh" xml:space="preserve"><value>Describe the proposed solution: what should change in the law...</value></data>
+  <data name="New_Create" xml:space="preserve"><value>Create draft</value></data>
+  <data name="New_Saving" xml:space="preserve"><value>Saving...</value></data>
+
+  <data name="Init_NotFound" xml:space="preserve"><value>Initiative not found or not yet published.</value></data>
+  <data name="Init_DraftBanner" xml:space="preserve"><value>📝 Draft — visible only to you. Publish to start collecting signatures.</value></data>
+  <data name="Init_Created" xml:space="preserve"><value>created</value></data>
+  <data name="Init_PublishedAt" xml:space="preserve"><value>published</value></data>
+  <data name="Init_DetailDisclaimer" xml:space="preserve"><value>⚖️ This is a civic legislative initiative, not an official Knesset bill. Only the government, MKs, or committees can formally submit a law — the platform's goal is to prepare a strong initiative and find an MK willing to advance it.</value></data>
+  <data name="Init_Problem" xml:space="preserve"><value>Problem</value></data>
+  <data name="Init_Solution" xml:space="preserve"><value>Proposed solution</value></data>
+  <data name="Init_Support" xml:space="preserve"><value>Support</value></data>
+  <data name="Init_SigCount" xml:space="preserve"><value>signatures</value></data>
+  <data name="Init_Threshold" xml:space="preserve"><value>threshold:</value></data>
+  <data name="Init_ReachedMsg" xml:space="preserve"><value>🎉 Threshold reached — the initiative package is ready to be handed to MKs.</value></data>
+  <data name="Init_Publish" xml:space="preserve"><value>Publish and start collecting signatures</value></data>
+  <data name="Init_Signed" xml:space="preserve"><value>✓ You signed</value></data>
+  <data name="Init_Sign" xml:space="preserve"><value>✍ Sign the initiative</value></data>
+  <data name="Init_LoginToSign" xml:space="preserve"><value>Log in to sign</value></data>
+
+  <data name="Hist_Header" xml:space="preserve"><value>📜 Analysis history</value></data>
+  <data name="Hist_Stale" xml:space="preserve"><value>outdated — the bill changed</value></data>
+  <data name="Hist_Current" xml:space="preserve"><value>current</value></data>
+  <data name="Hist_Show" xml:space="preserve"><value>show</value></data>
+  <data name="Hist_Hide" xml:space="preserve"><value>hide</value></data>
+  <data name="Ai_TranslationPending" xml:space="preserve"><value>A translation into your language is being prepared — showing the analysis in another language for now.</value></data>
+
+  <data name="Share_Header" xml:space="preserve"><value>Share</value></data>
+  <data name="Share_Copy" xml:space="preserve"><value>Copy link</value></data>
+  <data name="Share_Copied" xml:space="preserve"><value>Copied</value></data>
+  <data name="Share_Native" xml:space="preserve"><value>Share…</value></data>
+  <data name="Share_CommentLink" xml:space="preserve"><value>Link to comment</value></data>
+  <data name="Share_BillText" xml:space="preserve"><value>{0} — discussion, reactions and AI analysis on Knesset Tracker</value></data>
+  <data name="Share_InitText" xml:space="preserve"><value>Sign the civic initiative: {0}</value></data>
+  <data name="Share_DiscussText" xml:space="preserve"><value>Discussion in progress: {0}</value></data>
+</root>

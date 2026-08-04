@@ -1,0 +1,79 @@
+@using System.Net
+@inject IStringLocalizer<SharedResource> L
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+@* Мгновенный шеринг: WhatsApp/Telegram/X/Facebook — share-интенты без SDK,
+   системное меню на мобильных (Web Share API), копирование ссылки. *@
+<div class="d-flex align-items-center gap-1 flex-wrap my-2">
+    <small class="text-muted me-1">@L["Share_Header"]:</small>
+
+    <a class="btn btn-sm btn-outline-success" target="_blank" rel="noopener"
+       href="https://wa.me/?text=@Encoded($"{Text} {AbsoluteUrl}")" title="WhatsApp">
+        WhatsApp
+    </a>
+    <a class="btn btn-sm btn-outline-primary" target="_blank" rel="noopener"
+       href="https://t.me/share/url?url=@Encoded(AbsoluteUrl)&text=@Encoded(Text)" title="Telegram">
+        Telegram
+    </a>
+    <a class="btn btn-sm btn-outline-dark" target="_blank" rel="noopener"
+       href="https://twitter.com/intent/tweet?text=@Encoded(Text)&url=@Encoded(AbsoluteUrl)" title="X">
+        X
+    </a>
+    <a class="btn btn-sm btn-outline-primary" target="_blank" rel="noopener"
+       href="https://www.facebook.com/sharer/sharer.php?u=@Encoded(AbsoluteUrl)" title="Facebook">
+        Facebook
+    </a>
+
+    <button class="btn btn-sm btn-outline-secondary" @onclick="CopyAsync" title="@L["Share_Copy"]">
+        @(_copied ? $"✓ {L["Share_Copied"]}" : $"📋 {L["Share_Copy"]}")
+    </button>
+
+    @if (_nativeShareAvailable)
+    {
+        <button class="btn btn-sm btn-secondary" @onclick="NativeShareAsync">
+            📤 @L["Share_Native"]
+        </button>
+    }
+</div>
+
+@code {
+    /// <summary>Относительный путь страницы, напр. "/bills/35" (можно с якорем).</summary>
+    [Parameter, EditorRequired] public string Path { get; set; } = "";
+
+    [Parameter] public string Title { get; set; } = "";
+
+    /// <summary>Готовый текст сообщения (вовлекающий, локализованный).</summary>
+    [Parameter] public string Text { get; set; } = "";
+
+    private bool _copied;
+    private bool _nativeShareAvailable;
+
+    private string AbsoluteUrl => new Uri(new Uri(Navigation.BaseUri), Path).ToString();
+
+    private static string Encoded(string value) => WebUtility.UrlEncode(value);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _nativeShareAvailable = await JS.InvokeAsync<bool>("knesetShare.canNativeShare");
+            if (_nativeShareAvailable) StateHasChanged();
+        }
+    }
+
+    private async Task CopyAsync()
+    {
+        var ok = await JS.InvokeAsync<bool>("knesetShare.copy", AbsoluteUrl);
+        if (ok)
+        {
+            _copied = true;
+            StateHasChanged();
+            await Task.Delay(2000);
+            _copied = false;
+        }
+    }
+
+    private async Task NativeShareAsync() =>
+        await JS.InvokeAsync<bool>("knesetShare.nativeShare", AbsoluteUrl, Title, Text);
+}

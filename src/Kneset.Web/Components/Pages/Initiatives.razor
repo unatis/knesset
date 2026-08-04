@@ -1,0 +1,82 @@
+﻿@page "/initiatives"
+@rendermode InteractiveServer
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["Init_Title"]</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h1>@L["Init_Title"]</h1>
+    <a href="/initiatives/new" class="btn btn-primary">@L["Init_Create"]</a>
+</div>
+
+<div class="alert alert-light border">
+    @L["Init_Disclaimer"]
+</div>
+
+@if (_initiatives is null)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else if (_initiatives.Count == 0)
+{
+    <div class="alert alert-info">@L["Init_Empty"]</div>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var item in _initiatives)
+        {
+            var percent = Math.Min(100, item.SignatureCount * 100 / Math.Max(1, item.Threshold));
+            <a href="/initiatives/@item.Id" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">@item.Title</h6>
+                    @if (item.Status == InitiativeStatus.ThresholdReached)
+                    {
+                        <span class="badge bg-success">@L["Init_ThresholdBadge"]</span>
+                    }
+                </div>
+                <div class="progress mb-1" style="height:6px;max-width:400px">
+                    <div class="progress-bar @(percent >= 100 ? "bg-success" : "")" style="width:@percent%"></div>
+                </div>
+                <small class="text-muted">
+                    @string.Format(L["Init_Signatures"], item.SignatureCount, item.Threshold) · @L["Init_Author"] @item.AuthorName ·
+                    @item.PublishedAt?.ToString("dd.MM.yyyy")
+                </small>
+                @if (item.Support + item.Oppose + item.Undecided > 0)
+                {
+                    <div style="max-width:300px">
+                        <ReactionBar Support="@item.Support" Oppose="@item.Oppose"
+                                     Undecided="@item.Undecided" Compact="true" />
+                    </div>
+                }
+            </a>
+        }
+    </div>
+}
+
+@code {
+    private List<InitiativeListItem>? _initiatives;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        _initiatives = await db.CitizenInitiatives.AsNoTracking()
+            .Where(i => i.Status != InitiativeStatus.Draft)
+            .OrderByDescending(i => i.PublishedAt)
+            .Select(i => new InitiativeListItem(
+                i.Id, i.Title, i.Status,
+                i.Signatures.Count, i.SignatureThreshold,
+                i.Author.DisplayName ?? i.Author.UserName ?? "аноним",
+                i.PublishedAt,
+                db.InitiativeReactions.Count(r => r.InitiativeId == i.Id && r.Kind == ReactionKind.Support),
+                db.InitiativeReactions.Count(r => r.InitiativeId == i.Id && r.Kind == ReactionKind.Oppose),
+                db.InitiativeReactions.Count(r => r.InitiativeId == i.Id && r.Kind == ReactionKind.Undecided)))
+            .ToListAsync();
+    }
+
+    private record InitiativeListItem(
+        int Id, string Title, InitiativeStatus Status,
+        int SignatureCount, int Threshold, string AuthorName, DateTime? PublishedAt,
+        int Support, int Oppose, int Undecided);
+}
