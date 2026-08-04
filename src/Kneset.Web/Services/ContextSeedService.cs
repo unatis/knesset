@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Kneset.Web.Services;
 
 /// <summary>
-/// Одноразовый сидер редакционных контекстных анализов из Seed/context-analyses.json.
+/// Сидер редакционных контекстных анализов из Seed/context-analyses.json.
 /// Механизм для ручной/редакционной подготовки секций «Контекст и интерпретации»,
 /// пока автоматическая генерация не подключена. Upsert по (KnessetBillId, ModelVersion):
 /// уже загруженные записи не дублируются.
@@ -15,54 +15,92 @@ namespace Kneset.Web.Services;
 public class ContextSeedService(
     IDbContextFactory<AppDbContext> dbFactory,
     IWebHostEnvironment env,
-    ILogger<ContextSeedService> logger) : IHostedService
+    ILogger<ContextSeedService> logger) : BackgroundService
 {
-    public async Task StartAsync(CancellationToken ct)
+    private static readonly TimeSpan RetryDelay = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan GiveUpAfter = TimeSpan.FromMinutes(30);
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        try
+        // На чистой базе законопроекты появляются только после первой синхронизации,
+        // поэтому сидер ждёт их и повторяет попытки, а не сдаётся на первом проходе.
+        var deadline = DateTime.UtcNow + GiveUpAfter;
+
+        while (!stoppingToken.IsCancellationRequested)
         {
-            var path = Path.Combine(env.ContentRootPath, "Seed", "context-analyses.json");
-            if (!File.Exists(path)) return;
-
-            var json = await File.ReadAllTextAsync(path, ct);
-            var seeds = JsonSerializer.Deserialize<List<ContextSeed>>(json);
-            if (seeds is null || seeds.Count == 0) return;
-
-            await using var db = await dbFactory.CreateDbContextAsync(ct);
-            foreach (var seed in seeds)
+            int missing;
+            try
             {
-                var bill = await db.Bills.AsNoTracking()
-                    .FirstOrDefaultAsync(b => b.KnessetBillId == seed.KnessetBillId, ct);
-                if (bill is null)
-                {
-                    logger.LogWarning("Сид контекста: законопроект {KnessetBillId} не найден в базе", seed.KnessetBillId);
-                    continue;
-                }
-
-                var exists = await db.BillContextAnalyses.AnyAsync(c =>
-                    c.BillId == bill.Id && c.ModelVersion == seed.ModelVersion && !c.IsStale, ct);
-                if (exists) continue;
-
-                db.BillContextAnalyses.Add(new BillContextAnalysis
-                {
-                    BillId = bill.Id,
-                    ContextJson = JsonSerializer.Serialize(seed.Context),
-                    ModelVersion = seed.ModelVersion,
-                    LanguageCode = seed.LanguageCode,
-                    GeneratedAt = DateTime.UtcNow
-                });
-                logger.LogInformation("Сид контекста: загружен анализ для законопроекта {KnessetBillId}", seed.KnessetBillId);
+                missing = await SeedAsync(stoppingToken);
             }
-            await db.SaveChangesAsync(ct);
-        }
-        catch (Exception ex)
-        {
-            // Сидер не должен ронять приложение.
-            logger.LogError(ex, "Ошибка загрузки сидов контекстного анализа");
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+            {
+                return;
+            }
+            catch (Exception ex)
+            {
+                // Сидер не должен ронять приложение.
+                logger.LogError(ex, "Ошибка загрузки сидов контекстного анализа");
+                return;
+            }
+
+            if (missing == 0) return;
+
+            if (DateTime.UtcNow > deadline)
+            {
+                logger.LogWarning(
+                    "Сид контекста: {Count} записей так и не загружено — соответствующих " +
+                    "законопроектов нет в базе", missing);
+                return;
+            }
+
+            await Task.Delay(RetryDelay, stoppingToken);
         }
     }
 
-    public Task StopAsync(CancellationToken ct) => Task.CompletedTask;
+    /// <summary>Загружает недостающие сиды. Возвращает число записей, для которых
+    /// законопроект ещё не появился в базе.</summary>
+    private async Task<int> SeedAsync(CancellationToken ct)
+    {
+        var path = Path.Combine(env.ContentRootPath, "Seed", "context-analyses.json");
+        if (!File.Exists(path)) return 0;
+
+        var json = await File.ReadAllTextAsync(path, ct);
+        var seeds = JsonSerializer.Deserialize<List<ContextSeed>>(json);
+        if (seeds is null || seeds.Count == 0) return 0;
+
+        await using var db = await dbFactory.CreateDbContextAsync(ct);
+        var missing = 0;
+
+        foreach (var seed in seeds)
+        {
+            var bill = await db.Bills.AsNoTracking()
+                .FirstOrDefaultAsync(b => b.KnessetBillId == seed.KnessetBillId, ct);
+            if (bill is null)
+            {
+                missing++;
+                continue;
+            }
+
+            var exists = await db.BillContextAnalyses.AnyAsync(c =>
+                c.BillId == bill.Id && c.ModelVersion == seed.ModelVersion && !c.IsStale, ct);
+            if (exists) continue;
+
+            db.BillContextAnalyses.Add(new BillContextAnalysis
+            {
+                BillId = bill.Id,
+                ContextJson = JsonSerializer.Serialize(seed.Context),
+                ModelVersion = seed.ModelVersion,
+                LanguageCode = seed.LanguageCode,
+                GeneratedAt = DateTime.UtcNow
+            });
+            logger.LogInformation("Сид контекста: загружен анализ для законопроекта {KnessetBillId}",
+                seed.KnessetBillId);
+        }
+
+        await db.SaveChangesAsync(ct);
+        return missing;
+    }
 
     private record ContextSeed
     {
