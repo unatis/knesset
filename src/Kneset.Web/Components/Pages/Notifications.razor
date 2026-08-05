@@ -1,0 +1,189 @@
+@page "/notifications"
+@rendermode InteractiveServer
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@using Kneset.Core.Entities
+@using Kneset.Web.Services
+@inject IStringLocalizer<SharedResource> L
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject NotificationTextBuilder TextBuilder
+
+<PageTitle>@L["Notif_Title"]</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <h2 class="mb-0">@L["Notif_Title"]</h2>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary btn-sm" href="settings/notifications">⚙️ @L["Notif_Settings"]</a>
+        @if (_items.Any(i => i.ReadAt is null))
+        {
+            <button class="btn btn-outline-primary btn-sm" @onclick="MarkAllReadAsync" disabled="@_busy">
+                @L["Notif_MarkAllRead"]
+            </button>
+        }
+    </div>
+</div>
+
+@if (_loading)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else if (_items.Count == 0)
+{
+    <div class="alert alert-light border mt-3">@L["Notif_Empty"]</div>
+}
+else
+{
+    <ul class="list-group mt-3">
+        @foreach (var group in _groups)
+        {
+            @if (group.Collapsed is not null)
+            {
+                @* Режим сводки: события «новый законопроект» за сутки — одной строкой. *@
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <div>
+                            <strong>@string.Format(L["Notif_DigestDay"], group.Collapsed.Count)</strong>
+                            <div class="small text-muted">@group.Day.ToString("dd.MM.yyyy")</div>
+                        </div>
+                        @if (group.Collapsed.Any(n => n.ReadAt is null))
+                        {
+                            <span class="badge bg-danger">@L["Notif_Unread"]</span>
+                        }
+                    </div>
+                    <ul class="list-unstyled mt-2 mb-0 ps-3">
+                        @foreach (var item in group.Collapsed)
+                        {
+                            <li class="mb-1">
+                                <a href="/bills/@item.BillId" @onclick="() => MarkReadAsync(item.Id)"
+                                   @onclick:preventDefault="false">@_titles.GetValueOrDefault(item.BillId, "")</a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+            else
+            {
+                foreach (var item in group.Items)
+                {
+                    <li class="list-group-item @(item.ReadAt is null ? "border-start border-3 border-primary" : "")">
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+                            <div>
+                                <a class="fw-semibold" href="/bills/@item.BillId"
+                                   @onclick="() => MarkReadAsync(item.Id)" @onclick:preventDefault="false">
+                                    @TextBuilder.BuildSubject(item, _titles.GetValueOrDefault(item.BillId, ""), _lang)
+                                </a>
+                                <div class="small text-muted">@TextBuilder.BuildReason(item, _lang)</div>
+                            </div>
+                            <div class="text-end flex-shrink-0">
+                                @if (item.ReadAt is null)
+                                {
+                                    <span class="badge bg-danger">@L["Notif_Unread"]</span>
+                                }
+                                <div class="small text-muted">@item.CreatedAt.ToString("dd.MM HH:mm")</div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+        }
+    </ul>
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private readonly List<Notification> _items = [];
+    private List<Group> _groups = [];
+    private Dictionary<int, string> _titles = [];
+    private string _lang = "ru";
+    private string? _userId;
+    private bool _loading = true;
+    private bool _busy;
+
+    private record Group(DateTime Day, List<Notification> Items, List<Notification>? Collapsed);
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthState is not null)
+        {
+            var auth = await AuthState;
+            _userId = auth.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        await LoadAsync();
+        _loading = false;
+    }
+
+    private async Task LoadAsync()
+    {
+        if (_userId is null) return;
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        var user = await db.Users.AsNoTracking()
+            .Where(u => u.Id == _userId)
+            .Select(u => new { u.PreferredLanguage, u.NotificationMode })
+            .FirstOrDefaultAsync();
+
+        _lang = user?.PreferredLanguage ?? "ru";
+
+        _items.Clear();
+        _items.AddRange(await db.Notifications.AsNoTracking()
+            .Where(n => n.UserId == _userId)
+            .OrderByDescending(n => n.CreatedAt)
+            .Take(200)
+            .ToListAsync());
+
+        _titles = await TextBuilder.LoadTitlesAsync(
+            _items.Select(n => n.BillId).Distinct().ToList(), _lang, CancellationToken.None);
+
+        BuildGroups(user?.NotificationMode ?? NotificationMode.Immediate);
+    }
+
+    /// <summary>
+    /// В режиме сводки схлопываем «новые законопроекты» за сутки в одну строку.
+    /// Точечные поводы (депутат, слово, отслеживаемый закон) не группируем никогда —
+    /// они редкие, и терять их в общей куче нельзя.
+    /// </summary>
+    private void BuildGroups(NotificationMode mode)
+    {
+        if (mode == NotificationMode.Immediate)
+        {
+            _groups = [new Group(DateTime.MinValue, _items, null)];
+            return;
+        }
+
+        _groups = [];
+        foreach (var byDay in _items.GroupBy(n => n.CreatedAt.Date).OrderByDescending(g => g.Key))
+        {
+            var bulk = byDay
+                .Where(n => n.Kind == NotificationKind.NewBill && n.TriggeredBy == SubscriptionKind.AllNewBills)
+                .ToList();
+            var rest = byDay.Except(bulk).ToList();
+
+            if (rest.Count > 0) _groups.Add(new Group(byDay.Key, rest, null));
+            if (bulk.Count > 0) _groups.Add(new Group(byDay.Key, [], bulk));
+        }
+    }
+
+    private async Task MarkReadAsync(int id)
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        await db.Notifications
+            .Where(n => n.Id == id && n.UserId == _userId && n.ReadAt == null)
+            .ExecuteUpdateAsync(s => s.SetProperty(n => n.ReadAt, DateTime.UtcNow));
+    }
+
+    private async Task MarkAllReadAsync()
+    {
+        if (_userId is null || _busy) return;
+        _busy = true;
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+        await db.Notifications
+            .Where(n => n.UserId == _userId && n.ReadAt == null)
+            .ExecuteUpdateAsync(s => s.SetProperty(n => n.ReadAt, DateTime.UtcNow));
+
+        await LoadAsync();
+        _busy = false;
+    }
+}

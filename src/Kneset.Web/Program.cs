@@ -4,6 +4,7 @@ using Kneset.Web;
 using Kneset.Infrastructure.Ai;
 using Kneset.Infrastructure.Data;
 using Kneset.Infrastructure.Knesset;
+using Kneset.Infrastructure.Notifications;
 using Kneset.Web.Components;
 using Kneset.Web.Components.Account;
 using Kneset.Web.Services;
@@ -24,7 +25,11 @@ builder.Services.AddRazorComponents()
 // Переводы читаются из БД (UiTranslations, кэш 5 мин) с fallback на .resx.
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddMemoryCache();
-builder.Services.AddSingleton<IStringLocalizer<SharedResource>, DbBackedLocalizer>();
+// Конкретный тип нужен фоновой рассылке: у неё нет CurrentUICulture, и она
+// запрашивает строки на языке получателя через DbBackedLocalizer.GetString(key, lang).
+builder.Services.AddSingleton<DbBackedLocalizer>();
+builder.Services.AddSingleton<IStringLocalizer<SharedResource>>(sp =>
+    sp.GetRequiredService<DbBackedLocalizer>());
 builder.Services.AddHostedService<UiTranslationSeedService>();
 
 // Normalize принимает и формат Npgsql, и URI «postgresql://…», который показывает Supabase.
@@ -80,6 +85,29 @@ builder.Services.AddHttpClient<KnessetWebsiteClient>(http =>
     http.BaseAddress = new Uri("https://knesset.gov.il/WebSiteApi/");
     http.Timeout = TimeSpan.FromSeconds(30);
 });
+
+// Уведомления. По-настоящему доставляется только колокольчик на сайте; почта,
+// мессенджеры и SMS показываются в настройках с пометкой «в разработке» и пишут
+// сообщения в лог. Подключение реального канала — свой класс INotificationChannel
+// вместо заглушки, как это сделано с AI-провайдерами.
+builder.Services.AddSingleton<INotificationChannel, InAppNotificationChannel>();
+foreach (var stubChannel in new[]
+         {
+             NotificationChannelKind.Email,
+             NotificationChannelKind.Telegram,
+             NotificationChannelKind.WhatsApp,
+             NotificationChannelKind.FacebookMessenger,
+             NotificationChannelKind.Sms
+         })
+{
+    var kind = stubChannel;
+    builder.Services.AddSingleton<INotificationChannel>(sp =>
+        new StubNotificationChannel(kind, sp.GetRequiredService<ILogger<StubNotificationChannel>>()));
+}
+
+builder.Services.AddSingleton<NotificationEvents>();
+builder.Services.AddSingleton<NotificationTextBuilder>();
+builder.Services.AddSingleton<NotificationDispatchService>();
 
 if (builder.Configuration.GetValue("Sync:Enabled", true))
 {

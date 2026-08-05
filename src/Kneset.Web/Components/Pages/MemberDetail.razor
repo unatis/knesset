@@ -26,6 +26,10 @@ else
             {
                 <span class="badge bg-success ms-2 align-middle">@L["Members_Current"]</span>
             }
+            <div class="mt-2">
+                <FollowButton Kind="SubscriptionKind.Person" TargetId="@_member.Id"
+                              ReturnUrl="@($"/members/{_member.Id}")" />
+            </div>
         </div>
     </div>
 

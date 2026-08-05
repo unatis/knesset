@@ -1,0 +1,421 @@
+@page "/settings/notifications"
+@rendermode InteractiveServer
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@using Kneset.Core.Abstractions
+@using Kneset.Core.Entities
+@inject IStringLocalizer<SharedResource> L
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IEnumerable<INotificationChannel> Channels
+
+<PageTitle>@L["Notif_Settings"]</PageTitle>
+
+<h2>@L["Notif_Settings"]</h2>
+
+@if (_loading)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else
+{
+    @if (_saved)
+    {
+        <div class="alert alert-success py-2">@L["Notif_Saved"]</div>
+    }
+
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="card mb-3">
+                <div class="card-header">@L["Notif_Title"]</div>
+                <div class="card-body">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="subAll"
+                               checked="@_allNewBills" @onchange="ToggleAllNewBillsAsync" />
+                        <label class="form-check-label" for="subAll">@L["Notif_SubAll"]</label>
+                    </div>
+
+                    <label class="form-label">@L["Notif_Mode"]</label>
+                    <select class="form-select mb-3" value="@((int)_mode)"
+                            @onchange="e => SaveModeAsync(e.Value?.ToString())">
+                        <option value="0">@L["Notif_ModeImmediate"]</option>
+                        <option value="1">@L["Notif_ModeDigest"]</option>
+                    </select>
+
+                    <label class="form-label">@L["Notif_Language"]</label>
+                    <select class="form-select" value="@_lang" @onchange="e => SaveLanguageAsync(e.Value?.ToString())">
+                        <option value="he">עברית</option>
+                        <option value="ar">العربية</option>
+                        <option value="ru">Русский</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">@L["Notif_SubKeywords"]</div>
+                <div class="card-body">
+                    <div class="input-group mb-2">
+                        <input class="form-control" placeholder="@L["Notif_KeywordPlaceholder"]"
+                               @bind="_newKeyword" @bind:event="oninput" />
+                        <button class="btn btn-outline-primary" @onclick="AddKeywordAsync"
+                                disabled="@(string.IsNullOrWhiteSpace(_newKeyword) || _busy)">
+                            @L["Notif_AddKeyword"]
+                        </button>
+                    </div>
+                    <small class="text-muted d-block mb-3">@L["Notif_KeywordHint"]</small>
+
+                    @if (_keywords.Count == 0)
+                    {
+                        <p class="text-muted mb-0">@L["Notif_NothingYet"]</p>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in _keywords)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <span dir="auto">@item.Keyword</span>
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            @onclick="() => RemoveAsync(item.Id)" disabled="@_busy">
+                                        @L["Notif_Remove"]
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">@L["Notif_SubPersons"]</div>
+                <div class="card-body">
+                    @if (_persons.Count == 0)
+                    {
+                        <p class="text-muted mb-0">@L["Notif_NothingYet"]</p>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in _persons)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <a href="/members/@item.PersonId" dir="rtl" lang="he">@item.Title</a>
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            @onclick="() => RemoveAsync(item.Id)" disabled="@_busy">
+                                        @L["Notif_Remove"]
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">@L["Notif_SubBills"]</div>
+                <div class="card-body">
+                    @if (_bills.Count == 0)
+                    {
+                        <p class="text-muted mb-0">@L["Notif_NothingYet"]</p>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in _bills)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <a href="/bills/@item.BillId" dir="auto">@item.Title</a>
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            @onclick="() => RemoveAsync(item.Id)" disabled="@_busy">
+                                        @L["Notif_Remove"]
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header">@L["Notif_Channels"]</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" checked disabled />
+                            <label class="form-check-label">@L["Notif_ChannelInApp"]</label>
+                        </div>
+                        <small class="text-muted">@L["Notif_ChannelInAppHint"]</small>
+                    </li>
+
+                    @foreach (var channel in _externalChannels)
+                    {
+                        var state = _channelState[channel.Kind];
+                        <li class="list-group-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="@($"ch-{channel.Kind}")"
+                                       checked="@state.Enabled"
+                                       @onchange="e => ToggleChannelAsync(channel.Kind, (bool)(e.Value ?? false))" />
+                                <label class="form-check-label" for="@($"ch-{channel.Kind}")">
+                                    @L[ChannelLabelKey(channel.Kind)]
+                                </label>
+                            </div>
+
+                            @if (!channel.IsConfigured)
+                            {
+                                <span class="badge bg-secondary mt-1">@L["Notif_ChannelNotReady"]</span>
+                            }
+
+                            @if (state.Enabled)
+                            {
+                                <input class="form-control form-control-sm mt-2"
+                                       placeholder="@L["Notif_ChannelAddress"]"
+                                       value="@state.Address"
+                                       @onchange="e => SaveAddressAsync(channel.Kind, e.Value?.ToString())" />
+                                @if (channel.Kind == NotificationChannelKind.Email)
+                                {
+                                    <small class="text-muted">@L["Notif_ChannelAddressHint"]</small>
+                                }
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private record SubItem(int Id, string Title, string? Keyword, int? PersonId, int? BillId);
+    private record ChannelState(bool Enabled, string? Address);
+
+    private readonly List<SubItem> _keywords = [];
+    private readonly List<SubItem> _persons = [];
+    private readonly List<SubItem> _bills = [];
+    private Dictionary<NotificationChannelKind, ChannelState> _channelState = [];
+    private List<INotificationChannel> _externalChannels = [];
+
+    private bool _allNewBills;
+    private NotificationMode _mode = NotificationMode.Immediate;
+    private string _lang = "ru";
+    private string _newKeyword = "";
+    private string? _userId;
+    private bool _loading = true;
+    private bool _busy;
+    private bool _saved;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _externalChannels = Channels
+            .Where(c => c.Kind != NotificationChannelKind.InApp)
+            .OrderBy(c => c.Kind)
+            .ToList();
+
+        if (AuthState is not null)
+        {
+            var auth = await AuthState;
+            _userId = auth.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        await LoadAsync();
+        _loading = false;
+    }
+
+    private static string ChannelLabelKey(NotificationChannelKind kind) => kind switch
+    {
+        NotificationChannelKind.Email => "Notif_ChannelEmail",
+        NotificationChannelKind.Telegram => "Notif_ChannelTelegram",
+        NotificationChannelKind.WhatsApp => "Notif_ChannelWhatsApp",
+        NotificationChannelKind.FacebookMessenger => "Notif_ChannelMessenger",
+        NotificationChannelKind.Sms => "Notif_ChannelSms",
+        _ => "Notif_ChannelInApp"
+    };
+
+    private async Task LoadAsync()
+    {
+        if (_userId is null) return;
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        var user = await db.Users.AsNoTracking()
+            .Where(u => u.Id == _userId)
+            .Select(u => new { u.PreferredLanguage, u.NotificationMode })
+            .FirstOrDefaultAsync();
+
+        _lang = user?.PreferredLanguage ?? "ru";
+        _mode = user?.NotificationMode ?? NotificationMode.Immediate;
+
+        var subs = await db.NotificationSubscriptions.AsNoTracking()
+            .Where(s => s.UserId == _userId)
+            .Select(s => new
+            {
+                s.Id, s.Kind, s.Keyword, s.PersonId, s.BillId,
+                PersonName = s.Person != null ? s.Person.FirstName + " " + s.Person.LastName : null,
+                BillName = s.Bill != null ? (s.Bill.NameRu ?? s.Bill.Name) : null
+            })
+            .ToListAsync();
+
+        _allNewBills = subs.Any(s => s.Kind == SubscriptionKind.AllNewBills);
+
+        _keywords.Clear();
+        _keywords.AddRange(subs.Where(s => s.Kind == SubscriptionKind.Keyword)
+            .Select(s => new SubItem(s.Id, s.Keyword ?? "", s.Keyword, null, null)));
+
+        _persons.Clear();
+        _persons.AddRange(subs.Where(s => s.Kind == SubscriptionKind.Person)
+            .Select(s => new SubItem(s.Id, (s.PersonName ?? "").Trim(), null, s.PersonId, null)));
+
+        _bills.Clear();
+        _bills.AddRange(subs.Where(s => s.Kind == SubscriptionKind.Bill)
+            .Select(s => new SubItem(s.Id, s.BillName ?? "", null, null, s.BillId)));
+
+        var saved = await db.UserNotificationChannels.AsNoTracking()
+            .Where(c => c.UserId == _userId)
+            .ToDictionaryAsync(c => c.Channel);
+
+        _channelState = _externalChannels.ToDictionary(
+            c => c.Kind,
+            c => saved.TryGetValue(c.Kind, out var s)
+                ? new ChannelState(s.IsEnabled, s.Address)
+                : new ChannelState(false, null));
+    }
+
+    private async Task ToggleAllNewBillsAsync(ChangeEventArgs e)
+    {
+        if (_userId is null) return;
+        var enable = (bool)(e.Value ?? false);
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+        var key = NotificationSubscription.BuildTargetKey(SubscriptionKind.AllNewBills, null, null, null);
+
+        if (enable)
+        {
+            db.NotificationSubscriptions.Add(new NotificationSubscription
+            {
+                UserId = _userId,
+                Kind = SubscriptionKind.AllNewBills,
+                TargetKey = key,
+                CreatedAt = DateTime.UtcNow
+            });
+            try { await db.SaveChangesAsync(); } catch (DbUpdateException) { /* уже есть */ }
+        }
+        else
+        {
+            await db.NotificationSubscriptions
+                .Where(s => s.UserId == _userId && s.Kind == SubscriptionKind.AllNewBills)
+                .ExecuteDeleteAsync();
+        }
+
+        await LoadAsync();
+        Flash();
+    }
+
+    private async Task AddKeywordAsync()
+    {
+        if (_userId is null || _busy) return;
+        var keyword = _newKeyword.Trim();
+        if (keyword.Length == 0) return;
+
+        _busy = true;
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        db.NotificationSubscriptions.Add(new NotificationSubscription
+        {
+            UserId = _userId,
+            Kind = SubscriptionKind.Keyword,
+            Keyword = keyword,
+            TargetKey = NotificationSubscription.BuildTargetKey(SubscriptionKind.Keyword, null, null, keyword),
+            CreatedAt = DateTime.UtcNow
+        });
+
+        try { await db.SaveChangesAsync(); } catch (DbUpdateException) { /* такое слово уже есть */ }
+
+        _newKeyword = "";
+        await LoadAsync();
+        _busy = false;
+        Flash();
+    }
+
+    private async Task RemoveAsync(int id)
+    {
+        if (_userId is null || _busy) return;
+        _busy = true;
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+        await db.NotificationSubscriptions
+            .Where(s => s.Id == id && s.UserId == _userId)
+            .ExecuteDeleteAsync();
+
+        await LoadAsync();
+        _busy = false;
+        Flash();
+    }
+
+    private async Task SaveModeAsync(string? value)
+    {
+        if (_userId is null || !int.TryParse(value, out var raw)) return;
+
+        _mode = (NotificationMode)raw;
+        await using var db = await DbFactory.CreateDbContextAsync();
+        await db.Users.Where(u => u.Id == _userId)
+            .ExecuteUpdateAsync(s => s.SetProperty(u => u.NotificationMode, _mode));
+        Flash();
+    }
+
+    private async Task SaveLanguageAsync(string? value)
+    {
+        if (_userId is null || string.IsNullOrWhiteSpace(value)) return;
+
+        _lang = value;
+        await using var db = await DbFactory.CreateDbContextAsync();
+        await db.Users.Where(u => u.Id == _userId)
+            .ExecuteUpdateAsync(s => s.SetProperty(u => u.PreferredLanguage, _lang));
+        Flash();
+    }
+
+    private async Task ToggleChannelAsync(NotificationChannelKind kind, bool enabled)
+    {
+        if (_userId is null) return;
+        await UpsertChannelAsync(kind, enabled, _channelState[kind].Address);
+    }
+
+    private async Task SaveAddressAsync(NotificationChannelKind kind, string? address)
+    {
+        if (_userId is null) return;
+        await UpsertChannelAsync(kind, _channelState[kind].Enabled, address);
+    }
+
+    private async Task UpsertChannelAsync(NotificationChannelKind kind, bool enabled, string? address)
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        var existing = await db.UserNotificationChannels
+            .FirstOrDefaultAsync(c => c.UserId == _userId && c.Channel == kind);
+
+        if (existing is null)
+        {
+            db.UserNotificationChannels.Add(new UserNotificationChannel
+            {
+                UserId = _userId!,
+                Channel = kind,
+                IsEnabled = enabled,
+                Address = string.IsNullOrWhiteSpace(address) ? null : address.Trim(),
+                UpdatedAt = DateTime.UtcNow
+            });
+        }
+        else
+        {
+            existing.IsEnabled = enabled;
+            existing.Address = string.IsNullOrWhiteSpace(address) ? null : address.Trim();
+            existing.UpdatedAt = DateTime.UtcNow;
+        }
+
+        try { await db.SaveChangesAsync(); } catch (DbUpdateException) { /* гонка двойного клика */ }
+
+        _channelState[kind] = new ChannelState(enabled, address);
+        Flash();
+    }
+
+    private void Flash() => _saved = true;
+}

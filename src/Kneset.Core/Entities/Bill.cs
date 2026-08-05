@@ -29,6 +29,16 @@ public class Bill
     /// <summary>Дата последнего обновления в системе Кнессета.</summary>
     public DateTime LastUpdatedDate { get; set; }
 
+    /// <summary>
+    /// Когда синхронизация впервые увидела этот законопроект. Именно это, а не
+    /// PublicationDate из Кнессета, означает «новый для нас»: при первом наполнении
+    /// базы прилетает вся история за два созыва.
+    /// </summary>
+    public DateTime FirstSeenAt { get; set; }
+
+    /// <summary>Когда в последний раз менялась стадия (StatusId). null — не менялась.</summary>
+    public DateTime? StatusChangedAt { get; set; }
+
     /// <summary>Краткое описание закона (если есть в источнике).</summary>
     public string? SummaryLaw { get; set; }
 

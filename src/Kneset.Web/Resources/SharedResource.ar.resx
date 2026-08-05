@@ -186,4 +186,50 @@
   <data name="Share_BillText" xml:space="preserve"><value>{0} — نقاش وتفاعلات وتحليل ذكاء اصطناعي على متتبع الكنيست</value></data>
   <data name="Share_InitText" xml:space="preserve"><value>وقّع المبادرة المدنية: {0}</value></data>
   <data name="Share_DiscussText" xml:space="preserve"><value>نقاش جارٍ: {0}</value></data>
+  <data name="Nav_Notifications" xml:space="preserve"><value>الإشعارات</value></data>
+  <data name="Notif_Title" xml:space="preserve"><value>الإشعارات</value></data>
+  <data name="Notif_Empty" xml:space="preserve"><value>لا توجد إشعارات بعد. يمكنك إدارة اشتراكاتك في إعدادات الإشعارات.</value></data>
+  <data name="Notif_MarkAllRead" xml:space="preserve"><value>وضع علامة مقروء على الكل</value></data>
+  <data name="Notif_Unread" xml:space="preserve"><value>جديد</value></data>
+  <data name="Notif_NewBillSubject" xml:space="preserve"><value>مشروع قانون جديد: {0}</value></data>
+  <data name="Notif_StatusChangedSubject" xml:space="preserve"><value>تغيّرت المرحلة: {0}</value></data>
+  <data name="Notif_ReasonAll" xml:space="preserve"><value>أنت مشترك في جميع مشاريع القوانين الجديدة</value></data>
+  <data name="Notif_ReasonPerson" xml:space="preserve"><value>قدّمه نائب تتابعه: {0}</value></data>
+  <data name="Notif_ReasonKeyword" xml:space="preserve"><value>تطابق مع كلمتك المفتاحية: {0}</value></data>
+  <data name="Notif_ReasonBill" xml:space="preserve"><value>أنت تتابع مشروع القانون هذا</value></data>
+  <data name="Notif_DigestDay" xml:space="preserve"><value>{0} مشاريع قوانين جديدة</value></data>
+  <data name="Notif_Settings" xml:space="preserve"><value>إعدادات الإشعارات</value></data>
+  <data name="Notif_SubAll" xml:space="preserve"><value>أبلغني بكل مشاريع القوانين الجديدة</value></data>
+  <data name="Notif_SubPersons" xml:space="preserve"><value>النواب المتابَعون</value></data>
+  <data name="Notif_SubKeywords" xml:space="preserve"><value>الكلمات المفتاحية</value></data>
+  <data name="Notif_SubBills" xml:space="preserve"><value>مشاريع القوانين المتابَعة</value></data>
+  <data name="Notif_KeywordHint" xml:space="preserve"><value>تصل عناوين مشاريع القوانين من الكنيست بالعبرية، لذا فإن كلمة بالعبرية تعطي تطابقًا أدق.</value></data>
+  <data name="Notif_AddKeyword" xml:space="preserve"><value>إضافة</value></data>
+  <data name="Notif_KeywordPlaceholder" xml:space="preserve"><value>مثلاً חינוך</value></data>
+  <data name="Notif_Remove" xml:space="preserve"><value>إزالة</value></data>
+  <data name="Notif_NothingYet" xml:space="preserve"><value>لم يتم اختيار شيء بعد</value></data>
+  <data name="Notif_Mode" xml:space="preserve"><value>طريقة العرض</value></data>
+  <data name="Notif_ModeImmediate" xml:space="preserve"><value>كل حدث على حدة</value></data>
+  <data name="Notif_ModeDigest" xml:space="preserve"><value>ملخّص يومي</value></data>
+  <data name="Notif_Language" xml:space="preserve"><value>لغة الإشعارات</value></data>
+  <data name="Notif_Channels" xml:space="preserve"><value>قنوات التسليم</value></data>
+  <data name="Notif_ChannelInApp" xml:space="preserve"><value>في الموقع</value></data>
+  <data name="Notif_ChannelInAppHint" xml:space="preserve"><value>مفعّل دائمًا</value></data>
+  <data name="Notif_ChannelEmail" xml:space="preserve"><value>البريد الإلكتروني</value></data>
+  <data name="Notif_ChannelTelegram" xml:space="preserve"><value>تيليغرام</value></data>
+  <data name="Notif_ChannelWhatsApp" xml:space="preserve"><value>واتساب</value></data>
+  <data name="Notif_ChannelMessenger" xml:space="preserve"><value>فيسبوك ماسنجر</value></data>
+  <data name="Notif_ChannelSms" xml:space="preserve"><value>رسائل SMS</value></data>
+  <data name="Notif_ChannelNotReady" xml:space="preserve"><value>قيد التطوير — لا تُرسل الرسائل بعد</value></data>
+  <data name="Notif_ChannelAddress" xml:space="preserve"><value>عنوان التسليم</value></data>
+  <data name="Notif_ChannelAddressHint" xml:space="preserve"><value>اتركه فارغًا للبريد — سيُستخدم عنوان حسابك</value></data>
+  <data name="Notif_Save" xml:space="preserve"><value>حفظ</value></data>
+  <data name="Notif_Saved" xml:space="preserve"><value>تم الحفظ</value></data>
+  <data name="Notif_Follow" xml:space="preserve"><value>متابعة</value></data>
+  <data name="Notif_Following" xml:space="preserve"><value>تتابع</value></data>
+  <data name="Notif_Unfollow" xml:space="preserve"><value>إلغاء المتابعة</value></data>
+  <data name="Notif_FollowBillHint" xml:space="preserve"><value>سنبلغك عند تغيّر المرحلة</value></data>
+  <data name="Notif_FollowPersonHint" xml:space="preserve"><value>سنبلغك بمشاريع القوانين الجديدة لهذا النائب</value></data>
+  <data name="Notif_LoginToFollow" xml:space="preserve"><value>سجّل الدخول للمتابعة</value></data>
+  <data name="Notif_RegisterOptIn" xml:space="preserve"><value>أبلغني بمشاريع القوانين الجديدة</value></data>
 </root>

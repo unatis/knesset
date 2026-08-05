@@ -50,6 +50,37 @@ public class DbBackedLocalizer(
         return fromResx.Select(kv => new LocalizedString(kv.Key, kv.Value));
     }
 
+    /// <summary>
+    /// Строка на конкретном языке, без оглядки на CurrentUICulture. Нужна фоновой
+    /// рассылке уведомлений: она работает вне HTTP-запроса, где культуры нет,
+    /// и собирает текст на языке получателя из его настроек.
+    /// </summary>
+    public string GetString(string key, string lang, params object[] arguments)
+    {
+        var value = GetCultureDictionary(lang).GetValueOrDefault(key);
+
+        if (value is null)
+        {
+            // Fallback на .resx: переключаем культуру только на время чтения.
+            var previous = CultureInfo.CurrentUICulture;
+            try
+            {
+                CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(lang);
+                value = _inner[key].Value;
+            }
+            catch (CultureNotFoundException)
+            {
+                value = _inner[key].Value;
+            }
+            finally
+            {
+                CultureInfo.CurrentUICulture = previous;
+            }
+        }
+
+        return arguments.Length > 0 ? string.Format(value, arguments) : value;
+    }
+
     private string? Lookup(string key)
     {
         var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;

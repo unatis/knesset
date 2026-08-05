@@ -186,4 +186,50 @@
   <data name="Share_BillText" xml:space="preserve"><value>{0} — discussion, reactions and AI analysis on Knesset Tracker</value></data>
   <data name="Share_InitText" xml:space="preserve"><value>Sign the civic initiative: {0}</value></data>
   <data name="Share_DiscussText" xml:space="preserve"><value>Discussion in progress: {0}</value></data>
+  <data name="Nav_Notifications" xml:space="preserve"><value>Notifications</value></data>
+  <data name="Notif_Title" xml:space="preserve"><value>Notifications</value></data>
+  <data name="Notif_Empty" xml:space="preserve"><value>No notifications yet. Manage your subscriptions in Notification settings.</value></data>
+  <data name="Notif_MarkAllRead" xml:space="preserve"><value>Mark all as read</value></data>
+  <data name="Notif_Unread" xml:space="preserve"><value>New</value></data>
+  <data name="Notif_NewBillSubject" xml:space="preserve"><value>New bill: {0}</value></data>
+  <data name="Notif_StatusChangedSubject" xml:space="preserve"><value>Stage changed: {0}</value></data>
+  <data name="Notif_ReasonAll" xml:space="preserve"><value>You are subscribed to all new bills</value></data>
+  <data name="Notif_ReasonPerson" xml:space="preserve"><value>Submitted by a member you follow: {0}</value></data>
+  <data name="Notif_ReasonKeyword" xml:space="preserve"><value>Matched your keyword: {0}</value></data>
+  <data name="Notif_ReasonBill" xml:space="preserve"><value>You follow this bill</value></data>
+  <data name="Notif_DigestDay" xml:space="preserve"><value>{0} new bills</value></data>
+  <data name="Notif_Settings" xml:space="preserve"><value>Notification settings</value></data>
+  <data name="Notif_SubAll" xml:space="preserve"><value>Notify me about all new bills</value></data>
+  <data name="Notif_SubPersons" xml:space="preserve"><value>Members you follow</value></data>
+  <data name="Notif_SubKeywords" xml:space="preserve"><value>Keywords</value></data>
+  <data name="Notif_SubBills" xml:space="preserve"><value>Bills you follow</value></data>
+  <data name="Notif_KeywordHint" xml:space="preserve"><value>Bill titles arrive from the Knesset in Hebrew, so a Hebrew keyword matches more reliably. Translations appear only after AI analysis.</value></data>
+  <data name="Notif_AddKeyword" xml:space="preserve"><value>Add</value></data>
+  <data name="Notif_KeywordPlaceholder" xml:space="preserve"><value>e.g. חינוך</value></data>
+  <data name="Notif_Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="Notif_NothingYet" xml:space="preserve"><value>Nothing selected yet</value></data>
+  <data name="Notif_Mode" xml:space="preserve"><value>How to show</value></data>
+  <data name="Notif_ModeImmediate" xml:space="preserve"><value>Each event separately</value></data>
+  <data name="Notif_ModeDigest" xml:space="preserve"><value>Daily summary</value></data>
+  <data name="Notif_Language" xml:space="preserve"><value>Notification language</value></data>
+  <data name="Notif_Channels" xml:space="preserve"><value>Delivery channels</value></data>
+  <data name="Notif_ChannelInApp" xml:space="preserve"><value>On the site</value></data>
+  <data name="Notif_ChannelInAppHint" xml:space="preserve"><value>Always on</value></data>
+  <data name="Notif_ChannelEmail" xml:space="preserve"><value>Email</value></data>
+  <data name="Notif_ChannelTelegram" xml:space="preserve"><value>Telegram</value></data>
+  <data name="Notif_ChannelWhatsApp" xml:space="preserve"><value>WhatsApp</value></data>
+  <data name="Notif_ChannelMessenger" xml:space="preserve"><value>Facebook Messenger</value></data>
+  <data name="Notif_ChannelSms" xml:space="preserve"><value>SMS</value></data>
+  <data name="Notif_ChannelNotReady" xml:space="preserve"><value>In development — messages are not sent yet</value></data>
+  <data name="Notif_ChannelAddress" xml:space="preserve"><value>Delivery address</value></data>
+  <data name="Notif_ChannelAddressHint" xml:space="preserve"><value>Leave empty for email — your account address will be used</value></data>
+  <data name="Notif_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Notif_Saved" xml:space="preserve"><value>Saved</value></data>
+  <data name="Notif_Follow" xml:space="preserve"><value>Follow</value></data>
+  <data name="Notif_Following" xml:space="preserve"><value>Following</value></data>
+  <data name="Notif_Unfollow" xml:space="preserve"><value>Unfollow</value></data>
+  <data name="Notif_FollowBillHint" xml:space="preserve"><value>We will tell you when the stage changes</value></data>
+  <data name="Notif_FollowPersonHint" xml:space="preserve"><value>We will tell you about new bills from this member</value></data>
+  <data name="Notif_LoginToFollow" xml:space="preserve"><value>Sign in to follow</value></data>
+  <data name="Notif_RegisterOptIn" xml:space="preserve"><value>Notify me about new bills</value></data>
 </root>

@@ -14,6 +14,7 @@ public class KnessetSyncService(
     IDbContextFactory<AppDbContext> dbFactory,
     KnessetODataClient client,
     KnessetWebsiteClient websiteClient,
+    NotificationDispatchService notifications,
     IConfiguration configuration,
     ILogger<KnessetSyncService> logger) : BackgroundService
 {
@@ -64,6 +65,11 @@ public class KnessetSyncService(
         await RunStepAsync("Photos", SyncPhotosAsync, ct);
         await RunStepAsync("Bills", SyncBillsAsync, ct);
         await RunStepAsync("BillInitiators", SyncInitiatorsAsync, ct);
+
+        // Строго последним: подписка на депутата опирается на BillInitiators,
+        // которые заполняются шагом выше. RunStepAsync передаёт сюда время
+        // последней успешной рассылки — прерванный прогон повторится.
+        await RunStepAsync("Notifications", notifications.DispatchAsync, ct);
     }
 
     private async Task RunStepAsync(string entityName,
@@ -220,7 +226,7 @@ public class KnessetSyncService(
             {
                 if (!existing.TryGetValue(src.BillID, out var bill))
                 {
-                    bill = new Bill { KnessetBillId = src.BillID };
+                    bill = new Bill { KnessetBillId = src.BillID, FirstSeenAt = DateTime.UtcNow };
                     db.Bills.Add(bill);
                 }
 
@@ -230,6 +236,10 @@ public class KnessetSyncService(
                     (bill.Name != (src.Name ?? "") ||
                      bill.StatusId != src.StatusID ||
                      bill.SummaryLaw != src.SummaryLaw);
+
+                // Смена стадии — отдельное событие для тех, кто следит за этим законом.
+                if (bill.Id != 0 && bill.StatusId != src.StatusID)
+                    bill.StatusChangedAt = DateTime.UtcNow;
 
                 bill.Name = src.Name ?? "";
                 bill.KnessetNum = src.KnessetNum ?? 0;

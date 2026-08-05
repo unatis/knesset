@@ -1,0 +1,58 @@
+@using Kneset.Web.Services
+@implements IDisposable
+@inject IStringLocalizer<SharedResource> L
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject NotificationEvents Events
+
+@* Колокольчик со счётчиком непрочитанных. Виден только вошедшим. *@
+
+<AuthorizeView>
+    <Authorized>
+        <a class="nav-link d-inline-flex align-items-center gap-1" href="notifications"
+           title="@L["Nav_Notifications"]">
+            <span aria-hidden="true">🔔</span>
+            <span class="d-none d-lg-inline">@L["Nav_Notifications"]</span>
+            @if (_unread > 0)
+            {
+                <span class="badge rounded-pill bg-danger">@(_unread > 99 ? "99+" : _unread.ToString())</span>
+            }
+        </a>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private int _unread;
+    private string? _userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthState is not null)
+        {
+            var auth = await AuthState;
+            _userId = auth.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        // Рассылка идёт в фоне — обновляем счётчик по её сигналу, без перезагрузки.
+        Events.Created += OnCreated;
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        if (_userId is null) return;
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+        _unread = await db.Notifications
+            .CountAsync(n => n.UserId == _userId && n.ReadAt == null);
+    }
+
+    private void OnCreated() => InvokeAsync(async () =>
+    {
+        await LoadAsync();
+        StateHasChanged();
+    });
+
+    public void Dispose() => Events.Created -= OnCreated;
+}

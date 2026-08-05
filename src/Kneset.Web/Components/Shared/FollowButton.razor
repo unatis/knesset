@@ -1,0 +1,100 @@
+@using Kneset.Core.Entities
+@inject IStringLocalizer<SharedResource> L
+@inject IDbContextFactory<AppDbContext> DbFactory
+
+@* Кнопка подписки. Один компонент на два случая: следить за законопроектом
+   (уведомим о смене стадии) и за депутатом (уведомим о новых законопроектах). *@
+
+<AuthorizeView>
+    <Authorized>
+        <button class="btn btn-sm @(_following ? "btn-primary" : "btn-outline-primary")"
+                disabled="@_busy" @onclick="ToggleAsync">
+            @(_following ? $"🔔 {L["Notif_Following"]}" : $"🔕 {L["Notif_Follow"]}")
+        </button>
+        <small class="text-muted d-block mt-1">
+            @(Kind == SubscriptionKind.Bill ? L["Notif_FollowBillHint"] : L["Notif_FollowPersonHint"])
+        </small>
+    </Authorized>
+    <NotAuthorized>
+        <a class="btn btn-sm btn-outline-secondary" href="@($"Account/Login?returnUrl={ReturnUrl}")">
+            🔔 @L["Notif_LoginToFollow"]
+        </a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    /// <summary>SubscriptionKind.Bill или SubscriptionKind.Person.</summary>
+    [Parameter, EditorRequired] public SubscriptionKind Kind { get; set; }
+
+    /// <summary>Id законопроекта или депутата — смотря какой Kind.</summary>
+    [Parameter, EditorRequired] public int TargetId { get; set; }
+
+    /// <summary>Куда вернуть после входа.</summary>
+    [Parameter, EditorRequired] public string ReturnUrl { get; set; } = "";
+
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private bool _following;
+    private bool _busy;
+    private string? _userId;
+
+    private int? PersonId => Kind == SubscriptionKind.Person ? TargetId : null;
+    private int? BillId => Kind == SubscriptionKind.Bill ? TargetId : null;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (AuthState is not null)
+        {
+            var auth = await AuthState;
+            _userId = auth.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        if (_userId is null) return;
+
+        var key = NotificationSubscription.BuildTargetKey(Kind, PersonId, BillId, null);
+        await using var db = await DbFactory.CreateDbContextAsync();
+        _following = await db.NotificationSubscriptions
+            .AnyAsync(s => s.UserId == _userId && s.Kind == Kind && s.TargetKey == key);
+    }
+
+    private async Task ToggleAsync()
+    {
+        if (_userId is null || _busy) return;
+        _busy = true;
+
+        var key = NotificationSubscription.BuildTargetKey(Kind, PersonId, BillId, null);
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        try
+        {
+            if (_following)
+            {
+                await db.NotificationSubscriptions
+                    .Where(s => s.UserId == _userId && s.Kind == Kind && s.TargetKey == key)
+                    .ExecuteDeleteAsync();
+                _following = false;
+            }
+            else
+            {
+                db.NotificationSubscriptions.Add(new NotificationSubscription
+                {
+                    UserId = _userId,
+                    Kind = Kind,
+                    PersonId = PersonId,
+                    BillId = BillId,
+                    TargetKey = key,
+                    CreatedAt = DateTime.UtcNow
+                });
+                await db.SaveChangesAsync();
+                _following = true;
+            }
+        }
+        catch (DbUpdateException)
+        {
+            // Уникальный индекс: подписка уже есть (гонка двойного клика).
+            _following = true;
+        }
+
+        _busy = false;
+    }
+}

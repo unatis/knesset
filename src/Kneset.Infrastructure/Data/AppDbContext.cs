@@ -28,6 +28,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<InitiativeReaction> InitiativeReactions => Set<InitiativeReaction>();
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<UiTranslation> UiTranslations => Set<UiTranslation>();
+    public DbSet<NotificationSubscription> NotificationSubscriptions => Set<NotificationSubscription>();
+    public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<UserNotificationChannel> UserNotificationChannels => Set<UserNotificationChannel>();
+    public DbSet<NotificationDelivery> NotificationDeliveries => Set<NotificationDelivery>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -136,6 +140,54 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             c.HasOne(x => x.Initiative).WithMany().HasForeignKey(x => x.InitiativeId);
             c.HasOne(x => x.User).WithMany()
                 .HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<AppUser>(u =>
+        {
+            u.Property(x => x.PreferredLanguage).HasMaxLength(10).HasDefaultValue("ru");
+        });
+
+        modelBuilder.Entity<NotificationSubscription>(s =>
+        {
+            s.Property(x => x.Keyword).HasMaxLength(200);
+            s.Property(x => x.TargetKey).HasMaxLength(250);
+            s.HasIndex(x => new { x.UserId, x.Kind, x.TargetKey }).IsUnique();
+            // Рассылка идёт от законопроекта к подписчикам, поэтому нужен обратный поиск.
+            s.HasIndex(x => new { x.Kind, x.PersonId });
+            s.HasIndex(x => new { x.Kind, x.BillId });
+            s.HasOne(x => x.User).WithMany(x => x.Subscriptions)
+                .HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+            s.HasOne(x => x.Person).WithMany().HasForeignKey(x => x.PersonId);
+            s.HasOne(x => x.Bill).WithMany().HasForeignKey(x => x.BillId);
+        });
+
+        modelBuilder.Entity<Notification>(n =>
+        {
+            n.Property(x => x.TriggerDetail).HasMaxLength(500);
+            n.HasIndex(x => new { x.UserId, x.ReadAt });
+            n.HasIndex(x => new { x.UserId, x.CreatedAt });
+            // Защита от повторной вставки, если рассылку прервали и перезапустили.
+            // EventAt в ключе: вторая смена стадии у того же закона — это новое событие.
+            n.HasIndex(x => new { x.UserId, x.BillId, x.Kind, x.EventAt }).IsUnique();
+            n.HasOne(x => x.User).WithMany()
+                .HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+            n.HasOne(x => x.Bill).WithMany().HasForeignKey(x => x.BillId);
+        });
+
+        modelBuilder.Entity<UserNotificationChannel>(c =>
+        {
+            c.Property(x => x.Address).HasMaxLength(300);
+            c.HasIndex(x => new { x.UserId, x.Channel }).IsUnique();
+            c.HasOne(x => x.User).WithMany(x => x.NotificationChannels)
+                .HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<NotificationDelivery>(d =>
+        {
+            d.Property(x => x.Error).HasMaxLength(1000);
+            d.HasIndex(x => new { x.NotificationId, x.Channel }).IsUnique();
+            d.HasOne(x => x.Notification).WithMany(x => x.Deliveries)
+                .HasForeignKey(x => x.NotificationId).OnDelete(DeleteBehavior.Cascade);
         });
     }
 }
