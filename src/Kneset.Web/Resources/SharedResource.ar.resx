@@ -232,4 +232,23 @@
   <data name="Notif_FollowPersonHint" xml:space="preserve"><value>سنبلغك بمشاريع القوانين الجديدة لهذا النائب</value></data>
   <data name="Notif_LoginToFollow" xml:space="preserve"><value>سجّل الدخول للمتابعة</value></data>
   <data name="Notif_RegisterOptIn" xml:space="preserve"><value>أبلغني بمشاريع القوانين الجديدة</value></data>
+  <data name="Home_HeroTitle" xml:space="preserve"><value>ما يحدث في الكنيست — بلغة بسيطة</value></data>
+  <data name="Home_HeroText" xml:space="preserve"><value>نتابع مشاريع القوانين ونوضّح في أي مرحلة هي، ومن قدّمها، وماذا تعني عمليًا. وما دام المشروع قيد النقاش، لا يزال بالإمكان التأثير عليه.</value></data>
+  <data name="Home_Point1" xml:space="preserve"><value>تحليل لكل مشروع قانون — حجج من كل الأطراف، دون الانحياز لأحد</value></data>
+  <data name="Home_Point2" xml:space="preserve"><value>نافذة التأثير: ترى متى لم يفت الأوان بعد، ومتى فات</value></data>
+  <data name="Home_Point3" xml:space="preserve"><value>صوتك وحججك إلى جانب الآخرين — مع عرض صادق لعددنا</value></data>
+  <data name="Home_CtaBrowse" xml:space="preserve"><value>تصفّح مشاريع القوانين</value></data>
+  <data name="Home_CtaJoin" xml:space="preserve"><value>انضم</value></data>
+  <data name="Home_FeedTitle" xml:space="preserve"><value>آخر المستجدات</value></data>
+  <data name="Home_FeedEmpty" xml:space="preserve"><value>لا توجد مستجدات بعد — ستظهر بعد أول مزامنة مع الكنيست.</value></data>
+  <data name="Feed_NewBill" xml:space="preserve"><value>مشروع قانون جديد</value></data>
+  <data name="Feed_StatusChanged" xml:space="preserve"><value>تغيّرت المرحلة</value></data>
+  <data name="Feed_NewInitiative" xml:space="preserve"><value>مبادرة مدنية</value></data>
+  <data name="Feed_NewComment" xml:space="preserve"><value>جديد في النقاش</value></data>
+  <data name="Feed_ShowMore" xml:space="preserve"><value>كل مشاريع القوانين</value></data>
+  <data name="Search_Placeholder" xml:space="preserve"><value>ابحث في مشاريع القوانين</value></data>
+  <data name="Time_JustNow" xml:space="preserve"><value>الآن</value></data>
+  <data name="Time_Minutes" xml:space="preserve"><value>قبل {0} د</value></data>
+  <data name="Time_Hours" xml:space="preserve"><value>قبل {0} س</value></data>
+  <data name="Time_Days" xml:space="preserve"><value>قبل {0} ي</value></data>
 </root>

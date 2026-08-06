@@ -64,3 +64,99 @@ h1:focus {
     border-color: #ffc107 !important;
     transition: background-color 0.5s;
 }
+
+/* --- главная: экран-знакомство и лента событий --- */
+
+.hero {
+    background: #eef0fb;
+    border-radius: 0.9rem;
+    padding: 1.5rem;
+    margin-bottom: 1.75rem;
+}
+
+    .hero h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1a1a40;
+        margin-bottom: 0.6rem;
+    }
+
+.hero-text {
+    color: #3b3b55;
+    margin-bottom: 1rem;
+}
+
+.hero-points {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem;
+}
+
+    .hero-points li {
+        display: flex;
+        gap: 0.6rem;
+        align-items: flex-start;
+        color: #3b3b55;
+        font-size: 0.95rem;
+        margin-bottom: 0.4rem;
+    }
+
+.hero-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.feed-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.9rem;
+}
+
+.feed-card {
+    border: 1px solid #e3e3e8;
+    border-radius: 0.75rem;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.75rem;
+    background: #fff;
+}
+
+    .feed-card:hover {
+        border-color: #c9c9d6;
+    }
+
+.feed-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+}
+
+.feed-kind {
+    font-size: 0.8rem;
+    color: #55555f;
+}
+
+.feed-time {
+    font-size: 0.8rem;
+    color: #8a8a96;
+    white-space: nowrap;
+}
+
+.feed-link {
+    display: block;
+    font-weight: 500;
+    color: #1a1a40;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+}
+
+    .feed-link:hover {
+        text-decoration: underline;
+    }
+
+.feed-meta {
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+}

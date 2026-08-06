@@ -232,4 +232,23 @@
   <data name="Notif_FollowPersonHint" xml:space="preserve"><value>Сообщим о новых законопроектах этого депутата</value></data>
   <data name="Notif_LoginToFollow" xml:space="preserve"><value>Войдите, чтобы следить</value></data>
   <data name="Notif_RegisterOptIn" xml:space="preserve"><value>Уведомлять меня о новых законопроектах</value></data>
+  <data name="Home_HeroTitle" xml:space="preserve"><value>Что происходит в Кнессете — понятным языком</value></data>
+  <data name="Home_HeroText" xml:space="preserve"><value>Мы следим за законопроектами и показываем, на какой они стадии, кто их внёс и что они означают на деле. Пока закон обсуждают, на него ещё можно повлиять.</value></data>
+  <data name="Home_Point1" xml:space="preserve"><value>Разбор каждого законопроекта — доводы всех сторон, без выбора чьей-то стороны</value></data>
+  <data name="Home_Point2" xml:space="preserve"><value>Окно влияния: видно, когда ещё не поздно, а когда уже поздно</value></data>
+  <data name="Home_Point3" xml:space="preserve"><value>Ваш голос и доводы рядом с голосами других — с честным показом, сколько нас</value></data>
+  <data name="Home_CtaBrowse" xml:space="preserve"><value>Смотреть законопроекты</value></data>
+  <data name="Home_CtaJoin" xml:space="preserve"><value>Присоединиться</value></data>
+  <data name="Home_FeedTitle" xml:space="preserve"><value>Последние события</value></data>
+  <data name="Home_FeedEmpty" xml:space="preserve"><value>Пока событий нет — они появятся после первой синхронизации с Кнессетом.</value></data>
+  <data name="Feed_NewBill" xml:space="preserve"><value>Новый законопроект</value></data>
+  <data name="Feed_StatusChanged" xml:space="preserve"><value>Изменилась стадия</value></data>
+  <data name="Feed_NewInitiative" xml:space="preserve"><value>Гражданская инициатива</value></data>
+  <data name="Feed_NewComment" xml:space="preserve"><value>Новое в обсуждении</value></data>
+  <data name="Feed_ShowMore" xml:space="preserve"><value>Все законопроекты</value></data>
+  <data name="Search_Placeholder" xml:space="preserve"><value>Поиск законопроекта</value></data>
+  <data name="Time_JustNow" xml:space="preserve"><value>только что</value></data>
+  <data name="Time_Minutes" xml:space="preserve"><value>{0} мин назад</value></data>
+  <data name="Time_Hours" xml:space="preserve"><value>{0} ч назад</value></data>
+  <data name="Time_Days" xml:space="preserve"><value>{0} дн назад</value></data>
 </root>

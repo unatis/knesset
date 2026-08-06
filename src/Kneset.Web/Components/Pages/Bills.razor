@@ -107,8 +107,14 @@ else
     private List<int> _knessetNums = [];
     private System.Timers.Timer? _debounce;
 
+    /// <summary>Запрос из строки адреса — сюда приходит поиск из верхней панели.</summary>
+    [SupplyParameterFromQuery(Name = "q")]
+    private string? Query { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        if (!string.IsNullOrWhiteSpace(Query)) _search = Query;
+
         await using var db = await DbFactory.CreateDbContextAsync();
         _statuses = await db.Bills.Where(b => b.StatusDesc != null)
             .Select(b => b.StatusDesc!).Distinct().OrderBy(s => s).ToListAsync();

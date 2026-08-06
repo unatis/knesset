@@ -1,19 +1,53 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
+@inject IStringLocalizer<SharedResource> L
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    @* Верхняя панель: логотип, поиск, колокольчик, язык, аккаунт — как у привычных соцсетей. *@
+    <header class="top-bar">
+        <a class="brand" href="">@L["Brand"]</a>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        @* Обычная GET-форма: работает без интерактивного режима, то есть и в статичном макете.
+           Кнопка отправки нужна явно — без неё Enter в поле не срабатывает под расширенной
+           навигацией Blazor. *@
+        <form class="top-search" action="bills" method="get">
+            <input class="form-control form-control-sm" type="search" name="q"
+                   placeholder="@L["Search_Placeholder"]" aria-label="@L["Search_Placeholder"]" />
+            <button type="submit" aria-label="@L["Search_Placeholder"]">🔍</button>
+        </form>
+
+        <div class="top-actions">
+            <NotificationBell />
+
+            <div class="lang-switch">
+                <a href="/set-culture?culture=he&redirectUri=/@CurrentPath">עב</a>
+                <a href="/set-culture?culture=ar&redirectUri=/@CurrentPath">ع</a>
+                <a href="/set-culture?culture=ru&redirectUri=/@CurrentPath">РУ</a>
+                <a href="/set-culture?culture=en&redirectUri=/@CurrentPath">EN</a>
+            </div>
+
+            <AuthorizeView>
+                <Authorized>
+                    <a class="account" href="Account/Manage">@context.User.Identity?.Name</a>
+                </Authorized>
+                <NotAuthorized>
+                    <a class="btn btn-sm btn-primary" href="Account/Login">@L["Nav_Login"]</a>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+    </header>
+
+    <div class="body-row">
+        <input type="checkbox" title="Menu" class="navbar-toggler" />
+        <div class="sidebar">
+            <NavMenu />
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+        <main>
+            <article class="content">
+                @Body
+            </article>
+        </main>
+    </div>
 </div>
 
 <div id="blazor-error-ui" data-nosnippet>
@@ -21,3 +55,9 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    [Inject] private NavigationManager Navigation { get; set; } = null!;
+
+    private string CurrentPath => Navigation.ToBaseRelativePath(Navigation.Uri);
+}

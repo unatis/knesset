@@ -232,4 +232,23 @@
   <data name="Notif_FollowPersonHint" xml:space="preserve"><value>We will tell you about new bills from this member</value></data>
   <data name="Notif_LoginToFollow" xml:space="preserve"><value>Sign in to follow</value></data>
   <data name="Notif_RegisterOptIn" xml:space="preserve"><value>Notify me about new bills</value></data>
+  <data name="Home_HeroTitle" xml:space="preserve"><value>What is happening in the Knesset — in plain language</value></data>
+  <data name="Home_HeroText" xml:space="preserve"><value>We track bills and show what stage they are at, who submitted them and what they actually mean. While a bill is still being discussed, it can still be influenced.</value></data>
+  <data name="Home_Point1" xml:space="preserve"><value>A breakdown of every bill — arguments from all sides, taking nobody's side</value></data>
+  <data name="Home_Point2" xml:space="preserve"><value>Influence window: you see when it is still not too late, and when it is</value></data>
+  <data name="Home_Point3" xml:space="preserve"><value>Your vote and arguments alongside others — with an honest count of how many we are</value></data>
+  <data name="Home_CtaBrowse" xml:space="preserve"><value>Browse bills</value></data>
+  <data name="Home_CtaJoin" xml:space="preserve"><value>Join</value></data>
+  <data name="Home_FeedTitle" xml:space="preserve"><value>Latest updates</value></data>
+  <data name="Home_FeedEmpty" xml:space="preserve"><value>No updates yet — they will appear after the first sync with the Knesset.</value></data>
+  <data name="Feed_NewBill" xml:space="preserve"><value>New bill</value></data>
+  <data name="Feed_StatusChanged" xml:space="preserve"><value>Stage changed</value></data>
+  <data name="Feed_NewInitiative" xml:space="preserve"><value>Civic initiative</value></data>
+  <data name="Feed_NewComment" xml:space="preserve"><value>New in discussion</value></data>
+  <data name="Feed_ShowMore" xml:space="preserve"><value>All bills</value></data>
+  <data name="Search_Placeholder" xml:space="preserve"><value>Search bills</value></data>
+  <data name="Time_JustNow" xml:space="preserve"><value>just now</value></data>
+  <data name="Time_Minutes" xml:space="preserve"><value>{0} min ago</value></data>
+  <data name="Time_Hours" xml:space="preserve"><value>{0} h ago</value></data>
+  <data name="Time_Days" xml:space="preserve"><value>{0} d ago</value></data>
 </root>

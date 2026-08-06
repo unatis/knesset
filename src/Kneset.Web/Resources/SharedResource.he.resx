@@ -232,4 +232,23 @@
   <data name="Notif_FollowPersonHint" xml:space="preserve"><value>נעדכן על הצעות חוק חדשות של חבר הכנסת</value></data>
   <data name="Notif_LoginToFollow" xml:space="preserve"><value>התחברו כדי לעקוב</value></data>
   <data name="Notif_RegisterOptIn" xml:space="preserve"><value>עדכנו אותי על הצעות חוק חדשות</value></data>
+  <data name="Home_HeroTitle" xml:space="preserve"><value>מה קורה בכנסת — בשפה פשוטה</value></data>
+  <data name="Home_HeroText" xml:space="preserve"><value>אנחנו עוקבים אחר הצעות חוק ומראים באיזה שלב הן נמצאות, מי הגיש אותן ומה משמעותן בפועל. כל עוד הצעת החוק נדונה, עדיין אפשר להשפיע עליה.</value></data>
+  <data name="Home_Point1" xml:space="preserve"><value>ניתוח לכל הצעת חוק — טיעונים מכל הצדדים, בלי לבחור צד</value></data>
+  <data name="Home_Point2" xml:space="preserve"><value>חלון ההשפעה: רואים מתי עוד לא מאוחר, ומתי כבר כן</value></data>
+  <data name="Home_Point3" xml:space="preserve"><value>הקול והטיעונים שלכם לצד של אחרים — עם הצגה כנה של כמה אנחנו</value></data>
+  <data name="Home_CtaBrowse" xml:space="preserve"><value>לצפייה בהצעות חוק</value></data>
+  <data name="Home_CtaJoin" xml:space="preserve"><value>הצטרפות</value></data>
+  <data name="Home_FeedTitle" xml:space="preserve"><value>עדכונים אחרונים</value></data>
+  <data name="Home_FeedEmpty" xml:space="preserve"><value>אין עדיין עדכונים — הם יופיעו לאחר הסנכרון הראשון עם הכנסת.</value></data>
+  <data name="Feed_NewBill" xml:space="preserve"><value>הצעת חוק חדשה</value></data>
+  <data name="Feed_StatusChanged" xml:space="preserve"><value>השלב השתנה</value></data>
+  <data name="Feed_NewInitiative" xml:space="preserve"><value>יוזמה אזרחית</value></data>
+  <data name="Feed_NewComment" xml:space="preserve"><value>חדש בדיון</value></data>
+  <data name="Feed_ShowMore" xml:space="preserve"><value>כל הצעות החוק</value></data>
+  <data name="Search_Placeholder" xml:space="preserve"><value>חיפוש הצעת חוק</value></data>
+  <data name="Time_JustNow" xml:space="preserve"><value>הרגע</value></data>
+  <data name="Time_Minutes" xml:space="preserve"><value>לפני {0} דק'</value></data>
+  <data name="Time_Hours" xml:space="preserve"><value>לפני {0} שע'</value></data>
+  <data name="Time_Days" xml:space="preserve"><value>לפני {0} ימים</value></data>
 </root>

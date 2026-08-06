@@ -1,57 +1,191 @@
 @page "/"
 @rendermode InteractiveServer
+@using Kneset.Core.Entities
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
 
 <PageTitle>@L["Brand"]</PageTitle>
 
-<h1>@L["Brand"]</h1>
-<p class="lead">@L["Home_Lead"]</p>
+@* Экран-знакомство только для гостя: вошедшему сразу нужна лента. *@
+<AuthorizeView>
+    <NotAuthorized>
+        <section class="hero">
+            <h1>@L["Home_HeroTitle"]</h1>
+            <p class="hero-text">@L["Home_HeroText"]</p>
 
-<div class="row g-3 mt-2" style="max-width:700px">
-    <div class="col-md-6">
-        <a href="/bills" class="card text-decoration-none h-100">
-            <div class="card-body text-center">
-                <div style="font-size:2rem">📜</div>
-                <h5 class="card-title">@L["Nav_Bills"]</h5>
-                <p class="display-6 mb-0">@(_billCount?.ToString() ?? "…")</p>
-            </div>
-        </a>
-    </div>
-    <div class="col-md-6">
-        <a href="/members" class="card text-decoration-none h-100">
-            <div class="card-body text-center">
-                <div style="font-size:2rem">🧑‍⚖️</div>
-                <h5 class="card-title">@L["Home_MembersCard"]</h5>
-                <p class="display-6 mb-0">@(_memberCount?.ToString() ?? "…")</p>
-            </div>
-        </a>
-    </div>
-</div>
+            <ul class="hero-points">
+                <li><span aria-hidden="true">⚖️</span> @L["Home_Point1"]</li>
+                <li><span aria-hidden="true">⏳</span> @L["Home_Point2"]</li>
+                <li><span aria-hidden="true">🗳️</span> @L["Home_Point3"]</li>
+            </ul>
 
-@if (_lastSync is not null)
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="Account/Register">@L["Home_CtaJoin"]</a>
+                <a class="btn btn-outline-primary" href="bills">@L["Home_CtaBrowse"]</a>
+            </div>
+        </section>
+    </NotAuthorized>
+</AuthorizeView>
+
+<h2 class="feed-title">@L["Home_FeedTitle"]</h2>
+
+@if (_loading)
 {
-    <p class="text-muted mt-4">@L["Home_LastSync"] @_lastSync.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
 }
-else if (_billCount == 0)
+else if (_feed.Count == 0)
 {
-    <div class="alert alert-warning mt-4" style="max-width:700px">
-        @L["Home_FirstSync"]
-    </div>
+    <div class="alert alert-light border">@L["Home_FeedEmpty"]</div>
+}
+else
+{
+    @foreach (var item in _feed)
+    {
+        <article class="feed-card">
+            <div class="feed-head">
+                <span class="feed-kind"><span aria-hidden="true">@item.Icon</span> @L[item.KindKey]</span>
+                <span class="feed-time">@RelativeTime(item.At)</span>
+            </div>
+
+            <a class="feed-link" href="@item.Url" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+
+            @if (item.BillId is int billId)
+            {
+                <div class="feed-meta">
+                    <InfluenceWindowBadge StatusDesc="@item.StatusDesc" />
+                </div>
+
+                var counts = _reactions.GetValueOrDefault(billId);
+                @if (counts is not null && counts.Total > 0)
+                {
+                    <ReactionBar Support="counts.Support" Oppose="counts.Oppose"
+                                 Undecided="counts.Undecided" Compact="true" />
+                }
+            }
+            else if (item.Signatures is not null)
+            {
+                <div class="feed-meta text-muted">
+                    @item.Signatures @L["Init_SigCount"] · @L["Init_Threshold"] @item.Threshold
+                </div>
+            }
+            else if (item.Subtitle is not null)
+            {
+                <div class="feed-meta text-muted">@item.Subtitle</div>
+            }
+        </article>
+    }
+
+    <a class="btn btn-outline-secondary w-100 mt-2" href="bills">@L["Feed_ShowMore"]</a>
 }
 
 @code {
-    private int? _billCount;
-    private int? _memberCount;
-    private DateTime? _lastSync;
+    private sealed record FeedItem(
+        DateTime At,
+        string Icon,
+        string KindKey,
+        string Title,
+        string Url,
+        bool IsHebrew,
+        int? BillId = null,
+        string? StatusDesc = null,
+        string? Subtitle = null,
+        int? Signatures = null,
+        int? Threshold = null);
+
+    private sealed record Counts(int Support, int Oppose, int Undecided)
+    {
+        public int Total => Support + Oppose + Undecided;
+    }
+
+    private const int FeedSize = 30;
+
+    private List<FeedItem> _feed = [];
+    private Dictionary<int, Counts> _reactions = [];
+    private bool _loading = true;
 
     protected override async Task OnInitializedAsync()
     {
         await using var db = await DbFactory.CreateDbContextAsync();
-        _billCount = await db.Bills.CountAsync();
-        _memberCount = await db.Persons.CountAsync(p => p.IsCurrent);
-        _lastSync = await db.SyncLogs
-            .Where(s => s.Error == null && s.FinishedUtc != null)
-            .MaxAsync(s => (DateTime?)s.FinishedUtc);
+        var items = new List<FeedItem>();
+
+        // 1. Новые законопроекты.
+        items.AddRange(await db.Bills.AsNoTracking()
+            .Where(b => b.FirstSeenAt > DateTime.UnixEpoch)
+            .OrderByDescending(b => b.FirstSeenAt)
+            .Take(FeedSize)
+            .Select(b => new FeedItem(
+                b.FirstSeenAt, "📄", "Feed_NewBill",
+                b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
+                b.Id, b.StatusDesc))
+            .ToListAsync());
+
+        // 2. Смена стадии — главное событие для «окна влияния».
+        items.AddRange(await db.Bills.AsNoTracking()
+            .Where(b => b.StatusChangedAt != null)
+            .OrderByDescending(b => b.StatusChangedAt)
+            .Take(FeedSize)
+            .Select(b => new FeedItem(
+                b.StatusChangedAt!.Value, "🔄", "Feed_StatusChanged",
+                b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
+                b.Id, b.StatusDesc))
+            .ToListAsync());
+
+        // 3. Гражданские инициативы — единственные события, созданные людьми.
+        items.AddRange(await db.CitizenInitiatives.AsNoTracking()
+            .Where(i => i.Status != InitiativeStatus.Draft && i.PublishedAt != null)
+            .OrderByDescending(i => i.PublishedAt)
+            .Take(FeedSize)
+            .Select(i => new FeedItem(
+                i.PublishedAt!.Value, "💡", "Feed_NewInitiative",
+                i.Title, $"/initiatives/{i.Id}", false,
+                null, null, null,
+                i.Signatures.Count, i.SignatureThreshold))
+            .ToListAsync());
+
+        // 4. Обсуждение: показываем, где сейчас спорят.
+        items.AddRange(await db.Comments.AsNoTracking()
+            .OrderByDescending(c => c.CreatedAt)
+            .Take(FeedSize)
+            .Select(c => new FeedItem(
+                c.CreatedAt, "💬", "Feed_NewComment",
+                c.Bill != null ? (c.Bill.NameRu ?? c.Bill.Name) : c.Initiative!.Title,
+                c.BillId != null ? $"/bills/{c.BillId}#comment-{c.Id}"
+                                 : $"/initiatives/{c.InitiativeId}#comment-{c.Id}",
+                c.Bill != null && c.Bill.NameRu == null,
+                null, null,
+                c.Text.Length > 120 ? c.Text.Substring(0, 120) + "…" : c.Text))
+            .ToListAsync());
+
+        _feed = items.OrderByDescending(i => i.At).Take(FeedSize).ToList();
+
+        // Счётчики реакций одним запросом только по попавшим в ленту законам.
+        var billIds = _feed.Where(i => i.BillId != null).Select(i => i.BillId!.Value).Distinct().ToList();
+        if (billIds.Count > 0)
+        {
+            _reactions = (await db.BillReactions.AsNoTracking()
+                    .Where(r => billIds.Contains(r.BillId))
+                    .GroupBy(r => new { r.BillId, r.Kind })
+                    .Select(g => new { g.Key.BillId, g.Key.Kind, Count = g.Count() })
+                    .ToListAsync())
+                .GroupBy(x => x.BillId)
+                .ToDictionary(g => g.Key, g => new Counts(
+                    g.FirstOrDefault(x => x.Kind == ReactionKind.Support)?.Count ?? 0,
+                    g.FirstOrDefault(x => x.Kind == ReactionKind.Oppose)?.Count ?? 0,
+                    g.FirstOrDefault(x => x.Kind == ReactionKind.Undecided)?.Count ?? 0));
+        }
+
+        _loading = false;
+    }
+
+    private string RelativeTime(DateTime utc)
+    {
+        var delta = DateTime.UtcNow - utc;
+
+        if (delta.TotalMinutes < 1) return L["Time_JustNow"];
+        if (delta.TotalHours < 1) return string.Format(L["Time_Minutes"], (int)delta.TotalMinutes);
+        if (delta.TotalDays < 1) return string.Format(L["Time_Hours"], (int)delta.TotalHours);
+        if (delta.TotalDays < 30) return string.Format(L["Time_Days"], (int)delta.TotalDays);
+
+        return utc.ToLocalTime().ToString("dd.MM.yyyy");
     }
 }
