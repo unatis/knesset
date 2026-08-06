@@ -276,4 +276,17 @@
   <data name="Laws_AmendDirect" xml:space="preserve"><value>прямых</value></data>
   <data name="Laws_UnnamedNote" xml:space="preserve"><value>Для {0} изменений Кнессет не публикует названия акта — это старые акты, которых нет в открытом наборе данных. На подсчёт выше это не влияет.</value></data>
   <data name="Laws_NamedOnly" xml:space="preserve"><value>Изменения с известным названием</value></data>
+  <data name="Nav_About" xml:space="preserve"><value>О проекте</value></data>
+  <data name="About_Title" xml:space="preserve"><value>О проекте</value></data>
+  <data name="About_WhatIs" xml:space="preserve"><value>Что это</value></data>
+  <data name="About_WhatIsText" xml:space="preserve"><value>Гражданская платформа над официальными данными Кнессета. Мы показываем, какие законопроекты обсуждаются прямо сейчас, на какой они стадии, кто их внёс и что они означают на деле. Пока закон обсуждают, на него ещё можно повлиять — а когда о нём напишут в новостях, обычно уже поздно.</value></data>
+  <data name="About_NotOfficial" xml:space="preserve"><value>Чем это не является</value></data>
+  <data name="About_NotOfficialText" xml:space="preserve"><value>Это не официальный сайт Кнессета и не связанный с ним ресурс. Официальный источник — knesset.gov.il, и на него мы ссылаемся с каждой страницы закона. Это и не юридическая консультация: разбор помогает понять суть, но решения о своих правах принимайте, опираясь на первоисточник и, если нужно, на юриста.</value></data>
+  <data name="About_Data" xml:space="preserve"><value>Откуда данные</value></data>
+  <data name="About_DataText" xml:space="preserve"><value>Законопроекты, депутаты, фракции и свод действующих законов приходят из официального открытого API Кнессета и обновляются автоматически. Признак косвенной поправки — когда закон об одной теме меняет закон о другой — тоже проставляет сам Кнессет, мы лишь показываем его на виду.</value></data>
+  <data name="About_Ai" xml:space="preserve"><value>Про AI-анализ</value></data>
+  <data name="About_AiText" xml:space="preserve"><value>Сейчас анализ работает на демонстрационных данных — настоящая модель ещё не подключена, и карточки помечены соответствующим образом. Когда она появится, разбор будет обязан следовать правилам симметрии: доводы всех сторон, разделение факта и вывода, отказ выдавать предположение за установленное.</value></data>
+  <data name="About_Source" xml:space="preserve"><value>Исходный код открыт</value></data>
+  <data name="Home_StripText" xml:space="preserve"><value>Следим за законопроектами Кнессета и показываем, когда на них ещё можно повлиять.</value></data>
+  <data name="Home_StripMore" xml:space="preserve"><value>Подробнее</value></data>
 </root>

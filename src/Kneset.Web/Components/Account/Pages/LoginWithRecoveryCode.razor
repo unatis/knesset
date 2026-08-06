@@ -1,10 +1,9 @@
-﻿@page "/Account/LoginWithRecoveryCode"
+@page "/Account/LoginWithRecoveryCode"
 
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity
 @using Kneset.Core.Entities;
-using Kneset.Infrastructure.Data
-
+@using Kneset.Infrastructure.Data
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 @inject IdentityRedirectManager RedirectManager

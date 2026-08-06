@@ -107,6 +107,20 @@ h1:focus {
     flex-wrap: wrap;
 }
 
+/* Полоска для вошедших: объяснение в одну строку вместо экрана-знакомства. */
+.home-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    background: #eef0fb;
+    border-radius: 0.6rem;
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: #3b3b55;
+}
+
 .feed-title {
     font-size: 1.15rem;
     font-weight: 600;

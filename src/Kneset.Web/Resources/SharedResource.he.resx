@@ -276,4 +276,17 @@
   <data name="Laws_AmendDirect" xml:space="preserve"><value>ישירים</value></data>
   <data name="Laws_UnnamedNote" xml:space="preserve"><value>עבור {0} תיקונים הכנסת אינה מפרסמת את שם החוק — מדובר בחוקים ישנים שאינם במאגר הפתוח. אין לכך השפעה על הספירה שלמעלה.</value></data>
   <data name="Laws_NamedOnly" xml:space="preserve"><value>תיקונים עם שם ידוע</value></data>
+  <data name="Nav_About" xml:space="preserve"><value>אודות</value></data>
+  <data name="About_Title" xml:space="preserve"><value>אודות הפרויקט</value></data>
+  <data name="About_WhatIs" xml:space="preserve"><value>מה זה</value></data>
+  <data name="About_WhatIsText" xml:space="preserve"><value>פלטפורמה אזרחית מעל נתוני הכנסת הרשמיים. אנחנו מראים אילו הצעות חוק נדונות כרגע, באיזה שלב הן, מי הגיש אותן ומה משמעותן בפועל. כל עוד ההצעה נדונה אפשר להשפיע עליה; כשהיא מגיעה לחדשות בדרך כלל כבר מאוחר.</value></data>
+  <data name="About_NotOfficial" xml:space="preserve"><value>מה זה לא</value></data>
+  <data name="About_NotOfficialText" xml:space="preserve"><value>זה אינו אתר הכנסת הרשמי ואינו קשור אליו. המקור הרשמי הוא knesset.gov.il, ואנחנו מקשרים אליו מכל עמוד של הצעת חוק. זו גם אינה ייעוץ משפטי: הניתוח עוזר להבין את העיקר, אך החלטות על זכויותיכם צריכות להישען על המקור הראשוני ובמידת הצורך על עורך דין.</value></data>
+  <data name="About_Data" xml:space="preserve"><value>מאיפה הנתונים</value></data>
+  <data name="About_DataText" xml:space="preserve"><value>הצעות חוק, חברי כנסת, סיעות ומאגר החוקים בתוקף מגיעים מה-API הפתוח הרשמי של הכנסת ומתעדכנים אוטומטית. גם סימון התיקון העקיף — כשחוק בנושא אחד משנה חוק בנושא אחר — נעשה בידי הכנסת עצמה; אנחנו רק מציגים אותו לעין.</value></data>
+  <data name="About_Ai" xml:space="preserve"><value>על ניתוח ה-AI</value></data>
+  <data name="About_AiText" xml:space="preserve"><value>הניתוח פועל כרגע על נתוני הדגמה — מודל אמיתי עדיין לא מחובר, והכרטיסים מסומנים בהתאם. כשהוא יחובר, הניתוח יחויב בכללי סימטריה: טיעונים מכל הצדדים, הפרדה בין עובדה למסקנה, ואיסור להציג השערה כעובדה.</value></data>
+  <data name="About_Source" xml:space="preserve"><value>קוד המקור פתוח</value></data>
+  <data name="Home_StripText" xml:space="preserve"><value>עוקבים אחר הצעות חוק בכנסת ומראים מתי עוד אפשר להשפיע עליהן.</value></data>
+  <data name="Home_StripMore" xml:space="preserve"><value>פרטים נוספים</value></data>
 </root>

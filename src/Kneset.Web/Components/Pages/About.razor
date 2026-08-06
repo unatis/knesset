@@ -1,0 +1,44 @@
+@page "/about"
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["About_Title"]</PageTitle>
+
+<h2>@L["About_Title"]</h2>
+
+<div style="max-width:760px">
+    <section class="mb-4">
+        <h5>@L["About_WhatIs"]</h5>
+        <p>@L["About_WhatIsText"]</p>
+    </section>
+
+    @* Честная оговорка на видном месте: тот же принцип, по которому
+       гражданские инициативы помечены как неофициальные. *@
+    <section class="alert alert-light border mb-4">
+        <h5>@L["About_NotOfficial"]</h5>
+        <p class="mb-0">@L["About_NotOfficialText"]</p>
+    </section>
+
+    <section class="mb-4">
+        <h5>@L["About_Data"]</h5>
+        <p>@L["About_DataText"]</p>
+        <p class="mb-0">
+            <a href="https://knesset.gov.il/Odata/ParliamentInfo.svc/" target="_blank" rel="noopener">
+                knesset.gov.il/Odata
+            </a>
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h5>@L["About_Ai"]</h5>
+        <p>@L["About_AiText"]</p>
+    </section>
+
+    <section>
+        <h5>@L["About_Source"]</h5>
+        <p class="mb-0">
+            <a href="https://github.com/unatis/knesset" target="_blank" rel="noopener">
+                github.com/unatis/knesset
+            </a>
+        </p>
+    </section>
+</div>

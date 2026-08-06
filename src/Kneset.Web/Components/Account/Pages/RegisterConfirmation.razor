@@ -1,11 +1,10 @@
-﻿@page "/Account/RegisterConfirmation"
+@page "/Account/RegisterConfirmation"
 
 @using System.Text
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using Kneset.Core.Entities;
-using Kneset.Infrastructure.Data
-
+@using Kneset.Infrastructure.Data
 @inject UserManager<AppUser> UserManager
 @inject IEmailSender<AppUser> EmailSender
 @inject NavigationManager NavigationManager

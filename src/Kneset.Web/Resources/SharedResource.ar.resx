@@ -276,4 +276,17 @@
   <data name="Laws_AmendDirect" xml:space="preserve"><value>مباشرة</value></data>
   <data name="Laws_UnnamedNote" xml:space="preserve"><value>بالنسبة إلى {0} تعديلًا لا ينشر الكنيست اسم القانون — وهي قوانين قديمة غير متوفرة في مجموعة البيانات المفتوحة. لا يؤثر ذلك على الأعداد أعلاه.</value></data>
   <data name="Laws_NamedOnly" xml:space="preserve"><value>التعديلات ذات الاسم المعروف</value></data>
+  <data name="Nav_About" xml:space="preserve"><value>عن المشروع</value></data>
+  <data name="About_Title" xml:space="preserve"><value>عن المشروع</value></data>
+  <data name="About_WhatIs" xml:space="preserve"><value>ما هذا</value></data>
+  <data name="About_WhatIsText" xml:space="preserve"><value>منصة مدنية مبنية على بيانات الكنيست الرسمية. نعرض مشاريع القوانين قيد النقاش الآن، وفي أي مرحلة هي، ومن قدّمها وماذا تعني عمليًا. ما دام المشروع قيد النقاش يمكن التأثير عليه؛ وعندما يصل إلى الأخبار يكون الأوان قد فات عادةً.</value></data>
+  <data name="About_NotOfficial" xml:space="preserve"><value>ما ليس هذا</value></data>
+  <data name="About_NotOfficialText" xml:space="preserve"><value>هذا ليس موقع الكنيست الرسمي ولا تابعًا له. المصدر الرسمي هو knesset.gov.il، ونحن نربط إليه من كل صفحة مشروع قانون. كما أنه ليس استشارة قانونية: التحليل يساعد على فهم الجوهر، لكن القرارات بشأن حقوقك يجب أن تستند إلى المصدر الأصلي وإلى محامٍ عند الحاجة.</value></data>
+  <data name="About_Data" xml:space="preserve"><value>من أين تأتي البيانات</value></data>
+  <data name="About_DataText" xml:space="preserve"><value>تأتي مشاريع القوانين والنواب والكتل ومجموعة القوانين السارية من واجهة الكنيست المفتوحة الرسمية وتُحدَّث تلقائيًا. كذلك تصنيف التعديل غير المباشر — حين يغيّر قانون في موضوع ما قانونًا في موضوع آخر — يضعه الكنيست نفسه؛ ونحن نُظهره فقط.</value></data>
+  <data name="About_Ai" xml:space="preserve"><value>عن تحليل الذكاء الاصطناعي</value></data>
+  <data name="About_AiText" xml:space="preserve"><value>يعمل التحليل حاليًا على بيانات تجريبية — لم يُربط نموذج حقيقي بعد، والبطاقات موسومة بذلك. وعند ربطه سيلتزم التحليل بقواعد التوازن: حجج من كل الأطراف، وفصل الوقائع عن الاستنتاجات، ومنع تقديم الافتراض كأمر ثابت.</value></data>
+  <data name="About_Source" xml:space="preserve"><value>الشيفرة المصدرية مفتوحة</value></data>
+  <data name="Home_StripText" xml:space="preserve"><value>نتابع مشاريع قوانين الكنيست ونبيّن متى لا يزال بالإمكان التأثير عليها.</value></data>
+  <data name="Home_StripMore" xml:space="preserve"><value>تفاصيل أكثر</value></data>
 </root>

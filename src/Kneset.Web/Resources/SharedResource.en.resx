@@ -276,4 +276,17 @@
   <data name="Laws_AmendDirect" xml:space="preserve"><value>direct</value></data>
   <data name="Laws_UnnamedNote" xml:space="preserve"><value>For {0} amendments the Knesset publishes no act name — these are older acts absent from the open dataset. The counts above are unaffected.</value></data>
   <data name="Laws_NamedOnly" xml:space="preserve"><value>Amendments with a known name</value></data>
+  <data name="Nav_About" xml:space="preserve"><value>About</value></data>
+  <data name="About_Title" xml:space="preserve"><value>About the project</value></data>
+  <data name="About_WhatIs" xml:space="preserve"><value>What this is</value></data>
+  <data name="About_WhatIsText" xml:space="preserve"><value>A civic platform built on official Knesset data. We show which bills are under discussion right now, what stage they are at, who submitted them and what they actually mean. While a bill is still being discussed it can be influenced; by the time it makes the news it is usually too late.</value></data>
+  <data name="About_NotOfficial" xml:space="preserve"><value>What this is not</value></data>
+  <data name="About_NotOfficialText" xml:space="preserve"><value>This is not the official Knesset website and is not affiliated with it. The official source is knesset.gov.il, and we link to it from every bill page. Nor is this legal advice: the analysis helps you understand the gist, but decisions about your rights should rest on the primary source and, where needed, a lawyer.</value></data>
+  <data name="About_Data" xml:space="preserve"><value>Where the data comes from</value></data>
+  <data name="About_DataText" xml:space="preserve"><value>Bills, members, factions and the body of laws in force come from the Knesset's official open API and update automatically. The indirect-amendment marking — when a law on one subject changes a law on another — is also assigned by the Knesset itself; we merely bring it into view.</value></data>
+  <data name="About_Ai" xml:space="preserve"><value>About the AI analysis</value></data>
+  <data name="About_AiText" xml:space="preserve"><value>The analysis currently runs on demo data — a real model is not connected yet, and the cards are marked accordingly. Once it is, the analysis will be bound by symmetry rules: arguments from all sides, facts kept separate from inferences, and no presenting a guess as established.</value></data>
+  <data name="About_Source" xml:space="preserve"><value>The source code is open</value></data>
+  <data name="Home_StripText" xml:space="preserve"><value>We track Knesset bills and show when they can still be influenced.</value></data>
+  <data name="Home_StripMore" xml:space="preserve"><value>Learn more</value></data>
 </root>

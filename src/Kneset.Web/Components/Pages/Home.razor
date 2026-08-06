@@ -25,6 +25,16 @@
             </div>
         </section>
     </NotAuthorized>
+
+    @* Вошедшему полноэкранное знакомство не нужно, но совсем без объяснения
+       сайт оставлять нельзя — узкая полоска со ссылкой на страницу о проекте. *@
+    <Authorized>
+        <div class="home-strip">
+            <span aria-hidden="true">ℹ️</span>
+            <span>@L["Home_StripText"]</span>
+            <a href="about">@L["Home_StripMore"]</a>
+        </div>
+    </Authorized>
 </AuthorizeView>
 
 <h2 class="feed-title">@L["Home_FeedTitle"]</h2>
