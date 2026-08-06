@@ -39,6 +39,7 @@ else if (_feed.Count == 0)
 }
 else
 {
+    <div class="feed-list">
     @foreach (var item in _feed)
     {
         <article class="feed-card">
@@ -74,8 +75,9 @@ else
             }
         </article>
     }
+    </div>
 
-    <a class="btn btn-outline-secondary w-100 mt-2" href="bills">@L["Feed_ShowMore"]</a>
+    <a class="btn btn-outline-secondary w-100 mt-3" href="bills">@L["Feed_ShowMore"]</a>
 }
 
 @code {

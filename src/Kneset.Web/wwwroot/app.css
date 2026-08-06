@@ -113,11 +113,21 @@ h1:focus {
     margin-bottom: 0.9rem;
 }
 
+/* На широком экране лента раскладывается в несколько колонок, а не тянется
+   одной полосой в пустоте. Ширина карточки при этом остаётся читаемой. */
+.feed-list {
+    display: grid;
+    /* min(360px, 100%) обязателен: на узком экране колонка в 360px вылезла бы
+       за пределы контейнера — grid не сжимает minmax сам по себе. */
+    grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
+    gap: 0.75rem;
+    align-items: start;
+}
+
 .feed-card {
     border: 1px solid #e3e3e8;
     border-radius: 0.75rem;
     padding: 0.85rem 1rem;
-    margin-bottom: 0.75rem;
     background: #fff;
 }
 
