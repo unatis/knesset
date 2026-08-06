@@ -251,4 +251,24 @@
   <data name="Time_Minutes" xml:space="preserve"><value>{0} min ago</value></data>
   <data name="Time_Hours" xml:space="preserve"><value>{0} h ago</value></data>
   <data name="Time_Days" xml:space="preserve"><value>{0} d ago</value></data>
+  <data name="Nav_Laws" xml:space="preserve"><value>Laws in force</value></data>
+  <data name="Laws_Title" xml:space="preserve"><value>Laws in force</value></data>
+  <data name="Laws_Lead" xml:space="preserve"><value>The body of enacted Israeli law. Not to be confused with bills — these are already in force.</value></data>
+  <data name="Laws_Search" xml:space="preserve"><value>Search laws by name</value></data>
+  <data name="Laws_BasicOnly" xml:space="preserve"><value>Basic laws only</value></data>
+  <data name="Laws_BasicLaw" xml:space="preserve"><value>Basic law</value></data>
+  <data name="Laws_BudgetLaw" xml:space="preserve"><value>Budget law</value></data>
+  <data name="Laws_NotFound" xml:space="preserve"><value>Law not found</value></data>
+  <data name="Laws_Empty" xml:space="preserve"><value>Laws will appear after syncing with the Knesset.</value></data>
+  <data name="Laws_Validity" xml:space="preserve"><value>Status</value></data>
+  <data name="Laws_InForceSince" xml:space="preserve"><value>In force since</value></data>
+  <data name="Laws_Published" xml:space="preserve"><value>Published</value></data>
+  <data name="Laws_Amendments" xml:space="preserve"><value>Amendment history</value></data>
+  <data name="Laws_NoAmendments" xml:space="preserve"><value>No amendments recorded</value></data>
+  <data name="Laws_Indirect" xml:space="preserve"><value>Indirect amendment</value></data>
+  <data name="Laws_Direct" xml:space="preserve"><value>Direct amendment</value></data>
+  <data name="Laws_Original" xml:space="preserve"><value>Original law</value></data>
+  <data name="Laws_IndirectExplain" xml:space="preserve"><value>An indirect amendment is when a law on one subject changes a law on another. That is how a change slips past the people it affects. The marking comes from the Knesset itself.</value></data>
+  <data name="Laws_IndirectCount" xml:space="preserve"><value>of them indirect: {0}</value></data>
+  <data name="Laws_Found" xml:space="preserve"><value>Found</value></data>
 </root>

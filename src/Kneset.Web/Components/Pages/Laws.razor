@@ -1,0 +1,152 @@
+@page "/laws"
+@rendermode InteractiveServer
+@using Kneset.Core.Entities
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["Laws_Title"]</PageTitle>
+
+<h2>@L["Laws_Title"]</h2>
+<p class="text-muted">@L["Laws_Lead"]</p>
+
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <input class="form-control" style="max-width:360px" placeholder="@L["Laws_Search"]"
+           value="@_search" @oninput="OnSearchChanged" />
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="basicOnly"
+               checked="@_basicOnly" @onchange="OnBasicChanged" />
+        <label class="form-check-label" for="basicOnly">@L["Laws_BasicOnly"]</label>
+    </div>
+</div>
+
+@if (_laws is null)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else if (_total == 0)
+{
+    <div class="alert alert-light border">@L["Laws_Empty"]</div>
+}
+else
+{
+    <p class="text-muted">@L["Laws_Found"]: @_total</p>
+
+    <ul class="list-group">
+        @foreach (var row in _laws)
+        {
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                    <a href="/laws/@row.Law.Id" dir="rtl" lang="he">@row.Law.Name</a>
+                    <div class="text-end flex-shrink-0">
+                        @if (row.Law.IsBasicLaw)
+                        {
+                            <span class="badge bg-dark">@L["Laws_BasicLaw"]</span>
+                        }
+                        @if (row.IndirectCount > 0)
+                        {
+                            @* Косвенные поправки — то, ради чего этот раздел и делался. *@
+                            <span class="badge bg-warning text-dark">
+                                @string.Format(L["Laws_IndirectCount"], row.IndirectCount)
+                            </span>
+                        }
+                    </div>
+                </div>
+                <small class="text-muted">
+                    @row.Law.ValidityDesc
+                    @if (row.Law.ValidityStartDate is not null)
+                    {
+                        <span> · @L["Laws_InForceSince"] @row.Law.ValidityStartDate.Value.ToString("dd.MM.yyyy")</span>
+                    }
+                </small>
+            </li>
+        }
+    </ul>
+
+    @if (_total > PageSize)
+    {
+        <nav class="mt-3">
+            <ul class="pagination">
+                <li class="page-item @(_page == 0 ? "disabled" : "")">
+                    <button class="page-link" @onclick="() => GoToAsync(_page - 1)">←</button>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">@(_page + 1) / @((_total + PageSize - 1) / PageSize)</span>
+                </li>
+                <li class="page-item @((_page + 1) * PageSize >= _total ? "disabled" : "")">
+                    <button class="page-link" @onclick="() => GoToAsync(_page + 1)">→</button>
+                </li>
+            </ul>
+        </nav>
+    }
+}
+
+@code {
+    private const int PageSize = 25;
+
+    private sealed record LawRow(IsraelLaw Law, int IndirectCount);
+
+    private List<LawRow>? _laws;
+    private int _total;
+    private int _page;
+    private string _search = "";
+    private bool _basicOnly;
+    private System.Timers.Timer? _debounce;
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        var query = db.IsraelLaws.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(_search))
+            query = query.Where(l => EF.Functions.ILike(l.Name, $"%{_search.Trim()}%"));
+
+        if (_basicOnly) query = query.Where(l => l.IsBasicLaw);
+
+        _total = await query.CountAsync();
+
+        var laws = await query
+            .OrderByDescending(l => l.IsBasicLaw)
+            .ThenByDescending(l => l.ValidityStartDate)
+            .Skip(_page * PageSize).Take(PageSize)
+            .ToListAsync();
+
+        // Счётчик косвенных поправок одним запросом по показанным законам.
+        var ids = laws.Select(l => l.Id).ToList();
+        var indirect = await db.LawAmendments.AsNoTracking()
+            .Where(a => ids.Contains(a.IsraelLawId) && a.IsIndirect)
+            .GroupBy(a => a.IsraelLawId)
+            .Select(g => new { IsraelLawId = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.IsraelLawId, x => x.Count);
+
+        _laws = laws.Select(l => new LawRow(l, indirect.GetValueOrDefault(l.Id))).ToList();
+    }
+
+    private void OnSearchChanged(ChangeEventArgs e)
+    {
+        _search = e.Value?.ToString() ?? "";
+        _page = 0;
+        _debounce?.Stop();
+        _debounce = new System.Timers.Timer(350) { AutoReset = false };
+        _debounce.Elapsed += async (_, _) => await InvokeAsync(async () =>
+        {
+            await LoadAsync();
+            StateHasChanged();
+        });
+        _debounce.Start();
+    }
+
+    private async Task OnBasicChanged(ChangeEventArgs e)
+    {
+        _basicOnly = (bool)(e.Value ?? false);
+        _page = 0;
+        await LoadAsync();
+    }
+
+    private async Task GoToAsync(int page)
+    {
+        _page = Math.Max(0, page);
+        await LoadAsync();
+    }
+}

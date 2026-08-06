@@ -40,6 +40,15 @@ public class KnessetODataClient(HttpClient http, ILogger<KnessetODataClient> log
         return GetPagedAsync<KnsBillInitiator>("KNS_BillInitiator", filter, ct);
     }
 
+    public Task<List<KnsIsraelLaw>> GetIsraelLawsAsync(DateTime? since, CancellationToken ct) =>
+        GetPagedAsync<KnsIsraelLaw>("KNS_IsraelLaw", SinceFilter(since), ct);
+
+    public Task<List<KnsLaw>> GetLawActsAsync(DateTime? since, CancellationToken ct) =>
+        GetPagedAsync<KnsLaw>("KNS_Law", SinceFilter(since), ct);
+
+    public Task<List<KnsLawBinding>> GetLawBindingsAsync(DateTime? since, CancellationToken ct) =>
+        GetPagedAsync<KnsLawBinding>("KNS_LawBinding", SinceFilter(since), ct);
+
     /// <summary>Максимальный номер созыва среди законопроектов (= текущий созыв).</summary>
     public async Task<int> GetLatestKnessetNumAsync(CancellationToken ct)
     {

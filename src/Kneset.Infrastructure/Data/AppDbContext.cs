@@ -28,6 +28,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<InitiativeReaction> InitiativeReactions => Set<InitiativeReaction>();
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<UiTranslation> UiTranslations => Set<UiTranslation>();
+    public DbSet<IsraelLaw> IsraelLaws => Set<IsraelLaw>();
+    public DbSet<LawAct> LawActs => Set<LawAct>();
+    public DbSet<LawAmendment> LawAmendments => Set<LawAmendment>();
     public DbSet<NotificationSubscription> NotificationSubscriptions => Set<NotificationSubscription>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<UserNotificationChannel> UserNotificationChannels => Set<UserNotificationChannel>();
@@ -140,6 +143,32 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             c.HasOne(x => x.Initiative).WithMany().HasForeignKey(x => x.InitiativeId);
             c.HasOne(x => x.User).WithMany()
                 .HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<IsraelLaw>(l =>
+        {
+            l.HasIndex(x => x.KnessetIsraelLawId).IsUnique();
+            l.HasIndex(x => x.IsBasicLaw);
+            l.Property(x => x.Name).HasMaxLength(2000);
+            l.Property(x => x.ValidityDesc).HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<LawAct>(a =>
+        {
+            a.HasIndex(x => x.KnessetLawId).IsUnique();
+            a.Property(x => x.Name).HasMaxLength(2000);
+        });
+
+        modelBuilder.Entity<LawAmendment>(a =>
+        {
+            a.HasIndex(x => x.KnessetBindingId).IsUnique();
+            // Выборка поправок конкретного закона — основной запрос на карточке.
+            a.HasIndex(x => new { x.IsraelLawId, x.IsIndirect });
+            a.Property(x => x.ActName).HasMaxLength(2000);
+            a.Property(x => x.BindingTypeDesc).HasMaxLength(200);
+            a.Property(x => x.AmendmentTypeDesc).HasMaxLength(200);
+            a.HasOne(x => x.IsraelLaw).WithMany(x => x.Amendments)
+                .HasForeignKey(x => x.IsraelLawId).OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<AppUser>(u =>

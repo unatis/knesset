@@ -1,0 +1,139 @@
+@page "/laws/{Id:int}"
+@rendermode InteractiveServer
+@using Kneset.Core.Entities
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@(_law?.Name ?? L["Laws_Title"].Value)</PageTitle>
+
+@if (_loading)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else if (_law is null)
+{
+    <div class="alert alert-warning">@L["Laws_NotFound"]</div>
+}
+else
+{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/laws">@L["Laws_Title"]</a></li>
+        </ol>
+    </nav>
+
+    <h2 dir="rtl" lang="he">@_law.Name</h2>
+
+    <div class="mb-3">
+        @if (_law.IsBasicLaw)
+        {
+            <span class="badge bg-dark me-1">@L["Laws_BasicLaw"]</span>
+        }
+        @if (_law.IsBudgetLaw)
+        {
+            <span class="badge bg-secondary me-1">@L["Laws_BudgetLaw"]</span>
+        }
+    </div>
+
+    <table class="table" style="max-width:640px">
+        <tbody>
+            @if (_law.ValidityDesc is not null)
+            {
+                <tr>
+                    <th style="width:220px">@L["Laws_Validity"]</th>
+                    <td dir="rtl" lang="he" style="text-align:start">@_law.ValidityDesc</td>
+                </tr>
+            }
+            @if (_law.ValidityStartDate is not null)
+            {
+                <tr>
+                    <th>@L["Laws_InForceSince"]</th>
+                    <td>@_law.ValidityStartDate.Value.ToString("dd.MM.yyyy")</td>
+                </tr>
+            }
+            @if (_law.PublicationDate is not null)
+            {
+                <tr>
+                    <th>@L["Laws_Published"]</th>
+                    <td>@_law.PublicationDate.Value.ToString("dd.MM.yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (_indirect.Count > 0)
+    {
+        @* Главное на этой странице: закон меняли «через заднюю дверь». *@
+        <div class="alert alert-warning">
+            <strong>⚠ @L["Laws_Indirect"] · @_indirect.Count</strong>
+            <p class="mb-0 mt-1 small">@L["Laws_IndirectExplain"]</p>
+        </div>
+    }
+
+    <h5 class="mt-4">@L["Laws_Amendments"] (@_amendments.Count)</h5>
+
+    @if (_amendments.Count == 0)
+    {
+        <p class="text-muted">@L["Laws_NoAmendments"]</p>
+    }
+    else
+    {
+        <ul class="list-group">
+            @foreach (var amendment in _amendments)
+            {
+                <li class="list-group-item @(amendment.IsIndirect ? "list-group-item-warning" : "")">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <span dir="rtl" lang="he">@(amendment.ActName ?? $"#{amendment.KnessetLawId}")</span>
+                        <span class="flex-shrink-0">
+                            @if (amendment.IsOriginal)
+                            {
+                                <span class="badge bg-secondary">@L["Laws_Original"]</span>
+                            }
+                            else if (amendment.IsIndirect)
+                            {
+                                <span class="badge bg-warning text-dark">@L["Laws_Indirect"]</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-light text-dark border">@L["Laws_Direct"]</span>
+                            }
+                        </span>
+                    </div>
+                    @if (amendment.ActPublicationDate is not null)
+                    {
+                        <small class="text-muted">@amendment.ActPublicationDate.Value.ToString("dd.MM.yyyy")</small>
+                    }
+                </li>
+            }
+        </ul>
+    }
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private IsraelLaw? _law;
+    private List<LawAmendment> _amendments = [];
+    private List<LawAmendment> _indirect = [];
+    private bool _loading = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        _law = await db.IsraelLaws.AsNoTracking().FirstOrDefaultAsync(l => l.Id == Id);
+
+        if (_law is not null)
+        {
+            _amendments = await db.LawAmendments.AsNoTracking()
+                .Where(a => a.IsraelLawId == Id)
+                // Косвенные наверх: ради них раздел и делался.
+                .OrderByDescending(a => a.IsIndirect)
+                .ThenByDescending(a => a.ActPublicationDate)
+                .ToListAsync();
+
+            _indirect = _amendments.Where(a => a.IsIndirect).ToList();
+        }
+
+        _loading = false;
+    }
+}

@@ -251,4 +251,24 @@
   <data name="Time_Minutes" xml:space="preserve"><value>לפני {0} דק'</value></data>
   <data name="Time_Hours" xml:space="preserve"><value>לפני {0} שע'</value></data>
   <data name="Time_Days" xml:space="preserve"><value>לפני {0} ימים</value></data>
+  <data name="Nav_Laws" xml:space="preserve"><value>חוקים בתוקף</value></data>
+  <data name="Laws_Title" xml:space="preserve"><value>חוקים בתוקף</value></data>
+  <data name="Laws_Lead" xml:space="preserve"><value>מאגר החוקים שנחקקו בישראל. לא להתבלבל עם הצעות חוק — אלה כבר בתוקף.</value></data>
+  <data name="Laws_Search" xml:space="preserve"><value>חיפוש חוק לפי שם</value></data>
+  <data name="Laws_BasicOnly" xml:space="preserve"><value>חוקי יסוד בלבד</value></data>
+  <data name="Laws_BasicLaw" xml:space="preserve"><value>חוק יסוד</value></data>
+  <data name="Laws_BudgetLaw" xml:space="preserve"><value>חוק תקציב</value></data>
+  <data name="Laws_NotFound" xml:space="preserve"><value>החוק לא נמצא</value></data>
+  <data name="Laws_Empty" xml:space="preserve"><value>החוקים יופיעו לאחר סנכרון עם הכנסת.</value></data>
+  <data name="Laws_Validity" xml:space="preserve"><value>סטטוס</value></data>
+  <data name="Laws_InForceSince" xml:space="preserve"><value>נכנס לתוקף</value></data>
+  <data name="Laws_Published" xml:space="preserve"><value>פורסם</value></data>
+  <data name="Laws_Amendments" xml:space="preserve"><value>היסטוריית תיקונים</value></data>
+  <data name="Laws_NoAmendments" xml:space="preserve"><value>לא נרשמו תיקונים</value></data>
+  <data name="Laws_Indirect" xml:space="preserve"><value>תיקון עקיף</value></data>
+  <data name="Laws_Direct" xml:space="preserve"><value>תיקון ישיר</value></data>
+  <data name="Laws_Original" xml:space="preserve"><value>החוק המקורי</value></data>
+  <data name="Laws_IndirectExplain" xml:space="preserve"><value>תיקון עקיף הוא כאשר חוק בנושא אחד משנה חוק בנושא אחר. כך שינוי חומק מעיני מי שהוא נוגע לו. הסימון מגיע מהכנסת עצמה.</value></data>
+  <data name="Laws_IndirectCount" xml:space="preserve"><value>מתוכם עקיפים: {0}</value></data>
+  <data name="Laws_Found" xml:space="preserve"><value>נמצאו</value></data>
 </root>

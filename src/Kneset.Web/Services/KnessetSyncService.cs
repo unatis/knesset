@@ -65,6 +65,9 @@ public class KnessetSyncService(
         await RunStepAsync("Photos", SyncPhotosAsync, ct);
         await RunStepAsync("Bills", SyncBillsAsync, ct);
         await RunStepAsync("BillInitiators", SyncInitiatorsAsync, ct);
+        await RunStepAsync("IsraelLaws", SyncIsraelLawsAsync, ct);
+        await RunStepAsync("LawActs", SyncLawActsAsync, ct);
+        await RunStepAsync("LawAmendments", SyncLawAmendmentsAsync, ct);
 
         // Строго последним: подписка на депутата опирается на BillInitiators,
         // которые заполняются шагом выше. RunStepAsync передаёт сюда время
@@ -312,6 +315,149 @@ public class KnessetSyncService(
             }
 
             await chunkDb.SaveChangesAsync(ct);
+            total += chunk.Length;
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// Свод действующих законов. Это не законопроекты: законопроект — предложение,
+    /// а здесь то, что уже принято и действует.
+    /// </summary>
+    private async Task<int> SyncIsraelLawsAsync(DateTime? since, CancellationToken ct)
+    {
+        var laws = await client.GetIsraelLawsAsync(since, ct);
+        if (laws.Count == 0) return 0;
+
+        var total = 0;
+        foreach (var chunk in laws.Chunk(500))
+        {
+            await using var db = await dbFactory.CreateDbContextAsync(ct);
+            var ids = chunk.Select(l => l.IsraelLawID).ToList();
+            var existing = await db.IsraelLaws
+                .Where(l => ids.Contains(l.KnessetIsraelLawId))
+                .ToDictionaryAsync(l => l.KnessetIsraelLawId, ct);
+
+            foreach (var src in chunk)
+            {
+                if (!existing.TryGetValue(src.IsraelLawID, out var law))
+                {
+                    law = new IsraelLaw { KnessetIsraelLawId = src.IsraelLawID };
+                    db.IsraelLaws.Add(law);
+                }
+
+                law.Name = src.Name ?? "";
+                law.KnessetNum = src.KnessetNum;
+                law.IsBasicLaw = src.IsBasicLaw ?? false;
+                law.IsBudgetLaw = src.IsBudgetLaw ?? false;
+                law.ValidityDesc = src.LawValidityDesc;
+                law.PublicationDate = AsUtcNullable(src.PublicationDate);
+                law.ValidityStartDate = AsUtcNullable(src.ValidityStartDate);
+                law.ValidityFinishDate = AsUtcNullable(src.ValidityFinishDate);
+                law.LastUpdatedDate = AsUtc(src.LastUpdatedDate);
+            }
+
+            await db.SaveChangesAsync(ct);
+            total += chunk.Length;
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// Принятые акты. Их больше шестидесяти тысяч, поэтому шаг строго инкрементальный:
+    /// первый прогон длинный, дальше подтягиваются только изменившиеся.
+    /// </summary>
+    private async Task<int> SyncLawActsAsync(DateTime? since, CancellationToken ct)
+    {
+        var acts = await client.GetLawActsAsync(since, ct);
+        if (acts.Count == 0) return 0;
+
+        var total = 0;
+        foreach (var chunk in acts.Chunk(1000))
+        {
+            await using var db = await dbFactory.CreateDbContextAsync(ct);
+            var ids = chunk.Select(a => a.LawID).ToList();
+            var existing = await db.LawActs
+                .Where(a => ids.Contains(a.KnessetLawId))
+                .ToDictionaryAsync(a => a.KnessetLawId, ct);
+
+            foreach (var src in chunk)
+            {
+                if (!existing.TryGetValue(src.LawID, out var act))
+                {
+                    act = new LawAct { KnessetLawId = src.LawID };
+                    db.LawActs.Add(act);
+                    existing[src.LawID] = act;
+                }
+
+                act.Name = src.Name ?? "";
+                act.PublicationDate = AsUtcNullable(src.PublicationDate);
+                act.LastUpdatedDate = AsUtc(src.LastUpdatedDate);
+            }
+
+            await db.SaveChangesAsync(ct);
+            total += chunk.Length;
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// Связки «акт → закон» с признаком прямой или косвенной поправки.
+    /// Косвенная поправка — когда акт про одну тему меняет закон про другую;
+    /// Кнессет помечает такие сам, и это самое ценное в этих данных.
+    /// </summary>
+    private async Task<int> SyncLawAmendmentsAsync(DateTime? since, CancellationToken ct)
+    {
+        var bindings = await client.GetLawBindingsAsync(since, ct);
+        if (bindings.Count == 0) return 0;
+
+        await using var mapDb = await dbFactory.CreateDbContextAsync(ct);
+        var lawIdMap = await mapDb.IsraelLaws.ToDictionaryAsync(l => l.KnessetIsraelLawId, l => l.Id, ct);
+        // Названия берём из своей таблицы, а не из API: она уже наполнена шагом выше.
+        var acts = await mapDb.LawActs.AsNoTracking()
+            .ToDictionaryAsync(a => a.KnessetLawId, a => new { a.Name, a.PublicationDate }, ct);
+
+        var total = 0;
+        foreach (var chunk in bindings.Chunk(1000))
+        {
+            await using var db = await dbFactory.CreateDbContextAsync(ct);
+            var bindingIds = chunk.Select(b => b.LawBindingID).ToList();
+            var existing = await db.LawAmendments
+                .Where(a => bindingIds.Contains(a.KnessetBindingId))
+                .ToDictionaryAsync(a => a.KnessetBindingId, ct);
+
+            foreach (var src in chunk)
+            {
+                // Закон другого созыва или ещё не загруженный — пропускаем.
+                if (!lawIdMap.TryGetValue(src.IsraelLawID, out var israelLawId)) continue;
+
+                if (!existing.TryGetValue(src.LawBindingID, out var amendment))
+                {
+                    amendment = new LawAmendment { KnessetBindingId = src.LawBindingID };
+                    db.LawAmendments.Add(amendment);
+                    existing[src.LawBindingID] = amendment;
+                }
+
+                amendment.IsraelLawId = israelLawId;
+                amendment.KnessetLawId = src.LawID;
+                amendment.BindingTypeDesc = src.BindingTypeDesc;
+                amendment.AmendmentTypeDesc = src.AmendmentTypeDesc;
+                // Разметка Кнессета: עקיף — косвенная, החוק המקורי — сам факт создания закона.
+                amendment.IsIndirect = src.AmendmentTypeDesc?.Contains("עקיף") ?? false;
+                amendment.IsOriginal = src.BindingTypeDesc?.Contains("המקורי") ?? false;
+                amendment.LastUpdatedDate = AsUtc(src.LastUpdatedDate);
+
+                if (acts.TryGetValue(src.LawID, out var act))
+                {
+                    amendment.ActName = act.Name;
+                    amendment.ActPublicationDate = act.PublicationDate;
+                }
+            }
+
+            await db.SaveChangesAsync(ct);
             total += chunk.Length;
         }
 

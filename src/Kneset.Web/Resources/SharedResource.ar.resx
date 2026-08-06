@@ -251,4 +251,24 @@
   <data name="Time_Minutes" xml:space="preserve"><value>قبل {0} د</value></data>
   <data name="Time_Hours" xml:space="preserve"><value>قبل {0} س</value></data>
   <data name="Time_Days" xml:space="preserve"><value>قبل {0} ي</value></data>
+  <data name="Nav_Laws" xml:space="preserve"><value>القوانين السارية</value></data>
+  <data name="Laws_Title" xml:space="preserve"><value>القوانين السارية</value></data>
+  <data name="Laws_Lead" xml:space="preserve"><value>مجموعة القوانين المسنونة في إسرائيل. لا تخلط بينها وبين مشاريع القوانين — هذه سارية بالفعل.</value></data>
+  <data name="Laws_Search" xml:space="preserve"><value>ابحث عن قانون بالاسم</value></data>
+  <data name="Laws_BasicOnly" xml:space="preserve"><value>القوانين الأساسية فقط</value></data>
+  <data name="Laws_BasicLaw" xml:space="preserve"><value>قانون أساسي</value></data>
+  <data name="Laws_BudgetLaw" xml:space="preserve"><value>قانون الميزانية</value></data>
+  <data name="Laws_NotFound" xml:space="preserve"><value>لم يتم العثور على القانون</value></data>
+  <data name="Laws_Empty" xml:space="preserve"><value>ستظهر القوانين بعد المزامنة مع الكنيست.</value></data>
+  <data name="Laws_Validity" xml:space="preserve"><value>الحالة</value></data>
+  <data name="Laws_InForceSince" xml:space="preserve"><value>ساري منذ</value></data>
+  <data name="Laws_Published" xml:space="preserve"><value>نُشر</value></data>
+  <data name="Laws_Amendments" xml:space="preserve"><value>سجل التعديلات</value></data>
+  <data name="Laws_NoAmendments" xml:space="preserve"><value>لم تُسجَّل تعديلات</value></data>
+  <data name="Laws_Indirect" xml:space="preserve"><value>تعديل غير مباشر</value></data>
+  <data name="Laws_Direct" xml:space="preserve"><value>تعديل مباشر</value></data>
+  <data name="Laws_Original" xml:space="preserve"><value>القانون الأصلي</value></data>
+  <data name="Laws_IndirectExplain" xml:space="preserve"><value>التعديل غير المباشر هو أن يغيّر قانون في موضوع ما قانونًا في موضوع آخر. هكذا يمر التغيير دون أن ينتبه إليه المعنيون. التصنيف من الكنيست نفسه.</value></data>
+  <data name="Laws_IndirectCount" xml:space="preserve"><value>منها غير مباشرة: {0}</value></data>
+  <data name="Laws_Found" xml:space="preserve"><value>وُجد</value></data>
 </root>
