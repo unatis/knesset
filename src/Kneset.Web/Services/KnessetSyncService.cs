@@ -371,11 +371,11 @@ public class KnessetSyncService(
     /// </summary>
     private async Task<int> SyncLawActsAsync(DateTime? since, CancellationToken ct)
     {
-        var acts = await client.GetLawActsAsync(since, ct);
-        if (acts.Count == 0) return 0;
-
         var total = 0;
-        foreach (var chunk in acts.Chunk(1000))
+
+        // Постранично, с сохранением каждой страницы: шесть сотен запросов могут
+        // не уложиться в один сеанс, и прерванная загрузка не должна пропадать.
+        await foreach (var chunk in client.StreamActsAsync(since, ct))
         {
             await using var db = await dbFactory.CreateDbContextAsync(ct);
             var ids = chunk.Select(a => a.LawID).ToList();
@@ -398,7 +398,7 @@ public class KnessetSyncService(
             }
 
             await db.SaveChangesAsync(ct);
-            total += chunk.Length;
+            total += chunk.Count;
         }
 
         return total;

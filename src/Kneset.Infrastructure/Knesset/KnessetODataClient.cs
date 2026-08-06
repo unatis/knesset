@@ -43,8 +43,9 @@ public class KnessetODataClient(HttpClient http, ILogger<KnessetODataClient> log
     public Task<List<KnsIsraelLaw>> GetIsraelLawsAsync(DateTime? since, CancellationToken ct) =>
         GetPagedAsync<KnsIsraelLaw>("KNS_IsraelLaw", SinceFilter(since), ct);
 
-    public Task<List<KnsLaw>> GetLawActsAsync(DateTime? since, CancellationToken ct) =>
-        GetPagedAsync<KnsLaw>("KNS_Law", SinceFilter(since), ct);
+    /// <summary>Принятые акты потоком: их за шестьдесят тысяч, копить в памяти незачем.</summary>
+    public IAsyncEnumerable<List<KnsLaw>> StreamActsAsync(DateTime? since, CancellationToken ct) =>
+        StreamPagedAsync<KnsLaw>("KNS_Law", SinceFilter(since), ct);
 
     public Task<List<KnsLawBinding>> GetLawBindingsAsync(DateTime? since, CancellationToken ct) =>
         GetPagedAsync<KnsLawBinding>("KNS_LawBinding", SinceFilter(since), ct);
@@ -60,6 +61,38 @@ public class KnessetODataClient(HttpClient http, ILogger<KnessetODataClient> log
 
     private static string? SinceFilter(DateTime? since) =>
         since is null ? null : $"LastUpdatedDate gt datetime'{since:yyyy-MM-ddTHH:mm:ss}'";
+
+    /// <summary>
+    /// Отдаёт страницы по мере получения, а не одним списком в конце.
+    /// Нужно для больших наборов вроде KNS_Law (за шестьдесят тысяч записей):
+    /// вызывающий сохраняет каждую страницу сразу, и прерванная загрузка
+    /// не пропадает целиком — на бесплатном хостинге инстанс засыпает
+    /// раньше, чем успевает пройти шесть сотен страниц.
+    /// API ограничивает страницу сотней записей независимо от $top.
+    /// </summary>
+    public async IAsyncEnumerable<List<T>> StreamPagedAsync<T>(
+        string entity, string? filter,
+        [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken ct = default)
+    {
+        var skip = 0;
+        var total = 0;
+        while (true)
+        {
+            var url = $"{entity}?$format=json&$top={PageSize}&$skip={skip}";
+            if (filter is not null) url += $"&$filter={Uri.EscapeDataString(filter)}";
+
+            var page = await GetWithRetryAsync<T>(url, ct);
+            if (page.Count > 0)
+            {
+                total += page.Count;
+                yield return page;
+            }
+
+            if (page.Count < PageSize) break;
+            skip += PageSize;
+        }
+        logger.LogInformation("Кнессет API: {Entity} — получено {Count} записей (потоком)", entity, total);
+    }
 
     private async Task<List<T>> GetPagedAsync<T>(string entity, string? filter, CancellationToken ct)
     {
