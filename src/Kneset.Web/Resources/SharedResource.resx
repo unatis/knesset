@@ -271,4 +271,9 @@
   <data name="Laws_IndirectExplain" xml:space="preserve"><value>Косвенная поправка — когда закон об одной теме меняет закон о другой. Так изменение проходит незаметно для тех, кого оно касается. Пометку ставит сам Кнессет.</value></data>
   <data name="Laws_IndirectCount" xml:space="preserve"><value>из них косвенных: {0}</value></data>
   <data name="Laws_Found" xml:space="preserve"><value>Найдено</value></data>
+  <data name="Laws_AmendTotal" xml:space="preserve"><value>Всего изменений</value></data>
+  <data name="Laws_AmendIndirect" xml:space="preserve"><value>из них косвенных</value></data>
+  <data name="Laws_AmendDirect" xml:space="preserve"><value>прямых</value></data>
+  <data name="Laws_UnnamedNote" xml:space="preserve"><value>Для {0} изменений Кнессет не публикует названия акта — это старые акты, которых нет в открытом наборе данных. На подсчёт выше это не влияет.</value></data>
+  <data name="Laws_NamedOnly" xml:space="preserve"><value>Изменения с известным названием</value></data>
 </root>

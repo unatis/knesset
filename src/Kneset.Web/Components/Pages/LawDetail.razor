@@ -61,51 +61,82 @@ else
         </tbody>
     </table>
 
-    @if (_indirect.Count > 0)
-    {
-        @* Главное на этой странице: закон меняли «через заднюю дверь». *@
-        <div class="alert alert-warning">
-            <strong>⚠ @L["Laws_Indirect"] · @_indirect.Count</strong>
-            <p class="mb-0 mt-1 small">@L["Laws_IndirectExplain"]</p>
-        </div>
-    }
-
-    <h5 class="mt-4">@L["Laws_Amendments"] (@_amendments.Count)</h5>
-
     @if (_amendments.Count == 0)
     {
+        <h5 class="mt-4">@L["Laws_Amendments"]</h5>
         <p class="text-muted">@L["Laws_NoAmendments"]</p>
     }
     else
     {
-        <ul class="list-group">
-            @foreach (var amendment in _amendments)
-            {
-                <li class="list-group-item @(amendment.IsIndirect ? "list-group-item-warning" : "")">
-                    <div class="d-flex justify-content-between align-items-start gap-2">
-                        <span dir="rtl" lang="he">@(amendment.ActName ?? $"#{amendment.KnessetLawId}")</span>
-                        <span class="flex-shrink-0">
-                            @if (amendment.IsOriginal)
-                            {
-                                <span class="badge bg-secondary">@L["Laws_Original"]</span>
-                            }
-                            else if (amendment.IsIndirect)
-                            {
-                                <span class="badge bg-warning text-dark">@L["Laws_Indirect"]</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-light text-dark border">@L["Laws_Direct"]</span>
-                            }
-                        </span>
-                    </div>
-                    @if (amendment.ActPublicationDate is not null)
-                    {
-                        <small class="text-muted">@amendment.ActPublicationDate.Value.ToString("dd.MM.yyyy")</small>
-                    }
-                </li>
-            }
-        </ul>
+        @* Ведём счётом: он точен для всех поправок, тогда как названия
+           источник публикует лишь для малой части. *@
+        <div class="row g-2 mt-4 mb-3">
+            <div class="col-4">
+                <div class="border rounded p-2 text-center">
+                    <div class="small text-muted">@L["Laws_AmendTotal"]</div>
+                    <div class="fs-4">@_amendments.Count</div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="border border-warning bg-warning-subtle rounded p-2 text-center">
+                    <div class="small text-muted">@L["Laws_AmendIndirect"]</div>
+                    <div class="fs-4">@_indirect.Count</div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="border rounded p-2 text-center">
+                    <div class="small text-muted">@L["Laws_AmendDirect"]</div>
+                    <div class="fs-4">@_directCount</div>
+                </div>
+            </div>
+        </div>
+
+        @if (_indirect.Count > 0)
+        {
+            <div class="alert alert-warning">
+                <strong>⚠ @L["Laws_Indirect"]</strong>
+                <p class="mb-0 mt-1 small">@L["Laws_IndirectExplain"]</p>
+            </div>
+        }
+
+        @if (_named.Count > 0)
+        {
+            <h5>@L["Laws_NamedOnly"] (@_named.Count)</h5>
+            <ul class="list-group">
+                @foreach (var amendment in _named)
+                {
+                    <li class="list-group-item @(amendment.IsIndirect ? "list-group-item-warning" : "")">
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+                            <span dir="rtl" lang="he">@amendment.ActName</span>
+                            <span class="flex-shrink-0">
+                                @if (amendment.IsOriginal)
+                                {
+                                    <span class="badge bg-secondary">@L["Laws_Original"]</span>
+                                }
+                                else if (amendment.IsIndirect)
+                                {
+                                    <span class="badge bg-warning text-dark">@L["Laws_Indirect"]</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-light text-dark border">@L["Laws_Direct"]</span>
+                                }
+                            </span>
+                        </div>
+                        @if (amendment.ActPublicationDate is not null)
+                        {
+                            <small class="text-muted">@amendment.ActPublicationDate.Value.ToString("dd.MM.yyyy")</small>
+                        }
+                    </li>
+                }
+            </ul>
+        }
+
+        @if (_unnamedCount > 0)
+        {
+            @* Честно про пробел в источнике, а не молча пустой список. *@
+            <p class="text-muted small mt-3">@string.Format(L["Laws_UnnamedNote"], _unnamedCount)</p>
+        }
     }
 }
 
@@ -115,6 +146,9 @@ else
     private IsraelLaw? _law;
     private List<LawAmendment> _amendments = [];
     private List<LawAmendment> _indirect = [];
+    private List<LawAmendment> _named = [];
+    private int _directCount;
+    private int _unnamedCount;
     private bool _loading = true;
 
     protected override async Task OnParametersSetAsync()
@@ -132,6 +166,12 @@ else
                 .ToListAsync();
 
             _indirect = _amendments.Where(a => a.IsIndirect).ToList();
+            _directCount = _amendments.Count(a => !a.IsIndirect && !a.IsOriginal);
+
+            // Названия актов Кнессет публикует только для новых: старые акты
+            // лежат в другом диапазоне идентификаторов, которого нет в наборе.
+            _named = _amendments.Where(a => !string.IsNullOrWhiteSpace(a.ActName)).ToList();
+            _unnamedCount = _amendments.Count - _named.Count;
         }
 
         _loading = false;

@@ -271,4 +271,9 @@
   <data name="Laws_IndirectExplain" xml:space="preserve"><value>תיקון עקיף הוא כאשר חוק בנושא אחד משנה חוק בנושא אחר. כך שינוי חומק מעיני מי שהוא נוגע לו. הסימון מגיע מהכנסת עצמה.</value></data>
   <data name="Laws_IndirectCount" xml:space="preserve"><value>מתוכם עקיפים: {0}</value></data>
   <data name="Laws_Found" xml:space="preserve"><value>נמצאו</value></data>
+  <data name="Laws_AmendTotal" xml:space="preserve"><value>סך התיקונים</value></data>
+  <data name="Laws_AmendIndirect" xml:space="preserve"><value>מתוכם עקיפים</value></data>
+  <data name="Laws_AmendDirect" xml:space="preserve"><value>ישירים</value></data>
+  <data name="Laws_UnnamedNote" xml:space="preserve"><value>עבור {0} תיקונים הכנסת אינה מפרסמת את שם החוק — מדובר בחוקים ישנים שאינם במאגר הפתוח. אין לכך השפעה על הספירה שלמעלה.</value></data>
+  <data name="Laws_NamedOnly" xml:space="preserve"><value>תיקונים עם שם ידוע</value></data>
 </root>

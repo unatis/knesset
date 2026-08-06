@@ -271,4 +271,9 @@
   <data name="Laws_IndirectExplain" xml:space="preserve"><value>التعديل غير المباشر هو أن يغيّر قانون في موضوع ما قانونًا في موضوع آخر. هكذا يمر التغيير دون أن ينتبه إليه المعنيون. التصنيف من الكنيست نفسه.</value></data>
   <data name="Laws_IndirectCount" xml:space="preserve"><value>منها غير مباشرة: {0}</value></data>
   <data name="Laws_Found" xml:space="preserve"><value>وُجد</value></data>
+  <data name="Laws_AmendTotal" xml:space="preserve"><value>إجمالي التعديلات</value></data>
+  <data name="Laws_AmendIndirect" xml:space="preserve"><value>منها غير مباشرة</value></data>
+  <data name="Laws_AmendDirect" xml:space="preserve"><value>مباشرة</value></data>
+  <data name="Laws_UnnamedNote" xml:space="preserve"><value>بالنسبة إلى {0} تعديلًا لا ينشر الكنيست اسم القانون — وهي قوانين قديمة غير متوفرة في مجموعة البيانات المفتوحة. لا يؤثر ذلك على الأعداد أعلاه.</value></data>
+  <data name="Laws_NamedOnly" xml:space="preserve"><value>التعديلات ذات الاسم المعروف</value></data>
 </root>

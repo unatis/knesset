@@ -271,4 +271,9 @@
   <data name="Laws_IndirectExplain" xml:space="preserve"><value>An indirect amendment is when a law on one subject changes a law on another. That is how a change slips past the people it affects. The marking comes from the Knesset itself.</value></data>
   <data name="Laws_IndirectCount" xml:space="preserve"><value>of them indirect: {0}</value></data>
   <data name="Laws_Found" xml:space="preserve"><value>Found</value></data>
+  <data name="Laws_AmendTotal" xml:space="preserve"><value>Amendments in total</value></data>
+  <data name="Laws_AmendIndirect" xml:space="preserve"><value>of them indirect</value></data>
+  <data name="Laws_AmendDirect" xml:space="preserve"><value>direct</value></data>
+  <data name="Laws_UnnamedNote" xml:space="preserve"><value>For {0} amendments the Knesset publishes no act name — these are older acts absent from the open dataset. The counts above are unaffected.</value></data>
+  <data name="Laws_NamedOnly" xml:space="preserve"><value>Amendments with a known name</value></data>
 </root>
