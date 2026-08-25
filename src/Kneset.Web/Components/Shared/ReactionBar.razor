@@ -1,26 +1,29 @@
 @inject IStringLocalizer<SharedResource> L
 
-@* Трёхцветный бар реакций: зелёный (за) → жёлтый (не определился) → красный (против).
-   Всегда показывает размер выборки — процент без числа участников вводит в заблуждение. *@
+@* Трёхцветный бар реакций: за (оливковый) → не определился (тёплый нейтральный) →
+   против (обожжённый красный). Цвета остаются в тёплой семье, чтобы «за» и «против»
+   не читались как партийные цвета.
+
+   Всегда показывает размер выборки — процент без числа участников вводит в заблуждение,
+   но с версии визуального слоя размер уходит в третью строку: он не должен
+   конкурировать с самим результатом. Emoji (🤔 🗳 ⚠) убраны. *@
 @if (Total > 0)
 {
     <div>
-        <div class="progress" style="height:@(Compact ? 6 : 12)px">
-            <div class="progress-bar bg-success" style="width:@Percent(Support)%"
-                 title="@L["For"]: @Support"></div>
-            <div class="progress-bar bg-warning" style="width:@Percent(Undecided)%"
-                 title="@L["DontKnow"]: @Undecided"></div>
-            <div class="progress-bar bg-danger" style="width:@Percent(Oppose)%"
-                 title="@L["Against"]: @Oppose"></div>
+        <div class="kt-bar @(Compact ? "kt-bar-compact" : null)">
+            <div class="kt-bar-for" style="width:@Percent(Support)%" title="@L["For"]: @Support"></div>
+            <div class="kt-bar-undecided" style="width:@Percent(Undecided)%" title="@L["DontKnow"]: @Undecided"></div>
+            <div class="kt-bar-against" style="width:@Percent(Oppose)%" title="@L["Against"]: @Oppose"></div>
         </div>
+
         @if (!Compact)
         {
-            <div class="d-flex justify-content-between mt-1">
-                <small><span class="text-success">●</span> @L["For"] @Support (@Percent(Support)%)</small>
-                <small><span class="text-warning">●</span> 🤔 @Undecided (@Percent(Undecided)%)</small>
-                <small><span class="text-danger">●</span> @L["Against"] @Oppose (@Percent(Oppose)%)</small>
+            <div class="kt-bar-legend">
+                <span>@Percent(Support)% @L["For"]</span>
+                <span>@Percent(Undecided)% @L["DontKnow"]</span>
+                <span>@Percent(Oppose)% @L["Against"]</span>
             </div>
-            <small class="text-muted d-block mt-1">
+            <small class="kt-bar-sample">
                 @L["Votes"] @Total
                 @if (Decided > 0)
                 {
@@ -28,19 +31,19 @@
                 }
                 @if (Total < 10)
                 {
-                    <span> · ⚠ @L["SmallSample"]</span>
+                    <span> · @L["SmallSample"]</span>
                 }
             </small>
         }
         else
         {
-            <small class="text-muted">@Total 🗳</small>
+            <span class="kt-num">@Total @L["Votes"]</span>
         }
     </div>
 }
 else if (!Compact)
 {
-    <small class="text-muted">@L["NoVotes"]</small>
+    <small class="kt-bar-sample">@L["NoVotes"]</small>
 }
 
 @code {

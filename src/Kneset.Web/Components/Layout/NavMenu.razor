@@ -3,43 +3,35 @@
 @inject IStringLocalizer<SharedResource> L
 
 @* Разделы сайта. Колокольчик и переключатель языка живут в верхней панели,
-   чтобы не дублироваться. *@
+   чтобы не дублироваться.
+
+   Визуальный слой: emoji-иконки убраны. Они рендерились по-разному в каждой ОС
+   и ломали вертикальный ритм строки; в меню из шести пунктов подписи справляются
+   сами. Если позже понадобятся иконки — Lucide через CDN, обводка 1.75, 20px. *@
 
 <nav class="nav flex-column py-3">
     <div class="nav-item">
-        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-            <span class="nav-icon" aria-hidden="true">🏠</span> @L["Nav_Home"]
-        </NavLink>
+        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">@L["Nav_Home"]</NavLink>
     </div>
 
     <div class="nav-item">
-        <NavLink class="nav-link" href="bills">
-            <span class="nav-icon" aria-hidden="true">📜</span> @L["Nav_Bills"]
-        </NavLink>
+        <NavLink class="nav-link" href="bills">@L["Nav_Bills"]</NavLink>
     </div>
 
     <div class="nav-item">
-        <NavLink class="nav-link" href="laws">
-            <span class="nav-icon" aria-hidden="true">⚖️</span> @L["Nav_Laws"]
-        </NavLink>
+        <NavLink class="nav-link" href="laws">@L["Nav_Laws"]</NavLink>
     </div>
 
     <div class="nav-item">
-        <NavLink class="nav-link" href="members">
-            <span class="nav-icon" aria-hidden="true">🧑‍⚖️</span> @L["Nav_Members"]
-        </NavLink>
+        <NavLink class="nav-link" href="members">@L["Nav_Members"]</NavLink>
     </div>
 
     <div class="nav-item">
-        <NavLink class="nav-link" href="initiatives">
-            <span class="nav-icon" aria-hidden="true">💡</span> @L["Nav_Initiatives"]
-        </NavLink>
+        <NavLink class="nav-link" href="initiatives">@L["Nav_Initiatives"]</NavLink>
     </div>
 
     <div class="nav-item">
-        <NavLink class="nav-link" href="about">
-            <span class="nav-icon" aria-hidden="true">ℹ️</span> @L["Nav_About"]
-        </NavLink>
+        <NavLink class="nav-link" href="about">@L["Nav_About"]</NavLink>
     </div>
 
     <AuthorizeView>
@@ -47,24 +39,18 @@
             <hr class="nav-divider" />
 
             <div class="nav-item">
-                <NavLink class="nav-link" href="notifications">
-                    <span class="nav-icon" aria-hidden="true">🔔</span> @L["Nav_Notifications"]
-                </NavLink>
+                <NavLink class="nav-link" href="notifications">@L["Nav_Notifications"]</NavLink>
             </div>
 
             <div class="nav-item">
-                <NavLink class="nav-link" href="settings/notifications">
-                    <span class="nav-icon" aria-hidden="true">⚙️</span> @L["Notif_Settings"]
-                </NavLink>
+                <NavLink class="nav-link" href="settings/notifications">@L["Notif_Settings"]</NavLink>
             </div>
 
             <div class="nav-item">
                 <form action="Account/Logout" method="post">
                     <AntiforgeryToken />
                     <input type="hidden" name="ReturnUrl" value="@currentUrl" />
-                    <button type="submit" class="nav-link nav-link-button">
-                        <span class="nav-icon" aria-hidden="true">🚪</span> @L["Nav_Logout"]
-                    </button>
+                    <button type="submit" class="nav-link nav-link-button">@L["Nav_Logout"]</button>
                 </form>
             </div>
         </Authorized>
@@ -72,15 +58,11 @@
             <hr class="nav-divider" />
 
             <div class="nav-item">
-                <NavLink class="nav-link" href="Account/Register">
-                    <span class="nav-icon" aria-hidden="true">✍️</span> @L["Nav_Register"]
-                </NavLink>
+                <NavLink class="nav-link" href="Account/Register">@L["Nav_Register"]</NavLink>
             </div>
 
             <div class="nav-item">
-                <NavLink class="nav-link" href="Account/Login">
-                    <span class="nav-icon" aria-hidden="true">🔑</span> @L["Nav_Login"]
-                </NavLink>
+                <NavLink class="nav-link" href="Account/Login">@L["Nav_Login"]</NavLink>
             </div>
         </NotAuthorized>
     </AuthorizeView>

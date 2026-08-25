@@ -7,6 +7,11 @@
 
 <h1>@L["Nav_Bills"]</h1>
 
+@* Визуальный слой: list-group заменён на строки с разделителями (.kt-row).
+   Карточка внутри карточки съедала около 40% плотности списка.
+   Порядок заголовков перевёрнут: сначала название на языке интерфейса,
+   оригинал на иврите — второй строкой. Данные те же (NameRu / Name). *@
+
 <div class="row g-2 mb-3">
     <div class="col-md-5">
         <input class="form-control" placeholder="@L["Bills_Search"]"
@@ -42,33 +47,39 @@ else if (_bills.Count == 0)
 }
 else
 {
-    <p class="text-muted">@L["Bills_Found"] @_totalCount</p>
-    <div class="list-group mb-3">
+    <p class="kt-num">@L["Bills_Found"] @_totalCount</p>
+
+    <div class="kt-rows mb-3">
         @foreach (var bill in _bills)
         {
-            <a href="/bills/@bill.Bill.Id" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                    <h6 class="mb-1" dir="rtl" lang="he">@bill.Bill.Name</h6>
-                    <span class="text-nowrap">
-                        <InfluenceWindowBadge StatusDesc="@bill.Bill.StatusDesc" />
-                        <BillStatusBadge StatusDesc="@bill.Bill.StatusDesc" />
-                    </span>
-                </div>
-                @if (bill.Bill.NameRu is not null)
-                {
-                    <div class="text-muted small">@bill.Bill.NameRu</div>
-                }
-                <small class="text-muted">
-                    @L["Knesset"] @bill.Bill.KnessetNum
-                    @if (bill.Bill.SubTypeDesc is not null)
+            <a href="/bills/@bill.Bill.Id" class="kt-row">
+                <div class="kt-row-main">
+                    @if (bill.Bill.NameRu is not null)
                     {
-                        <span> · <span dir="rtl" lang="he">@bill.Bill.SubTypeDesc</span></span>
+                        <div class="kt-row-title">@bill.Bill.NameRu</div>
+                        <div class="kt-row-orig" dir="rtl" lang="he">@bill.Bill.Name</div>
                     }
-                    · @L["Updated"] @bill.Bill.LastUpdatedDate.ToString("dd.MM.yyyy")
-                </small>
+                    else
+                    {
+                        <div class="kt-row-title" dir="rtl" lang="he">@bill.Bill.Name</div>
+                    }
+
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <InfluenceWindowBadge StatusDesc="@bill.Bill.StatusDesc" />
+                        <span class="kt-num">
+                            @L["Knesset"] @bill.Bill.KnessetNum
+                            @if (bill.Bill.SubTypeDesc is not null)
+                            {
+                                <span> · <span dir="rtl" lang="he">@bill.Bill.SubTypeDesc</span></span>
+                            }
+                            · @L["Updated"] @bill.Bill.LastUpdatedDate.ToString("dd.MM.yyyy")
+                        </span>
+                    </div>
+                </div>
+
                 @if (bill.Support + bill.Oppose + bill.Undecided > 0)
                 {
-                    <div style="max-width:300px">
+                    <div class="kt-row-side">
                         <ReactionBar Support="@bill.Support" Oppose="@bill.Oppose"
                                      Undecided="@bill.Undecided" Compact="true" />
                     </div>
