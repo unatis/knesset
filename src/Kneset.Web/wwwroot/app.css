@@ -6,6 +6,28 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
+/* Мультискриптовый Rubik (OFL) — единственная гарнитура в проекте с глифами иврита
+   и арабского. У Instrument Serif и Geist их нет, поэтому эти два лица стоят
+   в стеках --kt-font-display и --kt-font-sans вторыми: латиница и кириллица достаются
+   шрифтам с CDN, иврит и арабский — этим файлам. unicode-range не задаём —
+   браузер сам берёт из стека то лицо, у которого нужный глиф есть.
+   Те же файлы читает OgImageService для OG-картинок, см. fonts/README.md. */
+@font-face {
+    font-family: 'Title-Multiscript';
+    src: url('fonts/Title-Multiscript.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Body-Multiscript';
+    src: url('fonts/Body-Multiscript.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
     /* Тёплая палитра. Оранжевый — только действие и «окно открыто». */
     --kt-ember-50: #FFF4EC;

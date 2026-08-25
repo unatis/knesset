@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <Content Update="Seed\**\*.json" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Fonts\**\*.ttf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <PropertyGroup>
