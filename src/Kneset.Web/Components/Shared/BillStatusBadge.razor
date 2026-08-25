@@ -1,18 +1,21 @@
-@* Бейдж статуса законопроекта. Статусы приходят на иврите из KNS_Status. *@
+@* Бейдж статуса законопроекта. Статусы приходят на иврите из KNS_Status.
+
+   Визуальный слой: плашка стала нейтральной. Раньше она конкурировала с бейджем
+   окна влияния — два цветных бейджа рядом читались как два разных сигнала.
+   Теперь срочность несёт только окно влияния, а статус — это факт из источника. *@
 @if (!string.IsNullOrEmpty(StatusDesc))
 {
-    <span class="badge @CssClass" dir="rtl" lang="he">@StatusDesc</span>
+    <span class="kt-status @CssClass" dir="rtl" lang="he">@StatusDesc</span>
 }
 
 @code {
     [Parameter] public string? StatusDesc { get; set; }
 
-    // Грубая раскраска по ключевым словам ивритских статусов:
-    // аранжевый — в работе/комиссии, зелёный — принят/утверждён, красный — снят/отклонён.
+    // Три группы: процесс завершён, процесс остановлен, работа идёт.
     private string CssClass =>
-        StatusDesc is null ? "bg-secondary"
-        : StatusDesc.Contains("אושר") || StatusDesc.Contains("התקבל") ? "bg-success"
-        : StatusDesc.Contains("הוסר") || StatusDesc.Contains("נדחה") || StatusDesc.Contains("נעצר") ? "bg-danger"
-        : StatusDesc.Contains("ועדה") || StatusDesc.Contains("קריאה") ? "bg-warning text-dark"
-        : "bg-secondary";
+        StatusDesc is null ? "kt-status-done"
+        : StatusDesc.Contains("אושר") || StatusDesc.Contains("התקבל") ? "kt-status-done"
+        : StatusDesc.Contains("הוסר") || StatusDesc.Contains("נדחה") || StatusDesc.Contains("נעצר") ? "kt-status-stopped"
+        : StatusDesc.Contains("ועדה") || StatusDesc.Contains("קריאה") ? "kt-status-active"
+        : "kt-status-done";
 }

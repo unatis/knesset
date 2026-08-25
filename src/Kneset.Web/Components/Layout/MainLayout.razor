@@ -8,11 +8,18 @@
 
         @* Обычная GET-форма: работает без интерактивного режима, то есть и в статичном макете.
            Кнопка отправки нужна явно — без неё Enter в поле не срабатывает под расширенной
-           навигацией Blazor. *@
+           навигацией Blazor.
+           Визуальный слой: emoji 🔍 заменён на inline-SVG (Lucide search, обводка 1.75). *@
         <form class="top-search" action="bills" method="get">
             <input class="form-control form-control-sm" type="search" name="q"
                    placeholder="@L["Search_Placeholder"]" aria-label="@L["Search_Placeholder"]" />
-            <button type="submit" aria-label="@L["Search_Placeholder"]">🔍</button>
+            <button type="submit" aria-label="@L["Search_Placeholder"]">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="M20 20l-4.2-4.2"></path>
+                </svg>
+            </button>
         </form>
 
         <div class="top-actions">
@@ -53,7 +60,7 @@
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
+    <span class="dismiss">×</span>
 </div>
 
 @code {

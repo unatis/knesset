@@ -43,11 +43,11 @@ public class OgImageService
 
         var fonts = new FontCollection();
         // ВАЖНО: весь текст рендерится ОДНИМ мультискриптовым шрифтом (иврит, арабский,
-        // кириллица, латиница и цифры в одном файле) — Rubik под OFL, см. Fonts/README.md.
+        // кириллица, латиница и цифры в одном файле) — Rubik под OFL, см. wwwroot/fonts/README.md.
         // Смешивать шрифты внутри строки нельзя: при fallback'е на отдельный ивритский шрифт
         // bidi-движок переставляет цифры («2026» → «0226»).
-        var multiBold = fonts.Add(Path.Combine(env.ContentRootPath, "Fonts", "Title-Multiscript.ttf"));
-        var multiRegular = fonts.Add(Path.Combine(env.ContentRootPath, "Fonts", "Body-Multiscript.ttf"));
+        var multiBold = fonts.Add(Path.Combine(env.WebRootPath, "fonts", "Title-Multiscript.ttf"));
+        var multiRegular = fonts.Add(Path.Combine(env.WebRootPath, "fonts", "Body-Multiscript.ttf"));
 
         _fallbacks = [multiRegular];
         _titleFallbacks = [multiRegular];

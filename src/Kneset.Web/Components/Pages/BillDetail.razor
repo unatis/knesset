@@ -6,6 +6,14 @@
 
 <PageTitle>@(_bill?.NameRu ?? _bill?.Name ?? L["Nav_Bills"])</PageTitle>
 
+@* Визуальный слой. Два изменения:
+   1. Окно влияния поднято под заголовок отдельной полосой — это главная идея
+      продукта, а раньше оно было шестой строкой таблицы.
+   2. Таблица метаданных на восемь строк стала grid-списком (.kt-meta-grid):
+      те же поля занимают втрое меньше высоты, и реакция с обсуждением
+      попадают на первый экран.
+   Порядок блоков и все компоненты остались прежними. *@
+
 @if (_bill is null)
 {
     <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
@@ -29,10 +37,14 @@ else
         <meta property="og:image:height" content="630" />
     </HeadContent>
 
-    <h2 dir="rtl" lang="he">@_bill.Name</h2>
     @if (_bill.NameRu is not null)
     {
-        <h5 class="text-muted">@_bill.NameRu</h5>
+        <h1 class="kt-bill-title">@_bill.NameRu</h1>
+        <div class="kt-bill-orig" dir="rtl" lang="he">@_bill.Name</div>
+    }
+    else
+    {
+        <h1 class="kt-bill-title" dir="rtl" lang="he">@_bill.Name</h1>
     }
 
     <div class="d-flex flex-wrap align-items-start gap-3">
@@ -45,49 +57,49 @@ else
         </div>
     </div>
 
+    <div class="kt-window-band @(InfluenceWindowBadge.IsOpen(_bill.StatusDesc) ? null : "kt-window-band-late")">
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <InfluenceWindowBadge StatusDesc="@_bill.StatusDesc" />
+            <BillStatusBadge StatusDesc="@_bill.StatusDesc" />
+        </div>
+        <div class="kt-win-hint">@InfluenceHint</div>
+    </div>
+
     <div class="row mt-4">
         <div class="col-lg-8">
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <th style="width:220px">@L["Status"]</th>
-                        <td><BillStatusBadge StatusDesc="@_bill.StatusDesc" /></td>
-                    </tr>
-                    <tr>
-                        <th>@L["InfluenceWindow"]</th>
-                        <td><InfluenceWindowBadge StatusDesc="@_bill.StatusDesc" ShowHint="true" /></td>
-                    </tr>
-                    <tr>
-                        <th>@L["Knesset"]</th>
-                        <td>@L["Knesset"] @_bill.KnessetNum</td>
-                    </tr>
-                    @if (_bill.SubTypeDesc is not null)
-                    {
-                        <tr>
-                            <th>@L["Type"]</th>
-                            <td dir="rtl" lang="he" style="text-align:left">@_bill.SubTypeDesc</td>
-                        </tr>
-                    }
-                    @if (_bill.PublicationDate is not null)
-                    {
-                        <tr>
-                            <th>@L["PubDate"]</th>
-                            <td>@_bill.PublicationDate.Value.ToString("dd.MM.yyyy")</td>
-                        </tr>
-                    }
-                    <tr>
-                        <th>@L["UpdatedInKnesset"]</th>
-                        <td>@_bill.LastUpdatedDate.ToString("dd.MM.yyyy HH:mm")</td>
-                    </tr>
-                    <tr>
-                        <th>@L["Source"]</th>
-                        <td>
-                            <a href="https://main.knesset.gov.il/Activity/Legislation/Laws/Pages/LawBill.aspx?t=lawsuggestionssearch&lawitemid=@_bill.KnessetBillId"
-                               target="_blank" rel="noopener">@L["OpenAtKnesset"]</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="kt-meta-grid mb-4">
+                <div class="kt-meta-item">
+                    <span>@L["Knesset"]</span>
+                    <span class="kt-num">@_bill.KnessetNum</span>
+                </div>
+                @if (_bill.SubTypeDesc is not null)
+                {
+                    <div class="kt-meta-item">
+                        <span>@L["Type"]</span>
+                        <span dir="rtl" lang="he">@_bill.SubTypeDesc</span>
+                    </div>
+                }
+                @if (_bill.PublicationDate is not null)
+                {
+                    <div class="kt-meta-item">
+                        <span>@L["PubDate"]</span>
+                        <span class="kt-num">@_bill.PublicationDate.Value.ToString("dd.MM.yyyy")</span>
+                    </div>
+                }
+                <div class="kt-meta-item">
+                    <span>@L["UpdatedInKnesset"]</span>
+                    <span class="kt-num">@_bill.LastUpdatedDate.ToString("dd.MM.yyyy HH:mm")</span>
+                </div>
+                <div class="kt-meta-item">
+                    <span>@L["Initiators"]</span>
+                    <span class="kt-num">@_bill.Initiators.Count</span>
+                </div>
+                <div class="kt-meta-item">
+                    <span>@L["Source"]</span>
+                    <a href="https://main.knesset.gov.il/Activity/Legislation/Laws/Pages/LawBill.aspx?t=lawsuggestionssearch&lawitemid=@_bill.KnessetBillId"
+                       target="_blank" rel="noopener">@L["OpenAtKnesset"]</a>
+                </div>
+            </div>
 
             @if (!string.IsNullOrWhiteSpace(_bill.SummaryLaw))
             {
@@ -117,11 +129,11 @@ else
                     @foreach (var initiator in _bill.Initiators
                         .OrderByDescending(i => i.IsInitiator).ThenBy(i => i.Ordinal))
                     {
-                        <li class="list-group-item d-flex justify-content-between">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             <a href="/members/@initiator.PersonId" dir="rtl" lang="he">@initiator.Person.FullName</a>
                             @if (initiator.IsInitiator)
                             {
-                                <span class="badge bg-primary">@L["InitiatorBadge"]</span>
+                                <span class="kt-eyebrow" style="color: var(--kt-ember-600)">@L["InitiatorBadge"]</span>
                             }
                         </li>
                     }
@@ -135,6 +147,16 @@ else
     [Parameter] public int Id { get; set; }
 
     private Bill? _bill;
+
+    /// <summary>Пояснение к окну влияния — тот же ключ ресурса, что и в бейдже.</summary>
+    private string InfluenceHint
+    {
+        get
+        {
+            var window = InfluenceWindowBadge.Classify(_bill?.StatusDesc);
+            return window is null ? "" : L[window.Value.HintKey];
+        }
+    }
 
     /// <summary>Описание для og:description — первые ~200 символов официального описания.</summary>
     private string OgDescription

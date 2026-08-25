@@ -6,7 +6,12 @@
 
 <PageTitle>@L["Brand"]</PageTitle>
 
-@* Экран-знакомство только для гостя: вошедшему сразу нужна лента. *@
+@* Экран-знакомство только для гостя: вошедшему сразу нужна лента.
+
+   Визуальный слой: emoji в герое и в ленте заменены на цветные точки и подписи
+   капсом (см. .hero-points::before и .feed-kind-* в app.css). У карточек ленты
+   появилась вторая строка с оригинальным названием на иврите — читатель сканирует
+   список по названию на своём языке, а оригинал нужен для сверки с источником. *@
 <AuthorizeView>
     <NotAuthorized>
         <section class="hero">
@@ -14,9 +19,9 @@
             <p class="hero-text">@L["Home_HeroText"]</p>
 
             <ul class="hero-points">
-                <li><span aria-hidden="true">⚖️</span> @L["Home_Point1"]</li>
-                <li><span aria-hidden="true">⏳</span> @L["Home_Point2"]</li>
-                <li><span aria-hidden="true">🗳️</span> @L["Home_Point3"]</li>
+                <li>@L["Home_Point1"]</li>
+                <li>@L["Home_Point2"]</li>
+                <li>@L["Home_Point3"]</li>
             </ul>
 
             <div class="hero-actions">
@@ -30,7 +35,6 @@
        сайт оставлять нельзя — узкая полоска со ссылкой на страницу о проекте. *@
     <Authorized>
         <div class="home-strip">
-            <span aria-hidden="true">ℹ️</span>
             <span>@L["Home_StripText"]</span>
             <a href="about">@L["Home_StripMore"]</a>
         </div>
@@ -54,11 +58,16 @@ else
     {
         <article class="feed-card">
             <div class="feed-head">
-                <span class="feed-kind"><span aria-hidden="true">@item.Icon</span> @L[item.KindKey]</span>
+                <span class="feed-kind @item.KindCss">@L[item.KindKey]</span>
                 <span class="feed-time">@RelativeTime(item.At)</span>
             </div>
 
             <a class="feed-link" href="@item.Url" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+
+            @if (item.Original is not null)
+            {
+                <div class="feed-orig" dir="rtl" lang="he">@item.Original</div>
+            }
 
             @if (item.BillId is int billId)
             {
@@ -75,13 +84,13 @@ else
             }
             else if (item.Signatures is not null)
             {
-                <div class="feed-meta text-muted">
+                <div class="feed-meta kt-num">
                     @item.Signatures @L["Init_SigCount"] · @L["Init_Threshold"] @item.Threshold
                 </div>
             }
             else if (item.Subtitle is not null)
             {
-                <div class="feed-meta text-muted">@item.Subtitle</div>
+                <div class="feed-quote">@item.Subtitle</div>
             }
         </article>
     }
@@ -93,7 +102,7 @@ else
 @code {
     private sealed record FeedItem(
         DateTime At,
-        string Icon,
+        string KindCss,
         string KindKey,
         string Title,
         string Url,
@@ -102,7 +111,8 @@ else
         string? StatusDesc = null,
         string? Subtitle = null,
         int? Signatures = null,
-        int? Threshold = null);
+        int? Threshold = null,
+        string? Original = null);
 
     private sealed record Counts(int Support, int Oppose, int Undecided)
     {
@@ -126,9 +136,10 @@ else
             .OrderByDescending(b => b.FirstSeenAt)
             .Take(FeedSize)
             .Select(b => new FeedItem(
-                b.FirstSeenAt, "📄", "Feed_NewBill",
+                b.FirstSeenAt, "feed-kind-bill", "Feed_NewBill",
                 b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
-                b.Id, b.StatusDesc))
+                b.Id, b.StatusDesc, null, null, null,
+                b.NameRu == null ? null : b.Name))
             .ToListAsync());
 
         // 2. Смена стадии — главное событие для «окна влияния».
@@ -137,9 +148,10 @@ else
             .OrderByDescending(b => b.StatusChangedAt)
             .Take(FeedSize)
             .Select(b => new FeedItem(
-                b.StatusChangedAt!.Value, "🔄", "Feed_StatusChanged",
+                b.StatusChangedAt!.Value, "feed-kind-status", "Feed_StatusChanged",
                 b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
-                b.Id, b.StatusDesc))
+                b.Id, b.StatusDesc, null, null, null,
+                b.NameRu == null ? null : b.Name))
             .ToListAsync());
 
         // 3. Гражданские инициативы — единственные события, созданные людьми.
@@ -148,7 +160,7 @@ else
             .OrderByDescending(i => i.PublishedAt)
             .Take(FeedSize)
             .Select(i => new FeedItem(
-                i.PublishedAt!.Value, "💡", "Feed_NewInitiative",
+                i.PublishedAt!.Value, "feed-kind-initiative", "Feed_NewInitiative",
                 i.Title, $"/initiatives/{i.Id}", false,
                 null, null, null,
                 i.Signatures.Count, i.SignatureThreshold))
@@ -159,7 +171,7 @@ else
             .OrderByDescending(c => c.CreatedAt)
             .Take(FeedSize)
             .Select(c => new FeedItem(
-                c.CreatedAt, "💬", "Feed_NewComment",
+                c.CreatedAt, "feed-kind-comment", "Feed_NewComment",
                 c.Bill != null ? (c.Bill.NameRu ?? c.Bill.Name) : c.Initiative!.Title,
                 c.BillId != null ? $"/bills/{c.BillId}#comment-{c.Id}"
                                  : $"/initiatives/{c.InitiativeId}#comment-{c.Id}",

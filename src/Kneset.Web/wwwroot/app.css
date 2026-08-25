@@ -1,104 +1,494 @@
+/* ============================================================
+   Кнессет-Трекер — визуальный слой.
+   Заменяет прежний app.css целиком. Разметка страниц не меняется:
+   переопределяются переменные Bootstrap и добавляются классы kt-*.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* Мультискриптовый Rubik (OFL) — единственная гарнитура в проекте с глифами иврита
+   и арабского. У Instrument Serif и Geist их нет, поэтому эти два лица стоят
+   в стеках --kt-font-display и --kt-font-sans вторыми: латиница и кириллица достаются
+   шрифтам с CDN, иврит и арабский — этим файлам. unicode-range не задаём —
+   браузер сам берёт из стека то лицо, у которого нужный глиф есть.
+   Те же файлы читает OgImageService для OG-картинок, см. fonts/README.md. */
+@font-face {
+    font-family: 'Title-Multiscript';
+    src: url('fonts/Title-Multiscript.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Body-Multiscript';
+    src: url('fonts/Body-Multiscript.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    /* Тёплая палитра. Оранжевый — только действие и «окно открыто». */
+    --kt-ember-50: #FFF4EC;
+    --kt-ember-100: #FFE3CE;
+    --kt-ember-200: #FFC39A;
+    --kt-ember-500: #E85D16;
+    --kt-ember-600: #C94A0D;
+    --kt-ember-700: #A33B0B;
+
+    --kt-amber-50: #FCF3E8;
+    --kt-amber-100: #F7E0C0;
+    --kt-amber-400: #D48327;
+    --kt-amber-600: #8F5314;
+
+    --kt-terra-50: #FBEEE9;
+    --kt-terra-100: #F3D1C4;
+    --kt-terra-400: #B95A3C;
+    --kt-terra-600: #77321E;
+
+    --kt-honey-50: #FFF8E1;
+    --kt-honey-100: #FEEAA3;
+    --kt-honey-300: #F5BE2A;
+    --kt-honey-500: #A77910;
+
+    /* Нейтральные — тёплые, не серые. */
+    --kt-char-0: #FFFDFA;
+    --kt-char-25: #FAF6EF;
+    --kt-char-50: #F2ECDF;
+    --kt-char-100: #E6DDC9;
+    --kt-char-200: #CFC3A8;
+    --kt-char-300: #AEA084;
+    --kt-char-400: #857962;
+    --kt-char-500: #5C5443;
+    --kt-char-600: #3F3A2E;
+    --kt-char-700: #2B271F;
+    --kt-char-900: #110F0B;
+
+    /* Статусы остаются в тёплой семье: «за» и «против» не должны читаться
+       как партийные цвета. */
+    --kt-for: #6B8E23;
+    --kt-for-bg: #EEF1DC;
+    --kt-against: #B23A1E;
+    --kt-against-bg: #FBE8E1;
+
+    --kt-font-display: 'Instrument Serif', 'Title-Multiscript', Georgia, serif;
+    --kt-font-sans: 'Geist', 'Body-Multiscript', system-ui, -apple-system, sans-serif;
+    --kt-font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+    --kt-r-sm: 6px;
+    --kt-r-md: 10px;
+    --kt-r-lg: 14px;
+    --kt-r-pill: 999px;
+
+    --kt-shadow-sm: 0 1px 2px rgba(70, 40, 10, 0.06), 0 1px 3px rgba(70, 40, 10, 0.08);
+    --kt-shadow-md: 0 4px 8px -2px rgba(70, 40, 10, 0.08), 0 2px 4px -1px rgba(70, 40, 10, 0.06);
+    --kt-shadow-ember: 0 8px 20px -4px rgba(232, 93, 22, 0.35);
+
+    /* --- переопределение Bootstrap: одна правка на весь сайт --- */
+    --bs-body-font-family: var(--kt-font-sans);
+    --bs-body-font-size: 0.9375rem;
+    --bs-body-line-height: 1.55;
+    --bs-body-color: var(--kt-char-600);
+    --bs-body-bg: var(--kt-char-25);
+    --bs-border-color: var(--kt-char-100);
+    --bs-border-radius: var(--kt-r-md);
+    --bs-border-radius-sm: var(--kt-r-sm);
+    --bs-border-radius-lg: var(--kt-r-lg);
+    --bs-primary: var(--kt-ember-500);
+    --bs-primary-rgb: 232, 93, 22;
+    --bs-link-color: var(--kt-ember-600);
+    --bs-link-color-rgb: 201, 74, 13;
+    --bs-link-hover-color: var(--kt-ember-700);
+    --bs-secondary-color: var(--kt-char-400);
+    --bs-emphasis-color: var(--kt-char-900);
+    --bs-heading-color: var(--kt-char-900);
+    --bs-font-monospace: var(--kt-font-mono);
+}
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: var(--kt-font-sans);
+    background: var(--kt-char-25);
+    color: var(--kt-char-600);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+    font-family: var(--kt-font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--kt-char-900);
+}
+
+h1 { font-size: 2.375rem; }
+h2 { font-size: 1.875rem; }
+h3 { font-size: 1.5rem; }
+
+h4, h5, h6 {
+    font-family: var(--kt-font-sans);
+    font-weight: 600;
+    color: var(--kt-char-900);
 }
 
 a, .btn-link {
-    color: #006bb7;
+    color: var(--kt-ember-600);
+    text-decoration: none;
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    a:hover, .btn-link:hover {
+        color: var(--kt-ember-700);
+        text-decoration: underline;
+    }
+
+/* Цифры — всегда моно с табличными знаками: счётчики не должны дёргаться. */
+.kt-num {
+    font-family: var(--kt-font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.8125rem;
+    color: var(--kt-char-500);
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/* Мелкая подпись капсом — единственный разрешённый uppercase. */
+.kt-eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--kt-char-400);
 }
 
 .content {
-    padding-top: 1.1rem;
+    padding-top: 1.5rem;
 }
 
-h1:focus {
-    outline: none;
+/* --- кнопки --- */
+
+.btn {
+    font-weight: 500;
+    border-radius: var(--kt-r-md);
+}
+
+.btn-primary {
+    color: var(--kt-char-0);
+    background-color: var(--kt-ember-500);
+    border-color: var(--kt-ember-500);
+}
+
+    .btn-primary:hover {
+        color: var(--kt-char-0);
+        background-color: var(--kt-ember-600);
+        border-color: var(--kt-ember-600);
+        box-shadow: var(--kt-shadow-ember);
+    }
+
+    .btn-primary:active {
+        background-color: var(--kt-ember-700);
+        border-color: var(--kt-ember-700);
+        transform: scale(0.98);
+        transition: transform 80ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+.btn-outline-primary {
+    color: var(--kt-ember-600);
+    border-color: var(--kt-ember-200);
+}
+
+    .btn-outline-primary:hover {
+        color: var(--kt-char-0);
+        background-color: var(--kt-ember-500);
+        border-color: var(--kt-ember-500);
+    }
+
+.btn-outline-secondary {
+    color: var(--kt-char-600);
+    border-color: var(--kt-char-200);
+}
+
+    .btn-outline-secondary:hover {
+        color: var(--kt-char-900);
+        background-color: var(--kt-char-50);
+        border-color: var(--kt-char-200);
+    }
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus,
+.form-control:focus, .form-select:focus, .form-check-input:focus {
+    border-color: var(--kt-ember-500);
+    box-shadow: 0 0 0 3px var(--kt-ember-100);
+}
+
+/* --- карточки, формы, таблицы --- */
+
+.card {
+    background: #FFFFFF;
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-lg);
+    box-shadow: var(--kt-shadow-sm);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--kt-char-100);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--kt-char-400);
+    padding: 0.875rem 1.25rem;
+}
+
+.form-control, .form-select {
+    border-color: var(--kt-char-200);
+    border-radius: var(--kt-r-md);
+    background-color: #FFFFFF;
+}
+
+.table > :not(caption) > * > * {
+    border-color: var(--kt-char-100);
 }
 
 .valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
+    outline: 1px solid var(--kt-for);
 }
 
 .invalid {
-    outline: 1px solid #e50000;
+    outline: 1px solid var(--kt-against);
 }
 
 .validation-message {
-    color: #e50000;
+    color: var(--kt-against);
 }
 
-.blazor-error-boundary {
-    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
-    padding: 1rem 1rem 1rem 3.7rem;
-    color: white;
+.alert-light {
+    background: #FFFFFF;
+    border-color: var(--kt-char-100);
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
+.alert-info {
+    background: var(--kt-amber-50);
+    border-color: var(--kt-amber-100);
+    color: var(--kt-amber-600);
+}
+
+.spinner-border {
+    color: var(--kt-ember-500);
+}
+
+.pagination {
+    --bs-pagination-color: var(--kt-char-600);
+    --bs-pagination-border-color: var(--kt-char-100);
+    --bs-pagination-hover-bg: var(--kt-char-50);
+    --bs-pagination-hover-border-color: var(--kt-char-200);
+    --bs-pagination-active-bg: var(--kt-ember-500);
+    --bs-pagination-active-border-color: var(--kt-ember-500);
+}
+
+.breadcrumb {
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+}
+
+/* --- окно влияния: три состояния вместо серых бейджей --- */
+
+.kt-win {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--kt-r-pill);
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+    /* Точка — дубль цвета для дальтоников и ч/б печати. */
+    .kt-win::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: var(--kt-r-pill);
+        background: currentColor;
+        flex-shrink: 0;
     }
 
-.darker-border-checkbox.form-check-input {
-    border-color: #929292;
+.kt-win-open {
+    background: var(--kt-ember-50);
+    border-color: var(--kt-ember-200);
+    color: var(--kt-ember-600);
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-    color: var(--bs-secondary-color);
-    text-align: end;
+.kt-win-limited {
+    background: var(--kt-honey-50);
+    border-color: var(--kt-honey-100);
+    color: var(--kt-honey-500);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-    text-align: start;
+.kt-win-late, .kt-win-frozen {
+    background: var(--kt-char-50);
+    border-color: var(--kt-char-100);
+    color: var(--kt-char-400);
 }
+
+.kt-win-hint {
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+    margin-top: 0.35rem;
+}
+
+/* --- статус из KNS_Status: нейтральная плашка, цвет несёт окно влияния --- */
+
+.kt-status {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--kt-r-pill);
+    border: 1px solid var(--kt-char-100);
+    background: var(--kt-char-50);
+    color: var(--kt-char-500);
+    white-space: nowrap;
+}
+
+.kt-status-done { background: var(--kt-char-50); border-color: var(--kt-char-100); color: var(--kt-char-500); }
+.kt-status-stopped { background: var(--kt-terra-50); border-color: var(--kt-terra-100); color: var(--kt-terra-600); }
+.kt-status-active { background: var(--kt-amber-50); border-color: var(--kt-amber-100); color: var(--kt-amber-600); }
+
+/* --- бар реакций --- */
+
+.kt-bar {
+    display: flex;
+    height: 10px;
+    border-radius: var(--kt-r-pill);
+    overflow: hidden;
+    background: var(--kt-char-50);
+}
+
+.kt-bar-compact {
+    height: 8px;
+}
+
+.kt-bar-for { background: var(--kt-for); }
+.kt-bar-undecided { background: var(--kt-char-200); }
+.kt-bar-against { background: var(--kt-against); }
+
+.kt-bar-legend {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.4rem;
+    font-family: var(--kt-font-mono);
+    font-size: 0.75rem;
+    color: var(--kt-char-500);
+}
+
+/* Размер выборки остаётся всегда, но не конкурирует с результатом. */
+.kt-bar-sample {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.75rem;
+    color: var(--kt-char-400);
+}
+
+/* --- тип аргумента: один нейтральный цвет на все типы --- */
+
+.kt-tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.2rem 0.625rem;
+    border-radius: var(--kt-r-pill);
+    background: var(--kt-amber-50);
+    border: 1px solid var(--kt-amber-100);
+    color: var(--kt-amber-600);
+}
+
+/* Позиция автора комментария — единственное место, где сторона окрашена. */
+.kt-side {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--kt-r-pill);
+    border: 1px solid var(--kt-char-100);
+    color: var(--kt-char-700);
+}
+
+    .kt-side::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: var(--kt-r-pill);
+        flex-shrink: 0;
+    }
+
+.kt-side-for { background: var(--kt-for-bg); border-color: var(--kt-for); }
+.kt-side-for::before { background: var(--kt-for); }
+.kt-side-against { background: var(--kt-against-bg); border-color: var(--kt-terra-100); }
+.kt-side-against::before { background: var(--kt-against); }
+.kt-side-undecided::before { background: var(--kt-char-300); }
+
 /* Подсветка комментария, на который перешли по прямой ссылке (#comment-N) */
 .comment-anchor:target {
-    background-color: #fff3cd;
-    border-color: #ffc107 !important;
+    background-color: var(--kt-honey-50);
+    border-color: var(--kt-honey-300) !important;
     transition: background-color 0.5s;
 }
 
-/* --- главная: экран-знакомство и лента событий --- */
+/* --- главная: экран-знакомство --- */
 
 .hero {
-    background: #eef0fb;
-    border-radius: 0.9rem;
-    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--kt-ember-50) 0%, var(--kt-amber-50) 100%);
+    border: 1px solid var(--kt-ember-200);
+    border-radius: var(--kt-r-lg);
+    padding: 1.75rem 2rem;
     margin-bottom: 1.75rem;
 }
 
     .hero h1 {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #1a1a40;
-        margin-bottom: 0.6rem;
+        font-family: var(--kt-font-display);
+        font-size: 2rem;
+        font-weight: 400;
+        line-height: 1.15;
+        color: var(--kt-char-900);
+        margin-bottom: 0.75rem;
+        max-width: 34ch;
     }
 
 .hero-text {
-    color: #3b3b55;
-    margin-bottom: 1rem;
+    color: var(--kt-char-600);
+    max-width: 62ch;
+    margin-bottom: 1.25rem;
 }
 
 .hero-points {
     list-style: none;
     padding: 0;
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.5rem;
+    display: grid;
+    gap: 0.5rem;
 }
 
     .hero-points li {
         display: flex;
         gap: 0.6rem;
-        align-items: flex-start;
-        color: #3b3b55;
-        font-size: 0.95rem;
-        margin-bottom: 0.4rem;
+        align-items: baseline;
+        color: var(--kt-char-600);
+        font-size: 0.9375rem;
+    }
+
+    /* Точка вместо emoji: маркер не должен ломать ритм строки. */
+    .hero-points li::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: var(--kt-r-pill);
+        background: var(--kt-ember-500);
+        flex-shrink: 0;
+        transform: translateY(-2px);
     }
 
 .hero-actions {
@@ -107,28 +497,42 @@ h1:focus {
     flex-wrap: wrap;
 }
 
-/* Полоска для вошедших: объяснение в одну строку вместо экрана-знакомства. */
+/* Полоска для вошедших: объяснение в одну строку. */
 .home-strip {
     display: flex;
     align-items: center;
     gap: 0.6rem;
     flex-wrap: wrap;
-    background: #eef0fb;
-    border-radius: 0.6rem;
-    padding: 0.6rem 0.9rem;
+    background: var(--kt-ember-50);
+    border: 1px solid var(--kt-ember-100);
+    border-radius: var(--kt-r-md);
+    padding: 0.6rem 1rem;
     margin-bottom: 1.5rem;
-    font-size: 0.9rem;
-    color: #3b3b55;
+    font-size: 0.875rem;
+    color: var(--kt-char-600);
 }
+
+    .home-strip::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: var(--kt-r-pill);
+        background: var(--kt-ember-500);
+        flex-shrink: 0;
+    }
+
+/* --- лента --- */
 
 .feed-title {
-    font-size: 1.15rem;
+    font-family: var(--kt-font-sans);
+    font-size: 0.6875rem;
     font-weight: 600;
-    margin-bottom: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--kt-char-400);
+    margin-bottom: 0.75rem;
 }
 
-/* На широком экране лента раскладывается в несколько колонок, а не тянется
-   одной полосой в пустоте. Ширина карточки при этом остаётся читаемой. */
 .feed-list {
     display: grid;
     /* min(360px, 100%) обязателен: на узком экране колонка в 360px вылезла бы
@@ -139,48 +543,258 @@ h1:focus {
 }
 
 .feed-card {
-    border: 1px solid #e3e3e8;
-    border-radius: 0.75rem;
-    padding: 0.85rem 1rem;
-    background: #fff;
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-lg);
+    padding: 1rem 1.125rem;
+    background: #FFFFFF;
+    transition: box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1), transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
     .feed-card:hover {
-        border-color: #c9c9d6;
+        box-shadow: var(--kt-shadow-md);
+        transform: translateY(-2px);
     }
 
 .feed-head {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     gap: 0.5rem;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.5rem;
 }
 
+/* Тип события: цветная точка плюс подпись капсом — замена emoji. */
 .feed-kind {
-    font-size: 0.8rem;
-    color: #55555f;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--kt-char-500);
 }
+
+    .feed-kind::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: var(--kt-r-pill);
+        background: var(--kt-char-300);
+        flex-shrink: 0;
+    }
+
+/* Порядок в списке — он же порядок важности в ленте. */
+.feed-kind-status { color: var(--kt-ember-600); }
+.feed-kind-status::before { background: var(--kt-ember-500); }
+.feed-kind-bill { color: var(--kt-amber-600); }
+.feed-kind-bill::before { background: var(--kt-amber-400); }
+.feed-kind-initiative { color: var(--kt-terra-600); }
+.feed-kind-initiative::before { background: var(--kt-terra-400); }
+.feed-kind-comment { color: var(--kt-char-500); }
+.feed-kind-comment::before { background: var(--kt-char-300); }
 
 .feed-time {
-    font-size: 0.8rem;
-    color: #8a8a96;
+    font-size: 0.75rem;
+    color: var(--kt-char-300);
     white-space: nowrap;
 }
 
 .feed-link {
     display: block;
+    font-size: 0.9375rem;
     font-weight: 500;
-    color: #1a1a40;
+    line-height: 1.35;
+    color: var(--kt-char-900);
     text-decoration: none;
     margin-bottom: 0.5rem;
 }
 
     .feed-link:hover {
+        color: var(--kt-char-900);
         text-decoration: underline;
     }
 
+.feed-orig {
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+    margin-bottom: 0.5rem;
+}
+
 .feed-meta {
-    font-size: 0.85rem;
+    font-size: 0.8125rem;
     margin-bottom: 0.4rem;
 }
+
+/* Цитата комментария в ленте. */
+.feed-quote {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--kt-char-500);
+    border-inline-start: 2px solid var(--kt-char-100);
+    padding-inline-start: 0.625rem;
+}
+
+/* --- карточка закона --- */
+
+/* Окно влияния поднимается в шапку: это главная идея продукта. */
+.kt-window-band {
+    background: var(--kt-ember-50);
+    border: 1px solid var(--kt-ember-200);
+    border-radius: var(--kt-r-lg);
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.kt-window-band-late {
+    background: var(--kt-char-50);
+    border-color: var(--kt-char-100);
+}
+
+/* Метаданные: grid вместо таблицы на восемь строк. */
+.kt-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.875rem 1.25rem;
+    background: #FFFFFF;
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-lg);
+    padding: 1.125rem 1.25rem;
+}
+
+.kt-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+    .kt-meta-item > span:first-child {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--kt-char-300);
+    }
+
+    .kt-meta-item > span:last-child, .kt-meta-item a {
+        font-size: 0.8125rem;
+        color: var(--kt-char-700);
+        overflow-wrap: anywhere;
+    }
+
+.kt-bill-title {
+    font-family: var(--kt-font-display);
+    font-weight: 400;
+    font-size: 2.25rem;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--kt-char-900);
+    max-width: 30ch;
+    margin-bottom: 0.4rem;
+}
+
+.kt-bill-orig {
+    font-size: 0.9375rem;
+    color: var(--kt-char-500);
+    margin-bottom: 1rem;
+}
+
+/* --- список законопроектов: строки на разделителях вместо list-group --- */
+
+.kt-rows {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--kt-char-100);
+}
+
+.kt-row {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1rem 0.25rem;
+    border-bottom: 1px solid var(--kt-char-100);
+    text-decoration: none;
+    transition: background-color 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+    .kt-row:hover {
+        background: var(--kt-char-25);
+        text-decoration: none;
+    }
+
+.kt-row-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.kt-row-title {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--kt-char-900);
+}
+
+.kt-row-orig {
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+}
+
+.kt-row-side {
+    width: 150px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    justify-content: center;
+}
+
+@media (max-width: 575.98px) {
+    .kt-row {
+        flex-direction: column;
+        gap: 0.625rem;
+    }
+
+    .kt-row-side {
+        width: 100%;
+    }
+
+    .kt-bill-title {
+        font-size: 1.75rem;
+    }
+}
+
+/* --- служебное --- */
+
+h1:focus {
+    outline: none;
+}
+
+.darker-border-checkbox.form-check-input {
+    border-color: var(--kt-char-200);
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+.blazor-error-boundary {
+    background: var(--kt-against);
+    padding: 1rem 1.25rem;
+    border-radius: var(--kt-r-md);
+    color: var(--kt-char-0);
+}
+
+    .blazor-error-boundary::after {
+        content: "An error has occurred."
+    }

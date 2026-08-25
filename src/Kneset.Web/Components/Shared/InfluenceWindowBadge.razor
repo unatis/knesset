@@ -1,13 +1,17 @@
 @inject IStringLocalizer<SharedResource> L
 
 @* Бейдж «окно влияния»: переводит этап законодательного процесса на язык действия —
-   можно ли ещё повлиять на закон и как. Маппинг по ключевым словам ивритских статусов. *@
+   можно ли ещё повлиять на закон и как. Маппинг по ключевым словам ивритских статусов.
+
+   Визуальный слой: вместо bg-secondary / bg-success / bg-warning — классы kt-win-*.
+   Цвет несёт срочность, точка перед текстом (::before в app.css) дублирует его
+   для дальтоников и ч/б печати. Логика Classify не изменилась. *@
 @if (Window is not null)
 {
-    <span class="badge @Window.Value.Css" title="@(ShowHint ? null : L[Window.Value.HintKey])">@L[Window.Value.LabelKey]</span>
+    <span class="kt-win @Window.Value.Css" title="@(ShowHint ? null : L[Window.Value.HintKey])">@L[Window.Value.LabelKey]</span>
     @if (ShowHint)
     {
-        <div class="text-muted small mt-1">@L[Window.Value.HintKey]</div>
+        <div class="kt-win-hint">@L[Window.Value.HintKey]</div>
     }
 }
 
@@ -31,21 +35,25 @@
         if (status.Contains("נעצרה") || status.Contains("מוזגה") || status.Contains("הוסרה")
             || status.Contains("הוסר") || status.Contains("נדחתה") || status.Contains("נדחה")
             || status.Contains("הוסבה"))
-            return ("bg-secondary", "Inf_Frozen", "Inf_Frozen_Hint");
+            return ("kt-win-frozen", "Inf_Frozen", "Inf_Frozen_Hint");
 
         // Принят / утверждён — поздно.
         if (status.Contains("התקבלה") || status.Contains("התקבל") || status.Contains("אושרה")
             || status.Contains("אושר"))
-            return ("bg-danger", "Inf_Late", "Inf_Late_Hint");
+            return ("kt-win-late", "Inf_Late", "Inf_Late_Hint");
 
         // Работа в комиссии — главное окно влияния.
         if (status.Contains("ועדה") || status.Contains("הכנה"))
-            return ("bg-success", "Inf_Open", "Inf_Open_Hint");
+            return ("kt-win-open", "Inf_Open", "Inf_Open_Hint");
 
         // Ждёт обсуждения в зале — влияние только через депутатов.
         if (status.Contains("מליאה") || status.Contains("הונחה") || status.Contains("שולחן"))
-            return ("bg-warning text-dark", "Inf_Limited", "Inf_Limited_Hint");
+            return ("kt-win-limited", "Inf_Limited", "Inf_Limited_Hint");
 
         return null;
     }
+
+    /// <summary>Открыто ли окно — нужно карточке закона, чтобы выбрать оформление полосы.</summary>
+    public static bool IsOpen(string? status)
+        => Classify(status)?.Css is "kt-win-open" or "kt-win-limited";
 }

@@ -1,5 +1,6 @@
-/* Светлое меню вместо шаблонного тёмного градиента.
-   Отступы — логическими свойствами, чтобы меню зеркалилось на иврите и арабском. */
+/* Светлое тёплое меню. Отступы — логическими свойствами, чтобы меню
+   зеркалилось на иврите и арабском.
+   Цвета берутся из переменных :root в wwwroot/app.css. */
 
 .nav-item {
     padding-inline: 0.5rem;
@@ -11,35 +12,30 @@
     gap: 0.65rem;
     width: 100%;
     padding: 0.55rem 0.75rem;
-    border-radius: 0.5rem;
-    color: #33333d;
-    font-size: 0.95rem;
+    border-radius: var(--kt-r-md);
+    color: var(--kt-char-600);
+    font-size: 0.9375rem;
     text-decoration: none;
     background: none;
     border: none;
     text-align: start;
+    transition: background-color 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
     .nav-link:hover, .nav-link-button:hover {
-        background: #ececef;
-        color: #1a1a40;
+        background: var(--kt-char-50);
+        color: var(--kt-char-900);
+        text-decoration: none;
     }
 
     .nav-link.active {
-        background: #e7e7f5;
-        color: #1a1a40;
-        font-weight: 600;
+        background: var(--kt-ember-50);
+        color: var(--kt-ember-600);
+        font-weight: 500;
     }
-
-.nav-icon {
-    font-size: 1.05rem;
-    line-height: 1;
-    width: 1.4rem;
-    text-align: center;
-    flex-shrink: 0;
-}
 
 .nav-divider {
     margin: 0.6rem 1rem;
-    border-color: #dcdce4;
+    border-color: var(--kt-char-100);
+    opacity: 1;
 }
