@@ -1,8 +1,11 @@
 @page "/"
 @rendermode InteractiveServer
 @using Kneset.Core.Entities
+@using Kneset.Web.Services
+@using Microsoft.AspNetCore.Components.Authorization
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
+@inject SubscriptionRelevanceService Relevance
 
 <PageTitle>@L["Brand"]</PageTitle>
 
@@ -11,7 +14,10 @@
    Визуальный слой: emoji в герое и в ленте заменены на цветные точки и подписи
    капсом (см. .hero-points::before и .feed-kind-* в app.css). У карточек ленты
    появилась вторая строка с оригинальным названием на иврите — читатель сканирует
-   список по названию на своём языке, а оригинал нужен для сверки с источником. *@
+   список по названию на своём языке, а оригинал нужен для сверки с источником.
+
+   Структура 2a: лента слева, столбец контекста справа. Табы «Моё / Всё» есть
+   только у вошедшего — «Моё» строится из его подписок. *@
 <AuthorizeView>
     <NotAuthorized>
         <section class="hero">
@@ -41,65 +47,117 @@
     </Authorized>
 </AuthorizeView>
 
-<h2 class="feed-title">@L["Home_FeedTitle"]</h2>
+<div class="kt-home">
+    <div class="kt-home-feed">
 
-@if (_loading)
-{
-    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
-}
-else if (_feed.Count == 0)
-{
-    <div class="alert alert-light border">@L["Home_FeedEmpty"]</div>
-}
-else
-{
-    <div class="feed-list">
-    @foreach (var item in _feed)
-    {
-        <article class="feed-card">
-            <div class="feed-head">
-                <span class="feed-kind @item.KindCss">@L[item.KindKey]</span>
-                <span class="feed-time">@RelativeTime(item.At)</span>
+        @if (_userId is null)
+        {
+            <h2 class="feed-title">@L["Home_FeedTitle"]</h2>
+        }
+        else
+        {
+            <div class="kt-tabs">
+                <div class="kt-tabs-row" role="tablist">
+                    <button type="button" role="tab" class="kt-tab @(_tab == Tab.Mine ? "kt-tab-on" : null)"
+                            aria-selected="@(_tab == Tab.Mine)" @onclick="() => SwitchAsync(Tab.Mine)">
+                        @L["Feed_TabMine"]
+                    </button>
+                    <button type="button" role="tab" class="kt-tab @(_tab == Tab.All ? "kt-tab-on" : null)"
+                            aria-selected="@(_tab == Tab.All)" @onclick="() => SwitchAsync(Tab.All)">
+                        @L["Feed_TabAll"]
+                    </button>
+                </div>
+
+                @if (_summary is not null && !_summary.IsEmpty)
+                {
+                    <span class="kt-tabs-summary kt-num">
+                        @L["Subs_Themes"]: @_summary.Themes ·
+                        @L["Subs_Persons"]: @_summary.Persons ·
+                        @L["Subs_Bills"]: @_summary.Bills
+                    </span>
+                }
+            </div>
+        }
+
+        @if (_loading)
+        {
+            <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+        }
+        else if (_tab == Tab.Mine && _summary is not null && _summary.IsEmpty)
+        {
+            @* Пустое «Моё» без объяснения читается как поломка. *@
+            <div class="alert alert-light border">
+                @L["Feed_MineNoSubs"]
+                <a href="bills">@L["Home_CtaBrowse"]</a>
+            </div>
+        }
+        else if (_feed.Count == 0)
+        {
+            <div class="alert alert-light border">@L["Home_FeedEmpty"]</div>
+        }
+        else
+        {
+            <div class="feed-list">
+            @foreach (var item in _feed)
+            {
+                <article class="feed-card">
+                    <div class="feed-head">
+                        <span class="feed-kind @item.KindCss">
+                            @L[item.KindKey]
+                            @if (item.Because is not null)
+                            {
+                                <span class="kt-because">· @item.Because</span>
+                            }
+                        </span>
+                        <span class="feed-time">@RelativeTime(item.At)</span>
+                    </div>
+
+                    <a class="feed-link" href="@item.Url" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+
+                    @if (item.Original is not null)
+                    {
+                        <div class="feed-orig" dir="rtl" lang="he">@item.Original</div>
+                    }
+
+                    @if (item.BillId is int billId)
+                    {
+                        <div class="feed-meta">
+                            <InfluenceWindowBadge StatusDesc="@item.StatusDesc" />
+                        </div>
+
+                        var counts = _reactions.GetValueOrDefault(billId);
+                        @if (counts is not null && counts.Total > 0)
+                        {
+                            <ReactionBar Support="counts.Support" Oppose="counts.Oppose"
+                                         Undecided="counts.Undecided" Compact="true" />
+                        }
+                    }
+                    else if (item.Signatures is not null)
+                    {
+                        <div class="feed-meta kt-num">
+                            @item.Signatures @L["Init_SigCount"] · @L["Init_Threshold"] @item.Threshold
+                        </div>
+                    }
+                    else if (item.Subtitle is not null)
+                    {
+                        <div class="feed-quote">@item.Subtitle</div>
+                    }
+                </article>
+            }
             </div>
 
-            <a class="feed-link" href="@item.Url" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
-
-            @if (item.Original is not null)
-            {
-                <div class="feed-orig" dir="rtl" lang="he">@item.Original</div>
-            }
-
-            @if (item.BillId is int billId)
-            {
-                <div class="feed-meta">
-                    <InfluenceWindowBadge StatusDesc="@item.StatusDesc" />
-                </div>
-
-                var counts = _reactions.GetValueOrDefault(billId);
-                @if (counts is not null && counts.Total > 0)
-                {
-                    <ReactionBar Support="counts.Support" Oppose="counts.Oppose"
-                                 Undecided="counts.Undecided" Compact="true" />
-                }
-            }
-            else if (item.Signatures is not null)
-            {
-                <div class="feed-meta kt-num">
-                    @item.Signatures @L["Init_SigCount"] · @L["Init_Threshold"] @item.Threshold
-                </div>
-            }
-            else if (item.Subtitle is not null)
-            {
-                <div class="feed-quote">@item.Subtitle</div>
-            }
-        </article>
-    }
+            <a class="btn btn-outline-secondary w-100 mt-3" href="bills">@L["Feed_ShowMore"]</a>
+        }
     </div>
 
-    <a class="btn btn-outline-secondary w-100 mt-3" href="bills">@L["Feed_ShowMore"]</a>
-}
+    <ContextColumn RelevantBillIds="_relevantIds" />
+</div>
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private enum Tab { Mine, All }
+
     private sealed record FeedItem(
         DateTime At,
         string KindCss,
@@ -112,7 +170,8 @@ else
         string? Subtitle = null,
         int? Signatures = null,
         int? Threshold = null,
-        string? Original = null);
+        string? Original = null,
+        string? Because = null);
 
     private sealed record Counts(int Support, int Oppose, int Undecided)
     {
@@ -125,14 +184,71 @@ else
     private Dictionary<int, Counts> _reactions = [];
     private bool _loading = true;
 
+    private string? _userId;
+    private Tab _tab = Tab.Mine;
+    private SubscriptionSummary? _summary;
+    private Dictionary<int, SubscriptionReason> _relevance = [];
+    private List<int>? _relevantIds;
+
     protected override async Task OnInitializedAsync()
     {
+        if (AuthState is not null)
+        {
+            var auth = await AuthState;
+            _userId = auth.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        if (_userId is not null)
+        {
+            _summary = await Relevance.GetSummaryAsync(_userId);
+            _relevance = await Relevance.GetRelevantBillsAsync(_userId);
+            _relevantIds = _relevance.Keys.ToList();
+
+            // Без подписок «Моё» пустое, и открывать его первым бессмысленно.
+            if (_summary.IsEmpty) _tab = Tab.All;
+        }
+        else
+        {
+            _tab = Tab.All;
+        }
+
+        await LoadFeedAsync();
+        _loading = false;
+    }
+
+    private async Task SwitchAsync(Tab tab)
+    {
+        if (_tab == tab) return;
+
+        _tab = tab;
+        _loading = true;
+        await LoadFeedAsync();
+        _loading = false;
+    }
+
+    private async Task LoadFeedAsync()
+    {
+        // «Моё» — те же четыре выборки, но суженные до законов из подписок.
+        // Отдельного набора запросов нет намеренно: две ленты, расходящиеся
+        // в логике, начали бы показывать разное про одно и то же событие.
+        var mine = _tab == Tab.Mine && _relevantIds is { Count: > 0 };
+        var ids = mine ? _relevantIds! : null;
+
+        if (_tab == Tab.Mine && !mine)
+        {
+            _feed = [];
+            _reactions = [];
+            return;
+        }
+
         await using var db = await DbFactory.CreateDbContextAsync();
         var items = new List<FeedItem>();
 
         // 1. Новые законопроекты.
-        items.AddRange(await db.Bills.AsNoTracking()
-            .Where(b => b.FirstSeenAt > DateTime.UnixEpoch)
+        var newBills = db.Bills.AsNoTracking().Where(b => b.FirstSeenAt > DateTime.UnixEpoch);
+        if (ids is not null) newBills = newBills.Where(b => ids.Contains(b.Id));
+
+        items.AddRange(await newBills
             .OrderByDescending(b => b.FirstSeenAt)
             .Take(FeedSize)
             .Select(b => new FeedItem(
@@ -143,8 +259,10 @@ else
             .ToListAsync());
 
         // 2. Смена стадии — главное событие для «окна влияния».
-        items.AddRange(await db.Bills.AsNoTracking()
-            .Where(b => b.StatusChangedAt != null)
+        var changed = db.Bills.AsNoTracking().Where(b => b.StatusChangedAt != null);
+        if (ids is not null) changed = changed.Where(b => ids.Contains(b.Id));
+
+        items.AddRange(await changed
             .OrderByDescending(b => b.StatusChangedAt)
             .Take(FeedSize)
             .Select(b => new FeedItem(
@@ -155,19 +273,26 @@ else
             .ToListAsync());
 
         // 3. Гражданские инициативы — единственные события, созданные людьми.
-        items.AddRange(await db.CitizenInitiatives.AsNoTracking()
-            .Where(i => i.Status != InitiativeStatus.Draft && i.PublishedAt != null)
-            .OrderByDescending(i => i.PublishedAt)
-            .Take(FeedSize)
-            .Select(i => new FeedItem(
-                i.PublishedAt!.Value, "feed-kind-initiative", "Feed_NewInitiative",
-                i.Title, $"/initiatives/{i.Id}", false,
-                null, null, null,
-                i.Signatures.Count, i.SignatureThreshold))
-            .ToListAsync());
+        //    К подпискам они не привязаны, поэтому в «Моём» их нет.
+        if (ids is null)
+        {
+            items.AddRange(await db.CitizenInitiatives.AsNoTracking()
+                .Where(i => i.Status != InitiativeStatus.Draft && i.PublishedAt != null)
+                .OrderByDescending(i => i.PublishedAt)
+                .Take(FeedSize)
+                .Select(i => new FeedItem(
+                    i.PublishedAt!.Value, "feed-kind-initiative", "Feed_NewInitiative",
+                    i.Title, $"/initiatives/{i.Id}", false,
+                    null, null, null,
+                    i.Signatures.Count, i.SignatureThreshold))
+                .ToListAsync());
+        }
 
         // 4. Обсуждение: показываем, где сейчас спорят.
-        items.AddRange(await db.Comments.AsNoTracking()
+        var comments = db.Comments.AsNoTracking();
+        if (ids is not null) comments = comments.Where(c => c.BillId != null && ids.Contains(c.BillId.Value));
+
+        items.AddRange(await comments
             .OrderByDescending(c => c.CreatedAt)
             .Take(FeedSize)
             .Select(c => new FeedItem(
@@ -176,14 +301,21 @@ else
                 c.BillId != null ? $"/bills/{c.BillId}#comment-{c.Id}"
                                  : $"/initiatives/{c.InitiativeId}#comment-{c.Id}",
                 c.Bill != null && c.Bill.NameRu == null,
-                null, null,
+                c.BillId, null,
                 c.Text.Length > 120 ? c.Text.Substring(0, 120) + "…" : c.Text))
             .ToListAsync());
 
-        _feed = items.OrderByDescending(i => i.At).Take(FeedSize).ToList();
+        var feed = items.OrderByDescending(i => i.At).Take(FeedSize).ToList();
+
+        // Повод подписки дописывается только в «Моём»: во «Всём» он был бы ложью —
+        // события там показываются независимо от того, подписан человек или нет.
+        _feed = mine
+            ? feed.Select(i => i with { Because = BecauseOf(i.BillId) }).ToList()
+            : feed;
 
         // Счётчики реакций одним запросом только по попавшим в ленту законам.
         var billIds = _feed.Where(i => i.BillId != null).Select(i => i.BillId!.Value).Distinct().ToList();
+        _reactions = [];
         if (billIds.Count > 0)
         {
             _reactions = (await db.BillReactions.AsNoTracking()
@@ -197,8 +329,20 @@ else
                     g.FirstOrDefault(x => x.Kind == ReactionKind.Oppose)?.Count ?? 0,
                     g.FirstOrDefault(x => x.Kind == ReactionKind.Undecided)?.Count ?? 0));
         }
+    }
 
-        _loading = false;
+    /// <summary>«Почему это здесь» — тема, депутат или сам закон.</summary>
+    private string? BecauseOf(int? billId)
+    {
+        if (billId is null || !_relevance.TryGetValue(billId.Value, out var reason)) return null;
+
+        return reason.Kind switch
+        {
+            SubscriptionKind.Keyword => string.Format(L["Feed_BecauseTheme"], reason.Detail),
+            SubscriptionKind.Person => string.Format(L["Feed_BecausePerson"], reason.Detail),
+            SubscriptionKind.Bill => L["Feed_BecauseBill"],
+            _ => null
+        };
     }
 
     private string RelativeTime(DateTime utc)

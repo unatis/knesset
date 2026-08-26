@@ -289,4 +289,24 @@
   <data name="About_Source" xml:space="preserve"><value>الشيفرة المصدرية مفتوحة</value></data>
   <data name="Home_StripText" xml:space="preserve"><value>نتابع مشاريع قوانين الكنيست ونبيّن متى لا يزال بالإمكان التأثير عليها.</value></data>
   <data name="Home_StripMore" xml:space="preserve"><value>تفاصيل أكثر</value></data>
+  <data name="Feed_TabMine" xml:space="preserve"><value>خاصتي</value></data>
+  <data name="Feed_TabAll" xml:space="preserve"><value>الكل</value></data>
+  <data name="Subs_Themes" xml:space="preserve"><value>مواضيع</value></data>
+  <data name="Subs_Persons" xml:space="preserve"><value>أعضاء كنيست</value></data>
+  <data name="Subs_Bills" xml:space="preserve"><value>مشاريع قوانين</value></data>
+  <data name="Feed_MineNoSubs" xml:space="preserve"><value>لا متابعات بعد — سيمتلئ "خاصتي" عندما تتابع موضوعًا أو عضو كنيست أو مشروع قانون.</value></data>
+  <data name="Feed_BecauseTheme" xml:space="preserve"><value>موضوع "{0}"</value></data>
+  <data name="Feed_BecausePerson" xml:space="preserve"><value>أنت تتابع {0}</value></data>
+  <data name="Feed_BecauseBill" xml:space="preserve"><value>أنت تتابع هذا المشروع</value></data>
+  <data name="Ctx_OpenWindow" xml:space="preserve"><value>النافذة ما زالت مفتوحة</value></data>
+  <data name="Ctx_ClosingEmpty" xml:space="preserve"><value>لا توجد نوافذ تأثير مفتوحة الآن.</value></data>
+  <data name="Ctx_DayForms" xml:space="preserve"><value>يوم|أيام</value></data>
+  <data name="Ctx_InStage" xml:space="preserve"><value>في المرحلة</value></data>
+  <data name="Ctx_AllBills" xml:space="preserve"><value>كل مشاريع القوانين</value></data>
+  <data name="Ctx_Themes" xml:space="preserve"><value>المواضيع</value></data>
+  <data name="Ctx_ThemesEmpty" xml:space="preserve"><value>لا أحد يتابع كلمات بعد — لا شيء لبناء المواضيع منه.</value></data>
+  <data name="Ctx_AllThemes" xml:space="preserve"><value>كل المواضيع</value></data>
+  <data name="Ctx_WeekDebate" xml:space="preserve"><value>ما يُجدل حوله هذا الأسبوع</value></data>
+  <data name="Ctx_DebateEmpty" xml:space="preserve"><value>لا تعليقات هذا الأسبوع.</value></data>
+  <data name="Ctx_DebateNote" xml:space="preserve"><value>مرتّب حسب عدد التعليقات فقط، دون اعتبار للموقف.</value></data>
 </root>
