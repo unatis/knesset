@@ -165,13 +165,21 @@
         string Title,
         string Url,
         bool IsHebrew,
+        /// <summary>Заполнен, если карточка показывает сам закон: бейдж окна и бар реакций.</summary>
         int? BillId = null,
         string? StatusDesc = null,
         string? Subtitle = null,
         int? Signatures = null,
         int? Threshold = null,
         string? Original = null,
-        string? Because = null);
+        string? Because = null,
+        /// <summary>
+        /// К какому закону относится событие — независимо от вида карточки.
+        /// У обсуждения BillId пустой (карточка показывает цитату, а не бейдж),
+        /// но закон у события есть, и по нему считаются повод подписки и склейка
+        /// событий одного закона.
+        /// </summary>
+        int? SourceBillId = null);
 
     private sealed record Counts(int Support, int Oppose, int Undecided)
     {
@@ -255,7 +263,8 @@
                 b.FirstSeenAt, "feed-kind-bill", "Feed_NewBill",
                 b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
                 b.Id, b.StatusDesc, null, null, null,
-                b.NameRu == null ? null : b.Name))
+                b.NameRu == null ? null : b.Name,
+                null, b.Id))
             .ToListAsync());
 
         // 2. Смена стадии — главное событие для «окна влияния».
@@ -269,7 +278,8 @@
                 b.StatusChangedAt!.Value, "feed-kind-status", "Feed_StatusChanged",
                 b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
                 b.Id, b.StatusDesc, null, null, null,
-                b.NameRu == null ? null : b.Name))
+                b.NameRu == null ? null : b.Name,
+                null, b.Id))
             .ToListAsync());
 
         // 3. Гражданские инициативы — единственные события, созданные людьми.
@@ -301,16 +311,33 @@
                 c.BillId != null ? $"/bills/{c.BillId}#comment-{c.Id}"
                                  : $"/initiatives/{c.InitiativeId}#comment-{c.Id}",
                 c.Bill != null && c.Bill.NameRu == null,
-                c.BillId, null,
-                c.Text.Length > 120 ? c.Text.Substring(0, 120) + "…" : c.Text))
+                // BillId намеренно пустой: карточка обсуждения показывает цитату,
+                // а не бейдж окна с баром реакций. Закон события — в SourceBillId.
+                null, null,
+                c.Text.Length > 120 ? c.Text.Substring(0, 120) + "…" : c.Text,
+                null, null, null, null, c.BillId))
             .ToListAsync());
 
-        var feed = items.OrderByDescending(i => i.At).Take(FeedSize).ToList();
+        // Один закон — одна карточка. У закона бывает и появление, и смена стадии,
+        // и обсуждение: формально это разные события, но карточка показывает
+        // текущее состояние закона, поэтому более старое событие не добавляет
+        // ничего и читается как дубль. Во «Всём» такие пары почти не встречались
+        // рядом — выборки берутся из тысяч записей; в «Моём», где пул сужен
+        // до подписок, они сталкиваются сразу. Оставляем самое свежее событие.
+        var feed = items
+            .OrderByDescending(i => i.At)
+            .GroupBy(i => i.SourceBillId)
+            // Ключ null — это инициативы: у них нет закона, и склеивать их
+            // друг с другом нельзя, это разные сущности.
+            .SelectMany(g => g.Key is null ? g : g.Take(1))
+            .OrderByDescending(i => i.At)
+            .Take(FeedSize)
+            .ToList();
 
         // Повод подписки дописывается только в «Моём»: во «Всём» он был бы ложью —
         // события там показываются независимо от того, подписан человек или нет.
         _feed = mine
-            ? feed.Select(i => i with { Because = BecauseOf(i.BillId) }).ToList()
+            ? feed.Select(i => i with { Because = BecauseOf(i.SourceBillId) }).ToList()
             : feed;
 
         // Счётчики реакций одним запросом только по попавшим в ленту законам.
