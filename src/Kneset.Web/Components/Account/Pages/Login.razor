@@ -63,17 +63,23 @@
             </EditForm>
         </section>
     </div>
-    <div class="col-lg-4 col-lg-offset-2">
-        <section>
-            <h3>@L["Auth_LogInExternal"]</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
-    </div>
+    @* Колонка внешних входов появляется только когда провайдеры настроены:
+       иначе это заголовок над пустотой. *@
+    @if (hasExternalLogins)
+    {
+        <div class="col-lg-4 col-lg-offset-2">
+            <section>
+                <h3>@L["Auth_LogInExternal"]</h3>
+                <hr />
+                <ExternalLoginPicker />
+            </section>
+        </div>
+    }
 </div>
 
 @code {
     private string? errorMessage;
+    private bool hasExternalLogins;
     private EditContext editContext = default!;
 
     [CascadingParameter]
@@ -87,6 +93,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        hasExternalLogins = await ExternalLoginPicker.HasProvidersAsync(SignInManager);
+
         Input ??= new();
 
         editContext = new EditContext(Input);

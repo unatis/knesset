@@ -361,4 +361,26 @@
   <data name="Val_Length" xml:space="preserve"><value>בין {0} ל־{1} תווים</value></data>
   <data name="Val_Mismatch" xml:space="preserve"><value>הערכים אינם תואמים</value></data>
   <data name="Val_PasswordMismatch" xml:space="preserve"><value>הסיסמאות אינן תואמות</value></data>
+  <data name="Comment_AnonymousAuthor" xml:space="preserve"><value>משתתף</value></data>
+  <data name="Priv_Nav" xml:space="preserve"><value>פרטיות</value></data>
+  <data name="Priv_Title" xml:space="preserve"><value>מדיניות פרטיות</value></data>
+  <data name="Priv_Updated" xml:space="preserve"><value>עודכן: {0}</value></data>
+  <data name="Priv_Collect" xml:space="preserve"><value>מה אנחנו שומרים</value></data>
+  <data name="Priv_CollectText" xml:space="preserve"><value>כתובת דואר אלקטרוני וסיסמה — הסיסמה נשמרת רק כגיבוב חד-כיווני, לא בטקסט גלוי. שם לתצוגה, אם הזנתם אותו: בהרשמה לא מבקשים אותו והוא נשאר ריק. שפת הממשק ואופן קבלת ההתראות. המעקבים שלכם: מילים, חברי כנסת והצעות חוק. כתובת למשלוח התראות, אם הוספתם — היא נשמרת בנפרד מכתובת הכניסה. העמדות שלכם לגבי הצעות חוק, התגובות, היוזמות האזרחיות והחתימות עליהן.</value></data>
+  <data name="Priv_Public" xml:space="preserve"><value>מה אחרים רואים</value></data>
+  <data name="Priv_PublicText" xml:space="preserve"><value>תגובות, יוזמות אזרחיות והחתימות עליהן גלויות לכל מבקר, גם למי שלא נרשם. תגובה נחתמת בשם שבחרתם; בלי שם מופיע "משתתף" נייטרלי — כתובת הדואר אינה מוצגת בחתימה לעולם. העמדה האישית שלכם לגבי הצעת חוק אינה מוצגת לאחרים: היא נכנסת למונה המשותף רק כמספר.</value></data>
+  <data name="Priv_Political" xml:space="preserve"><value>עמדות לגבי הצעות חוק</value></data>
+  <data name="Priv_PoliticalText" xml:space="preserve"><value>סימון "בעד", "נגד" או "לא החלטתי" הוא מידע על עמדותיכם הפוליטיות, ואנחנו מתייחסים אליו בהתאם. הוא נשמר מקושר לחשבון, אחרת לא היינו יכולים להראות לכם את הקול שלכם ולאפשר לשנותו. בפומבי הוא מופיע רק כמונה מסכם ובאחוזים, בלי שמות. מחיקת החשבון מוחקת גם אותו.</value></data>
+  <data name="Priv_Third" xml:space="preserve"><value>למי עוברים הנתונים</value></data>
+  <data name="Priv_ThirdText" xml:space="preserve"><value>האתר פועל על אירוח Render, מסד הנתונים הוא Supabase; שניהם ממוקמים בפרנקפורט, באיחוד האירופי. הגופנים נטענים משרתי Google Fonts, ולכן בפתיחת כל עמוד כתובת ה-IP ופרטי הדפדפן שלכם נודעים ל-Google — וזה קורה עוד לפני כל הרשמה. כפתורי השיתוף הם קישורים רגילים לרשתות החברתיות: עד שלא לחצתם, השירותים האלה אינם יודעים עליכם דבר. נתוני הכנסת מגיעים מה-API הפתוח שלה, שמקבל רק את הבקשה שלנו וללא מידע על המבקרים. מודל השפה לניתוח הצעות חוק אינו מחובר עדיין, ולא נשלחים אליו נתונים.</value></data>
+  <data name="Priv_Cookies" xml:space="preserve"><value>קובצי Cookie</value></data>
+  <data name="Priv_CookiesText" xml:space="preserve"><value>שלושה סוגים: קובץ כניסה, כדי שלא תתחברו מחדש בכל עמוד; קובץ עם השפה שבחרתם; וסימן טכני להגנת הטפסים מזיוף בקשות. אין באתר אנליטיקה, מוני מבקרים או גלאי פרסום.</value></data>
+  <data name="Priv_Retention" xml:space="preserve"><value>כמה זמן נשמר</value></data>
+  <data name="Priv_RetentionText" xml:space="preserve"><value>התראות שנקראו נמחקות אוטומטית לאחר 30 יום. כל השאר נשמר כל עוד החשבון שלכם קיים. תגובה אפשר למחוק בכל רגע — לידה יש כפתור מחיקה.</value></data>
+  <data name="Priv_Rights" xml:space="preserve"><value>ניהול הנתונים</value></data>
+  <data name="Priv_RightsText" xml:space="preserve"><value>אתם יכולים להוריד את הנתונים שלכם ולמחוק את החשבון בעצמכם, בלי לפנות אלינו. המחיקה בלתי הפיכה: יחד עם החשבון נעלמים המעקבים, העמדות והתגובות.</value></data>
+  <data name="Priv_RightsDownload" xml:space="preserve"><value>הורדת הנתונים</value></data>
+  <data name="Priv_RightsDelete" xml:space="preserve"><value>מחיקת החשבון</value></data>
+  <data name="Priv_Contact" xml:space="preserve"><value>שאלות ושינויים</value></data>
+  <data name="Priv_ContactText" xml:space="preserve"><value>קוד המקור של האתר פתוח, והעמוד הזה נכתב לפיו: כל טענה כאן אפשר לבדוק מול הקוד. אם משהו בטיפול בנתונים ישתנה, ישתנה גם העמוד — תאריך העדכון מופיע למעלה.</value></data>
 </root>

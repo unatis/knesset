@@ -49,19 +49,30 @@
                 <label class="form-check-label" for="Input.NotifyNewBills">@L["Notif_RegisterOptIn"]</label>
             </div>
             <button type="submit" class="w-100 btn btn-lg btn-primary">@L["Auth_RegisterNew"]</button>
+            @* Ссылка, а не согласие: формулировать «регистрируясь, вы соглашаетесь»
+               без юридической проверки нельзя. Человек должен иметь возможность
+               прочитать, что произойдёт с его данными, до того как нажмёт кнопку. *@
+            <p class="mt-3 mb-0">
+                <a href="privacy">@L["Priv_Title"]</a>
+            </p>
         </EditForm>
     </div>
-    <div class="col-lg-4 col-lg-offset-2">
-        <section>
-            <h3>@L["Auth_RegisterExternal"]</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
-    </div>
+    @* См. Login.razor: без настроенных провайдеров колонки нет. *@
+    @if (hasExternalLogins)
+    {
+        <div class="col-lg-4 col-lg-offset-2">
+            <section>
+                <h3>@L["Auth_RegisterExternal"]</h3>
+                <hr />
+                <ExternalLoginPicker />
+            </section>
+        </div>
+    }
 </div>
 
 @code {
     private IEnumerable<IdentityError>? identityErrors;
+    private bool hasExternalLogins;
 
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = default!;
@@ -73,9 +84,10 @@
         ? null
         : string.Format(L["Auth_ErrorPrefix"], string.Join(", ", identityErrors.Select(error => error.Description)));
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Input ??= new();
+        hasExternalLogins = await ExternalLoginPicker.HasProvidersAsync(SignInManager);
     }
 
     public async Task RegisterUser(EditContext editContext)

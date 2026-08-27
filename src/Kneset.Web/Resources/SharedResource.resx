@@ -361,4 +361,26 @@
   <data name="Val_Length" xml:space="preserve"><value>От {0} до {1} символов</value></data>
   <data name="Val_Mismatch" xml:space="preserve"><value>Значения не совпадают</value></data>
   <data name="Val_PasswordMismatch" xml:space="preserve"><value>Пароли не совпадают</value></data>
+  <data name="Comment_AnonymousAuthor" xml:space="preserve"><value>Участник</value></data>
+  <data name="Priv_Nav" xml:space="preserve"><value>Конфиденциальность</value></data>
+  <data name="Priv_Title" xml:space="preserve"><value>Политика конфиденциальности</value></data>
+  <data name="Priv_Updated" xml:space="preserve"><value>Обновлено: {0}</value></data>
+  <data name="Priv_Collect" xml:space="preserve"><value>Что мы храним</value></data>
+  <data name="Priv_CollectText" xml:space="preserve"><value>Адрес электронной почты и пароль — пароль только в виде необратимого хэша, в открытом виде он не хранится. Имя для подписи, если вы его укажете: при регистрации оно не спрашивается и остаётся пустым. Язык интерфейса и режим уведомлений. Подписки: слова, депутаты и законы, за которыми вы следите. Адрес для доставки уведомлений, если вы его добавите, — он хранится отдельно от адреса для входа. Ваши позиции по законам, комментарии, гражданские инициативы и подписи под ними.</value></data>
+  <data name="Priv_Public" xml:space="preserve"><value>Что видно другим</value></data>
+  <data name="Priv_PublicText" xml:space="preserve"><value>Комментарии, гражданские инициативы и подписи под ними видны всем посетителям, включая незарегистрированных. Комментарий подписывается указанным вами именем; если имя не задано, вместо него стоит нейтральное «Участник» — адрес почты в подписи не показывается никогда. Ваша позиция по закону другим людям по отдельности не показывается: в общий счётчик она входит только числом.</value></data>
+  <data name="Priv_Political" xml:space="preserve"><value>Позиция по законам</value></data>
+  <data name="Priv_PoliticalText" xml:space="preserve"><value>Отметка «за», «против» или «не определился» — это сведения о ваших политических взглядах, и мы относимся к ним соответственно. Они хранятся привязанными к учётной записи, потому что иначе нельзя показать вам ваш же голос и дать его изменить. Публично они выходят только в виде общего счётчика и процентов, без имён. Удаление учётной записи удаляет и их.</value></data>
+  <data name="Priv_Third" xml:space="preserve"><value>Кому передаются данные</value></data>
+  <data name="Priv_ThirdText" xml:space="preserve"><value>Сайт работает на хостинге Render, база данных — Supabase; оба размещены во Франкфурте, в Европейском союзе. Шрифты страницы загружаются с серверов Google Fonts, поэтому при открытии любой страницы ваш IP-адрес и данные браузера становятся известны Google — это происходит до всякой регистрации. Кнопки «поделиться» ведут в социальные сети обычными ссылками: пока вы по ним не нажали, эти сервисы о вас ничего не узнают. Данные Кнессета мы получаем с его открытого API — там передаётся только наш запрос, без сведений о посетителях. Языковая модель для разбора законов пока не подключена, никакие данные ей не отправляются.</value></data>
+  <data name="Priv_Cookies" xml:space="preserve"><value>Cookie</value></data>
+  <data name="Priv_CookiesText" xml:space="preserve"><value>Три вида: cookie входа — чтобы не входить заново на каждой странице; cookie выбранного языка; технический маркер защиты форм от подделки запросов. Аналитики, счётчиков посещений и рекламных трекеров на сайте нет.</value></data>
+  <data name="Priv_Retention" xml:space="preserve"><value>Сколько храним</value></data>
+  <data name="Priv_RetentionText" xml:space="preserve"><value>Прочитанные уведомления удаляются автоматически через 30 дней. Остальное хранится, пока существует ваша учётная запись. Комментарий можно удалить в любой момент — рядом с ним есть кнопка удаления.</value></data>
+  <data name="Priv_Rights" xml:space="preserve"><value>Управление данными</value></data>
+  <data name="Priv_RightsText" xml:space="preserve"><value>Вы можете выгрузить свои данные и удалить учётную запись сами, без обращения к нам. Удаление необратимо: вместе с учётной записью исчезают подписки, позиции по законам и комментарии.</value></data>
+  <data name="Priv_RightsDownload" xml:space="preserve"><value>Выгрузить данные</value></data>
+  <data name="Priv_RightsDelete" xml:space="preserve"><value>Удалить учётную запись</value></data>
+  <data name="Priv_Contact" xml:space="preserve"><value>Вопросы и изменения</value></data>
+  <data name="Priv_ContactText" xml:space="preserve"><value>Исходный код сайта открыт, и эта страница написана по нему: любое утверждение здесь можно сверить с кодом. Если что-то в обработке данных изменится, изменится и эта страница — дата обновления указана сверху.</value></data>
 </root>

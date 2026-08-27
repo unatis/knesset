@@ -361,4 +361,26 @@
   <data name="Val_Length" xml:space="preserve"><value>Between {0} and {1} characters</value></data>
   <data name="Val_Mismatch" xml:space="preserve"><value>The values do not match</value></data>
   <data name="Val_PasswordMismatch" xml:space="preserve"><value>The passwords do not match</value></data>
+  <data name="Comment_AnonymousAuthor" xml:space="preserve"><value>Member</value></data>
+  <data name="Priv_Nav" xml:space="preserve"><value>Privacy</value></data>
+  <data name="Priv_Title" xml:space="preserve"><value>Privacy policy</value></data>
+  <data name="Priv_Updated" xml:space="preserve"><value>Updated: {0}</value></data>
+  <data name="Priv_Collect" xml:space="preserve"><value>What we store</value></data>
+  <data name="Priv_CollectText" xml:space="preserve"><value>Your email address and password — the password only as an irreversible hash, never in plain text. A display name if you set one: registration does not ask for it, so it starts out empty. Interface language and notification mode. Your subscriptions: the words, MKs and bills you follow. A delivery address for notifications if you add one — it is stored separately from your sign-in address. Your positions on bills, your comments, your civic initiatives and the signatures you give them.</value></data>
+  <data name="Priv_Public" xml:space="preserve"><value>What others can see</value></data>
+  <data name="Priv_PublicText" xml:space="preserve"><value>Comments, civic initiatives and their signatures are visible to every visitor, including those who are not registered. A comment is signed with the display name you chose; without one it shows a neutral "Member" — your email address never appears in the signature. Your individual position on a bill is not shown to others: it only enters the shared counter as a number.</value></data>
+  <data name="Priv_Political" xml:space="preserve"><value>Positions on bills</value></data>
+  <data name="Priv_PoliticalText" xml:space="preserve"><value>Marking a bill "for", "against" or "undecided" is information about your political views, and we treat it as such. It is stored against your account because otherwise we could not show you your own vote or let you change it. Publicly it appears only as an aggregate count and percentage, with no names. Deleting your account deletes it too.</value></data>
+  <data name="Priv_Third" xml:space="preserve"><value>Who else receives data</value></data>
+  <data name="Priv_ThirdText" xml:space="preserve"><value>The site runs on Render hosting with a Supabase database; both are located in Frankfurt, in the European Union. Page fonts are loaded from Google Fonts servers, so opening any page reveals your IP address and browser details to Google — this happens before any registration. Share buttons are ordinary links to social networks: until you click one, those services learn nothing about you. Knesset data comes from its open API, which receives only our request and nothing about visitors. The language model for analysing bills is not connected yet; no data is sent to it.</value></data>
+  <data name="Priv_Cookies" xml:space="preserve"><value>Cookies</value></data>
+  <data name="Priv_CookiesText" xml:space="preserve"><value>Three kinds: a sign-in cookie so you do not have to log in on every page; a cookie holding your chosen language; and a technical token protecting forms against request forgery. There is no analytics, no visitor counter and no advertising tracker on this site.</value></data>
+  <data name="Priv_Retention" xml:space="preserve"><value>How long we keep it</value></data>
+  <data name="Priv_RetentionText" xml:space="preserve"><value>Notifications you have read are deleted automatically after 30 days. Everything else is kept while your account exists. A comment can be deleted at any time — there is a delete button next to it.</value></data>
+  <data name="Priv_Rights" xml:space="preserve"><value>Managing your data</value></data>
+  <data name="Priv_RightsText" xml:space="preserve"><value>You can download your data and delete your account yourself, without contacting us. Deletion is irreversible: subscriptions, positions on bills and comments go with the account.</value></data>
+  <data name="Priv_RightsDownload" xml:space="preserve"><value>Download your data</value></data>
+  <data name="Priv_RightsDelete" xml:space="preserve"><value>Delete your account</value></data>
+  <data name="Priv_Contact" xml:space="preserve"><value>Questions and changes</value></data>
+  <data name="Priv_ContactText" xml:space="preserve"><value>The site's source code is open, and this page was written from it: every statement here can be checked against the code. If anything about data handling changes, this page changes too — the update date is at the top.</value></data>
 </root>
