@@ -813,3 +813,219 @@ h1:focus {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+/* ============================================================
+   Главная: три колонки (макет 2a) — лента и столбец контекста.
+   ============================================================ */
+
+/* Мобильный порядок задан по умолчанию: столбец контекста стоит перед лентой
+   и показывает только «Окно закрывается» — единственный блок, отвечающий
+   на вопрос «что мне делать сегодня». Ряд из двух колонок включается
+   с 1280px, как и нарисовано в макете. */
+.kt-home {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.kt-home-feed {
+    min-width: 0;
+}
+
+.kt-ctx {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+@media (max-width: 768.98px) {
+    .kt-ctx {
+        order: -1;
+    }
+
+    .kt-ctx-hide-mobile {
+        display: none;
+    }
+}
+
+@media (min-width: 1280px) {
+    .kt-home {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .kt-home-feed {
+        flex: 1;
+        min-width: 520px;
+    }
+
+    .kt-ctx {
+        width: 316px;
+        flex-shrink: 0;
+        border-inline-start: 1px solid var(--kt-char-100);
+        padding-inline-start: 1.25rem;
+    }
+}
+
+.kt-ctx-card {
+    background: #FFFFFF;
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-lg);
+    padding: 1rem 1.125rem;
+}
+
+/* Единственный акцентный блок: срочное из подписок. */
+.kt-ctx-card-accent {
+    background: var(--kt-ember-50);
+    border-color: var(--kt-ember-200);
+}
+
+.kt-ctx-title {
+    font-family: var(--kt-font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--kt-char-400);
+    margin: 0 0 0.75rem;
+}
+
+.kt-ctx-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+    .kt-ctx-list li {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+    }
+
+    .kt-ctx-list a {
+        font-size: 0.875rem;
+        font-weight: 500;
+        line-height: 1.35;
+        color: var(--kt-char-900);
+    }
+
+        .kt-ctx-list a:hover {
+            color: var(--kt-ember-700);
+        }
+
+/* Список со счётчиком: число уходит к концу строки. */
+.kt-ctx-list-num li {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.kt-ctx-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.kt-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--kt-r-pill);
+    background: var(--kt-char-50);
+    border: 1px solid var(--kt-char-100);
+    font-size: 0.8125rem;
+    color: var(--kt-char-700);
+}
+
+    .kt-chip:hover {
+        background: var(--kt-ember-50);
+        border-color: var(--kt-ember-200);
+        color: var(--kt-ember-700);
+        text-decoration: none;
+    }
+
+.kt-chip-num {
+    font-family: var(--kt-font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.75rem;
+    color: var(--kt-char-400);
+}
+
+.kt-ctx-more {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+}
+
+.kt-ctx-note {
+    margin: 0.75rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: var(--kt-char-400);
+}
+
+.kt-ctx-empty {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+}
+
+/* --- табы ленты: «Моё» и «Всё» --- */
+
+.kt-tabs {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    border-bottom: 1px solid var(--kt-char-100);
+    margin-bottom: 1rem;
+}
+
+.kt-tabs-row {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.kt-tab {
+    appearance: none;
+    background: none;
+    border: 0;
+    /* Отрицательный margin сажает подчёркивание активного таба ровно
+       на линию .kt-tabs, а не под неё. */
+    margin-bottom: -1px;
+    padding: 0 0 0.5rem;
+    border-bottom: 2px solid transparent;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--kt-char-400);
+    cursor: pointer;
+}
+
+    .kt-tab:hover {
+        color: var(--kt-char-700);
+    }
+
+.kt-tab-on {
+    color: var(--kt-ember-600);
+    border-bottom-color: var(--kt-ember-500);
+}
+
+.kt-tabs-summary {
+    padding-bottom: 0.5rem;
+}
+
+/* «Почему это здесь» — повод подписки в шапке карточки. Капсом не набираем:
+   по правилу набора капс отведён только коротким подписям, а здесь бывает
+   имя депутата, и в верхнем регистре оно читается плохо. */
+.kt-because {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    color: var(--kt-char-400);
+}

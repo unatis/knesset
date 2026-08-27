@@ -289,4 +289,24 @@
   <data name="About_Source" xml:space="preserve"><value>Исходный код открыт</value></data>
   <data name="Home_StripText" xml:space="preserve"><value>Следим за законопроектами Кнессета и показываем, когда на них ещё можно повлиять.</value></data>
   <data name="Home_StripMore" xml:space="preserve"><value>Подробнее</value></data>
+  <data name="Feed_TabMine" xml:space="preserve"><value>Моё</value></data>
+  <data name="Feed_TabAll" xml:space="preserve"><value>Всё</value></data>
+  <data name="Subs_Themes" xml:space="preserve"><value>темы</value></data>
+  <data name="Subs_Persons" xml:space="preserve"><value>депутаты</value></data>
+  <data name="Subs_Bills" xml:space="preserve"><value>законы</value></data>
+  <data name="Feed_MineNoSubs" xml:space="preserve"><value>Подписок пока нет — «Моё» наполнится, когда вы подпишетесь на тему, депутата или закон.</value></data>
+  <data name="Feed_BecauseTheme" xml:space="preserve"><value>тема «{0}»</value></data>
+  <data name="Feed_BecausePerson" xml:space="preserve"><value>вы следите за {0}</value></data>
+  <data name="Feed_BecauseBill" xml:space="preserve"><value>вы следите за этим законом</value></data>
+  <data name="Ctx_OpenWindow" xml:space="preserve"><value>Окно ещё открыто</value></data>
+  <data name="Ctx_ClosingEmpty" xml:space="preserve"><value>Открытых окон влияния сейчас нет.</value></data>
+  <data name="Ctx_DayForms" xml:space="preserve"><value>день|дня|дней</value></data>
+  <data name="Ctx_InStage" xml:space="preserve"><value>в стадии</value></data>
+  <data name="Ctx_AllBills" xml:space="preserve"><value>Все законы</value></data>
+  <data name="Ctx_Themes" xml:space="preserve"><value>Темы</value></data>
+  <data name="Ctx_ThemesEmpty" xml:space="preserve"><value>Пока никто не подписался на слова — темам не из чего складываться.</value></data>
+  <data name="Ctx_AllThemes" xml:space="preserve"><value>Все темы</value></data>
+  <data name="Ctx_WeekDebate" xml:space="preserve"><value>О чём спорят за неделю</value></data>
+  <data name="Ctx_DebateEmpty" xml:space="preserve"><value>За неделю комментариев не было.</value></data>
+  <data name="Ctx_DebateNote" xml:space="preserve"><value>Сортировка по числу комментариев, без учёта тональности.</value></data>
 </root>

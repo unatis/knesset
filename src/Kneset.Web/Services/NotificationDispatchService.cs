@@ -103,7 +103,7 @@ public class NotificationDispatchService(
             foreach (var sub in keywordSubs)
             {
                 if (byUser.ContainsKey(sub.UserId)) continue;
-                if (Matches(bill.Name, bill.NameRu, sub.Keyword!))
+                if (NotificationSubscription.MatchesKeyword(bill.Name, bill.NameRu, sub.Keyword!))
                     byUser[sub.UserId] = (SubscriptionKind.Keyword, sub.Keyword);
             }
 
@@ -308,12 +308,4 @@ public class NotificationDispatchService(
             logger.LogInformation("Уведомления: удалено прочитанных старше {Days} дней — {Count}", RetentionDays, removed);
     }
 
-    private static bool Matches(string name, string? nameRu, string keyword)
-    {
-        var needle = keyword.Trim();
-        if (needle.Length == 0) return false;
-
-        return name.Contains(needle, StringComparison.OrdinalIgnoreCase) ||
-               (nameRu is not null && nameRu.Contains(needle, StringComparison.OrdinalIgnoreCase));
-    }
 }

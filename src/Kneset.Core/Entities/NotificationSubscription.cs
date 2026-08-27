@@ -49,6 +49,21 @@ public class NotificationSubscription
 
     public DateTime CreatedAt { get; set; }
 
+    /// <summary>
+    /// Попадает ли законопроект под подписку на слово. Единственное место, где
+    /// задано это правило: им пользуются и рассылка уведомлений, и личная лента
+    /// на главной. Сравнение регистронезависимое и по обоим названиям —
+    /// человек мог подписаться и на ивритское слово, и на русское.
+    /// </summary>
+    public static bool MatchesKeyword(string name, string? nameRu, string keyword)
+    {
+        var needle = keyword.Trim();
+        if (needle.Length == 0) return false;
+
+        return name.Contains(needle, StringComparison.OrdinalIgnoreCase) ||
+               (nameRu is not null && nameRu.Contains(needle, StringComparison.OrdinalIgnoreCase));
+    }
+
     /// <summary>Собирает TargetKey — единственное место, где задаётся его формат.</summary>
     public static string BuildTargetKey(SubscriptionKind kind, int? personId, int? billId, string? keyword) =>
         kind switch

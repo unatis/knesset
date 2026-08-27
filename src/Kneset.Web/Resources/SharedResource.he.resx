@@ -289,4 +289,24 @@
   <data name="About_Source" xml:space="preserve"><value>קוד המקור פתוח</value></data>
   <data name="Home_StripText" xml:space="preserve"><value>עוקבים אחר הצעות חוק בכנסת ומראים מתי עוד אפשר להשפיע עליהן.</value></data>
   <data name="Home_StripMore" xml:space="preserve"><value>פרטים נוספים</value></data>
+  <data name="Feed_TabMine" xml:space="preserve"><value>שלי</value></data>
+  <data name="Feed_TabAll" xml:space="preserve"><value>הכול</value></data>
+  <data name="Subs_Themes" xml:space="preserve"><value>נושאים</value></data>
+  <data name="Subs_Persons" xml:space="preserve"><value>חברי כנסת</value></data>
+  <data name="Subs_Bills" xml:space="preserve"><value>הצעות חוק</value></data>
+  <data name="Feed_MineNoSubs" xml:space="preserve"><value>עדיין אין מעקבים — "שלי" יתמלא אחרי שתעקבו אחרי נושא, חבר כנסת או הצעת חוק.</value></data>
+  <data name="Feed_BecauseTheme" xml:space="preserve"><value>נושא "{0}"</value></data>
+  <data name="Feed_BecausePerson" xml:space="preserve"><value>אתם עוקבים אחרי {0}</value></data>
+  <data name="Feed_BecauseBill" xml:space="preserve"><value>אתם עוקבים אחרי הצעה זו</value></data>
+  <data name="Ctx_OpenWindow" xml:space="preserve"><value>החלון עוד פתוח</value></data>
+  <data name="Ctx_ClosingEmpty" xml:space="preserve"><value>אין כרגע חלונות השפעה פתוחים.</value></data>
+  <data name="Ctx_DayForms" xml:space="preserve"><value>יום|ימים</value></data>
+  <data name="Ctx_InStage" xml:space="preserve"><value>בשלב</value></data>
+  <data name="Ctx_AllBills" xml:space="preserve"><value>כל הצעות החוק</value></data>
+  <data name="Ctx_Themes" xml:space="preserve"><value>נושאים</value></data>
+  <data name="Ctx_ThemesEmpty" xml:space="preserve"><value>עדיין אף אחד לא עוקב אחרי מילים — אין ממה לבנות נושאים.</value></data>
+  <data name="Ctx_AllThemes" xml:space="preserve"><value>כל הנושאים</value></data>
+  <data name="Ctx_WeekDebate" xml:space="preserve"><value>על מה מתווכחים השבוע</value></data>
+  <data name="Ctx_DebateEmpty" xml:space="preserve"><value>לא היו תגובות השבוע.</value></data>
+  <data name="Ctx_DebateNote" xml:space="preserve"><value>מסודר לפי מספר התגובות בלבד, בלי התחשבות בעמדה.</value></data>
 </root>

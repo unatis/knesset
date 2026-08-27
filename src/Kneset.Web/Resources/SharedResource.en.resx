@@ -289,4 +289,24 @@
   <data name="About_Source" xml:space="preserve"><value>The source code is open</value></data>
   <data name="Home_StripText" xml:space="preserve"><value>We track Knesset bills and show when they can still be influenced.</value></data>
   <data name="Home_StripMore" xml:space="preserve"><value>Learn more</value></data>
+  <data name="Feed_TabMine" xml:space="preserve"><value>Mine</value></data>
+  <data name="Feed_TabAll" xml:space="preserve"><value>All</value></data>
+  <data name="Subs_Themes" xml:space="preserve"><value>themes</value></data>
+  <data name="Subs_Persons" xml:space="preserve"><value>MKs</value></data>
+  <data name="Subs_Bills" xml:space="preserve"><value>bills</value></data>
+  <data name="Feed_MineNoSubs" xml:space="preserve"><value>No subscriptions yet — Mine fills up once you follow a theme, an MK or a bill.</value></data>
+  <data name="Feed_BecauseTheme" xml:space="preserve"><value>theme “{0}”</value></data>
+  <data name="Feed_BecausePerson" xml:space="preserve"><value>you follow {0}</value></data>
+  <data name="Feed_BecauseBill" xml:space="preserve"><value>you follow this bill</value></data>
+  <data name="Ctx_OpenWindow" xml:space="preserve"><value>Window still open</value></data>
+  <data name="Ctx_ClosingEmpty" xml:space="preserve"><value>No influence windows are open right now.</value></data>
+  <data name="Ctx_DayForms" xml:space="preserve"><value>day|days</value></data>
+  <data name="Ctx_InStage" xml:space="preserve"><value>in stage</value></data>
+  <data name="Ctx_AllBills" xml:space="preserve"><value>All bills</value></data>
+  <data name="Ctx_Themes" xml:space="preserve"><value>Themes</value></data>
+  <data name="Ctx_ThemesEmpty" xml:space="preserve"><value>Nobody follows any words yet — there is nothing to build themes from.</value></data>
+  <data name="Ctx_AllThemes" xml:space="preserve"><value>All themes</value></data>
+  <data name="Ctx_WeekDebate" xml:space="preserve"><value>Most argued this week</value></data>
+  <data name="Ctx_DebateEmpty" xml:space="preserve"><value>No comments this week.</value></data>
+  <data name="Ctx_DebateNote" xml:space="preserve"><value>Sorted by comment count only, regardless of sentiment.</value></data>
 </root>

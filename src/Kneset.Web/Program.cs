@@ -108,6 +108,8 @@ foreach (var stubChannel in new[]
 builder.Services.AddSingleton<NotificationEvents>();
 builder.Services.AddSingleton<NotificationTextBuilder>();
 builder.Services.AddSingleton<NotificationDispatchService>();
+// Личная лента и столбец контекста на главной: связь подписок с законопроектами.
+builder.Services.AddSingleton<SubscriptionRelevanceService>();
 
 if (builder.Configuration.GetValue("Sync:Enabled", true))
 {

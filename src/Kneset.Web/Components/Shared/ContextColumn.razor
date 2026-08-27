@@ -1,0 +1,251 @@
+@using Kneset.Core.Entities
+@using Kneset.Web.Services
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+
+@* Правый столбец главной (макет 2a). Три блока в порядке ценности: сначала
+   срочное, потом вход по темам, потом спорное. Первый блок — единственный,
+   отвечающий на вопрос «что мне делать сегодня», поэтому он акцентный.
+
+   Запросы живут здесь, а не на странице: столбец самостоятелен и его можно
+   поставить на другой экран. Снаружи приходит только список законов, попавших
+   в подписки, — считать его дважды не нужно. *@
+
+<aside class="kt-ctx">
+
+    @* --- 1. Окно ещё открыто. В макете блок назван «Окно закрывается», но
+           обещать закрытие нечем: срока до конца стадии в данных нет. Смысл
+           блока сохранён — что можно сделать сегодня, — а заголовок говорит
+           ровно то, что известно. --- *@
+    <section class="kt-ctx-card kt-ctx-card-accent">
+        <h3 class="kt-ctx-title">@L["Ctx_OpenWindow"]</h3>
+
+        @if (_closing.Count == 0)
+        {
+            <p class="kt-ctx-empty">@L["Ctx_ClosingEmpty"]</p>
+        }
+        else
+        {
+            <ul class="kt-ctx-list">
+                @foreach (var item in _closing)
+                {
+                    <li>
+                        <a href="/bills/@item.Id" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+                        <span class="kt-num">
+                            @item.Days @Plural.Of(item.Days, L["Ctx_DayForms"])
+                            @L["Ctx_InStage"]
+                            @if (item.StatusDesc is not null)
+                            {
+                                <span> · </span><span dir="rtl" lang="he">@item.StatusDesc</span>
+                            }
+                        </span>
+                    </li>
+                }
+            </ul>
+            <a class="kt-ctx-more" href="bills">@L["Ctx_AllBills"]</a>
+        }
+    </section>
+
+    @* --- 2. Темы --- *@
+    <section class="kt-ctx-card kt-ctx-hide-mobile">
+        <h3 class="kt-ctx-title">@L["Ctx_Themes"]</h3>
+
+        @if (_themes.Count == 0)
+        {
+            <p class="kt-ctx-empty">@L["Ctx_ThemesEmpty"]</p>
+        }
+        else
+        {
+            <div class="kt-ctx-chips">
+                @foreach (var theme in _themes)
+                {
+                    @* Тема ведёт в поиск по названию: у законов нет предметной
+                       рубрикации, и слово — единственное, чем сейчас можно
+                       отобрать «что там с арендой». *@
+                    <a class="kt-chip" href="bills?q=@Uri.EscapeDataString(theme.Word)">
+                        <span dir="auto">@theme.Word</span>
+                        <span class="kt-chip-num">@theme.Bills</span>
+                    </a>
+                }
+            </div>
+            <a class="kt-ctx-more" href="bills">@L["Ctx_AllThemes"]</a>
+        }
+    </section>
+
+    @* --- 3. О чём спорят за неделю --- *@
+    <section class="kt-ctx-card kt-ctx-hide-mobile">
+        <h3 class="kt-ctx-title">@L["Ctx_WeekDebate"]</h3>
+
+        @if (_debated.Count == 0)
+        {
+            <p class="kt-ctx-empty">@L["Ctx_DebateEmpty"]</p>
+        }
+        else
+        {
+            <ul class="kt-ctx-list kt-ctx-list-num">
+                @foreach (var item in _debated)
+                {
+                    <li>
+                        <a href="/bills/@item.Id" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+                        <span class="kt-num">@item.Comments</span>
+                    </li>
+                }
+            </ul>
+            <p class="kt-ctx-note">@L["Ctx_DebateNote"]</p>
+        }
+    </section>
+
+</aside>
+
+@code {
+    /// <summary>
+    /// Законы из подписок пользователя. Пусто или null — показываем срочное
+    /// по всей базе: пустой блок бесполезнее неточного.
+    /// </summary>
+    [Parameter] public IReadOnlyCollection<int>? RelevantBillIds { get; set; }
+
+    private sealed record ClosingItem(int Id, string Title, bool IsHebrew, string? StatusDesc, int Days);
+    private sealed record ThemeItem(string Word, int Bills);
+    private sealed record DebatedItem(int Id, string Title, bool IsHebrew, int Comments);
+
+    private const int BlockSize = 3;
+    private const int ThemeCount = 5;
+    private const int DebateWindowDays = 7;
+
+    private List<ClosingItem> _closing = [];
+    private List<ThemeItem> _themes = [];
+    private List<DebatedItem> _debated = [];
+
+    /// <summary>
+    /// По какому набору подписок столбец уже посчитан. Нужен потому, что
+    /// параметры переустанавливаются при любой перерисовке страницы — в том числе
+    /// при переключении табов ленты, — а три запроса на каждое нажатие таба
+    /// столбцу не нужны: от таба он не зависит.
+    /// </summary>
+    private string? _loadedFor;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var key = RelevantBillIds is null ? "" : string.Join(",", RelevantBillIds.Order());
+        if (_loadedFor == key) return;
+        _loadedFor = key;
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        await LoadClosingAsync(db);
+        await LoadThemesAsync(db);
+        await LoadDebatedAsync(db);
+    }
+
+    private async Task LoadClosingAsync(AppDbContext db)
+    {
+        var query = db.Bills.AsNoTracking();
+
+        if (RelevantBillIds is { Count: > 0 })
+        {
+            var ids = RelevantBillIds.ToList();
+            query = query.Where(b => ids.Contains(b.Id));
+        }
+
+        // Открытость окна считает InfluenceWindowBadge по ключевым словам ивритского
+        // статуса, и это C#-логика — в SQL её не перевести. Но отбирать «самые
+        // залежавшиеся» без предфильтра нельзя: наверху окажутся древние мёртвые
+        // законы, и до открытых дело не дойдёт. Поэтому в SQL сужаем до статусов
+        // со словами стадий, где окно вообще может быть открыто, — это надмножество
+        // правила Classify, — а точное решение принимаем в памяти.
+        var stageWords = new[] { "%ועדה%", "%הכנה%", "%מליאה%", "%הונחה%", "%שולחן%" };
+        query = query.Where(b => b.StatusDesc != null && stageWords.Any(w =>
+            EF.Functions.ILike(b.StatusDesc!, w)));
+
+        // Срока до конца стадии в данных нет — есть только момент, с которого закон
+        // в ней находится. У давно лежащих в комиссии StatusChangedAt пустой:
+        // смену стадии мы ни разу не наблюдали. Тогда отсчитываем от первой встречи
+        // с законом — он уже был в этой стадии, значит оценка снизу, а не выдумка.
+        // Порядок — от самых свежих. Сортировка «кто дольше лежит» кажется
+        // логичной для срочности, но поднимает наверх заброшенные законы:
+        // в базе есть висящие в стадии по 1385 дней, и делать с ними сегодня
+        // нечего. Свежий вход в открытую стадию — единственный сигнал
+        // актуальности, который данные дают без сроков.
+        var candidates = await query
+            .OrderByDescending(b => b.StatusChangedAt ?? b.FirstSeenAt)
+            .Take(BlockSize * 20)
+            .Select(b => new
+            {
+                b.Id,
+                b.Name,
+                b.NameRu,
+                b.StatusDesc,
+                Since = b.StatusChangedAt ?? b.FirstSeenAt
+            })
+            .ToListAsync();
+
+        _closing = candidates
+            .Where(b => InfluenceWindowBadge.IsOpen(b.StatusDesc))
+            .Take(BlockSize)
+            .Select(b => new ClosingItem(
+                b.Id,
+                b.NameRu ?? b.Name,
+                b.NameRu == null,
+                b.StatusDesc,
+                Math.Max(0, (int)(DateTime.UtcNow - b.Since).TotalDays)))
+            .ToList();
+    }
+
+    private async Task LoadThemesAsync(AppDbContext db)
+    {
+        // Предметных тем в модели нет, есть подписки на слова. Берём самые
+        // популярные среди всех пользователей: это единственный имеющийся
+        // сигнал о том, что людям интересно.
+        var words = await db.NotificationSubscriptions.AsNoTracking()
+            .Where(s => s.Kind == SubscriptionKind.Keyword && s.Keyword != null)
+            .GroupBy(s => s.Keyword!)
+            .Select(g => new { Word = g.Key, Subscribers = g.Count() })
+            .OrderByDescending(x => x.Subscribers)
+            .Take(ThemeCount)
+            .ToListAsync();
+
+        var themes = new List<ThemeItem>();
+        foreach (var w in words)
+        {
+            var pattern = $"%{w.Word.Trim()}%";
+            var count = await db.Bills.AsNoTracking()
+                .CountAsync(b => EF.Functions.ILike(b.Name, pattern)
+                              || (b.NameRu != null && EF.Functions.ILike(b.NameRu, pattern)));
+            themes.Add(new ThemeItem(w.Word, count));
+        }
+
+        _themes = themes;
+    }
+
+    private async Task LoadDebatedAsync(AppDbContext db)
+    {
+        var since = DateTime.UtcNow.AddDays(-DebateWindowDays);
+
+        // Сортировка только по количеству, без учёта тональности: любая попытка
+        // учесть «за» и «против» сделала бы этот блок редакционной позицией.
+        var top = await db.Comments.AsNoTracking()
+            .Where(c => c.BillId != null && c.CreatedAt >= since)
+            .GroupBy(c => c.BillId!.Value)
+            .Select(g => new { BillId = g.Key, Comments = g.Count() })
+            .OrderByDescending(x => x.Comments)
+            .Take(BlockSize)
+            .ToListAsync();
+
+        if (top.Count == 0)
+        {
+            _debated = [];
+            return;
+        }
+
+        var ids = top.Select(t => t.BillId).ToList();
+        var names = await db.Bills.AsNoTracking()
+            .Where(b => ids.Contains(b.Id))
+            .Select(b => new { b.Id, b.Name, b.NameRu })
+            .ToListAsync();
+
+        _debated = top
+            .Join(names, t => t.BillId, n => n.Id, (t, n) => new DebatedItem(
+                n.Id, n.NameRu ?? n.Name, n.NameRu == null, t.Comments))
+            .ToList();
+    }
+}
