@@ -9,23 +9,24 @@
 @inject IEmailSender<AppUser> EmailSender
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Register confirmation</PageTitle>
+<PageTitle>@L["Auth_RegisterConfirmTitle"]</PageTitle>
 
-<h1>Register confirmation</h1>
+<h1>@L["Auth_RegisterConfirmTitle"]</h1>
 
 <StatusMessage Message="@statusMessage" />
 
 @if (emailConfirmationLink is not null)
 {
     <p>
-        This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
-        Normally this would be emailed: <a href="@emailConfirmationLink">Click here to confirm your account</a>
+        @L["Auth_NoEmailSenderNote"]
+        <a href="@emailConfirmationLink">@L["Auth_ConfirmLink"]</a>
     </p>
 }
 else
 {
-    <p role="alert">Please check your email to confirm your account.</p>
+    <p role="alert">@L["Auth_CheckEmailConfirm"]</p>
 }
 
 @code {
@@ -53,7 +54,7 @@ else
         if (user is null)
         {
             HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            statusMessage = "Error finding user for unspecified email";
+            statusMessage = L["Auth_UserNotFound"];
         }
         else if (EmailSender is IdentityNoOpEmailSender)
         {

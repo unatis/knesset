@@ -1,8 +1,9 @@
-﻿@page "/Account/Lockout"
+@page "/Account/Lockout"
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Locked out</PageTitle>
+<PageTitle>@L["Auth_LockedTitle"]</PageTitle>
 
 <header>
-    <h1 class="text-danger">Locked out</h1>
-    <p class="text-danger" role="alert">This account has been locked out, please try again later.</p>
+    <h1 class="text-danger">@L["Auth_LockedTitle"]</h1>
+    <p class="text-danger" role="alert">@L["Auth_LockedText"]</p>
 </header>
