@@ -8,10 +8,11 @@
 @inject UserManager<AppUser> UserManager
 @inject SignInManager<AppUser> SignInManager
 @inject IdentityRedirectManager RedirectManager
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Confirm email change</PageTitle>
+<PageTitle>@L["Cnf_EmailChangeTitle"]</PageTitle>
 
-<h1>Confirm email change</h1>
+<h1>@L["Cnf_EmailChangeTitle"]</h1>
 
 <StatusMessage Message="@message" />
 
@@ -42,7 +43,7 @@
         var user = await UserManager.FindByIdAsync(UserId);
         if (user is null)
         {
-            message = "Unable to find user with Id '{userId}'";
+            message = StatusMessage.Error(L["Auth_InvalidUserNote"]);
             return;
         }
 
@@ -50,7 +51,7 @@
         var result = await UserManager.ChangeEmailAsync(user, Email, code);
         if (!result.Succeeded)
         {
-            message = "Error changing email.";
+            message = StatusMessage.Error(L["Cnf_EmailChangeFail"]);
             return;
         }
 
@@ -59,11 +60,11 @@
         var setUserNameResult = await UserManager.SetUserNameAsync(user, Email);
         if (!setUserNameResult.Succeeded)
         {
-            message = "Error changing user name.";
+            message = StatusMessage.Error(L["Cnf_UserNameChangeFail"]);
             return;
         }
 
         await SignInManager.RefreshSignInAsync(user);
-        message = "Thank you for confirming your email change.";
+        message = L["Cnf_EmailChangeOk"];
     }
 }

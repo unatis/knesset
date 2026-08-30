@@ -69,6 +69,10 @@ builder.Services.AddIdentityCore<AppUser>(options =>
     })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddSignInManager()
+    // Свои тексты ошибок: базовый describer отвечает по-английски при любой
+    // культуре, а его сообщения видны в обычных местах — правила пароля,
+    // занятая почта, протухшая ссылка из письма.
+    .AddErrorDescriber<Kneset.Web.Validation.LocalizedIdentityErrorDescriber>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<AppUser>, IdentityNoOpEmailSender>();

@@ -7,15 +7,16 @@
 @inject SignInManager<AppUser> SignInManager
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<ResetAuthenticator> Logger
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Reset authenticator key</PageTitle>
+<PageTitle>@L["Mng_ResetAuthTitle"]</PageTitle>
 
 <StatusMessage />
-<h3>Reset authenticator key</h3>
+<h3>@L["Mng_ResetAuthTitle"]</h3>
 <div class="alert alert-warning" role="alert">
     <p>
         <span class="glyphicon glyphicon-warning-sign"></span>
-        <strong>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</strong>
+        <strong>@L["Mng_ResetAuthNote"]</strong>
     </p>
     <p>
         This process disables 2FA until you verify your authenticator app.
@@ -25,7 +26,7 @@
 <div>
     <form @formname="reset-authenticator" @onsubmit="OnSubmitAsync" method="post">
         <AntiforgeryToken />
-        <button class="btn btn-danger" type="submit">Reset authenticator key</button>
+        <button class="btn btn-danger" type="submit">@L["Mng_ResetAuthTitle"]</button>
     </form>
 </div>
 

@@ -56,8 +56,14 @@ public sealed class LocalizedEmailAddressAttribute : ValidationAttribute
 /// </summary>
 public sealed class LocalizedLengthAttribute(int maximumLength) : StringLengthAttribute(maximumLength)
 {
+    /// <summary>
+    /// Ключ ресурса с текстом ошибки. По умолчанию сообщение говорит про обе
+    /// границы; где нижней нет, поле подменяют своим ключом.
+    /// </summary>
+    public string MessageKey { get; init; } = "Val_Length";
+
     public override string FormatErrorMessage(string name) =>
-        string.Format(ValidationLocalizer.Get("Val_Length"), MinimumLength, MaximumLength);
+        string.Format(ValidationLocalizer.Get(MessageKey), MinimumLength, MaximumLength);
 }
 
 /// <summary>Совпадение с другим полем — здесь это подтверждение пароля.</summary>

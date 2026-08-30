@@ -51,5 +51,11 @@ internal sealed class IdentityRedirectManager(NavigationManager navigationManage
         => RedirectToWithStatus(CurrentPath, message, context);
 
     public void RedirectToInvalidUser(UserManager<AppUser> userManager, HttpContext context)
-        => RedirectToWithStatus("Account/InvalidUser", $"Error: Unable to load user with ID '{userManager.GetUserId(context.User)}'.", context);
+        // Идентификатор пользователя в сообщении не нужен: посетителю он
+        // ничего не говорит, а на экран попадал как есть. Текст — из ресурсов,
+        // метка неудачи — чтобы плашка была красной на любом языке.
+        => RedirectToWithStatus(
+            "Account/InvalidUser",
+            Shared.StatusMessage.Error(Validation.ValidationLocalizer.Get("Auth_InvalidUserNote")),
+            context);
 }

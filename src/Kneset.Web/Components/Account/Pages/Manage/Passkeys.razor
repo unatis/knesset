@@ -9,10 +9,11 @@
 @inject UserManager<AppUser> UserManager
 @inject SignInManager<AppUser> SignInManager
 @inject IdentityRedirectManager RedirectManager
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Manage your passkeys</PageTitle>
+<PageTitle>@L["Mng_PasskeysTitle"]</PageTitle>
 
-<h3>Manage your passkeys</h3>
+<h3>@L["Mng_PasskeysTitle"]</h3>
 
 <StatusMessage />
 
@@ -23,7 +24,7 @@
             @foreach (var passkey in currentPasskeys)
             {
                 <tr>
-                    <td>@(passkey.Name ?? "Unnamed passkey")</td>
+                    <td>@(passkey.Name ?? L["Mng_UnnamedPasskey"])</td>
                     <td>
                         @{
                             var credentialId = Base64Url.EncodeToString(passkey.CredentialId);
@@ -32,8 +33,8 @@
                             <AntiforgeryToken />
                             <div>
                                 <input type="hidden" name="CredentialId" value="@credentialId" />
-                                <button type="submit" name="Action" value="rename" class="btn btn-primary" title="Rename this passkey">Rename</button>
-                                <button type="submit" name="Action" value="delete" class="btn btn-danger" title="Remove this passkey from your account">Delete</button>
+                                <button type="submit" name="Action" value="rename" class="btn btn-primary" title="@L["Mng_RenamePasskey"]">@L["Mng_Rename"]</button>
+                                <button type="submit" name="Action" value="delete" class="btn btn-danger" title="@L["Mng_RemovePasskey"]">@L["Mng_Delete"]</button>
                             </div>
                         </form>
                     </td>
@@ -44,18 +45,18 @@
 }
 else
 {
-    <p>No passkeys are registered.</p>
+    <p>@L["Mng_NoPasskeys"]</p>
 }
 
 <form @formname="add-passkey" @onsubmit="AddPasskey" method="post">
     <AntiforgeryToken />
     @if (currentPasskeys is { Count: >= MaxPasskeyCount })
     {
-        <p class="text-danger">You have reached the maximum number of allowed passkeys. Please delete one before adding a new one.</p>
+        <p class="text-danger">@L["Mng_PasskeyLimit"]</p>
     }
     else
     {
-        <PasskeySubmit Operation="PasskeyOperation.Create" Name="Input" class="btn btn-primary">Add a new passkey</PasskeySubmit>
+        <PasskeySubmit Operation="PasskeyOperation.Create" Name="Input" class="btn btn-primary">@L["Mng_AddPasskey"]</PasskeySubmit>
     }
 
 </form>
@@ -101,7 +102,7 @@ else
 
         if (!string.IsNullOrEmpty(Input.Error))
         {
-            RedirectManager.RedirectToCurrentPageWithStatus($"Error: {Input.Error}", HttpContext);
+            RedirectManager.RedirectToCurrentPageWithStatus(StatusMessage.Error(Input.Error), HttpContext);
             return;
         }
 

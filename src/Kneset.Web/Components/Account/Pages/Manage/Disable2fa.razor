@@ -6,26 +6,25 @@
 @inject UserManager<AppUser> UserManager
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<Disable2fa> Logger
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Disable two-factor authentication (2FA)</PageTitle>
+<PageTitle>@L["Mng_Disable2faTitle"]</PageTitle>
 
 <StatusMessage />
-<h3>Disable two-factor authentication (2FA)</h3>
+<h3>@L["Mng_Disable2faTitle"]</h3>
 
 <div class="alert alert-warning" role="alert">
     <p>
-        <strong>This action only disables 2FA.</strong>
+        <strong>@L["Mng_Disable2faNote"]</strong>
     </p>
-    <p>
-        Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key
-        used in an authenticator app you should <a href="Account/Manage/ResetAuthenticator">reset your authenticator keys.</a>
-    </p>
+    <p>@L["Mng_ResetKeysNote"]</p>
+    <p><a href="Account/Manage/ResetAuthenticator">@L["Mng_ResetAuthApp"]</a></p>
 </div>
 
 <div>
     <form @formname="disable-2fa" @onsubmit="OnSubmitAsync" method="post">
         <AntiforgeryToken />
-        <button class="btn btn-danger" type="submit">Disable 2FA</button>
+        <button class="btn btn-danger" type="submit">@L["Mng_Disable2fa"]</button>
     </form>
 </div>
 
@@ -44,9 +43,12 @@
             return;
         }
 
+        // Отключать нечего — просто возвращаем на страницу двухфакторной.
+        // В скаффолде здесь летело исключение, то есть страница 500 всякому,
+        // кто зашёл по прямой ссылке или успел выключить 2FA в другой вкладке.
         if (HttpMethods.IsGet(HttpContext.Request.Method) && !await UserManager.GetTwoFactorEnabledAsync(user))
         {
-            throw new InvalidOperationException("Cannot disable 2FA for user as it's not currently enabled.");
+            RedirectManager.RedirectTo("Account/Manage/TwoFactorAuthentication");
         }
     }
 
@@ -68,7 +70,7 @@
         Logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", userId);
         RedirectManager.RedirectToWithStatus(
             "Account/Manage/TwoFactorAuthentication",
-            "2fa has been disabled. You can reenable 2fa when you setup an authenticator app",
+            L["Mng_Msg2faDisabled"],
             HttpContext);
     }
 }
