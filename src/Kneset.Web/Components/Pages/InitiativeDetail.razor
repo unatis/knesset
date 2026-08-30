@@ -1,8 +1,10 @@
 ﻿@page "/initiatives/{Id:int}"
 @rendermode InteractiveServer
+@using Kneset.Web.Services
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject NavigationManager Navigation
 @inject IStringLocalizer<SharedResource> L
+@inject InitiativeSigningService Signing
 
 <PageTitle>@(_initiative?.Title ?? L["Nav_Initiatives"].Value)</PageTitle>
 
@@ -207,30 +209,10 @@ else
         if (_userId is null || _initiative is null) return;
         _busy = true;
 
-        await using var db = await DbFactory.CreateDbContextAsync();
-        try
-        {
-            db.InitiativeSignatures.Add(new InitiativeSignature
-            {
-                InitiativeId = Id,
-                UserId = _userId,
-                SignedAt = DateTime.UtcNow
-            });
-            await db.SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            // Уникальный индекс: уже подписал (гонка двойного клика) — игнорируем.
-        }
-
-        // Порог достигнут — фиксируем статус.
-        var count = await db.InitiativeSignatures.CountAsync(s => s.InitiativeId == Id);
-        if (count >= _initiative.SignatureThreshold)
-        {
-            await db.CitizenInitiatives
-                .Where(i => i.Id == Id && i.Status == InitiativeStatus.Published)
-                .ExecuteUpdateAsync(s => s.SetProperty(i => i.Status, InitiativeStatus.ThresholdReached));
-        }
+        // Логика подписи живёт в сервисе: подписывать можно и отсюда,
+        // и из карточки в ленте, а переход через порог меняет статус
+        // инициативы — две копии такого расходиться не должны.
+        await Signing.SignAsync(Id, _userId);
 
         _busy = false;
         await ReloadAsync();

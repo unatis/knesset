@@ -392,4 +392,7 @@
   <data name="Bill_StagesTruncated" xml:space="preserve"><value>تُعرض الجلسات الأولى — لهذا المشروع المزيد.</value></data>
   <data name="Bill_StagesGap" xml:space="preserve"><value>…{0} بينهما</value></data>
   <data name="Bill_SittingForms" xml:space="preserve"><value>جلسة|جلسات</value></data>
+  <data name="Ctx_Initiatives" xml:space="preserve"><value>مطلوب توقيعات</value></data>
+  <data name="Ctx_SignaturesLeft" xml:space="preserve"><value>ينقص {0}</value></data>
+  <data name="Ctx_AllInitiatives" xml:space="preserve"><value>كل المبادرات</value></data>
 </root>

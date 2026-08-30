@@ -6,6 +6,7 @@
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
 @inject SubscriptionRelevanceService Relevance
+@inject InitiativeSigningService Signing
 
 <PageTitle>@L["Brand"]</PageTitle>
 
@@ -137,6 +138,34 @@
                         <div class="feed-meta kt-num">
                             @item.Signatures @L["Init_SigCount"] · @L["Init_Threshold"] @item.Threshold
                         </div>
+
+                        @* Подписать можно прямо отсюда. Инициатива живёт подписями,
+                           и требовать ради одной подписи открытия отдельной страницы
+                           значит терять тех, кто просто листал ленту. *@
+                        @if (item.InitiativeId is int initiativeId)
+                        {
+                            <div class="feed-meta">
+                                @if (_userId is null)
+                                {
+                                    <a class="btn btn-sm btn-outline-primary"
+                                       href="Account/Login?returnUrl=/initiatives/@initiativeId">
+                                        @L["Init_LoginToSign"]
+                                    </a>
+                                }
+                                else if (_signed.Contains(initiativeId))
+                                {
+                                    <span class="kt-eyebrow">@L["Init_Signed"]</span>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-sm btn-outline-primary"
+                                            disabled="@_signing"
+                                            @onclick="() => SignAsync(initiativeId)">
+                                        @L["Init_Sign"]
+                                    </button>
+                                }
+                            </div>
+                        }
                     }
                     else if (item.Subtitle is not null)
                     {
@@ -179,7 +208,13 @@
         /// но закон у события есть, и по нему считаются повод подписки и склейка
         /// событий одного закона.
         /// </summary>
-        int? SourceBillId = null);
+        int? SourceBillId = null,
+        /// <summary>
+        /// Инициатива, к которой относится карточка. По ней рисуется кнопка
+        /// подписи прямо в ленте: ради подписи не должно требоваться
+        /// открывать отдельную страницу.
+        /// </summary>
+        int? InitiativeId = null);
 
     private sealed record Counts(int Support, int Oppose, int Undecided)
     {
@@ -188,6 +223,12 @@
 
     private const int FeedSize = 30;
 
+    /// <summary>
+    /// Сколько мест в ленте отведено гражданским инициативам. Небольшая доля:
+    /// лента остаётся про Кнессет, но созданное людьми из неё не исчезает.
+    /// </summary>
+    private const int InitiativeSlots = 4;
+
     private List<FeedItem> _feed = [];
     private Dictionary<int, Counts> _reactions = [];
     private bool _loading = true;
@@ -195,6 +236,10 @@
     private string? _userId;
     private Tab _tab = Tab.Mine;
     private SubscriptionSummary? _summary;
+
+    /// <summary>Инициативы, которые этот пользователь уже подписал.</summary>
+    private HashSet<int> _signed = [];
+    private bool _signing;
     private Dictionary<int, SubscriptionReason> _relevance = [];
     private List<int>? _relevantIds;
 
@@ -283,20 +328,22 @@
             .ToListAsync());
 
         // 3. Гражданские инициативы — единственные события, созданные людьми.
-        //    К подпискам они не привязаны, поэтому в «Моём» их нет.
-        if (ids is null)
-        {
-            items.AddRange(await db.CitizenInitiatives.AsNoTracking()
-                .Where(i => i.Status != InitiativeStatus.Draft && i.PublishedAt != null)
-                .OrderByDescending(i => i.PublishedAt)
-                .Take(FeedSize)
-                .Select(i => new FeedItem(
-                    i.PublishedAt!.Value, "feed-kind-initiative", "Feed_NewInitiative",
-                    i.Title, $"/initiatives/{i.Id}", false,
-                    null, null, null,
-                    i.Signatures.Count, i.SignatureThreshold))
-                .ToListAsync());
-        }
+        //    Показываем их и в «Моём»: к подпискам они не привязаны, но это
+        //    не повод прятать. Подписки отвечают на вопрос «за чем я слежу»,
+        //    а инициативу нужно увидеть всем, иначе подписей ей не собрать.
+        var initiatives = await db.CitizenInitiatives.AsNoTracking()
+            .Where(i => i.Status != InitiativeStatus.Draft && i.PublishedAt != null)
+            .OrderByDescending(i => i.PublishedAt)
+            .Take(InitiativeSlots)
+            .Select(i => new FeedItem(
+                i.PublishedAt!.Value, "feed-kind-initiative", "Feed_NewInitiative",
+                i.Title, $"/initiatives/{i.Id}", false,
+                null, null, null,
+                i.Signatures.Count, i.SignatureThreshold, null, null, null,
+                i.Id))
+            .ToListAsync();
+
+        items.AddRange(initiatives);
 
         // 4. Обсуждение: показываем, где сейчас спорят.
         var comments = db.Comments.AsNoTracking();
@@ -324,14 +371,26 @@
         // ничего и читается как дубль. Во «Всём» такие пары почти не встречались
         // рядом — выборки берутся из тысяч записей; в «Моём», где пул сужен
         // до подписок, они сталкиваются сразу. Оставляем самое свежее событие.
-        var feed = items
+        var merged = items
             .OrderByDescending(i => i.At)
             .GroupBy(i => i.SourceBillId)
             // Ключ null — это инициативы: у них нет закона, и склеивать их
             // друг с другом нельзя, это разные сущности.
             .SelectMany(g => g.Key is null ? g : g.Take(1))
             .OrderByDescending(i => i.At)
-            .Take(FeedSize)
+            .ToList();
+
+        // Места под инициативы бронируются, а не разыгрываются по времени.
+        // Кнессет приезжает пачками: один прогон синхронизации даёт три десятка
+        // смен стадии с одинаковой отметкой времени и вытесняет из ленты всё
+        // остальное. Проверено на живой базе — все тридцать карточек оказывались
+        // одного вида. Инициатив на три порядка меньше, и по свежести они
+        // проигрывают всегда, поэтому им отводится фиксированная доля.
+        var reserved = merged.Where(i => i.InitiativeId is not null).Take(InitiativeSlots).ToList();
+        var rest = merged.Where(i => i.InitiativeId is null).Take(FeedSize - reserved.Count);
+
+        var feed = reserved.Concat(rest)
+            .OrderByDescending(i => i.At)
             .ToList();
 
         // Повод подписки дописывается только в «Моём»: во «Всём» он был бы ложью —
@@ -339,6 +398,16 @@
         _feed = mine
             ? feed.Select(i => i with { Because = BecauseOf(i.SourceBillId) }).ToList()
             : feed;
+
+        // Что из попавших в ленту инициатив человек уже подписал.
+        if (_userId is not null)
+        {
+            var initiativeIds = _feed
+                .Where(i => i.InitiativeId is not null)
+                .Select(i => i.InitiativeId!.Value)
+                .ToList();
+            _signed = await Signing.GetSignedAsync(initiativeIds, _userId);
+        }
 
         // Счётчики реакций одним запросом только по попавшим в ленту законам.
         var billIds = _feed.Where(i => i.BillId != null).Select(i => i.BillId!.Value).Distinct().ToList();
@@ -356,6 +425,20 @@
                     g.FirstOrDefault(x => x.Kind == ReactionKind.Oppose)?.Count ?? 0,
                     g.FirstOrDefault(x => x.Kind == ReactionKind.Undecided)?.Count ?? 0));
         }
+    }
+
+    private async Task SignAsync(int initiativeId)
+    {
+        if (_userId is null || _signing) return;
+
+        _signing = true;
+        await Signing.SignAsync(initiativeId, _userId);
+        _signed.Add(initiativeId);
+        _signing = false;
+
+        // Перечитываем ленту: у подписанной инициативы изменился счётчик,
+        // а при переходе порога — ещё и статус.
+        await LoadFeedAsync();
     }
 
     /// <summary>«Почему это здесь» — тема, депутат или сам закон.</summary>

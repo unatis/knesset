@@ -3,9 +3,11 @@
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
 
-@* Правый столбец главной (макет 2a). Три блока в порядке ценности: сначала
-   срочное, потом вход по темам, потом спорное. Первый блок — единственный,
-   отвечающий на вопрос «что мне делать сегодня», поэтому он акцентный.
+@* Правый столбец главной (макет 2a). Блоки идут по убыванию ценности:
+   срочное, вход по темам, инициативы, ждущие подписей, и спорное за неделю.
+   Первый — единственный, отвечающий на вопрос «что мне делать сегодня»,
+   поэтому он акцентный. Инициативы стоят выше спорного: там действие человека
+   меняет исход напрямую, а не выражает мнение.
 
    Запросы живут здесь, а не на странице: столбец самостоятелен и его можно
    поставить на другой экран. Снаружи приходит только список законов, попавших
@@ -71,7 +73,30 @@
         }
     </section>
 
-    @* --- 3. О чём спорят за неделю --- *@
+    @* --- 3. Инициативам нужны подписи. Стоит выше спорного: это
+           единственный блок, где действие человека что-то меняет
+           напрямую, а не выражает мнение. --- *@
+    @if (_initiatives.Count > 0)
+    {
+        <section class="kt-ctx-card kt-ctx-hide-mobile">
+            <h3 class="kt-ctx-title">@L["Ctx_Initiatives"]</h3>
+
+            <ul class="kt-ctx-list">
+                @foreach (var item in _initiatives)
+                {
+                    <li>
+                        <a href="/initiatives/@item.Id">@item.Title</a>
+                        <span class="kt-num">
+                            @string.Format(L["Ctx_SignaturesLeft"], item.Left)
+                        </span>
+                    </li>
+                }
+            </ul>
+            <a class="kt-ctx-more" href="initiatives">@L["Ctx_AllInitiatives"]</a>
+        </section>
+    }
+
+    @* --- 4. О чём спорят за неделю --- *@
     <section class="kt-ctx-card kt-ctx-hide-mobile">
         <h3 class="kt-ctx-title">@L["Ctx_WeekDebate"]</h3>
 
@@ -115,6 +140,9 @@
     private sealed record ThemeItem(string Word, int Bills);
     private sealed record DebatedItem(int Id, string Title, bool IsHebrew, int Comments);
 
+    /// <summary>Left — сколько подписей не хватает до порога.</summary>
+    private sealed record InitiativeItem(int Id, string Title, int Left);
+
     private const int BlockSize = 3;
     private const int ThemeCount = 5;
     private const int DebateWindowDays = 7;
@@ -129,6 +157,7 @@
     private List<ClosingItem> _closing = [];
     private List<ThemeItem> _themes = [];
     private List<DebatedItem> _debated = [];
+    private List<InitiativeItem> _initiatives = [];
 
     /// <summary>
     /// По какому набору подписок столбец уже посчитан. Нужен потому, что
@@ -148,6 +177,7 @@
 
         await LoadClosingAsync(db);
         await LoadThemesAsync(db);
+        await LoadInitiativesAsync(db);
         await LoadDebatedAsync(db);
     }
 
@@ -313,6 +343,29 @@
         }
 
         _themes = themes;
+    }
+
+    /// <summary>
+    /// Инициативы, которым ближе всего до порога. Сортировка по остатку,
+    /// а не по свежести: смысл блока — показать, где несколько подписей
+    /// решают дело, а не перечислить последнее опубликованное.
+    /// </summary>
+    private async Task LoadInitiativesAsync(AppDbContext db)
+    {
+        var rows = await db.CitizenInitiatives.AsNoTracking()
+            .Where(i => i.Status == InitiativeStatus.Published && i.PublishedAt != null)
+            .Select(i => new
+            {
+                i.Id,
+                i.Title,
+                Left = i.SignatureThreshold - i.Signatures.Count
+            })
+            .Where(x => x.Left > 0)
+            .OrderBy(x => x.Left)
+            .Take(BlockSize)
+            .ToListAsync();
+
+        _initiatives = rows.Select(x => new InitiativeItem(x.Id, x.Title, x.Left)).ToList();
     }
 
     private async Task LoadDebatedAsync(AppDbContext db)

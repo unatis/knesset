@@ -110,6 +110,8 @@ builder.Services.AddSingleton<NotificationTextBuilder>();
 builder.Services.AddSingleton<NotificationDispatchService>();
 // Личная лента и столбец контекста на главной: связь подписок с законопроектами.
 builder.Services.AddSingleton<SubscriptionRelevanceService>();
+// Подпись под инициативой: нужна и странице инициативы, и карточке в ленте.
+builder.Services.AddSingleton<InitiativeSigningService>();
 
 if (builder.Configuration.GetValue("Sync:Enabled", true))
 {

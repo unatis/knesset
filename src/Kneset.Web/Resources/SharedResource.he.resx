@@ -392,4 +392,7 @@
   <data name="Bill_StagesTruncated" xml:space="preserve"><value>מוצגות הישיבות הראשונות — להצעה הזאת יש עוד.</value></data>
   <data name="Bill_StagesGap" xml:space="preserve"><value>…עוד {0} בין לבין</value></data>
   <data name="Bill_SittingForms" xml:space="preserve"><value>ישיבה|ישיבות</value></data>
+  <data name="Ctx_Initiatives" xml:space="preserve"><value>דרושות חתימות</value></data>
+  <data name="Ctx_SignaturesLeft" xml:space="preserve"><value>חסרות {0}</value></data>
+  <data name="Ctx_AllInitiatives" xml:space="preserve"><value>כל היוזמות</value></data>
 </root>
