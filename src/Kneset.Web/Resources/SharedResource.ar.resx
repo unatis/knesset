@@ -245,7 +245,7 @@
   <data name="Feed_StatusChanged" xml:space="preserve"><value>تغيّرت المرحلة</value></data>
   <data name="Feed_NewInitiative" xml:space="preserve"><value>مبادرة مدنية</value></data>
   <data name="Feed_NewComment" xml:space="preserve"><value>جديد في النقاش</value></data>
-  <data name="Feed_ShowMore" xml:space="preserve"><value>كل مشاريع القوانين</value></data>
+  <data name="Feed_ShowMore" xml:space="preserve"><value>عرض المزيد</value></data>
   <data name="Search_Placeholder" xml:space="preserve"><value>ابحث في مشاريع القوانين</value></data>
   <data name="Time_JustNow" xml:space="preserve"><value>الآن</value></data>
   <data name="Time_Minutes" xml:space="preserve"><value>قبل {0} د</value></data>
@@ -400,4 +400,6 @@
   <data name="Bills_AllMembers" xml:space="preserve"><value>كل الأعضاء</value></data>
   <data name="Bills_AuthorOnly" xml:space="preserve"><value>ما قدّمه فقط، دون التوقيعات</value></data>
   <data name="Member_ShowInList" xml:space="preserve"><value>عرض في القائمة الكاملة</value></data>
+  <data name="Feed_Loading" xml:space="preserve"><value>جارٍ التحميل…</value></data>
+  <data name="Feed_AllBills" xml:space="preserve"><value>كل مشاريع القوانين</value></data>
 </root>

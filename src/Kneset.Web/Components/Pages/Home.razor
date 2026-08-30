@@ -175,7 +175,19 @@
             }
             </div>
 
-            <a class="btn btn-outline-secondary w-100 mt-3" href="bills">@L["Feed_ShowMore"]</a>
+            @* Дописывает события в ту же ленту, а не уводит на другую страницу
+               с другой вёрсткой. Курсор по времени, а не Skip: лента склеена
+               из четырёх выборок с дедупликацией, и смещение по ней давало бы
+               и пропуски, и повторы. *@
+            @if (_hasMore)
+            {
+                <button class="btn btn-outline-secondary w-100 mt-3"
+                        disabled="@_loadingMore" @onclick="LoadMoreAsync">
+                    @(_loadingMore ? L["Feed_Loading"] : L["Feed_ShowMore"])
+                </button>
+            }
+
+            <a class="btn btn-link w-100 mt-2" href="bills">@L["Feed_AllBills"]</a>
         }
     </div>
 
@@ -244,6 +256,15 @@
     /// <summary>Растёт после действий, после которых столбцу контекста
     /// нужно перечитать свои блоки.</summary>
     private int _ctxRefresh;
+
+    /// <summary>Что уже показано: подгрузка не должна повторять карточки.</summary>
+    private readonly HashSet<int> _shownBills = [];
+    private readonly HashSet<int> _shownInitiatives = [];
+
+    /// <summary>Время самого старого показанного события — курсор подгрузки.</summary>
+    private DateTime? _oldest;
+    private bool _hasMore = true;
+    private bool _loadingMore;
     private Dictionary<int, SubscriptionReason> _relevance = [];
     private List<int>? _relevantIds;
 
@@ -283,7 +304,41 @@
         _loading = false;
     }
 
+    /// <summary>
+    /// Первая страница ленты. Сбрасывает накопленное и запоминает, что уже
+    /// показано: подгрузка не должна повторять карточки.
+    /// </summary>
     private async Task LoadFeedAsync()
+    {
+        _shownBills.Clear();
+        _shownInitiatives.Clear();
+        _feed = [];
+        _oldest = null;
+        _hasMore = true;
+
+        var page = await FetchPageAsync(before: null);
+        _feed = page;
+        await LoadCardExtrasAsync();
+    }
+
+    /// <summary>
+    /// Следующая порция — события старше самого старого из показанных.
+    /// Именно курсор по времени, а не Skip: лента склеивается из четырёх
+    /// выборок с дедупликацией, и смещение по ней давало бы и пропуски,
+    /// и повторы.
+    /// </summary>
+    private async Task LoadMoreAsync()
+    {
+        if (_loadingMore || !_hasMore || _oldest is null) return;
+
+        _loadingMore = true;
+        var page = await FetchPageAsync(before: _oldest);
+        _feed = _feed.Concat(page).ToList();
+        await LoadCardExtrasAsync();
+        _loadingMore = false;
+    }
+
+    private async Task<List<FeedItem>> FetchPageAsync(DateTime? before)
     {
         // «Моё» — те же четыре выборки, но суженные до законов из подписок.
         // Отдельного набора запросов нет намеренно: две ленты, расходящиеся
@@ -293,9 +348,8 @@
 
         if (_tab == Tab.Mine && !mine)
         {
-            _feed = [];
-            _reactions = [];
-            return;
+            _hasMore = false;
+            return [];
         }
 
         await using var db = await DbFactory.CreateDbContextAsync();
@@ -304,6 +358,7 @@
         // 1. Новые законопроекты.
         var newBills = db.Bills.AsNoTracking().Where(b => b.FirstSeenAt > DateTime.UnixEpoch);
         if (ids is not null) newBills = newBills.Where(b => ids.Contains(b.Id));
+        if (before is { } b1) newBills = newBills.Where(b => b.FirstSeenAt < b1);
 
         items.AddRange(await newBills
             .OrderByDescending(b => b.FirstSeenAt)
@@ -319,6 +374,7 @@
         // 2. Смена стадии — главное событие для «окна влияния».
         var changed = db.Bills.AsNoTracking().Where(b => b.StatusChangedAt != null);
         if (ids is not null) changed = changed.Where(b => ids.Contains(b.Id));
+        if (before is { } b2) changed = changed.Where(b => b.StatusChangedAt < b2);
 
         items.AddRange(await changed
             .OrderByDescending(b => b.StatusChangedAt)
@@ -335,8 +391,11 @@
         //    Показываем их и в «Моём»: к подпискам они не привязаны, но это
         //    не повод прятать. Подписки отвечают на вопрос «за чем я слежу»,
         //    а инициативу нужно увидеть всем, иначе подписей ей не собрать.
-        var initiatives = await db.CitizenInitiatives.AsNoTracking()
-            .Where(i => i.Status != InitiativeStatus.Draft && i.PublishedAt != null)
+        var initiatives = db.CitizenInitiatives.AsNoTracking()
+            .Where(i => i.Status != InitiativeStatus.Draft && i.PublishedAt != null);
+        if (before is { } b3) initiatives = initiatives.Where(i => i.PublishedAt < b3);
+
+        items.AddRange(await initiatives
             .OrderByDescending(i => i.PublishedAt)
             .Take(InitiativeSlots)
             .Select(i => new FeedItem(
@@ -345,13 +404,12 @@
                 null, null, null,
                 i.Signatures.Count, i.SignatureThreshold, null, null, null,
                 i.Id))
-            .ToListAsync();
-
-        items.AddRange(initiatives);
+            .ToListAsync());
 
         // 4. Обсуждение: показываем, где сейчас спорят.
         var comments = db.Comments.AsNoTracking();
         if (ids is not null) comments = comments.Where(c => c.BillId != null && ids.Contains(c.BillId.Value));
+        if (before is { } b4) comments = comments.Where(c => c.CreatedAt < b4);
 
         items.AddRange(await comments
             .OrderByDescending(c => c.CreatedAt)
@@ -377,6 +435,10 @@
         // до подписок, они сталкиваются сразу. Оставляем самое свежее событие.
         var merged = items
             .OrderByDescending(i => i.At)
+            // Уже показанное не повторяем: подгрузка идёт по времени, а один
+            // и тот же закон мог попасть на предыдущую страницу другим событием.
+            .Where(i => i.SourceBillId is not { } sb || !_shownBills.Contains(sb))
+            .Where(i => i.InitiativeId is not { } si || !_shownInitiatives.Contains(si))
             .GroupBy(i => i.SourceBillId)
             // Ключ null — это инициативы: у них нет закона, и склеивать их
             // друг с другом нельзя, это разные сущности.
@@ -393,15 +455,36 @@
         var reserved = merged.Where(i => i.InitiativeId is not null).Take(InitiativeSlots).ToList();
         var rest = merged.Where(i => i.InitiativeId is null).Take(FeedSize - reserved.Count);
 
-        var feed = reserved.Concat(rest)
+        var page = reserved.Concat(rest)
             .OrderByDescending(i => i.At)
             .ToList();
 
+        // Кнопка «Показать ещё» исчезает, когда порция пришла неполной:
+        // значит источники исчерпаны.
+        _hasMore = page.Count >= FeedSize;
+        if (page.Count > 0) _oldest = page[^1].At;
+
+        foreach (var item in page)
+        {
+            if (item.SourceBillId is { } sb) _shownBills.Add(sb);
+            if (item.InitiativeId is { } si) _shownInitiatives.Add(si);
+        }
+
         // Повод подписки дописывается только в «Моём»: во «Всём» он был бы ложью —
         // события там показываются независимо от того, подписан человек или нет.
-        _feed = mine
-            ? feed.Select(i => i with { Because = BecauseOf(i.SourceBillId) }).ToList()
-            : feed;
+        return mine
+            ? page.Select(i => i with { Because = BecauseOf(i.SourceBillId) }).ToList()
+            : page;
+    }
+
+    /// <summary>
+    /// Подписи и счётчики реакций для всех накопленных карточек. Считается
+    /// заново после каждой подгрузки: два словаря на всю ленту дешевле,
+    /// чем разбирать, что добавилось.
+    /// </summary>
+    private async Task LoadCardExtrasAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
 
         // Что из попавших в ленту инициатив человек уже подписал.
         if (_userId is not null)
