@@ -62,7 +62,12 @@ else
         </tbody>
     </table>
 
-    <h5 class="mt-4">@L["Nav_Bills"] (@_bills.Count)</h5>
+    <h5 class="mt-4">
+        @L["Nav_Bills"] (@_bills.Count)
+        @* Отсюда в общий список с уже выставленным фильтром: там есть поиск,
+           статусы и переключатель «только внесённые», которых на карточке нет. *@
+        <a class="kt-ctx-more ms-2" href="bills?personId=@Id">@L["Member_ShowInList"]</a>
+    </h5>
     @if (_bills.Count == 0)
     {
         <p class="text-muted">@L["Member_NoBills"]</p>

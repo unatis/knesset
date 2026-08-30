@@ -4,6 +4,7 @@
 @using Kneset.Infrastructure.Data
 @inject SignInManager<AppUser> SignInManager
 @inject IdentityRedirectManager RedirectManager
+@inject IStringLocalizer<SharedResource> L
 
 @* Провайдеров нет — не показываем ничего. В скаффолде здесь стоял абзац
    со ссылкой на документацию Microsoft о том, как их настроить: сообщение
@@ -22,7 +23,7 @@
             <p>
                 @foreach (var provider in externalLogins)
                 {
-                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="@string.Format(L["Mng_LoginUsing"], provider.DisplayName)">@provider.DisplayName</button>
                 }
             </p>
         </div>

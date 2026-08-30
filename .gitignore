@@ -9,3 +9,6 @@ artifacts/
 ## Локальные настройки инструментов
 .claude/settings.local.json
 
+
+# Снимки и слепки страниц от Playwright MCP
+.playwright-mcp/

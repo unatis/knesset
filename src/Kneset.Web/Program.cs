@@ -69,6 +69,10 @@ builder.Services.AddIdentityCore<AppUser>(options =>
     })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddSignInManager()
+    // Свои тексты ошибок: базовый describer отвечает по-английски при любой
+    // культуре, а его сообщения видны в обычных местах — правила пароля,
+    // занятая почта, протухшая ссылка из письма.
+    .AddErrorDescriber<Kneset.Web.Validation.LocalizedIdentityErrorDescriber>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<AppUser>, IdentityNoOpEmailSender>();
@@ -110,6 +114,8 @@ builder.Services.AddSingleton<NotificationTextBuilder>();
 builder.Services.AddSingleton<NotificationDispatchService>();
 // Личная лента и столбец контекста на главной: связь подписок с законопроектами.
 builder.Services.AddSingleton<SubscriptionRelevanceService>();
+// Подпись под инициативой: нужна и странице инициативы, и карточке в ленте.
+builder.Services.AddSingleton<InitiativeSigningService>();
 
 if (builder.Configuration.GetValue("Sync:Enabled", true))
 {

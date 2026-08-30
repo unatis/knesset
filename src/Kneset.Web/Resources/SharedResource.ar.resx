@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
 
-  <data name="Brand" xml:space="preserve"><value>🏛️ متتبع الكنيست</value></data>
+  <data name="Brand" xml:space="preserve"><value>متتبع الكنيست</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>الرئيسية</value></data>
   <data name="Nav_Bills" xml:space="preserve"><value>مشاريع القوانين</value></data>
   <data name="Nav_Members" xml:space="preserve"><value>أعضاء الكنيست</value></data>
@@ -53,13 +53,13 @@
   <data name="LoginToVote" xml:space="preserve"><value>سجّل الدخول للتصويت</value></data>
   <data name="Reaction_InitiativeNote" xml:space="preserve"><value>التفاعل لمحة عامة عن الآراء (بمن فيهم المعارضون)؛ التوقيع أدناه دعم رسمي نحو الحد المطلوب.</value></data>
 
-  <data name="Inf_Open" xml:space="preserve"><value>🟢 نافذة التأثير مفتوحة</value></data>
+  <data name="Inf_Open" xml:space="preserve"><value>نافذة التأثير مفتوحة</value></data>
   <data name="Inf_Open_Hint" xml:space="preserve"><value>مشروع القانون في اللجنة: الجلسات علنية وتُقبل المواقف المكتوبة والنص يتغيّر. أفضل وقت للتحرّك.</value></data>
-  <data name="Inf_Limited" xml:space="preserve"><value>🟡 تأثير محدود</value></data>
+  <data name="Inf_Limited" xml:space="preserve"><value>تأثير محدود</value></data>
   <data name="Inf_Limited_Hint" xml:space="preserve"><value>بانتظار القراءة في الهيئة العامة — التأثير فقط عبر أعضاء الكنيست: تحفّظات وتصويت.</value></data>
-  <data name="Inf_Late" xml:space="preserve"><value>🔴 فات الأوان</value></data>
+  <data name="Inf_Late" xml:space="preserve"><value>فات الأوان</value></data>
   <data name="Inf_Late_Hint" xml:space="preserve"><value>أُقرّ القانون. لا يمكن تغييره إلا بقانون معدِّل — مثلًا عبر مبادرة مدنية.</value></data>
-  <data name="Inf_Frozen" xml:space="preserve"><value>⚪ مجمّد</value></data>
+  <data name="Inf_Frozen" xml:space="preserve"><value>مجمّد</value></data>
   <data name="Inf_Frozen_Hint" xml:space="preserve"><value>العملية متوقفة — لا شيء للتأثير عليه، لكن يمكن متابعة استئنافها.</value></data>
 
   <data name="Com_Header" xml:space="preserve"><value>نقاش</value></data>
@@ -116,8 +116,8 @@
   <data name="Meta_Source" xml:space="preserve"><value>مصدر</value></data>
   <data name="Meta_Confidence" xml:space="preserve"><value>الثقة</value></data>
 
-  <data name="Ctx_Header" xml:space="preserve"><value>🧭 السياق والتفسيرات</value></data>
-  <data name="Ctx_Warning" xml:space="preserve"><value>⚠️ كل ما في هذا القسم تفسير وليس حقائق: تحليل للمصالح والسياق والموازيات التاريخية وفق قواعد المنصة (تناظر الأطراف، إسناد كل موقف، طيف الآراء داخل كل طرف). وصفُ موقفٍ ما ليس تأييدًا له.</value></data>
+  <data name="Ctx_Header" xml:space="preserve"><value>السياق والتفسيرات</value></data>
+  <data name="Ctx_Warning" xml:space="preserve"><value>كل ما في هذا القسم تفسير وليس حقائق: تحليل للمصالح والسياق والموازيات التاريخية وفق قواعد المنصة (تناظر الأطراف، إسناد كل موقف، طيف الآراء داخل كل طرف). وصفُ موقفٍ ما ليس تأييدًا له.</value></data>
   <data name="Ctx_WhoBenefits" xml:space="preserve"><value>من يستفيد</value></data>
   <data name="Ctx_WhoConcerned" xml:space="preserve"><value>من يتوجّس</value></data>
   <data name="Ctx_DeFacto" xml:space="preserve"><value>الأهداف الفعلية</value></data>
@@ -245,7 +245,7 @@
   <data name="Feed_StatusChanged" xml:space="preserve"><value>تغيّرت المرحلة</value></data>
   <data name="Feed_NewInitiative" xml:space="preserve"><value>مبادرة مدنية</value></data>
   <data name="Feed_NewComment" xml:space="preserve"><value>جديد في النقاش</value></data>
-  <data name="Feed_ShowMore" xml:space="preserve"><value>كل مشاريع القوانين</value></data>
+  <data name="Feed_ShowMore" xml:space="preserve"><value>عرض المزيد</value></data>
   <data name="Search_Placeholder" xml:space="preserve"><value>ابحث في مشاريع القوانين</value></data>
   <data name="Time_JustNow" xml:space="preserve"><value>الآن</value></data>
   <data name="Time_Minutes" xml:space="preserve"><value>قبل {0} د</value></data>
@@ -384,4 +384,166 @@
   <data name="Priv_Contact" xml:space="preserve"><value>الأسئلة والتغييرات</value></data>
   <data name="Priv_ContactText" xml:space="preserve"><value>الكود المصدري للموقع مفتوح، وهذه الصفحة مكتوبة انطلاقًا منه: كل ما فيها يمكن التحقّق منه في الكود. وإن تغيّر شيء في معالجة البيانات تغيّرت الصفحة كذلك — وتاريخ التحديث في الأعلى.</value></data>
   <data name="Bills_InAgendaSince" xml:space="preserve"><value>على جدول الأعمال منذ</value></data>
+  <data name="Ctx_ClosingWindow" xml:space="preserve"><value>النافذة تُغلق</value></data>
+  <data name="Ctx_UntilSession" xml:space="preserve"><value>حتى الجلسة</value></data>
+  <data name="Ctx_Committee" xml:space="preserve"><value>لجنة</value></data>
+  <data name="Ctx_Plenum" xml:space="preserve"><value>الهيئة العامة</value></data>
+  <data name="Bill_Stages" xml:space="preserve"><value>مسار المشروع</value></data>
+  <data name="Bill_StagesTruncated" xml:space="preserve"><value>تُعرض الجلسات الأولى — لهذا المشروع المزيد.</value></data>
+  <data name="Bill_StagesGap" xml:space="preserve"><value>…{0} بينهما</value></data>
+  <data name="Bill_SittingForms" xml:space="preserve"><value>جلسة|جلسات</value></data>
+  <data name="Ctx_Initiatives" xml:space="preserve"><value>مطلوب توقيعات</value></data>
+  <data name="Ctx_SignaturesLeft" xml:space="preserve"><value>ينقص {0}</value></data>
+  <data name="Ctx_AllInitiatives" xml:space="preserve"><value>كل المبادرات</value></data>
+  <data name="Init_SigForms" xml:space="preserve"><value>توقيع|توقيعات</value></data>
+  <data name="Bills_AllFactions" xml:space="preserve"><value>كل الكتل</value></data>
+  <data name="Bills_AllMembers" xml:space="preserve"><value>كل الأعضاء</value></data>
+  <data name="Bills_AuthorOnly" xml:space="preserve"><value>ما قدّمه فقط، دون التوقيعات</value></data>
+  <data name="Member_ShowInList" xml:space="preserve"><value>عرض في القائمة الكاملة</value></data>
+  <data name="Feed_Loading" xml:space="preserve"><value>جارٍ التحميل…</value></data>
+  <data name="Feed_AllBills" xml:space="preserve"><value>كل مشاريع القوانين</value></data>
+  <data name="Feed_SeenBefore" xml:space="preserve"><value>ما بعده سبق أن رأيته</value></data>
+  <data name="Mng_Title" xml:space="preserve"><value>إدارة الحساب</value></data>
+  <data name="Mng_Profile" xml:space="preserve"><value>الملف الشخصي</value></data>
+  <data name="Mng_Email" xml:space="preserve"><value>البريد الإلكتروني</value></data>
+  <data name="Mng_Password" xml:space="preserve"><value>كلمة المرور</value></data>
+  <data name="Mng_ExternalLogins" xml:space="preserve"><value>تسجيلات دخول خارجية</value></data>
+  <data name="Mng_TwoFactor" xml:space="preserve"><value>المصادقة الثنائية</value></data>
+  <data name="Mng_Passkeys" xml:space="preserve"><value>مفاتيح المرور</value></data>
+  <data name="Mng_PersonalData" xml:space="preserve"><value>البيانات الشخصية</value></data>
+  <data name="Mng_Username" xml:space="preserve"><value>اسم المستخدم</value></data>
+  <data name="Mng_UsernameHint" xml:space="preserve"><value>اختر اسم المستخدم</value></data>
+  <data name="Mng_Phone" xml:space="preserve"><value>رقم الهاتف</value></data>
+  <data name="Mng_PhoneHint" xml:space="preserve"><value>أدخل رقم هاتفك</value></data>
+  <data name="Mng_Save" xml:space="preserve"><value>حفظ</value></data>
+  <data name="Mng_ChangePassword" xml:space="preserve"><value>تغيير كلمة المرور</value></data>
+  <data name="Mng_OldPassword" xml:space="preserve"><value>كلمة المرور الحالية</value></data>
+  <data name="Mng_NewPassword" xml:space="preserve"><value>كلمة مرور جديدة</value></data>
+  <data name="Mng_ConfirmPassword" xml:space="preserve"><value>تأكيد كلمة المرور الجديدة</value></data>
+  <data name="Mng_UpdatePassword" xml:space="preserve"><value>تحديث كلمة المرور</value></data>
+  <data name="Mng_EnterOldPassword" xml:space="preserve"><value>أدخل كلمة المرور الحالية</value></data>
+  <data name="Mng_EnterNewPassword" xml:space="preserve"><value>أدخل كلمة المرور الجديدة</value></data>
+  <data name="Mng_SetPassword" xml:space="preserve"><value>تعيين كلمة المرور</value></data>
+  <data name="Mng_SetPasswordTitle" xml:space="preserve"><value>عيّن كلمة المرور</value></data>
+  <data name="Mng_ManageEmail" xml:space="preserve"><value>إدارة البريد</value></data>
+  <data name="Mng_SendVerification" xml:space="preserve"><value>إرسال بريد التحقق</value></data>
+  <data name="Mng_NewEmail" xml:space="preserve"><value>بريد إلكتروني جديد</value></data>
+  <data name="Mng_ChangeEmail" xml:space="preserve"><value>تغيير البريد</value></data>
+  <data name="Mng_EnterEmail" xml:space="preserve"><value>أدخل بريدك</value></data>
+  <data name="Mng_EnterNewEmail" xml:space="preserve"><value>أدخل بريدًا جديدًا</value></data>
+  <data name="Mng_PersonalDataText" xml:space="preserve"><value>يحتوي حسابك على بيانات قدّمتها لنا. من هنا يمكنك تنزيلها أو حذفها.</value></data>
+  <data name="Mng_DeleteWarning" xml:space="preserve"><value>الحذف غير قابل للتراجع: تُحذف مع الحساب المتابعات والمواقف والتعليقات.</value></data>
+  <data name="Mng_Download" xml:space="preserve"><value>تنزيل</value></data>
+  <data name="Mng_Delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="Mng_DeleteDataTitle" xml:space="preserve"><value>حذف البيانات الشخصية</value></data>
+  <data name="Mng_DeleteAndClose" xml:space="preserve"><value>حذف البيانات وإغلاق الحساب</value></data>
+  <data name="Mng_EnterPassword" xml:space="preserve"><value>أدخل كلمة المرور</value></data>
+  <data name="Mng_ExtLoginsTitle" xml:space="preserve"><value>إدارة تسجيلات الدخول الخارجية</value></data>
+  <data name="Mng_RegisteredLogins" xml:space="preserve"><value>الخدمات المرتبطة</value></data>
+  <data name="Mng_Remove" xml:space="preserve"><value>إزالة</value></data>
+  <data name="Mng_AddService" xml:space="preserve"><value>إضافة خدمة أخرى</value></data>
+  <data name="Mng_RemoveLogin" xml:space="preserve"><value>إزالة تسجيل الدخول عبر {0}</value></data>
+  <data name="Mng_LoginUsing" xml:space="preserve"><value>الدخول عبر {0}</value></data>
+  <data name="Mng_2faTitle" xml:space="preserve"><value>المصادقة الثنائية</value></data>
+  <data name="Mng_NoRecoveryCodes" xml:space="preserve"><value>لم تبقَ رموز استرداد.</value></data>
+  <data name="Mng_OneRecoveryCode" xml:space="preserve"><value>بقي رمز استرداد واحد.</value></data>
+  <data name="Mng_ForgetBrowser" xml:space="preserve"><value>نسيان هذا المتصفح</value></data>
+  <data name="Mng_Disable2fa" xml:space="preserve"><value>تعطيل المصادقة الثنائية</value></data>
+  <data name="Mng_ResetCodes" xml:space="preserve"><value>إعادة تعيين رموز الاسترداد</value></data>
+  <data name="Mng_AuthApp" xml:space="preserve"><value>تطبيق المصادقة</value></data>
+  <data name="Mng_AddAuthApp" xml:space="preserve"><value>إضافة تطبيق مصادقة</value></data>
+  <data name="Mng_SetupAuthApp" xml:space="preserve"><value>إعداد تطبيق المصادقة</value></data>
+  <data name="Mng_ResetAuthApp" xml:space="preserve"><value>إعادة إعداد التطبيق</value></data>
+  <data name="Mng_PolicyNotAccepted" xml:space="preserve"><value>لم تُقبل سياسة الخصوصية.</value></data>
+  <data name="Mng_PolicyRequired" xml:space="preserve"><value>يجب قبول السياسة قبل تفعيل المصادقة الثنائية.</value></data>
+  <data name="Mng_Disable2faTitle" xml:space="preserve"><value>تعطيل المصادقة الثنائية</value></data>
+  <data name="Mng_Disable2faNote" xml:space="preserve"><value>هذا الإجراء يعطّل المصادقة الثنائية فقط.</value></data>
+  <data name="Mng_ConfigureAuth" xml:space="preserve"><value>إعداد تطبيق المصادقة</value></data>
+  <data name="Mng_AuthSteps" xml:space="preserve"><value>لاستخدام تطبيق المصادقة اتبع الخطوات التالية:</value></data>
+  <data name="Mng_VerificationCode" xml:space="preserve"><value>رمز التحقق</value></data>
+  <data name="Mng_Verify" xml:space="preserve"><value>تحقّق</value></data>
+  <data name="Mng_EnterCode" xml:space="preserve"><value>أدخل الرمز</value></data>
+  <data name="Mng_ResetAuthTitle" xml:space="preserve"><value>إعادة تعيين مفتاح المصادقة</value></data>
+  <data name="Mng_ResetAuthNote" xml:space="preserve"><value>بعد إعادة التعيين لن يعمل تطبيق المصادقة حتى تعيد إعداده.</value></data>
+  <data name="Mng_GenCodesTitle" xml:space="preserve"><value>إنشاء رموز استرداد للمصادقة الثنائية</value></data>
+  <data name="Mng_RecoveryCodes" xml:space="preserve"><value>رموز الاسترداد</value></data>
+  <data name="Mng_KeepCodesSafe" xml:space="preserve"><value>احفظ هذه الرموز في مكان آمن.</value></data>
+  <data name="Mng_GenerateCodes" xml:space="preserve"><value>إنشاء رموز الاسترداد</value></data>
+  <data name="Mng_PasskeysTitle" xml:space="preserve"><value>إدارة مفاتيح المرور</value></data>
+  <data name="Mng_Rename" xml:space="preserve"><value>إعادة تسمية</value></data>
+  <data name="Mng_NoPasskeys" xml:space="preserve"><value>لا توجد مفاتيح مرور مسجّلة.</value></data>
+  <data name="Mng_PasskeyLimit" xml:space="preserve"><value>بلغت الحد الأقصى لمفاتيح المرور. احذف واحدًا لإضافة جديد.</value></data>
+  <data name="Mng_AddPasskey" xml:space="preserve"><value>إضافة مفتاح مرور</value></data>
+  <data name="Mng_RenamePasskey" xml:space="preserve"><value>إعادة تسمية هذا المفتاح</value></data>
+  <data name="Mng_RemovePasskey" xml:space="preserve"><value>إزالة هذا المفتاح من حسابك</value></data>
+  <data name="Mng_PasskeyNamePrompt" xml:space="preserve"><value>أدخل اسمًا لمفتاح المرور</value></data>
+  <data name="Mng_PasskeyName" xml:space="preserve"><value>اسم المفتاح</value></data>
+  <data name="Mng_Continue" xml:space="preserve"><value>متابعة</value></data>
+  <data name="Mng_MyPasskey" xml:space="preserve"><value>مفتاحي</value></data>
+  <data name="Mng_MsgPasswordChanged" xml:space="preserve"><value>تم تغيير كلمة المرور</value></data>
+  <data name="Mng_MsgPasswordSet" xml:space="preserve"><value>تم تعيين كلمة المرور</value></data>
+  <data name="Mng_MsgProfileUpdated" xml:space="preserve"><value>تم تحديث الملف الشخصي</value></data>
+  <data name="Mng_MsgPhoneFailed" xml:space="preserve"><value>خطأ: تعذّر حفظ رقم الهاتف.</value></data>
+  <data name="Mng_MsgWrongPassword" xml:space="preserve"><value>خطأ: كلمة المرور غير صحيحة.</value></data>
+  <data name="Mng_MsgEmailUnchanged" xml:space="preserve"><value>لم يتغيّر البريد.</value></data>
+  <data name="Mng_MsgEmailChangeSent" xml:space="preserve"><value>أُرسل رابط تأكيد البريد الجديد. تحقّق من بريدك.</value></data>
+  <data name="Mng_MsgVerificationSent" xml:space="preserve"><value>أُرسل بريد التحقق. تحقّق من بريدك.</value></data>
+  <data name="Mng_MsgCodeInvalid" xml:space="preserve"><value>خطأ: رمز التحقق غير صحيح.</value></data>
+  <data name="Mng_MsgAuthVerified" xml:space="preserve"><value>تم التحقق من تطبيق المصادقة.</value></data>
+  <data name="Mng_Msg2faDisabled" xml:space="preserve"><value>تم تعطيل المصادقة الثنائية. يمكنك تفعيلها مجددًا من هذه الصفحة.</value></data>
+  <data name="Mng_MsgCodesGenerated" xml:space="preserve"><value>تم إنشاء رموز استرداد جديدة.</value></data>
+  <data name="Mng_MsgExtLoginRemoved" xml:space="preserve"><value>تمت إزالة تسجيل الدخول الخارجي.</value></data>
+  <data name="Mng_MsgExtLoginNotRemoved" xml:space="preserve"><value>خطأ: تعذّرت إزالة تسجيل الدخول الخارجي.</value></data>
+  <data name="Mng_MsgExtLoginAdded" xml:space="preserve"><value>تمت إضافة تسجيل الدخول الخارجي.</value></data>
+  <data name="Mng_MsgExtLoginNotAdded" xml:space="preserve"><value>خطأ: تعذّرت الإضافة. ترتبط كل خدمة بحساب واحد فقط.</value></data>
+  <data name="Mng_MsgExtLoginNoInfo" xml:space="preserve"><value>خطأ: تعذّر تحميل بيانات الدخول الخارجي.</value></data>
+  <data name="Mng_UnnamedPasskey" xml:space="preserve"><value>مفتاح بلا اسم</value></data>
+  <data name="Mng_PasskeyNameLength" xml:space="preserve"><value>الاسم بحد أقصى {1} حرفًا</value></data>
+  <data name="Mng_GenerateNewSet" xml:space="preserve"><value>إنشاء مجموعة جديدة من رموز الاسترداد</value></data>
+  <data name="Mng_CodesLeft" xml:space="preserve"><value>بقي {0} من رموز الاسترداد.</value></data>
+  <data name="Mng_RenamePasskeyOf" xml:space="preserve"><value>اسم جديد للمفتاح “{0}”</value></data>
+  <data name="Mng_StepInstallApp" xml:space="preserve"><value>ثبّت تطبيق مصادقة على هاتفك.</value></data>
+  <data name="Mng_StepInstallAppExamples" xml:space="preserve"><value>تصلح Google Authenticator وMicrosoft Authenticator وAegis و1Password وأي تطبيق آخر بمعيار TOTP.</value></data>
+  <data name="Mng_StepEnterKey" xml:space="preserve"><value>أدخل هذا المفتاح في التطبيق. المسافات وحالة الأحرف لا تهم.</value></data>
+  <data name="Mng_StepEnterCode" xml:space="preserve"><value>سيعرض التطبيق رمزًا من ست خانات يتغيّر كل نصف دقيقة. أدخل الرمز الحالي أدناه.</value></data>
+  <data name="IdErr_PasswordTooShort" xml:space="preserve"><value>كلمة المرور أقصر من {0} حرفًا</value></data>
+  <data name="IdErr_PasswordRequiresDigit" xml:space="preserve"><value>يجب أن تحتوي كلمة المرور على رقم واحد على الأقل</value></data>
+  <data name="IdErr_PasswordRequiresLower" xml:space="preserve"><value>يجب أن تحتوي كلمة المرور على حرف صغير</value></data>
+  <data name="IdErr_PasswordRequiresUpper" xml:space="preserve"><value>يجب أن تحتوي كلمة المرور على حرف كبير</value></data>
+  <data name="IdErr_PasswordRequiresSymbol" xml:space="preserve"><value>يجب أن تحتوي كلمة المرور على رمز غير أبجدي رقمي</value></data>
+  <data name="IdErr_PasswordRequiresUnique" xml:space="preserve"><value>يجب أن تستخدم كلمة المرور {0} أحرف مختلفة على الأقل</value></data>
+  <data name="IdErr_PasswordMismatch" xml:space="preserve"><value>كلمة المرور غير صحيحة</value></data>
+  <data name="IdErr_DuplicateEmail" xml:space="preserve"><value>البريد {0} مستخدم بالفعل</value></data>
+  <data name="IdErr_InvalidEmail" xml:space="preserve"><value>عنوان بريد غير صالح</value></data>
+  <data name="IdErr_DuplicateUserName" xml:space="preserve"><value>الاسم {0} مستخدم بالفعل</value></data>
+  <data name="IdErr_InvalidUserName" xml:space="preserve"><value>اسم مستخدم غير صالح</value></data>
+  <data name="IdErr_InvalidToken" xml:space="preserve"><value>الرابط غير صالح أو منتهي الصلاحية. اطلب رابطًا جديدًا.</value></data>
+  <data name="IdErr_AlreadyHasPassword" xml:space="preserve"><value>لديك كلمة مرور محددة بالفعل</value></data>
+  <data name="IdErr_LoginAlreadyAssociated" xml:space="preserve"><value>هذه الخدمة مرتبطة بحساب آخر</value></data>
+  <data name="IdErr_Concurrency" xml:space="preserve"><value>تغيّرت البيانات في هذه الأثناء. حاول مجددًا.</value></data>
+  <data name="Mng_RepeatPassword" xml:space="preserve"><value>أعد إدخال كلمة المرور</value></data>
+  <data name="Mng_ResetKeysNote" xml:space="preserve"><value>التعطيل لا يغيّر المفتاح المحفوظ في تطبيق المصادقة. لتغيير المفتاح نفسه، أعد إعداد التطبيق.</value></data>
+  <data name="Mng_ResetKeysNoteGen" xml:space="preserve"><value>الرموز الجديدة لا تغيّر المفتاح المحفوظ في تطبيق المصادقة. لتغيير المفتاح نفسه، أعد إعداد التطبيق.</value></data>
+  <data name="Mng_LoseCodesWarning" xml:space="preserve"><value>إذا فقدت هاتفك ولم تكن لديك رموز استرداد، ستفقد الوصول إلى حسابك.</value></data>
+  <data name="TwoFa_Title" xml:space="preserve"><value>الدخول بالمصادقة الثنائية</value></data>
+  <data name="TwoFa_Intro" xml:space="preserve"><value>الدخول إلى هذا الحساب محمي بتطبيق مصادقة. أدخل الرمز من التطبيق.</value></data>
+  <data name="TwoFa_Code" xml:space="preserve"><value>الرمز من التطبيق</value></data>
+  <data name="TwoFa_RememberMachine" xml:space="preserve"><value>تذكّر هذا الجهاز</value></data>
+  <data name="TwoFa_NoDevice" xml:space="preserve"><value>لا تملك وصولًا إلى التطبيق؟</value></data>
+  <data name="TwoFa_UseRecovery" xml:space="preserve"><value>الدخول برمز استرداد</value></data>
+  <data name="TwoFa_RecoveryTitle" xml:space="preserve"><value>الدخول برمز الاسترداد</value></data>
+  <data name="TwoFa_RecoveryIntro" xml:space="preserve"><value>لن يُتذكّر هذا الدخول حتى تدخل مجددًا برمز من التطبيق أو تعطّل المصادقة الثنائية.</value></data>
+  <data name="TwoFa_RecoveryCode" xml:space="preserve"><value>رمز الاسترداد</value></data>
+  <data name="TwoFa_LogIn" xml:space="preserve"><value>دخول</value></data>
+  <data name="TwoFa_EnterCode" xml:space="preserve"><value>أدخل الرمز</value></data>
+  <data name="Cnf_EmailChangeTitle" xml:space="preserve"><value>تأكيد البريد الجديد</value></data>
+  <data name="Ext_Title" xml:space="preserve"><value>إكمال التسجيل</value></data>
+  <data name="Ext_Intro" xml:space="preserve"><value>تم الدخول عبر {0} بنجاح. بقي إدخال بريد إلكتروني لتصلك الإشعارات.</value></data>
+  <data name="Ext_EnterEmail" xml:space="preserve"><value>أدخل عنوان بريدك</value></data>
+  <data name="Ext_Finish" xml:space="preserve"><value>إنهاء</value></data>
+  <data name="Auth_InvalidUserNote" xml:space="preserve"><value>تعذّر التعرّف على حسابك. سجّل الدخول مجددًا.</value></data>
+  <data name="Cnf_EmailChangeOk" xml:space="preserve"><value>تم تأكيد بريدك الجديد.</value></data>
+  <data name="Cnf_EmailChangeFail" xml:space="preserve"><value>تعذّر تغيير البريد. ربما انتهت صلاحية الرابط — اطلب رابطًا جديدًا.</value></data>
+  <data name="Cnf_UserNameChangeFail" xml:space="preserve"><value>تعذّر تحديث اسم المستخدم.</value></data>
+  <data name="Val_Phone" xml:space="preserve"><value>أدخل رقم هاتف صالحًا</value></data>
 </root>

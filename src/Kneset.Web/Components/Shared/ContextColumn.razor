@@ -3,9 +3,11 @@
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
 
-@* Правый столбец главной (макет 2a). Три блока в порядке ценности: сначала
-   срочное, потом вход по темам, потом спорное. Первый блок — единственный,
-   отвечающий на вопрос «что мне делать сегодня», поэтому он акцентный.
+@* Правый столбец главной (макет 2a). Блоки идут по убыванию ценности:
+   срочное, вход по темам, инициативы, ждущие подписей, и спорное за неделю.
+   Первый — единственный, отвечающий на вопрос «что мне делать сегодня»,
+   поэтому он акцентный. Инициативы стоят выше спорного: там действие человека
+   меняет исход напрямую, а не выражает мнение.
 
    Запросы живут здесь, а не на странице: столбец самостоятелен и его можно
    поставить на другой экран. Снаружи приходит только список законов, попавших
@@ -13,12 +15,12 @@
 
 <aside class="kt-ctx">
 
-    @* --- 1. Окно ещё открыто. В макете блок назван «Окно закрывается», но
-           обещать закрытие нечем: срока до конца стадии в данных нет. Смысл
-           блока сохранён — что можно сделать сегодня, — а заголовок говорит
-           ровно то, что известно. --- *@
+    @* --- 1. Срочное. Заголовок зависит от того, чем мы располагаем:
+           «Окно закрывается», когда заседание назначено и срок настоящий,
+           и «Окно ещё открыто», когда есть только время в стадии. Обещать
+           закрытие без даты заседания нельзя — данные о нём ничего не знают. --- *@
     <section class="kt-ctx-card kt-ctx-card-accent">
-        <h3 class="kt-ctx-title">@L["Ctx_OpenWindow"]</h3>
+        <h3 class="kt-ctx-title">@(_hasDeadlines ? L["Ctx_ClosingWindow"] : L["Ctx_OpenWindow"])</h3>
 
         @if (_closing.Count == 0)
         {
@@ -32,9 +34,8 @@
                     <li>
                         <a href="/bills/@item.Id" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
                         <span class="kt-num">
-                            @item.Days @Plural.Of(item.Days, L["Ctx_DayForms"])
-                            @L["Ctx_InStage"]
-                            @if (item.StatusDesc is not null)
+                            @Note(item)
+                            @if (!item.UntilSession && item.StatusDesc is not null)
                             {
                                 <span> · </span><span dir="rtl" lang="he">@item.StatusDesc</span>
                             }
@@ -72,7 +73,30 @@
         }
     </section>
 
-    @* --- 3. О чём спорят за неделю --- *@
+    @* --- 3. Инициативам нужны подписи. Стоит выше спорного: это
+           единственный блок, где действие человека что-то меняет
+           напрямую, а не выражает мнение. --- *@
+    @if (_initiatives.Count > 0)
+    {
+        <section class="kt-ctx-card kt-ctx-hide-mobile">
+            <h3 class="kt-ctx-title">@L["Ctx_Initiatives"]</h3>
+
+            <ul class="kt-ctx-list">
+                @foreach (var item in _initiatives)
+                {
+                    <li>
+                        <a href="/initiatives/@item.Id">@item.Title</a>
+                        <span class="kt-num">
+                            @string.Format(L["Ctx_SignaturesLeft"], item.Left)
+                        </span>
+                    </li>
+                }
+            </ul>
+            <a class="kt-ctx-more" href="initiatives">@L["Ctx_AllInitiatives"]</a>
+        </section>
+    }
+
+    @* --- 4. О чём спорят за неделю --- *@
     <section class="kt-ctx-card kt-ctx-hide-mobile">
         <h3 class="kt-ctx-title">@L["Ctx_WeekDebate"]</h3>
 
@@ -104,17 +128,44 @@
     /// </summary>
     [Parameter] public IReadOnlyCollection<int>? RelevantBillIds { get; set; }
 
-    private sealed record ClosingItem(int Id, string Title, bool IsHebrew, string? StatusDesc, int Days);
+    /// <summary>
+    /// Счётчик, который страница увеличивает после действий, меняющих данные
+    /// столбца, — например после подписи под инициативой прямо из ленты.
+    /// Без него защита от лишних запросов держала бы старые числа: набор
+    /// подписок не изменился, а содержимое блока изменилось.
+    /// </summary>
+    [Parameter] public int RefreshToken { get; set; }
+
+    /// <summary>
+    /// Строка блока «Окно закрывается». Days — либо дней до назначенного
+    /// заседания (UntilSession = true), либо дней в текущей стадии, если
+    /// заседание не назначено. Разница принципиальная: первое — настоящий
+    /// срок, второе — только оценка снизу, и подписи у них разные.
+    /// </summary>
+    private sealed record ClosingItem(
+        int Id, string Title, bool IsHebrew, string? StatusDesc, int Days,
+        bool UntilSession = false, BillSessionKind? Kind = null);
     private sealed record ThemeItem(string Word, int Bills);
     private sealed record DebatedItem(int Id, string Title, bool IsHebrew, int Comments);
+
+    /// <summary>Left — сколько подписей не хватает до порога.</summary>
+    private sealed record InitiativeItem(int Id, string Title, int Left);
 
     private const int BlockSize = 3;
     private const int ThemeCount = 5;
     private const int DebateWindowDays = 7;
 
+    /// <summary>
+    /// Показываем ли настоящие сроки. От этого зависит заголовок блока:
+    /// «Окно закрывается» вправе стоять только когда заседание назначено,
+    /// иначе блок обещал бы закрытие, о котором данные ничего не знают.
+    /// </summary>
+    private bool _hasDeadlines;
+
     private List<ClosingItem> _closing = [];
     private List<ThemeItem> _themes = [];
     private List<DebatedItem> _debated = [];
+    private List<InitiativeItem> _initiatives = [];
 
     /// <summary>
     /// По какому набору подписок столбец уже посчитан. Нужен потому, что
@@ -126,7 +177,8 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        var key = RelevantBillIds is null ? "" : string.Join(",", RelevantBillIds.Order());
+        var key = (RelevantBillIds is null ? "" : string.Join(",", RelevantBillIds.Order()))
+                  + "|" + RefreshToken;
         if (_loadedFor == key) return;
         _loadedFor = key;
 
@@ -134,18 +186,95 @@
 
         await LoadClosingAsync(db);
         await LoadThemesAsync(db);
+        await LoadInitiativesAsync(db);
         await LoadDebatedAsync(db);
+    }
+
+    /// <summary>
+    /// Подпись под названием. Собирается в C#, а не в разметке: Razor убирает
+    /// пробелы между соседними @-выражениями, и «до заседания» с числом
+    /// склеивались в «до заседания3дня».
+    /// </summary>
+    private string Note(ClosingItem item)
+    {
+        var days = $"{item.Days} {Plural.Of(item.Days, L["Ctx_DayForms"])}";
+
+        if (!item.UntilSession)
+            return $"{days} {L["Ctx_InStage"]}";
+
+        var kind = item.Kind == BillSessionKind.Plenum ? L["Ctx_Plenum"] : L["Ctx_Committee"];
+        return $"{L["Ctx_UntilSession"]} {days} · {kind}";
     }
 
     private async Task LoadClosingAsync(AppDbContext db)
     {
-        _closing = await QueryClosingAsync(db, RelevantBillIds?.ToList());
+        var ids = RelevantBillIds?.ToList();
 
-        // Подписки есть, но ни у одного из этих законов окно не открыто — тогда
-        // показываем срочное по всей базе. Иначе вход на сайт делал бы блок
-        // хуже: у гостя три закона, у подписавшегося на один закрытый — пусто.
-        if (_closing.Count == 0 && RelevantBillIds is { Count: > 0 })
-            _closing = await QueryClosingAsync(db, null);
+        // Порядок попыток — от самого точного к самому приблизительному.
+        // 1. Назначенное заседание: настоящий срок, Кнессет публикует повестку
+        //    заранее. Только здесь блок вправе называться «Окно закрывается».
+        _closing = await QueryUpcomingAsync(db, ids);
+        _hasDeadlines = _closing.Count > 0;
+
+        // 2. Среди подписок заседаний нет — ищем по всей базе.
+        if (_closing.Count == 0 && ids is { Count: > 0 })
+        {
+            _closing = await QueryUpcomingAsync(db, null);
+            _hasDeadlines = _closing.Count > 0;
+        }
+
+        // 3. Назначенных заседаний нет вовсе — откатываемся на «сколько
+        //    закон уже в стадии». Это не срок, и заголовок блока меняется.
+        if (_closing.Count == 0)
+        {
+            _closing = await QueryClosingAsync(db, ids);
+            if (_closing.Count == 0 && ids is { Count: > 0 })
+                _closing = await QueryClosingAsync(db, null);
+        }
+    }
+
+    /// <summary>
+    /// Законы, назначенные на будущее заседание, — ближайшие сверху.
+    /// Это и есть настоящий срок «окно закрывается через N дней»: раньше
+    /// в данных его не было, он появился вместе с BillSession.
+    /// </summary>
+    private async Task<List<ClosingItem>> QueryUpcomingAsync(AppDbContext db, List<int>? ids)
+    {
+        var now = DateTime.UtcNow;
+        var query = db.BillSessions.AsNoTracking().Where(s => s.StartDate > now);
+
+        if (ids is { Count: > 0 })
+            query = query.Where(s => ids.Contains(s.BillId));
+
+        // Берём запас: у одного закона может быть несколько будущих заседаний,
+        // а нужно ближайшее — схлопываем в памяти.
+        var rows = await query
+            .OrderBy(s => s.StartDate)
+            .Take(BlockSize * 10)
+            .Select(s => new
+            {
+                s.BillId,
+                s.StartDate,
+                s.Kind,
+                s.Bill.Name,
+                s.Bill.NameRu,
+                s.Bill.StatusDesc
+            })
+            .ToListAsync();
+
+        return rows
+            .GroupBy(r => r.BillId)
+            .Select(g => g.First())
+            .Take(BlockSize)
+            .Select(r => new ClosingItem(
+                r.BillId,
+                r.NameRu ?? r.Name,
+                r.NameRu == null,
+                r.StatusDesc,
+                Math.Max(0, (int)(r.StartDate - now).TotalDays),
+                UntilSession: true,
+                Kind: r.Kind))
+            .ToList();
     }
 
     private async Task<List<ClosingItem>> QueryClosingAsync(AppDbContext db, List<int>? ids)
@@ -223,6 +352,29 @@
         }
 
         _themes = themes;
+    }
+
+    /// <summary>
+    /// Инициативы, которым ближе всего до порога. Сортировка по остатку,
+    /// а не по свежести: смысл блока — показать, где несколько подписей
+    /// решают дело, а не перечислить последнее опубликованное.
+    /// </summary>
+    private async Task LoadInitiativesAsync(AppDbContext db)
+    {
+        var rows = await db.CitizenInitiatives.AsNoTracking()
+            .Where(i => i.Status == InitiativeStatus.Published && i.PublishedAt != null)
+            .Select(i => new
+            {
+                i.Id,
+                i.Title,
+                Left = i.SignatureThreshold - i.Signatures.Count
+            })
+            .Where(x => x.Left > 0)
+            .OrderBy(x => x.Left)
+            .Take(BlockSize)
+            .ToListAsync();
+
+        _initiatives = rows.Select(x => new InitiativeItem(x.Id, x.Title, x.Left)).ToList();
     }
 
     private async Task LoadDebatedAsync(AppDbContext db)

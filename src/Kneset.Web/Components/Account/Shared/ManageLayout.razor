@@ -1,10 +1,14 @@
 ﻿@inherits LayoutComponentBase
 @layout Kneset.Web.Components.Layout.MainLayout
+@inject IStringLocalizer<SharedResource> L
 
-<h1>Manage your account</h1>
+@* Подзаголовок из скаффолда убран: «Change your account settings» под
+   заголовком «Manage your account» повторял его же другими словами, а по-русски
+   выходило совсем в лоб — «Управление учётной записью / Настройки вашей учётной
+   записи». Что здесь есть, показывает меню ниже. *@
+<h1>@L["Mng_Title"]</h1>
 
 <div>
-    <h2>Change your account settings</h2>
     <hr />
     <div class="row">
         <div class="col-lg-3">

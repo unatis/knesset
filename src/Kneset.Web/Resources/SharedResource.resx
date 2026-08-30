@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
 
-  <data name="Brand" xml:space="preserve"><value>🏛️ Кнессет-Трекер</value></data>
+  <data name="Brand" xml:space="preserve"><value>Кнессет-Трекер</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>Главная</value></data>
   <data name="Nav_Bills" xml:space="preserve"><value>Законопроекты</value></data>
   <data name="Nav_Members" xml:space="preserve"><value>Депутаты</value></data>
@@ -53,13 +53,13 @@
   <data name="LoginToVote" xml:space="preserve"><value>Войдите, чтобы выразить позицию</value></data>
   <data name="Reaction_InitiativeNote" xml:space="preserve"><value>Реакция — общий срез мнений (включая несогласных); подпись ниже — формальная поддержка к порогу.</value></data>
 
-  <data name="Inf_Open" xml:space="preserve"><value>🟢 Окно влияния открыто</value></data>
+  <data name="Inf_Open" xml:space="preserve"><value>Окно влияния открыто</value></data>
   <data name="Inf_Open_Hint" xml:space="preserve"><value>Законопроект в комиссии: заседания открыты, комиссия принимает письменные позиции, текст активно переписывается. Лучший момент для обращения.</value></data>
-  <data name="Inf_Limited" xml:space="preserve"><value>🟡 Влияние ограничено</value></data>
+  <data name="Inf_Limited" xml:space="preserve"><value>Влияние ограничено</value></data>
   <data name="Inf_Limited_Hint" xml:space="preserve"><value>Ждёт чтения в зале — влиять можно только через депутатов: оговорки и голосование.</value></data>
-  <data name="Inf_Late" xml:space="preserve"><value>🔴 Поздно</value></data>
+  <data name="Inf_Late" xml:space="preserve"><value>Поздно</value></data>
   <data name="Inf_Late_Hint" xml:space="preserve"><value>Закон принят. Изменить можно только новым законом-поправкой — например, через гражданскую инициативу.</value></data>
-  <data name="Inf_Frozen" xml:space="preserve"><value>⚪ Заморожен</value></data>
+  <data name="Inf_Frozen" xml:space="preserve"><value>Заморожен</value></data>
   <data name="Inf_Frozen_Hint" xml:space="preserve"><value>Процесс не движется — влиять не на что, но можно следить за возобновлением.</value></data>
 
   <data name="Com_Header" xml:space="preserve"><value>Обсуждение</value></data>
@@ -116,8 +116,8 @@
   <data name="Meta_Source" xml:space="preserve"><value>источник</value></data>
   <data name="Meta_Confidence" xml:space="preserve"><value>уверенность</value></data>
 
-  <data name="Ctx_Header" xml:space="preserve"><value>🧭 Контекст и интерпретации</value></data>
-  <data name="Ctx_Warning" xml:space="preserve"><value>⚠️ Всё в этой секции — интерпретация, а не факты: анализ интересов, контекста и исторических параллелей по правилам платформы (симметрия сторон, атрибуция каждой позиции, спектр мнений внутри каждой стороны). Описание чьей-либо позиции не является её одобрением.</value></data>
+  <data name="Ctx_Header" xml:space="preserve"><value>Контекст и интерпретации</value></data>
+  <data name="Ctx_Warning" xml:space="preserve"><value>Всё в этой секции — интерпретация, а не факты: анализ интересов, контекста и исторических параллелей по правилам платформы (симметрия сторон, атрибуция каждой позиции, спектр мнений внутри каждой стороны). Описание чьей-либо позиции не является её одобрением.</value></data>
   <data name="Ctx_WhoBenefits" xml:space="preserve"><value>Кому выгодно</value></data>
   <data name="Ctx_WhoConcerned" xml:space="preserve"><value>Кто настороженно</value></data>
   <data name="Ctx_DeFacto" xml:space="preserve"><value>Цели де-факто</value></data>
@@ -245,7 +245,7 @@
   <data name="Feed_StatusChanged" xml:space="preserve"><value>Изменилась стадия</value></data>
   <data name="Feed_NewInitiative" xml:space="preserve"><value>Гражданская инициатива</value></data>
   <data name="Feed_NewComment" xml:space="preserve"><value>Новое в обсуждении</value></data>
-  <data name="Feed_ShowMore" xml:space="preserve"><value>Все законопроекты</value></data>
+  <data name="Feed_ShowMore" xml:space="preserve"><value>Показать ещё</value></data>
   <data name="Search_Placeholder" xml:space="preserve"><value>Поиск законопроекта</value></data>
   <data name="Time_JustNow" xml:space="preserve"><value>только что</value></data>
   <data name="Time_Minutes" xml:space="preserve"><value>{0} мин назад</value></data>
@@ -384,4 +384,166 @@
   <data name="Priv_Contact" xml:space="preserve"><value>Вопросы и изменения</value></data>
   <data name="Priv_ContactText" xml:space="preserve"><value>Исходный код сайта открыт, и эта страница написана по нему: любое утверждение здесь можно сверить с кодом. Если что-то в обработке данных изменится, изменится и эта страница — дата обновления указана сверху.</value></data>
   <data name="Bills_InAgendaSince" xml:space="preserve"><value>в повестке с</value></data>
+  <data name="Ctx_ClosingWindow" xml:space="preserve"><value>Окно закрывается</value></data>
+  <data name="Ctx_UntilSession" xml:space="preserve"><value>до заседания</value></data>
+  <data name="Ctx_Committee" xml:space="preserve"><value>комиссия</value></data>
+  <data name="Ctx_Plenum" xml:space="preserve"><value>пленум</value></data>
+  <data name="Bill_Stages" xml:space="preserve"><value>Путь законопроекта</value></data>
+  <data name="Bill_StagesTruncated" xml:space="preserve"><value>Показаны первые заседания — у этого закона их больше.</value></data>
+  <data name="Bill_StagesGap" xml:space="preserve"><value>…ещё {0} между ними</value></data>
+  <data name="Bill_SittingForms" xml:space="preserve"><value>заседание|заседания|заседаний</value></data>
+  <data name="Ctx_Initiatives" xml:space="preserve"><value>Нужны подписи</value></data>
+  <data name="Ctx_SignaturesLeft" xml:space="preserve"><value>не хватает {0}</value></data>
+  <data name="Ctx_AllInitiatives" xml:space="preserve"><value>Все инициативы</value></data>
+  <data name="Init_SigForms" xml:space="preserve"><value>подпись|подписи|подписей</value></data>
+  <data name="Bills_AllFactions" xml:space="preserve"><value>Все фракции</value></data>
+  <data name="Bills_AllMembers" xml:space="preserve"><value>Все депутаты</value></data>
+  <data name="Bills_AuthorOnly" xml:space="preserve"><value>только внесённые, без подписанных</value></data>
+  <data name="Member_ShowInList" xml:space="preserve"><value>показать в общем списке</value></data>
+  <data name="Feed_Loading" xml:space="preserve"><value>Загружаем…</value></data>
+  <data name="Feed_AllBills" xml:space="preserve"><value>Все законопроекты</value></data>
+  <data name="Feed_SeenBefore" xml:space="preserve"><value>дальше вы уже видели</value></data>
+  <data name="Mng_Title" xml:space="preserve"><value>Управление учётной записью</value></data>
+  <data name="Mng_Profile" xml:space="preserve"><value>Профиль</value></data>
+  <data name="Mng_Email" xml:space="preserve"><value>Почта</value></data>
+  <data name="Mng_Password" xml:space="preserve"><value>Пароль</value></data>
+  <data name="Mng_ExternalLogins" xml:space="preserve"><value>Внешние входы</value></data>
+  <data name="Mng_TwoFactor" xml:space="preserve"><value>Двухфакторная аутентификация</value></data>
+  <data name="Mng_Passkeys" xml:space="preserve"><value>Ключи доступа</value></data>
+  <data name="Mng_PersonalData" xml:space="preserve"><value>Личные данные</value></data>
+  <data name="Mng_Username" xml:space="preserve"><value>Имя пользователя</value></data>
+  <data name="Mng_UsernameHint" xml:space="preserve"><value>Выберите имя пользователя</value></data>
+  <data name="Mng_Phone" xml:space="preserve"><value>Телефон</value></data>
+  <data name="Mng_PhoneHint" xml:space="preserve"><value>Введите номер телефона</value></data>
+  <data name="Mng_Save" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="Mng_ChangePassword" xml:space="preserve"><value>Смена пароля</value></data>
+  <data name="Mng_OldPassword" xml:space="preserve"><value>Текущий пароль</value></data>
+  <data name="Mng_NewPassword" xml:space="preserve"><value>Новый пароль</value></data>
+  <data name="Mng_ConfirmPassword" xml:space="preserve"><value>Повторите новый пароль</value></data>
+  <data name="Mng_UpdatePassword" xml:space="preserve"><value>Обновить пароль</value></data>
+  <data name="Mng_EnterOldPassword" xml:space="preserve"><value>Введите текущий пароль</value></data>
+  <data name="Mng_EnterNewPassword" xml:space="preserve"><value>Введите новый пароль</value></data>
+  <data name="Mng_SetPassword" xml:space="preserve"><value>Установка пароля</value></data>
+  <data name="Mng_SetPasswordTitle" xml:space="preserve"><value>Задайте пароль</value></data>
+  <data name="Mng_ManageEmail" xml:space="preserve"><value>Управление почтой</value></data>
+  <data name="Mng_SendVerification" xml:space="preserve"><value>Отправить письмо для подтверждения</value></data>
+  <data name="Mng_NewEmail" xml:space="preserve"><value>Новая почта</value></data>
+  <data name="Mng_ChangeEmail" xml:space="preserve"><value>Сменить почту</value></data>
+  <data name="Mng_EnterEmail" xml:space="preserve"><value>Введите почту</value></data>
+  <data name="Mng_EnterNewEmail" xml:space="preserve"><value>Введите новую почту</value></data>
+  <data name="Mng_PersonalDataText" xml:space="preserve"><value>В учётной записи хранятся данные, которые вы нам сообщили. Здесь их можно выгрузить или удалить.</value></data>
+  <data name="Mng_DeleteWarning" xml:space="preserve"><value>Удаление необратимо: вместе с учётной записью исчезнут подписки, позиции по законам и комментарии.</value></data>
+  <data name="Mng_Download" xml:space="preserve"><value>Выгрузить</value></data>
+  <data name="Mng_Delete" xml:space="preserve"><value>Удалить</value></data>
+  <data name="Mng_DeleteDataTitle" xml:space="preserve"><value>Удаление личных данных</value></data>
+  <data name="Mng_DeleteAndClose" xml:space="preserve"><value>Удалить данные и закрыть учётную запись</value></data>
+  <data name="Mng_EnterPassword" xml:space="preserve"><value>Введите пароль</value></data>
+  <data name="Mng_ExtLoginsTitle" xml:space="preserve"><value>Управление внешними входами</value></data>
+  <data name="Mng_RegisteredLogins" xml:space="preserve"><value>Подключённые сервисы</value></data>
+  <data name="Mng_Remove" xml:space="preserve"><value>Отключить</value></data>
+  <data name="Mng_AddService" xml:space="preserve"><value>Подключить ещё сервис</value></data>
+  <data name="Mng_RemoveLogin" xml:space="preserve"><value>Отключить вход через {0}</value></data>
+  <data name="Mng_LoginUsing" xml:space="preserve"><value>Войти через {0}</value></data>
+  <data name="Mng_2faTitle" xml:space="preserve"><value>Двухфакторная аутентификация</value></data>
+  <data name="Mng_NoRecoveryCodes" xml:space="preserve"><value>Коды восстановления закончились.</value></data>
+  <data name="Mng_OneRecoveryCode" xml:space="preserve"><value>Остался один код восстановления.</value></data>
+  <data name="Mng_ForgetBrowser" xml:space="preserve"><value>Забыть этот браузер</value></data>
+  <data name="Mng_Disable2fa" xml:space="preserve"><value>Отключить двухфакторную</value></data>
+  <data name="Mng_ResetCodes" xml:space="preserve"><value>Сбросить коды восстановления</value></data>
+  <data name="Mng_AuthApp" xml:space="preserve"><value>Приложение-аутентификатор</value></data>
+  <data name="Mng_AddAuthApp" xml:space="preserve"><value>Подключить приложение</value></data>
+  <data name="Mng_SetupAuthApp" xml:space="preserve"><value>Настроить приложение</value></data>
+  <data name="Mng_ResetAuthApp" xml:space="preserve"><value>Перенастроить приложение</value></data>
+  <data name="Mng_PolicyNotAccepted" xml:space="preserve"><value>Политика конфиденциальности не принята.</value></data>
+  <data name="Mng_PolicyRequired" xml:space="preserve"><value>Принять политику нужно до включения двухфакторной аутентификации.</value></data>
+  <data name="Mng_Disable2faTitle" xml:space="preserve"><value>Отключение двухфакторной аутентификации</value></data>
+  <data name="Mng_Disable2faNote" xml:space="preserve"><value>Это действие только отключает двухфакторную аутентификацию.</value></data>
+  <data name="Mng_ConfigureAuth" xml:space="preserve"><value>Настройка приложения-аутентификатора</value></data>
+  <data name="Mng_AuthSteps" xml:space="preserve"><value>Чтобы подключить приложение-аутентификатор, выполните следующие шаги:</value></data>
+  <data name="Mng_VerificationCode" xml:space="preserve"><value>Код подтверждения</value></data>
+  <data name="Mng_Verify" xml:space="preserve"><value>Подтвердить</value></data>
+  <data name="Mng_EnterCode" xml:space="preserve"><value>Введите код</value></data>
+  <data name="Mng_ResetAuthTitle" xml:space="preserve"><value>Сброс ключа аутентификатора</value></data>
+  <data name="Mng_ResetAuthNote" xml:space="preserve"><value>После сброса ключа приложение-аутентификатор перестанет работать, пока вы не настроите его заново.</value></data>
+  <data name="Mng_GenCodesTitle" xml:space="preserve"><value>Коды восстановления для двухфакторной аутентификации</value></data>
+  <data name="Mng_RecoveryCodes" xml:space="preserve"><value>Коды восстановления</value></data>
+  <data name="Mng_KeepCodesSafe" xml:space="preserve"><value>Храните эти коды в надёжном месте.</value></data>
+  <data name="Mng_GenerateCodes" xml:space="preserve"><value>Сгенерировать коды</value></data>
+  <data name="Mng_PasskeysTitle" xml:space="preserve"><value>Управление ключами доступа</value></data>
+  <data name="Mng_Rename" xml:space="preserve"><value>Переименовать</value></data>
+  <data name="Mng_NoPasskeys" xml:space="preserve"><value>Ключи доступа не добавлены.</value></data>
+  <data name="Mng_PasskeyLimit" xml:space="preserve"><value>Достигнут предел числа ключей доступа. Удалите один, чтобы добавить новый.</value></data>
+  <data name="Mng_AddPasskey" xml:space="preserve"><value>Добавить ключ доступа</value></data>
+  <data name="Mng_RenamePasskey" xml:space="preserve"><value>Переименовать этот ключ</value></data>
+  <data name="Mng_RemovePasskey" xml:space="preserve"><value>Удалить этот ключ из учётной записи</value></data>
+  <data name="Mng_PasskeyNamePrompt" xml:space="preserve"><value>Введите название ключа доступа</value></data>
+  <data name="Mng_PasskeyName" xml:space="preserve"><value>Название ключа</value></data>
+  <data name="Mng_Continue" xml:space="preserve"><value>Продолжить</value></data>
+  <data name="Mng_MyPasskey" xml:space="preserve"><value>Мой ключ</value></data>
+  <data name="Mng_MsgPasswordChanged" xml:space="preserve"><value>Пароль изменён</value></data>
+  <data name="Mng_MsgPasswordSet" xml:space="preserve"><value>Пароль задан</value></data>
+  <data name="Mng_MsgProfileUpdated" xml:space="preserve"><value>Профиль обновлён</value></data>
+  <data name="Mng_MsgPhoneFailed" xml:space="preserve"><value>Ошибка: не удалось сохранить номер телефона.</value></data>
+  <data name="Mng_MsgWrongPassword" xml:space="preserve"><value>Ошибка: неверный пароль.</value></data>
+  <data name="Mng_MsgEmailUnchanged" xml:space="preserve"><value>Адрес не изменился.</value></data>
+  <data name="Mng_MsgEmailChangeSent" xml:space="preserve"><value>Ссылка для подтверждения нового адреса отправлена. Проверьте почту.</value></data>
+  <data name="Mng_MsgVerificationSent" xml:space="preserve"><value>Письмо для подтверждения отправлено. Проверьте почту.</value></data>
+  <data name="Mng_MsgCodeInvalid" xml:space="preserve"><value>Ошибка: неверный код подтверждения.</value></data>
+  <data name="Mng_MsgAuthVerified" xml:space="preserve"><value>Приложение-аутентификатор подключено.</value></data>
+  <data name="Mng_Msg2faDisabled" xml:space="preserve"><value>Двухфакторная аутентификация отключена. Включить её снова можно на этой странице.</value></data>
+  <data name="Mng_MsgCodesGenerated" xml:space="preserve"><value>Созданы новые коды восстановления.</value></data>
+  <data name="Mng_MsgExtLoginRemoved" xml:space="preserve"><value>Внешний вход отключён.</value></data>
+  <data name="Mng_MsgExtLoginNotRemoved" xml:space="preserve"><value>Ошибка: не удалось отключить внешний вход.</value></data>
+  <data name="Mng_MsgExtLoginAdded" xml:space="preserve"><value>Внешний вход подключён.</value></data>
+  <data name="Mng_MsgExtLoginNotAdded" xml:space="preserve"><value>Ошибка: не удалось подключить внешний вход. Один сервис можно связать только с одной учётной записью.</value></data>
+  <data name="Mng_MsgExtLoginNoInfo" xml:space="preserve"><value>Ошибка: не удалось получить данные внешнего входа.</value></data>
+  <data name="Mng_UnnamedPasskey" xml:space="preserve"><value>Ключ без названия</value></data>
+  <data name="Mng_PasskeyNameLength" xml:space="preserve"><value>Название не длиннее {1} символов</value></data>
+  <data name="Mng_GenerateNewSet" xml:space="preserve"><value>Создать новый набор кодов восстановления</value></data>
+  <data name="Mng_CodesLeft" xml:space="preserve"><value>Осталось кодов восстановления: {0}</value></data>
+  <data name="Mng_RenamePasskeyOf" xml:space="preserve"><value>Новое название для ключа «{0}»</value></data>
+  <data name="Mng_StepInstallApp" xml:space="preserve"><value>Установите на телефон приложение-аутентификатор.</value></data>
+  <data name="Mng_StepInstallAppExamples" xml:space="preserve"><value>Подойдут Google Authenticator, Microsoft Authenticator, Aegis, 1Password и любое другое приложение, работающее по стандарту TOTP.</value></data>
+  <data name="Mng_StepEnterKey" xml:space="preserve"><value>Введите в приложении этот ключ. Пробелы и регистр значения не имеют.</value></data>
+  <data name="Mng_StepEnterCode" xml:space="preserve"><value>Приложение начнёт показывать шестизначный код, который меняется каждые полминуты. Введите текущий код ниже.</value></data>
+  <data name="IdErr_PasswordTooShort" xml:space="preserve"><value>Пароль короче {0} символов</value></data>
+  <data name="IdErr_PasswordRequiresDigit" xml:space="preserve"><value>В пароле нужна хотя бы одна цифра</value></data>
+  <data name="IdErr_PasswordRequiresLower" xml:space="preserve"><value>В пароле нужна строчная буква</value></data>
+  <data name="IdErr_PasswordRequiresUpper" xml:space="preserve"><value>В пароле нужна заглавная буква</value></data>
+  <data name="IdErr_PasswordRequiresSymbol" xml:space="preserve"><value>В пароле нужен хотя бы один знак, кроме букв и цифр</value></data>
+  <data name="IdErr_PasswordRequiresUnique" xml:space="preserve"><value>В пароле должно быть не меньше {0} разных символов</value></data>
+  <data name="IdErr_PasswordMismatch" xml:space="preserve"><value>Неверный пароль</value></data>
+  <data name="IdErr_DuplicateEmail" xml:space="preserve"><value>Адрес {0} уже занят</value></data>
+  <data name="IdErr_InvalidEmail" xml:space="preserve"><value>Некорректный адрес электронной почты</value></data>
+  <data name="IdErr_DuplicateUserName" xml:space="preserve"><value>Имя {0} уже занято</value></data>
+  <data name="IdErr_InvalidUserName" xml:space="preserve"><value>Недопустимое имя пользователя</value></data>
+  <data name="IdErr_InvalidToken" xml:space="preserve"><value>Ссылка недействительна или устарела. Запросите новую.</value></data>
+  <data name="IdErr_AlreadyHasPassword" xml:space="preserve"><value>Пароль уже задан</value></data>
+  <data name="IdErr_LoginAlreadyAssociated" xml:space="preserve"><value>Этот сервис уже связан с другой учётной записью</value></data>
+  <data name="IdErr_Concurrency" xml:space="preserve"><value>Данные успели измениться. Попробуйте ещё раз.</value></data>
+  <data name="Mng_RepeatPassword" xml:space="preserve"><value>Повторите пароль</value></data>
+  <data name="Mng_ResetKeysNote" xml:space="preserve"><value>Отключение не меняет ключ, который уже записан в приложении-аутентификаторе. Чтобы сменить сам ключ, перенастройте приложение.</value></data>
+  <data name="Mng_ResetKeysNoteGen" xml:space="preserve"><value>Новые коды не меняют ключ, записанный в приложении-аутентификаторе. Чтобы сменить сам ключ, перенастройте приложение.</value></data>
+  <data name="Mng_LoseCodesWarning" xml:space="preserve"><value>Потеряв телефон и не имея кодов восстановления, вы потеряете доступ к учётной записи.</value></data>
+  <data name="TwoFa_Title" xml:space="preserve"><value>Вход по второму фактору</value></data>
+  <data name="TwoFa_Intro" xml:space="preserve"><value>Вход в эту учётную запись защищён приложением-аутентификатором. Введите код из приложения.</value></data>
+  <data name="TwoFa_Code" xml:space="preserve"><value>Код из приложения</value></data>
+  <data name="TwoFa_RememberMachine" xml:space="preserve"><value>Запомнить это устройство</value></data>
+  <data name="TwoFa_NoDevice" xml:space="preserve"><value>Нет доступа к приложению?</value></data>
+  <data name="TwoFa_UseRecovery" xml:space="preserve"><value>Войти по коду восстановления</value></data>
+  <data name="TwoFa_RecoveryTitle" xml:space="preserve"><value>Вход по коду восстановления</value></data>
+  <data name="TwoFa_RecoveryIntro" xml:space="preserve"><value>Этот вход не будет запомнен, пока вы снова не войдёте с кодом из приложения или не отключите двухфакторную аутентификацию.</value></data>
+  <data name="TwoFa_RecoveryCode" xml:space="preserve"><value>Код восстановления</value></data>
+  <data name="TwoFa_LogIn" xml:space="preserve"><value>Войти</value></data>
+  <data name="TwoFa_EnterCode" xml:space="preserve"><value>Введите код</value></data>
+  <data name="Cnf_EmailChangeTitle" xml:space="preserve"><value>Подтверждение новой почты</value></data>
+  <data name="Ext_Title" xml:space="preserve"><value>Завершение регистрации</value></data>
+  <data name="Ext_Intro" xml:space="preserve"><value>Вход через {0} прошёл успешно. Осталось указать адрес почты — на него будут приходить уведомления.</value></data>
+  <data name="Ext_EnterEmail" xml:space="preserve"><value>Введите адрес почты</value></data>
+  <data name="Ext_Finish" xml:space="preserve"><value>Готово</value></data>
+  <data name="Auth_InvalidUserNote" xml:space="preserve"><value>Не удалось определить учётную запись. Войдите заново.</value></data>
+  <data name="Cnf_EmailChangeOk" xml:space="preserve"><value>Новый адрес почты подтверждён.</value></data>
+  <data name="Cnf_EmailChangeFail" xml:space="preserve"><value>Не удалось сменить адрес почты. Возможно, ссылка устарела — запросите новую.</value></data>
+  <data name="Cnf_UserNameChangeFail" xml:space="preserve"><value>Не удалось обновить имя пользователя.</value></data>
+  <data name="Val_Phone" xml:space="preserve"><value>Введите корректный номер телефона</value></data>
 </root>

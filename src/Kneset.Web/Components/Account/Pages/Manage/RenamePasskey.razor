@@ -8,26 +8,27 @@
 
 @inject UserManager<AppUser> UserManager
 @inject IdentityRedirectManager RedirectManager
+@inject IStringLocalizer<SharedResource> L
 
 <EditForm Model="Input" OnValidSubmit="Rename" FormName="rename-passkey" method="post">
     <DataAnnotationsValidator />
     @if (passkey?.Name is { } name)
     {
-        <h4>Enter a new name for your "@name" passkey</h4>
+        <h4>@string.Format(L["Mng_RenamePasskeyOf"], name)</h4>
     }
     else
     {
-        <h4>Enter a name for your passkey</h4>
+        <h4>@L["Mng_PasskeyNamePrompt"]</h4>
     }
     <hr />
     <ValidationSummary class="text-danger" role="alert" />
     <div class="form-floating mb-3">
-        <InputText @bind-Value="Input.Name" id="Input.Name" class="form-control" aria-required="true" placeholder="My passkey" />
-        <label for="Input.Name" class="form-label">Passkey name</label>
+        <InputText @bind-Value="Input.Name" id="Input.Name" class="form-control" aria-required="true" placeholder="@L["Mng_MyPasskey"]" />
+        <label for="Input.Name" class="form-label">@L["Mng_PasskeyName"]</label>
         <ValidationMessage For="() => Input.Name" class="text-danger" />
     </div>
     <div>
-        <button type="submit" class="w-100 btn btn-lg btn-primary">Continue</button>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">@L["Mng_Continue"]</button>
     </div>
 </EditForm>
 
@@ -89,8 +90,8 @@
 
     private sealed class InputModel
     {
-        [Required]
-        [StringLength(200, ErrorMessage = "Passkey names must be no longer than {1} characters.")]
+        [LocalizedRequired]
+        [LocalizedLength(200, MessageKey = "Mng_PasskeyNameLength")]
         public string Name { get; set; } = "";
     }
 }

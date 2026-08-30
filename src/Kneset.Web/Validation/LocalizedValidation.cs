@@ -56,8 +56,32 @@ public sealed class LocalizedEmailAddressAttribute : ValidationAttribute
 /// </summary>
 public sealed class LocalizedLengthAttribute(int maximumLength) : StringLengthAttribute(maximumLength)
 {
+    /// <summary>
+    /// Ключ ресурса с текстом ошибки. По умолчанию сообщение говорит про обе
+    /// границы; где нижней нет, поле подменяют своим ключом.
+    /// </summary>
+    public string MessageKey { get; init; } = "Val_Length";
+
     public override string FormatErrorMessage(string name) =>
-        string.Format(ValidationLocalizer.Get("Val_Length"), MinimumLength, MaximumLength);
+        string.Format(ValidationLocalizer.Get(MessageKey), MinimumLength, MaximumLength);
+}
+
+/// <summary>
+/// Номер телефона у необязательного поля.
+///
+/// Штатный PhoneAttribute считает пустую строку недопустимой. Пока поле
+/// заполняли, это не мешало, но форма профиля отдаёт "" за незаполненный
+/// телефон — и сохранить профиль без телефона было нельзя вовсе: на пустом
+/// поле выскакивала ошибка. Пустое значение здесь означает «не указан».
+/// </summary>
+public sealed class LocalizedPhoneAttribute : ValidationAttribute
+{
+    private static readonly PhoneAttribute Inner = new();
+
+    public override bool IsValid(object? value) =>
+        value is not string s || string.IsNullOrWhiteSpace(s) || Inner.IsValid(s);
+
+    public override string FormatErrorMessage(string name) => ValidationLocalizer.Get("Val_Phone");
 }
 
 /// <summary>Совпадение с другим полем — здесь это подтверждение пароля.</summary>

@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
 
-  <data name="Brand" xml:space="preserve"><value>🏛️ מעקב הכנסת</value></data>
+  <data name="Brand" xml:space="preserve"><value>מעקב הכנסת</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>ראשי</value></data>
   <data name="Nav_Bills" xml:space="preserve"><value>הצעות חוק</value></data>
   <data name="Nav_Members" xml:space="preserve"><value>חברי הכנסת</value></data>
@@ -53,13 +53,13 @@
   <data name="LoginToVote" xml:space="preserve"><value>התחברו כדי להצביע</value></data>
   <data name="Reaction_InitiativeNote" xml:space="preserve"><value>התגובה היא תמונת דעות כללית (כולל מתנגדים); החתימה למטה היא תמיכה רשמית לקראת הסף.</value></data>
 
-  <data name="Inf_Open" xml:space="preserve"><value>🟢 חלון ההשפעה פתוח</value></data>
+  <data name="Inf_Open" xml:space="preserve"><value>חלון ההשפעה פתוח</value></data>
   <data name="Inf_Open_Hint" xml:space="preserve"><value>הצעת החוק בוועדה: הדיונים פתוחים, הוועדה מקבלת ניירות עמדה, הנוסח משתנה. הזמן הטוב ביותר לפעול.</value></data>
-  <data name="Inf_Limited" xml:space="preserve"><value>🟡 השפעה מוגבלת</value></data>
+  <data name="Inf_Limited" xml:space="preserve"><value>השפעה מוגבלת</value></data>
   <data name="Inf_Limited_Hint" xml:space="preserve"><value>ממתין לקריאה במליאה — השפעה רק דרך חברי כנסת: הסתייגויות והצבעה.</value></data>
-  <data name="Inf_Late" xml:space="preserve"><value>🔴 מאוחר מדי</value></data>
+  <data name="Inf_Late" xml:space="preserve"><value>מאוחר מדי</value></data>
   <data name="Inf_Late_Hint" xml:space="preserve"><value>החוק התקבל. שינוי אפשרי רק בחוק מתקן — למשל דרך יוזמה אזרחית.</value></data>
-  <data name="Inf_Frozen" xml:space="preserve"><value>⚪ מוקפא</value></data>
+  <data name="Inf_Frozen" xml:space="preserve"><value>מוקפא</value></data>
   <data name="Inf_Frozen_Hint" xml:space="preserve"><value>ההליך אינו מתקדם — אין על מה להשפיע, אך אפשר לעקוב אחר חידושו.</value></data>
 
   <data name="Com_Header" xml:space="preserve"><value>דיון</value></data>
@@ -116,8 +116,8 @@
   <data name="Meta_Source" xml:space="preserve"><value>מקור</value></data>
   <data name="Meta_Confidence" xml:space="preserve"><value>ביטחון</value></data>
 
-  <data name="Ctx_Header" xml:space="preserve"><value>🧭 הקשר ופרשנויות</value></data>
-  <data name="Ctx_Warning" xml:space="preserve"><value>⚠️ כל מה שבחלק זה הוא פרשנות ולא עובדות: ניתוח אינטרסים, הקשר ומקבילות היסטוריות לפי כללי הפלטפורמה (סימטריה בין הצדדים, ייחוס כל עמדה, מגוון דעות בתוך כל צד). תיאור עמדה אינו הסכמה איתה.</value></data>
+  <data name="Ctx_Header" xml:space="preserve"><value>הקשר ופרשנויות</value></data>
+  <data name="Ctx_Warning" xml:space="preserve"><value>כל מה שבחלק זה הוא פרשנות ולא עובדות: ניתוח אינטרסים, הקשר ומקבילות היסטוריות לפי כללי הפלטפורמה (סימטריה בין הצדדים, ייחוס כל עמדה, מגוון דעות בתוך כל צד). תיאור עמדה אינו הסכמה איתה.</value></data>
   <data name="Ctx_WhoBenefits" xml:space="preserve"><value>מי מרוויח</value></data>
   <data name="Ctx_WhoConcerned" xml:space="preserve"><value>מי חושש</value></data>
   <data name="Ctx_DeFacto" xml:space="preserve"><value>מטרות בפועל</value></data>
@@ -245,7 +245,7 @@
   <data name="Feed_StatusChanged" xml:space="preserve"><value>השלב השתנה</value></data>
   <data name="Feed_NewInitiative" xml:space="preserve"><value>יוזמה אזרחית</value></data>
   <data name="Feed_NewComment" xml:space="preserve"><value>חדש בדיון</value></data>
-  <data name="Feed_ShowMore" xml:space="preserve"><value>כל הצעות החוק</value></data>
+  <data name="Feed_ShowMore" xml:space="preserve"><value>הצג עוד</value></data>
   <data name="Search_Placeholder" xml:space="preserve"><value>חיפוש הצעת חוק</value></data>
   <data name="Time_JustNow" xml:space="preserve"><value>הרגע</value></data>
   <data name="Time_Minutes" xml:space="preserve"><value>לפני {0} דק'</value></data>
@@ -384,4 +384,166 @@
   <data name="Priv_Contact" xml:space="preserve"><value>שאלות ושינויים</value></data>
   <data name="Priv_ContactText" xml:space="preserve"><value>קוד המקור של האתר פתוח, והעמוד הזה נכתב לפיו: כל טענה כאן אפשר לבדוק מול הקוד. אם משהו בטיפול בנתונים ישתנה, ישתנה גם העמוד — תאריך העדכון מופיע למעלה.</value></data>
   <data name="Bills_InAgendaSince" xml:space="preserve"><value>בסדר היום מאז</value></data>
+  <data name="Ctx_ClosingWindow" xml:space="preserve"><value>החלון נסגר</value></data>
+  <data name="Ctx_UntilSession" xml:space="preserve"><value>עד הישיבה</value></data>
+  <data name="Ctx_Committee" xml:space="preserve"><value>ועדה</value></data>
+  <data name="Ctx_Plenum" xml:space="preserve"><value>מליאה</value></data>
+  <data name="Bill_Stages" xml:space="preserve"><value>מסלול ההצעה</value></data>
+  <data name="Bill_StagesTruncated" xml:space="preserve"><value>מוצגות הישיבות הראשונות — להצעה הזאת יש עוד.</value></data>
+  <data name="Bill_StagesGap" xml:space="preserve"><value>…עוד {0} בין לבין</value></data>
+  <data name="Bill_SittingForms" xml:space="preserve"><value>ישיבה|ישיבות</value></data>
+  <data name="Ctx_Initiatives" xml:space="preserve"><value>דרושות חתימות</value></data>
+  <data name="Ctx_SignaturesLeft" xml:space="preserve"><value>חסרות {0}</value></data>
+  <data name="Ctx_AllInitiatives" xml:space="preserve"><value>כל היוזמות</value></data>
+  <data name="Init_SigForms" xml:space="preserve"><value>חתימה|חתימות</value></data>
+  <data name="Bills_AllFactions" xml:space="preserve"><value>כל הסיעות</value></data>
+  <data name="Bills_AllMembers" xml:space="preserve"><value>כל חברי הכנסת</value></data>
+  <data name="Bills_AuthorOnly" xml:space="preserve"><value>רק הצעות שהגיש, בלי חתימות תמיכה</value></data>
+  <data name="Member_ShowInList" xml:space="preserve"><value>הצג ברשימה המלאה</value></data>
+  <data name="Feed_Loading" xml:space="preserve"><value>טוען…</value></data>
+  <data name="Feed_AllBills" xml:space="preserve"><value>כל הצעות החוק</value></data>
+  <data name="Feed_SeenBefore" xml:space="preserve"><value>מכאן כבר ראיתם</value></data>
+  <data name="Mng_Title" xml:space="preserve"><value>ניהול החשבון</value></data>
+  <data name="Mng_Profile" xml:space="preserve"><value>פרופיל</value></data>
+  <data name="Mng_Email" xml:space="preserve"><value>דוא"ל</value></data>
+  <data name="Mng_Password" xml:space="preserve"><value>סיסמה</value></data>
+  <data name="Mng_ExternalLogins" xml:space="preserve"><value>כניסות חיצוניות</value></data>
+  <data name="Mng_TwoFactor" xml:space="preserve"><value>אימות דו-שלבי</value></data>
+  <data name="Mng_Passkeys" xml:space="preserve"><value>מפתחות גישה</value></data>
+  <data name="Mng_PersonalData" xml:space="preserve"><value>מידע אישי</value></data>
+  <data name="Mng_Username" xml:space="preserve"><value>שם משתמש</value></data>
+  <data name="Mng_UsernameHint" xml:space="preserve"><value>בחרו שם משתמש</value></data>
+  <data name="Mng_Phone" xml:space="preserve"><value>טלפון</value></data>
+  <data name="Mng_PhoneHint" xml:space="preserve"><value>הזינו מספר טלפון</value></data>
+  <data name="Mng_Save" xml:space="preserve"><value>שמירה</value></data>
+  <data name="Mng_ChangePassword" xml:space="preserve"><value>שינוי סיסמה</value></data>
+  <data name="Mng_OldPassword" xml:space="preserve"><value>הסיסמה הנוכחית</value></data>
+  <data name="Mng_NewPassword" xml:space="preserve"><value>סיסמה חדשה</value></data>
+  <data name="Mng_ConfirmPassword" xml:space="preserve"><value>אימות הסיסמה החדשה</value></data>
+  <data name="Mng_UpdatePassword" xml:space="preserve"><value>עדכון הסיסמה</value></data>
+  <data name="Mng_EnterOldPassword" xml:space="preserve"><value>הזינו את הסיסמה הנוכחית</value></data>
+  <data name="Mng_EnterNewPassword" xml:space="preserve"><value>הזינו סיסמה חדשה</value></data>
+  <data name="Mng_SetPassword" xml:space="preserve"><value>הגדרת סיסמה</value></data>
+  <data name="Mng_SetPasswordTitle" xml:space="preserve"><value>הגדירו סיסמה</value></data>
+  <data name="Mng_ManageEmail" xml:space="preserve"><value>ניהול הדוא"ל</value></data>
+  <data name="Mng_SendVerification" xml:space="preserve"><value>שליחת דוא"ל אימות</value></data>
+  <data name="Mng_NewEmail" xml:space="preserve"><value>דוא"ל חדש</value></data>
+  <data name="Mng_ChangeEmail" xml:space="preserve"><value>שינוי הדוא"ל</value></data>
+  <data name="Mng_EnterEmail" xml:space="preserve"><value>הזינו דוא"ל</value></data>
+  <data name="Mng_EnterNewEmail" xml:space="preserve"><value>הזינו דוא"ל חדש</value></data>
+  <data name="Mng_PersonalDataText" xml:space="preserve"><value>בחשבון נשמר מידע שמסרתם לנו. כאן אפשר להוריד אותו או למחוק.</value></data>
+  <data name="Mng_DeleteWarning" xml:space="preserve"><value>המחיקה בלתי הפיכה: יחד עם החשבון יימחקו המעקבים, העמדות והתגובות.</value></data>
+  <data name="Mng_Download" xml:space="preserve"><value>הורדה</value></data>
+  <data name="Mng_Delete" xml:space="preserve"><value>מחיקה</value></data>
+  <data name="Mng_DeleteDataTitle" xml:space="preserve"><value>מחיקת מידע אישי</value></data>
+  <data name="Mng_DeleteAndClose" xml:space="preserve"><value>מחיקת המידע וסגירת החשבון</value></data>
+  <data name="Mng_EnterPassword" xml:space="preserve"><value>הזינו סיסמה</value></data>
+  <data name="Mng_ExtLoginsTitle" xml:space="preserve"><value>ניהול כניסות חיצוניות</value></data>
+  <data name="Mng_RegisteredLogins" xml:space="preserve"><value>שירותים מחוברים</value></data>
+  <data name="Mng_Remove" xml:space="preserve"><value>ניתוק</value></data>
+  <data name="Mng_AddService" xml:space="preserve"><value>חיבור שירות נוסף</value></data>
+  <data name="Mng_RemoveLogin" xml:space="preserve"><value>ניתוק הכניסה דרך {0}</value></data>
+  <data name="Mng_LoginUsing" xml:space="preserve"><value>כניסה דרך {0}</value></data>
+  <data name="Mng_2faTitle" xml:space="preserve"><value>אימות דו-שלבי</value></data>
+  <data name="Mng_NoRecoveryCodes" xml:space="preserve"><value>לא נותרו קודי שחזור.</value></data>
+  <data name="Mng_OneRecoveryCode" xml:space="preserve"><value>נותר קוד שחזור אחד.</value></data>
+  <data name="Mng_ForgetBrowser" xml:space="preserve"><value>שכחו את הדפדפן הזה</value></data>
+  <data name="Mng_Disable2fa" xml:space="preserve"><value>כיבוי האימות הדו-שלבי</value></data>
+  <data name="Mng_ResetCodes" xml:space="preserve"><value>איפוס קודי השחזור</value></data>
+  <data name="Mng_AuthApp" xml:space="preserve"><value>אפליקציית אימות</value></data>
+  <data name="Mng_AddAuthApp" xml:space="preserve"><value>חיבור אפליקציית אימות</value></data>
+  <data name="Mng_SetupAuthApp" xml:space="preserve"><value>הגדרת אפליקציית אימות</value></data>
+  <data name="Mng_ResetAuthApp" xml:space="preserve"><value>הגדרה מחדש של האפליקציה</value></data>
+  <data name="Mng_PolicyNotAccepted" xml:space="preserve"><value>מדיניות הפרטיות לא אושרה.</value></data>
+  <data name="Mng_PolicyRequired" xml:space="preserve"><value>יש לאשר את המדיניות לפני הפעלת האימות הדו-שלבי.</value></data>
+  <data name="Mng_Disable2faTitle" xml:space="preserve"><value>כיבוי האימות הדו-שלבי</value></data>
+  <data name="Mng_Disable2faNote" xml:space="preserve"><value>הפעולה הזאת רק מכבה את האימות הדו-שלבי.</value></data>
+  <data name="Mng_ConfigureAuth" xml:space="preserve"><value>הגדרת אפליקציית אימות</value></data>
+  <data name="Mng_AuthSteps" xml:space="preserve"><value>כדי להשתמש באפליקציית אימות, בצעו את השלבים הבאים:</value></data>
+  <data name="Mng_VerificationCode" xml:space="preserve"><value>קוד אימות</value></data>
+  <data name="Mng_Verify" xml:space="preserve"><value>אימות</value></data>
+  <data name="Mng_EnterCode" xml:space="preserve"><value>הזינו את הקוד</value></data>
+  <data name="Mng_ResetAuthTitle" xml:space="preserve"><value>איפוס מפתח האימות</value></data>
+  <data name="Mng_ResetAuthNote" xml:space="preserve"><value>לאחר האיפוס אפליקציית האימות לא תפעל עד שתגדירו אותה מחדש.</value></data>
+  <data name="Mng_GenCodesTitle" xml:space="preserve"><value>יצירת קודי שחזור לאימות הדו-שלבי</value></data>
+  <data name="Mng_RecoveryCodes" xml:space="preserve"><value>קודי שחזור</value></data>
+  <data name="Mng_KeepCodesSafe" xml:space="preserve"><value>שמרו את הקודים במקום בטוח.</value></data>
+  <data name="Mng_GenerateCodes" xml:space="preserve"><value>יצירת קודי שחזור</value></data>
+  <data name="Mng_PasskeysTitle" xml:space="preserve"><value>ניהול מפתחות הגישה</value></data>
+  <data name="Mng_Rename" xml:space="preserve"><value>שינוי שם</value></data>
+  <data name="Mng_NoPasskeys" xml:space="preserve"><value>לא נוספו מפתחות גישה.</value></data>
+  <data name="Mng_PasskeyLimit" xml:space="preserve"><value>הגעתם למספר המרבי של מפתחות גישה. מחקו אחד כדי להוסיף חדש.</value></data>
+  <data name="Mng_AddPasskey" xml:space="preserve"><value>הוספת מפתח גישה</value></data>
+  <data name="Mng_RenamePasskey" xml:space="preserve"><value>שינוי שם המפתח</value></data>
+  <data name="Mng_RemovePasskey" xml:space="preserve"><value>מחיקת המפתח מהחשבון</value></data>
+  <data name="Mng_PasskeyNamePrompt" xml:space="preserve"><value>הזינו שם למפתח הגישה</value></data>
+  <data name="Mng_PasskeyName" xml:space="preserve"><value>שם המפתח</value></data>
+  <data name="Mng_Continue" xml:space="preserve"><value>המשך</value></data>
+  <data name="Mng_MyPasskey" xml:space="preserve"><value>המפתח שלי</value></data>
+  <data name="Mng_MsgPasswordChanged" xml:space="preserve"><value>הסיסמה שונתה</value></data>
+  <data name="Mng_MsgPasswordSet" xml:space="preserve"><value>הסיסמה הוגדרה</value></data>
+  <data name="Mng_MsgProfileUpdated" xml:space="preserve"><value>הפרופיל עודכן</value></data>
+  <data name="Mng_MsgPhoneFailed" xml:space="preserve"><value>שגיאה: לא ניתן לשמור את מספר הטלפון.</value></data>
+  <data name="Mng_MsgWrongPassword" xml:space="preserve"><value>שגיאה: סיסמה שגויה.</value></data>
+  <data name="Mng_MsgEmailUnchanged" xml:space="preserve"><value>הכתובת לא השתנתה.</value></data>
+  <data name="Mng_MsgEmailChangeSent" xml:space="preserve"><value>נשלח קישור לאישור הכתובת החדשה. בדקו את הדוא"ל.</value></data>
+  <data name="Mng_MsgVerificationSent" xml:space="preserve"><value>נשלח דוא"ל אימות. בדקו את התיבה.</value></data>
+  <data name="Mng_MsgCodeInvalid" xml:space="preserve"><value>שגיאה: קוד האימות שגוי.</value></data>
+  <data name="Mng_MsgAuthVerified" xml:space="preserve"><value>אפליקציית האימות אומתה.</value></data>
+  <data name="Mng_Msg2faDisabled" xml:space="preserve"><value>האימות הדו-שלבי כובה. אפשר להפעיל אותו שוב בעמוד הזה.</value></data>
+  <data name="Mng_MsgCodesGenerated" xml:space="preserve"><value>נוצרו קודי שחזור חדשים.</value></data>
+  <data name="Mng_MsgExtLoginRemoved" xml:space="preserve"><value>הכניסה החיצונית נותקה.</value></data>
+  <data name="Mng_MsgExtLoginNotRemoved" xml:space="preserve"><value>שגיאה: לא ניתן לנתק את הכניסה החיצונית.</value></data>
+  <data name="Mng_MsgExtLoginAdded" xml:space="preserve"><value>הכניסה החיצונית חוברה.</value></data>
+  <data name="Mng_MsgExtLoginNotAdded" xml:space="preserve"><value>שגיאה: לא ניתן לחבר את הכניסה החיצונית. שירות אחד מתקשר לחשבון אחד בלבד.</value></data>
+  <data name="Mng_MsgExtLoginNoInfo" xml:space="preserve"><value>שגיאה: לא ניתן לטעון את פרטי הכניסה החיצונית.</value></data>
+  <data name="Mng_UnnamedPasskey" xml:space="preserve"><value>מפתח ללא שם</value></data>
+  <data name="Mng_PasskeyNameLength" xml:space="preserve"><value>השם עד {1} תווים</value></data>
+  <data name="Mng_GenerateNewSet" xml:space="preserve"><value>יצירת סט חדש של קודי שחזור</value></data>
+  <data name="Mng_CodesLeft" xml:space="preserve"><value>נותרו {0} קודי שחזור.</value></data>
+  <data name="Mng_RenamePasskeyOf" xml:space="preserve"><value>שם חדש למפתח „{0}”</value></data>
+  <data name="Mng_StepInstallApp" xml:space="preserve"><value>התקינו בטלפון אפליקציית אימות.</value></data>
+  <data name="Mng_StepInstallAppExamples" xml:space="preserve"><value>מתאימים Google Authenticator, Microsoft Authenticator, Aegis, 1Password וכל אפליקציה אחרת בתקן TOTP.</value></data>
+  <data name="Mng_StepEnterKey" xml:space="preserve"><value>הזינו את המפתח הזה באפליקציה. רווחים ואותיות גדולות אינם משנים.</value></data>
+  <data name="Mng_StepEnterCode" xml:space="preserve"><value>האפליקציה תציג קוד בן שש ספרות שמתחלף כל חצי דקה. הזינו את הקוד הנוכחי למטה.</value></data>
+  <data name="IdErr_PasswordTooShort" xml:space="preserve"><value>הסיסמה קצרה מ-{0} תווים</value></data>
+  <data name="IdErr_PasswordRequiresDigit" xml:space="preserve"><value>הסיסמה חייבת לכלול ספרה אחת לפחות</value></data>
+  <data name="IdErr_PasswordRequiresLower" xml:space="preserve"><value>הסיסמה חייבת לכלול אות קטנה</value></data>
+  <data name="IdErr_PasswordRequiresUpper" xml:space="preserve"><value>הסיסמה חייבת לכלול אות גדולה</value></data>
+  <data name="IdErr_PasswordRequiresSymbol" xml:space="preserve"><value>הסיסמה חייבת לכלול תו שאינו אות או ספרה</value></data>
+  <data name="IdErr_PasswordRequiresUnique" xml:space="preserve"><value>הסיסמה חייבת לכלול לפחות {0} תווים שונים</value></data>
+  <data name="IdErr_PasswordMismatch" xml:space="preserve"><value>סיסמה שגויה</value></data>
+  <data name="IdErr_DuplicateEmail" xml:space="preserve"><value>הכתובת {0} כבר תפוסה</value></data>
+  <data name="IdErr_InvalidEmail" xml:space="preserve"><value>כתובת דוא"ל שגויה</value></data>
+  <data name="IdErr_DuplicateUserName" xml:space="preserve"><value>השם {0} כבר תפוס</value></data>
+  <data name="IdErr_InvalidUserName" xml:space="preserve"><value>שם משתמש לא חוקי</value></data>
+  <data name="IdErr_InvalidToken" xml:space="preserve"><value>הקישור אינו תקף או פג תוקפו. בקשו קישור חדש.</value></data>
+  <data name="IdErr_AlreadyHasPassword" xml:space="preserve"><value>כבר הוגדרה סיסמה</value></data>
+  <data name="IdErr_LoginAlreadyAssociated" xml:space="preserve"><value>השירות הזה כבר מקושר לחשבון אחר</value></data>
+  <data name="IdErr_Concurrency" xml:space="preserve"><value>הנתונים השתנו בינתיים. נסו שוב.</value></data>
+  <data name="Mng_RepeatPassword" xml:space="preserve"><value>הזינו שוב את הסיסמה</value></data>
+  <data name="Mng_ResetKeysNote" xml:space="preserve"><value>הכיבוי אינו משנה את המפתח השמור באפליקציית האימות. כדי להחליף את המפתח עצמו, הגדירו את האפליקציה מחדש.</value></data>
+  <data name="Mng_ResetKeysNoteGen" xml:space="preserve"><value>קודים חדשים אינם משנים את המפתח השמור באפליקציית האימות. כדי להחליף את המפתח עצמו, הגדירו את האפליקציה מחדש.</value></data>
+  <data name="Mng_LoseCodesWarning" xml:space="preserve"><value>אם תאבדו את הטלפון ולא יהיו לכם קודי שחזור, תאבדו את הגישה לחשבון.</value></data>
+  <data name="TwoFa_Title" xml:space="preserve"><value>כניסה באימות דו-שלבי</value></data>
+  <data name="TwoFa_Intro" xml:space="preserve"><value>הכניסה לחשבון הזה מוגנת באפליקציית אימות. הזינו את הקוד מהאפליקציה.</value></data>
+  <data name="TwoFa_Code" xml:space="preserve"><value>הקוד מהאפליקציה</value></data>
+  <data name="TwoFa_RememberMachine" xml:space="preserve"><value>זכרו את המכשיר הזה</value></data>
+  <data name="TwoFa_NoDevice" xml:space="preserve"><value>אין גישה לאפליקציה?</value></data>
+  <data name="TwoFa_UseRecovery" xml:space="preserve"><value>כניסה עם קוד שחזור</value></data>
+  <data name="TwoFa_RecoveryTitle" xml:space="preserve"><value>כניסה עם קוד שחזור</value></data>
+  <data name="TwoFa_RecoveryIntro" xml:space="preserve"><value>הכניסה הזאת לא תיזכר עד שתיכנסו שוב עם קוד מהאפליקציה או תכבו את האימות הדו-שלבי.</value></data>
+  <data name="TwoFa_RecoveryCode" xml:space="preserve"><value>קוד שחזור</value></data>
+  <data name="TwoFa_LogIn" xml:space="preserve"><value>כניסה</value></data>
+  <data name="TwoFa_EnterCode" xml:space="preserve"><value>הזינו את הקוד</value></data>
+  <data name="Cnf_EmailChangeTitle" xml:space="preserve"><value>אישור הדוא"ל החדש</value></data>
+  <data name="Ext_Title" xml:space="preserve"><value>השלמת ההרשמה</value></data>
+  <data name="Ext_Intro" xml:space="preserve"><value>הכניסה דרך {0} הצליחה. נותר להזין כתובת דוא"ל שאליה יישלחו ההתראות.</value></data>
+  <data name="Ext_EnterEmail" xml:space="preserve"><value>הזינו כתובת דוא"ל</value></data>
+  <data name="Ext_Finish" xml:space="preserve"><value>סיום</value></data>
+  <data name="Auth_InvalidUserNote" xml:space="preserve"><value>לא הצלחנו לזהות את החשבון. היכנסו שוב.</value></data>
+  <data name="Cnf_EmailChangeOk" xml:space="preserve"><value>הכתובת החדשה אושרה.</value></data>
+  <data name="Cnf_EmailChangeFail" xml:space="preserve"><value>לא ניתן לשנות את הכתובת. ייתכן שהקישור פג — בקשו קישור חדש.</value></data>
+  <data name="Cnf_UserNameChangeFail" xml:space="preserve"><value>לא ניתן לעדכן את שם המשתמש.</value></data>
+  <data name="Val_Phone" xml:space="preserve"><value>הזינו מספר טלפון תקין</value></data>
 </root>

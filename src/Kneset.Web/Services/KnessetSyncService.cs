@@ -405,6 +405,11 @@ public class KnessetSyncService(
                 }
                 row.StartDate = startDate;
                 row.StatusId = src.StatusId;
+                // Справочник статусов загружен первым шагом SyncAllAsync,
+                // поэтому к этому моменту он уже заполнен.
+                row.StatusDesc = src.StatusId is { } sid
+                    ? _statusDescById.GetValueOrDefault(sid)
+                    : null;
                 touchedBills.Add(billId);
             }
 
@@ -437,6 +442,16 @@ public class KnessetSyncService(
                 && row.StartDate != actual)
             {
                 row.StartDate = actual;
+                changed++;
+            }
+
+            // Заодно дозаполняем название стадии. Колонка появилась позже самих
+            // строк, а инкрементальная выборка пунктов их уже не принесёт —
+            // без этого прохода старые заседания остались бы без подписи.
+            if (row.StatusDesc is null && row.StatusId is { } sid
+                && _statusDescById.TryGetValue(sid, out var desc))
+            {
+                row.StatusDesc = desc;
                 changed++;
             }
         }

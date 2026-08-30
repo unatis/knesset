@@ -122,6 +122,25 @@ html, body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* Шрифт для иврита и арабского. Instrument Serif и Geist не содержат этих
+   письменностей, но содержат цифры и пунктуацию — поэтому в ивритском заголовке
+   буквы доставались Rubik'у, а «2026» и скобки серифу, и строка выглядела
+   набранной двумя гарнитурами. Подменяем переменные прямо на элементе с lang:
+   это работает и в русском интерфейсе, где ивритские названия и встречаются
+   чаще всего, — в отличие от привязки к языку страницы.
+
+   font-family здесь обязателен вдобавок к переменным. Элементы вроде .feed-link
+   своего font-family не объявляют и наследуют уже вычисленное значение от body —
+   подмена переменной на них не влияет. А правило стоит до компонентных, чтобы
+   .kt-bill-title со своим var(--kt-font-display) выигрывал по порядку и получал
+   серифную ветку стека, а не эту. */
+[lang="he"],
+[lang="ar"] {
+    --kt-font-display: 'Title-Multiscript', Georgia, serif;
+    --kt-font-sans: 'Body-Multiscript', system-ui, -apple-system, sans-serif;
+    font-family: var(--kt-font-sans);
+}
+
 h1, h2, h3 {
     font-family: var(--kt-font-display);
     font-weight: 400;
@@ -1085,3 +1104,111 @@ h1:focus {
     font-weight: 400;
     color: var(--kt-char-400);
 }
+
+/* --- шкала стадий на карточке закона --- */
+
+.kt-stages {
+    background: #FFFFFF;
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-lg);
+    padding: 1rem 1.125rem;
+}
+
+.kt-stage-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* Линия хронологии проходит по всему списку, а точки стадий садятся
+       на неё. Логическое свойство, а не border-left: в иврите и арабском
+       шкала должна оказаться справа. */
+    border-inline-start: 2px solid var(--kt-char-100);
+}
+
+    .kt-stage-list li {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.5rem 0.875rem;
+        padding: 0.5rem 0 0.5rem 1.125rem;
+    }
+
+/* Точка на линии: ставится ровно на границу, поэтому сдвиг равен половине
+   её ширины плюс половина толщины линии. */
+        .kt-stage-list li::before {
+            content: "";
+            position: absolute;
+            inset-inline-start: -5px;
+            top: 0.9rem;
+            width: 8px;
+            height: 8px;
+            border-radius: var(--kt-r-pill);
+            background: var(--kt-char-300);
+        }
+
+/* Назначенное, но ещё не состоявшееся заседание: полая точка и акцентный
+   цвет — это единственная строка шкалы, с которой можно что-то сделать. */
+        /* Селектор с li обязателен: у базового .kt-stage-list li::before
+           специфичность выше, и без него фон точки не переопределялся. */
+        .kt-stage-list li.kt-stage-future::before {
+            background: var(--kt-char-0);
+            border: 2px solid var(--kt-ember-500);
+        }
+
+        .kt-stage-list li.kt-stage-future .kt-stage-kind {
+            color: var(--kt-ember-600);
+            font-weight: 600;
+        }
+
+.kt-stage-date {
+    flex-shrink: 0;
+}
+
+.kt-stage-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.75rem;
+    min-width: 0;
+}
+
+.kt-stage-kind {
+    font-size: 0.8125rem;
+    color: var(--kt-char-500);
+}
+
+.kt-stage-status {
+    font-size: 0.8125rem;
+    color: var(--kt-char-700);
+}
+
+/* Пропуск в шкале: заседания между началом пути и последними шагами.
+   Точки на линии у этой строки нет — она не событие, а отметка о пропуске. */
+.kt-stage-gap {
+    font-size: 0.75rem;
+    color: var(--kt-char-400);
+}
+
+    .kt-stage-list li.kt-stage-gap::before {
+        display: none;
+    }
+
+/* Черта «дальше вы уже видели» в ленте. Не карточка и не событие —
+   служебная отметка, поэтому набрана мельче и линиями по бокам. */
+.kt-seen-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem 0;
+    font-size: 0.75rem;
+    color: var(--kt-char-400);
+    white-space: nowrap;
+}
+
+    .kt-seen-divider::before,
+    .kt-seen-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--kt-char-100);
+    }

@@ -1,12 +1,25 @@
 ﻿@if (!string.IsNullOrEmpty(DisplayMessage))
 {
-    var statusMessageClass = DisplayMessage.StartsWith("Error") ? "danger" : "success";
-    <div class="alert alert-@statusMessageClass" role="alert">
-        @DisplayMessage
+    <div class="alert alert-@(IsError ? "danger" : "success")" role="alert">
+        @Text
     </div>
 }
 
 @code {
+    /// <summary>
+    /// Метка неудачи в начале сообщения. До экрана не доходит — снимается
+    /// перед показом.
+    ///
+    /// В скаффолде цвет плашки выбирался по тому, начинается ли текст со слова
+    /// «Error». Пока все сообщения были английскими, это работало; с переводом
+    /// сломалось бы молча — «Неверный пароль» уехало бы в зелёную плашку
+    /// с видом успешно выполненного действия. Метка не зависит от языка.
+    /// </summary>
+    public const string ErrorMarker = "!err!";
+
+    /// <summary>Помечает сообщение как неудачу.</summary>
+    public static string Error(string message) => ErrorMarker + message;
+
     private string? messageFromCookie;
 
     [Parameter]
@@ -16,6 +29,10 @@
     private HttpContext HttpContext { get; set; } = default!;
 
     private string? DisplayMessage => Message ?? messageFromCookie;
+
+    private bool IsError => DisplayMessage!.StartsWith(ErrorMarker, StringComparison.Ordinal);
+
+    private string Text => IsError ? DisplayMessage![ErrorMarker.Length..] : DisplayMessage!;
 
     protected override void OnInitialized()
     {

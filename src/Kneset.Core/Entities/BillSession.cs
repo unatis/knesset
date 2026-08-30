@@ -45,4 +45,11 @@ public class BillSession
     /// Может быть пустой: не у каждого пункта повестки статус проставлен.
     /// </summary>
     public int? StatusId { get; set; }
+
+    /// <summary>
+    /// Название стадии на иврите. Денормализовано, как и Bill.StatusDesc:
+    /// справочник KNS_Status живёт в памяти синхронизации и в базу не пишется,
+    /// а join ради восьмидесяти строк на каждую отрисовку карточки не нужен.
+    /// </summary>
+    public string? StatusDesc { get; set; }
 }

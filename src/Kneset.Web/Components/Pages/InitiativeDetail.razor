@@ -1,8 +1,10 @@
 ﻿@page "/initiatives/{Id:int}"
 @rendermode InteractiveServer
+@using Kneset.Web.Services
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject NavigationManager Navigation
 @inject IStringLocalizer<SharedResource> L
+@inject InitiativeSigningService Signing
 
 <PageTitle>@(_initiative?.Title ?? L["Nav_Initiatives"].Value)</PageTitle>
 
@@ -48,7 +50,7 @@ else
                    Text="@string.Format(L["Share_InitText"], _initiative.Title)" />
     }
     <p class="text-muted">
-        @L["Init_Author"]: @_authorName · @L["Init_Created"] @_initiative.CreatedAt.ToString("dd.MM.yyyy")
+        @L["Init_Author"]: @(_authorName ?? L["Comment_AnonymousAuthor"].Value) · @L["Init_Created"] @_initiative.CreatedAt.ToString("dd.MM.yyyy")
         @if (_initiative.PublishedAt is not null)
         {
             <span> · @L["Init_PublishedAt"] @_initiative.PublishedAt.Value.ToString("dd.MM.yyyy")</span>
@@ -87,7 +89,7 @@ else
                         var percent = Math.Min(100, _signatureCount * 100 / Math.Max(1, _initiative.SignatureThreshold));
                     }
                     <div class="d-flex justify-content-between mb-1">
-                        <strong>@_signatureCount @L["Init_SigCount"]</strong>
+                        <strong>@_signatureCount @Plural.Of(_signatureCount, L["Init_SigForms"])</strong>
                         <span class="text-muted">@L["Init_Threshold"] @_initiative.SignatureThreshold</span>
                     </div>
                     <div class="progress mb-3" style="height:10px">
@@ -142,7 +144,7 @@ else
     [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
 
     private CitizenInitiative? _initiative;
-    private string _authorName = "";
+    private string? _authorName;
     private int _signatureCount;
     private bool _hasSigned;
     private bool _isAuthor;
@@ -179,7 +181,11 @@ else
             return;
         }
 
-        _authorName = _initiative.Author.DisplayName ?? _initiative.Author.UserName ?? "аноним";
+        // Только DisplayName, который человек задаёт сам. Фолбэк на UserName
+        // публиковал адрес почты: UserName здесь равен почте (Register.razor
+        // задаёт его из Input.Email), а DisplayName при регистрации не спрашивают.
+        // То же самое было в подписи комментариев — там уже исправлено.
+        _authorName = _initiative.Author.DisplayName;
         _signatureCount = await db.InitiativeSignatures.CountAsync(s => s.InitiativeId == Id);
         _hasSigned = _userId is not null &&
             await db.InitiativeSignatures.AnyAsync(s => s.InitiativeId == Id && s.UserId == _userId);
@@ -207,30 +213,10 @@ else
         if (_userId is null || _initiative is null) return;
         _busy = true;
 
-        await using var db = await DbFactory.CreateDbContextAsync();
-        try
-        {
-            db.InitiativeSignatures.Add(new InitiativeSignature
-            {
-                InitiativeId = Id,
-                UserId = _userId,
-                SignedAt = DateTime.UtcNow
-            });
-            await db.SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            // Уникальный индекс: уже подписал (гонка двойного клика) — игнорируем.
-        }
-
-        // Порог достигнут — фиксируем статус.
-        var count = await db.InitiativeSignatures.CountAsync(s => s.InitiativeId == Id);
-        if (count >= _initiative.SignatureThreshold)
-        {
-            await db.CitizenInitiatives
-                .Where(i => i.Id == Id && i.Status == InitiativeStatus.Published)
-                .ExecuteUpdateAsync(s => s.SetProperty(i => i.Status, InitiativeStatus.ThresholdReached));
-        }
+        // Логика подписи живёт в сервисе: подписывать можно и отсюда,
+        // и из карточки в ленте, а переход через порог меняет статус
+        // инициативы — две копии такого расходиться не должны.
+        await Signing.SignAsync(Id, _userId);
 
         _busy = false;
         await ReloadAsync();

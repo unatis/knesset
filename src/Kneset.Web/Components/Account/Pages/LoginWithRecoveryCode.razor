@@ -8,27 +8,25 @@
 @inject UserManager<AppUser> UserManager
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<LoginWithRecoveryCode> Logger
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Recovery code verification</PageTitle>
+<PageTitle>@L["TwoFa_RecoveryTitle"]</PageTitle>
 
-<h1>Recovery code verification</h1>
+<h1>@L["TwoFa_RecoveryTitle"]</h1>
 <hr />
 <StatusMessage Message="@message" />
-<p>
-    You have requested to log in with a recovery code. This login will not be remembered until you provide
-    an authenticator app code at log in or disable 2FA and log in again.
-</p>
+<p>@L["TwoFa_RecoveryIntro"]</p>
 <div class="row">
     <div class="col-md-4">
         <EditForm Model="Input" FormName="login-with-recovery-code" OnValidSubmit="OnValidSubmitAsync" method="post">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
             <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.RecoveryCode" id="Input.RecoveryCode" class="form-control" autocomplete="off" placeholder="RecoveryCode" />
-                <label for="Input.RecoveryCode" class="form-label">Recovery Code</label>
+                <InputText @bind-Value="Input.RecoveryCode" id="Input.RecoveryCode" class="form-control" autocomplete="off" placeholder="@L["TwoFa_RecoveryCode"]" />
+                <label for="Input.RecoveryCode" class="form-label">@L["TwoFa_RecoveryCode"]</label>
                 <ValidationMessage For="() => Input.RecoveryCode" class="text-danger" />
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">@L["TwoFa_LogIn"]</button>
         </EditForm>
     </div>
 </div>
