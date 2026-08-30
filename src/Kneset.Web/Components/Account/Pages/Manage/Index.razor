@@ -69,9 +69,11 @@
             return;
         }
 
-        if (Input.PhoneNumber != phoneNumber)
+        var newPhone = string.IsNullOrWhiteSpace(Input.PhoneNumber) ? null : Input.PhoneNumber.Trim();
+
+        if (newPhone != phoneNumber)
         {
-            var setPhoneResult = await UserManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+            var setPhoneResult = await UserManager.SetPhoneNumberAsync(user, newPhone);
             if (!setPhoneResult.Succeeded)
             {
                 RedirectManager.RedirectToCurrentPageWithStatus(StatusMessage.Error(L["Mng_MsgPhoneFailed"]), HttpContext);
@@ -85,7 +87,7 @@
 
     private sealed class InputModel
     {
-        [Phone]
+        [LocalizedPhone]
         public string? PhoneNumber { get; set; }
     }
 }

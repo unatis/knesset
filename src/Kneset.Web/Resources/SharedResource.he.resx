@@ -545,4 +545,5 @@
   <data name="Cnf_EmailChangeOk" xml:space="preserve"><value>הכתובת החדשה אושרה.</value></data>
   <data name="Cnf_EmailChangeFail" xml:space="preserve"><value>לא ניתן לשנות את הכתובת. ייתכן שהקישור פג — בקשו קישור חדש.</value></data>
   <data name="Cnf_UserNameChangeFail" xml:space="preserve"><value>לא ניתן לעדכן את שם המשתמש.</value></data>
+  <data name="Val_Phone" xml:space="preserve"><value>הזינו מספר טלפון תקין</value></data>
 </root>

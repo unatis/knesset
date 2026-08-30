@@ -545,4 +545,5 @@
   <data name="Cnf_EmailChangeOk" xml:space="preserve"><value>تم تأكيد بريدك الجديد.</value></data>
   <data name="Cnf_EmailChangeFail" xml:space="preserve"><value>تعذّر تغيير البريد. ربما انتهت صلاحية الرابط — اطلب رابطًا جديدًا.</value></data>
   <data name="Cnf_UserNameChangeFail" xml:space="preserve"><value>تعذّر تحديث اسم المستخدم.</value></data>
+  <data name="Val_Phone" xml:space="preserve"><value>أدخل رقم هاتف صالحًا</value></data>
 </root>

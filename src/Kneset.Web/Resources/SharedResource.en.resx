@@ -545,4 +545,5 @@
   <data name="Cnf_EmailChangeOk" xml:space="preserve"><value>Your new email address is confirmed.</value></data>
   <data name="Cnf_EmailChangeFail" xml:space="preserve"><value>Could not change the email address. The link may have expired — request a new one.</value></data>
   <data name="Cnf_UserNameChangeFail" xml:space="preserve"><value>Could not update the username.</value></data>
+  <data name="Val_Phone" xml:space="preserve"><value>Enter a valid phone number</value></data>
 </root>

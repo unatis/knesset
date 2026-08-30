@@ -545,4 +545,5 @@
   <data name="Cnf_EmailChangeOk" xml:space="preserve"><value>Новый адрес почты подтверждён.</value></data>
   <data name="Cnf_EmailChangeFail" xml:space="preserve"><value>Не удалось сменить адрес почты. Возможно, ссылка устарела — запросите новую.</value></data>
   <data name="Cnf_UserNameChangeFail" xml:space="preserve"><value>Не удалось обновить имя пользователя.</value></data>
+  <data name="Val_Phone" xml:space="preserve"><value>Введите корректный номер телефона</value></data>
 </root>
