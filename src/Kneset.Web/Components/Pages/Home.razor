@@ -18,37 +18,37 @@
 
    Структура 2a: лента слева, столбец контекста справа. Табы «Моё / Всё» есть
    только у вошедшего — «Моё» строится из его подписок. *@
-<AuthorizeView>
-    <NotAuthorized>
-        <section class="hero">
-            <h1>@L["Home_HeroTitle"]</h1>
-            <p class="hero-text">@L["Home_HeroText"]</p>
-
-            <ul class="hero-points">
-                <li>@L["Home_Point1"]</li>
-                <li>@L["Home_Point2"]</li>
-                <li>@L["Home_Point3"]</li>
-            </ul>
-
-            <div class="hero-actions">
-                <a class="btn btn-primary" href="Account/Register">@L["Home_CtaJoin"]</a>
-                <a class="btn btn-outline-primary" href="bills">@L["Home_CtaBrowse"]</a>
-            </div>
-        </section>
-    </NotAuthorized>
-
-    @* Вошедшему полноэкранное знакомство не нужно, но совсем без объяснения
-       сайт оставлять нельзя — узкая полоска со ссылкой на страницу о проекте. *@
-    <Authorized>
-        <div class="home-strip">
-            <span>@L["Home_StripText"]</span>
-            <a href="about">@L["Home_StripMore"]</a>
-        </div>
-    </Authorized>
-</AuthorizeView>
-
 <div class="kt-home">
     <div class="kt-home-feed">
+
+        <AuthorizeView>
+            <NotAuthorized>
+                <section class="hero">
+                    <h1>@L["Home_HeroTitle"]</h1>
+                    <p class="hero-text">@L["Home_HeroText"]</p>
+
+                    <ul class="hero-points">
+                        <li>@L["Home_Point1"]</li>
+                        <li>@L["Home_Point2"]</li>
+                        <li>@L["Home_Point3"]</li>
+                    </ul>
+
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="Account/Register">@L["Home_CtaJoin"]</a>
+                        <a class="btn btn-outline-primary" href="bills">@L["Home_CtaBrowse"]</a>
+                    </div>
+                </section>
+            </NotAuthorized>
+
+            @* Вошедшему полноэкранное знакомство не нужно, но совсем без объяснения
+               сайт оставлять нельзя — узкая полоска со ссылкой на страницу о проекте. *@
+            <Authorized>
+                <div class="home-strip">
+                    <span>@L["Home_StripText"]</span>
+                    <a href="about">@L["Home_StripMore"]</a>
+                </div>
+            </Authorized>
+        </AuthorizeView>
 
         @if (_userId is null)
         {
@@ -112,11 +112,11 @@
                         <span class="feed-time">@RelativeTime(item.At)</span>
                     </div>
 
-                    <a class="feed-link" href="@item.Url" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+                    <a class="feed-link" href="@item.Url" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
 
                     @if (item.Original is not null)
                     {
-                        <div class="feed-orig" dir="rtl" lang="he">@item.Original</div>
+                        <div class="feed-orig" lang="he">@item.Original</div>
                     }
 
                     @if (item.BillId is int billId)

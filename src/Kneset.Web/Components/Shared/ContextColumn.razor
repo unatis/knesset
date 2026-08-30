@@ -30,7 +30,7 @@
                 @foreach (var item in _closing)
                 {
                     <li>
-                        <a href="/bills/@item.Id" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+                        <a href="/bills/@item.Id" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
                         <span class="kt-num">
                             @item.Days @Plural.Of(item.Days, L["Ctx_DayForms"])
                             @L["Ctx_InStage"]
@@ -86,7 +86,7 @@
                 @foreach (var item in _debated)
                 {
                     <li>
-                        <a href="/bills/@item.Id" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+                        <a href="/bills/@item.Id" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
                         <span class="kt-num">@item.Comments</span>
                     </li>
                 }

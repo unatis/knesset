@@ -87,7 +87,7 @@
 
     /* --- переопределение Bootstrap: одна правка на весь сайт --- */
     --bs-body-font-family: var(--kt-font-sans);
-    --bs-body-font-size: 0.9375rem;
+    --bs-body-font-size: 1rem;
     --bs-body-line-height: 1.55;
     --bs-body-color: var(--kt-char-600);
     --bs-body-bg: var(--kt-char-25);
@@ -590,7 +590,7 @@ a, .btn-link {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -617,14 +617,14 @@ a, .btn-link {
 .feed-kind-comment::before { background: var(--kt-char-300); }
 
 .feed-time {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     color: var(--kt-char-300);
     white-space: nowrap;
 }
 
 .feed-link {
     display: block;
-    font-size: 0.9375rem;
+    font-size: 1.0625rem;
     font-weight: 500;
     line-height: 1.35;
     color: var(--kt-char-900);
@@ -820,6 +820,38 @@ h1:focus {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+/* Ивритское название внутри русского интерфейса. dir="rtl" на самом элементе
+   разворачивал не только текст, но и выравнивание: короткое название
+   прижималось к правому краю карточки, далеко от подписи типа события слева,
+   и между ними зияла дыра. unicode-bidi: plaintext оставляет двунаправленный
+   разбор — иврит по-прежнему читается справа налево, — но выравнивание берёт
+   у родителя. В русском интерфейсе название встаёт слева, в ивритском справа,
+   без единой ветки в разметке. */
+.feed-link,
+.feed-orig,
+.kt-row-title,
+.kt-row-orig,
+.kt-bill-title,
+.kt-bill-orig,
+.kt-ctx-list a {
+    unicode-bidi: plaintext;
+    /* Именно left, а не start. При plaintext значение start считается
+       от направления самого абзаца — для иврита это снова «справа», то есть
+       ровно то, от чего уходим. Выравнивание должно следовать интерфейсу,
+       поэтому в RTL-локалях его переопределяет правило ниже. */
+    text-align: left;
+}
+
+[dir="rtl"] .feed-link,
+[dir="rtl"] .feed-orig,
+[dir="rtl"] .kt-row-title,
+[dir="rtl"] .kt-row-orig,
+[dir="rtl"] .kt-bill-title,
+[dir="rtl"] .kt-bill-orig,
+[dir="rtl"] .kt-ctx-list a {
+    text-align: right;
+}
 
 /* ============================================================
    Главная: три колонки (макет 2a) — лента и столбец контекста.
