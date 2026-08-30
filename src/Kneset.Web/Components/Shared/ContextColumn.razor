@@ -129,6 +129,14 @@
     [Parameter] public IReadOnlyCollection<int>? RelevantBillIds { get; set; }
 
     /// <summary>
+    /// Счётчик, который страница увеличивает после действий, меняющих данные
+    /// столбца, — например после подписи под инициативой прямо из ленты.
+    /// Без него защита от лишних запросов держала бы старые числа: набор
+    /// подписок не изменился, а содержимое блока изменилось.
+    /// </summary>
+    [Parameter] public int RefreshToken { get; set; }
+
+    /// <summary>
     /// Строка блока «Окно закрывается». Days — либо дней до назначенного
     /// заседания (UntilSession = true), либо дней в текущей стадии, если
     /// заседание не назначено. Разница принципиальная: первое — настоящий
@@ -169,7 +177,8 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        var key = RelevantBillIds is null ? "" : string.Join(",", RelevantBillIds.Order());
+        var key = (RelevantBillIds is null ? "" : string.Join(",", RelevantBillIds.Order()))
+                  + "|" + RefreshToken;
         if (_loadedFor == key) return;
         _loadedFor = key;
 

@@ -395,4 +395,5 @@
   <data name="Ctx_Initiatives" xml:space="preserve"><value>مطلوب توقيعات</value></data>
   <data name="Ctx_SignaturesLeft" xml:space="preserve"><value>ينقص {0}</value></data>
   <data name="Ctx_AllInitiatives" xml:space="preserve"><value>كل المبادرات</value></data>
+  <data name="Init_SigForms" xml:space="preserve"><value>توقيع|توقيعات</value></data>
 </root>

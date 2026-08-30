@@ -395,4 +395,5 @@
   <data name="Ctx_Initiatives" xml:space="preserve"><value>Signatures needed</value></data>
   <data name="Ctx_SignaturesLeft" xml:space="preserve"><value>{0} short</value></data>
   <data name="Ctx_AllInitiatives" xml:space="preserve"><value>All initiatives</value></data>
+  <data name="Init_SigForms" xml:space="preserve"><value>signature|signatures</value></data>
 </root>

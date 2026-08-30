@@ -40,7 +40,7 @@ else
                     <div class="progress-bar @(percent >= 100 ? "bg-success" : "")" style="width:@percent%"></div>
                 </div>
                 <small class="text-muted">
-                    @string.Format(L["Init_Signatures"], item.SignatureCount, item.Threshold) · @L["Init_Author"] @item.AuthorName ·
+                    @string.Format(L["Init_Signatures"], item.SignatureCount, item.Threshold) · @L["Init_Author"] @(item.AuthorName ?? L["Comment_AnonymousAuthor"].Value) ·
                     @item.PublishedAt?.ToString("dd.MM.yyyy")
                 </small>
                 @if (item.Support + item.Oppose + item.Undecided > 0)
@@ -67,7 +67,7 @@ else
             .Select(i => new InitiativeListItem(
                 i.Id, i.Title, i.Status,
                 i.Signatures.Count, i.SignatureThreshold,
-                i.Author.DisplayName ?? i.Author.UserName ?? "аноним",
+                i.Author.DisplayName,
                 i.PublishedAt,
                 db.InitiativeReactions.Count(r => r.InitiativeId == i.Id && r.Kind == ReactionKind.Support),
                 db.InitiativeReactions.Count(r => r.InitiativeId == i.Id && r.Kind == ReactionKind.Oppose),
@@ -77,6 +77,6 @@ else
 
     private record InitiativeListItem(
         int Id, string Title, InitiativeStatus Status,
-        int SignatureCount, int Threshold, string AuthorName, DateTime? PublishedAt,
+        int SignatureCount, int Threshold, string? AuthorName, DateTime? PublishedAt,
         int Support, int Oppose, int Undecided);
 }

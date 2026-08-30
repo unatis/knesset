@@ -136,7 +136,7 @@
                     else if (item.Signatures is not null)
                     {
                         <div class="feed-meta kt-num">
-                            @item.Signatures @L["Init_SigCount"] · @L["Init_Threshold"] @item.Threshold
+                            @item.Signatures @Plural.Of(item.Signatures ?? 0, L["Init_SigForms"]) · @L["Init_Threshold"] @item.Threshold
                         </div>
 
                         @* Подписать можно прямо отсюда. Инициатива живёт подписями,
@@ -179,7 +179,7 @@
         }
     </div>
 
-    <ContextColumn RelevantBillIds="_relevantIds" />
+    <ContextColumn RelevantBillIds="_relevantIds" RefreshToken="_ctxRefresh" />
 </div>
 
 @code {
@@ -240,6 +240,10 @@
     /// <summary>Инициативы, которые этот пользователь уже подписал.</summary>
     private HashSet<int> _signed = [];
     private bool _signing;
+
+    /// <summary>Растёт после действий, после которых столбцу контекста
+    /// нужно перечитать свои блоки.</summary>
+    private int _ctxRefresh;
     private Dictionary<int, SubscriptionReason> _relevance = [];
     private List<int>? _relevantIds;
 
@@ -435,6 +439,7 @@
         await Signing.SignAsync(initiativeId, _userId);
         _signed.Add(initiativeId);
         _signing = false;
+        _ctxRefresh++;
 
         // Перечитываем ленту: у подписанной инициативы изменился счётчик,
         // а при переходе порога — ещё и статус.
