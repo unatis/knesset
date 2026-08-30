@@ -29,6 +29,16 @@ public class AppUser : IdentityUser
 
     public NotificationMode NotificationMode { get; set; } = NotificationMode.Immediate;
 
+    /// <summary>
+    /// Когда человек последний раз открывал ленту. По этой отметке в ленте
+    /// проводится черта «дальше вы уже видели»: события не пропадают из виду,
+    /// а становятся отмеченными как прочитанные.
+    ///
+    /// Пишется с порогом, а не на каждый показ главной: иначе это запись
+    /// в базу на каждое открытие страницы.
+    /// </summary>
+    public DateTime? LastFeedSeenAt { get; set; }
+
     public List<CitizenInitiative> Initiatives { get; set; } = [];
     public List<NotificationSubscription> Subscriptions { get; set; } = [];
     public List<UserNotificationChannel> NotificationChannels { get; set; } = [];

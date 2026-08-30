@@ -402,4 +402,5 @@
   <data name="Member_ShowInList" xml:space="preserve"><value>הצג ברשימה המלאה</value></data>
   <data name="Feed_Loading" xml:space="preserve"><value>טוען…</value></data>
   <data name="Feed_AllBills" xml:space="preserve"><value>כל הצעות החוק</value></data>
+  <data name="Feed_SeenBefore" xml:space="preserve"><value>מכאן כבר ראיתם</value></data>
 </root>

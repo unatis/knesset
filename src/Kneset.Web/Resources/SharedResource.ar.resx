@@ -402,4 +402,5 @@
   <data name="Member_ShowInList" xml:space="preserve"><value>عرض في القائمة الكاملة</value></data>
   <data name="Feed_Loading" xml:space="preserve"><value>جارٍ التحميل…</value></data>
   <data name="Feed_AllBills" xml:space="preserve"><value>كل مشاريع القوانين</value></data>
+  <data name="Feed_SeenBefore" xml:space="preserve"><value>ما بعده سبق أن رأيته</value></data>
 </root>

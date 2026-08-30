@@ -101,6 +101,15 @@
             <div class="feed-list">
             @foreach (var item in _feed)
             {
+                @* Черта «дальше вы уже видели». Ставится перед первым событием
+                   старше прошлого визита — так человек понимает, где кончается
+                   новое, и ему не приходится вспоминать, до какого места
+                   он дочитал в прошлый раз. *@
+                @if (ShowSeenDivider(item))
+                {
+                    <div class="kt-seen-divider">@L["Feed_SeenBefore"]</div>
+                }
+
                 <article class="feed-card">
                     <div class="feed-head">
                         <span class="feed-kind @item.KindCss">
@@ -265,6 +274,19 @@
     private DateTime? _oldest;
     private bool _hasMore = true;
     private bool _loadingMore;
+
+    /// <summary>
+    /// Отметка прошлого визита, прочитанная до её обновления. По ней
+    /// проводится черта в ленте.
+    /// </summary>
+    private DateTime? _lastSeen;
+
+    /// <summary>Черта рисуется один раз за отрисовку списка.</summary>
+    private bool _dividerShown;
+    private bool _anyNew;
+
+    /// <summary>Насколько часто обновляем отметку визита.</summary>
+    private static readonly TimeSpan SeenThrottle = TimeSpan.FromMinutes(10);
     private Dictionary<int, SubscriptionReason> _relevance = [];
     private List<int>? _relevantIds;
 
@@ -278,6 +300,7 @@
 
         if (_userId is not null)
         {
+            await ReadFeedSeenAsync();
             _summary = await Relevance.GetSummaryAsync(_userId);
             _relevance = await Relevance.GetRelevantBillsAsync(_userId);
             _relevantIds = _relevance.Keys.ToList();
@@ -318,6 +341,8 @@
 
         var page = await FetchPageAsync(before: null);
         _feed = page;
+        _dividerShown = false;
+        _anyNew = false;
         await LoadCardExtrasAsync();
     }
 
@@ -514,6 +539,38 @@
         }
     }
 
+    /// <summary>Отметка прошлого визита — только чтение, до отрисовки.</summary>
+    private async Task ReadFeedSeenAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        _lastSeen = await db.Users
+            .Where(u => u.Id == _userId)
+            .Select(u => u.LastFeedSeenAt)
+            .FirstOrDefaultAsync();
+    }
+
+    /// <summary>
+    /// Продвигает отметку визита. Вызывается только после первой отрисовки
+    /// интерактивной цепи, а не при инициализации: страница выполняется дважды —
+    /// сначала предрендером, потом в цепи, — и запись в первом проходе
+    /// отравляла чтение во втором. Из-за этого на самом первом заходе лента
+    /// целиком оказывалась «уже виденной».
+    ///
+    /// Порог нужен, чтобы открытие главной не превращалось в запись в базу
+    /// на каждый просмотр страницы.
+    /// </summary>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || _userId is null) return;
+
+        var now = DateTime.UtcNow;
+        if (_lastSeen is { } seen && now - seen <= SeenThrottle) return;
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+        await db.Users.Where(u => u.Id == _userId)
+            .ExecuteUpdateAsync(x => x.SetProperty(u => u.LastFeedSeenAt, now));
+    }
+
     private async Task SignAsync(int initiativeId)
     {
         if (_userId is null || _signing) return;
@@ -527,6 +584,28 @@
         // Перечитываем ленту: у подписанной инициативы изменился счётчик,
         // а при переходе порога — ещё и статус.
         await LoadFeedAsync();
+    }
+
+    /// <summary>
+    /// Нужна ли черта перед этой карточкой. Возвращает true ровно один раз —
+    /// на первом событии, которое человек уже видел.
+    /// </summary>
+    private bool ShowSeenDivider(FeedItem item)
+    {
+        if (_lastSeen is not { } seen || _dividerShown) return false;
+
+        if (item.At > seen)
+        {
+            _anyNew = true;
+            return false;
+        }
+
+        // Нового нет вовсе — черта в самом верху ничего не сообщает:
+        // «ниже вы всё видели», а выше пусто. Тогда её не показываем.
+        if (!_anyNew) return false;
+
+        _dividerShown = true;
+        return true;
     }
 
     /// <summary>«Почему это здесь» — тема, депутат или сам закон.</summary>

@@ -402,4 +402,5 @@
   <data name="Member_ShowInList" xml:space="preserve"><value>show in the full list</value></data>
   <data name="Feed_Loading" xml:space="preserve"><value>Loading…</value></data>
   <data name="Feed_AllBills" xml:space="preserve"><value>All bills</value></data>
+  <data name="Feed_SeenBefore" xml:space="preserve"><value>you have seen the rest</value></data>
 </root>

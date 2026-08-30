@@ -1192,3 +1192,23 @@ h1:focus {
     .kt-stage-list li.kt-stage-gap::before {
         display: none;
     }
+
+/* Черта «дальше вы уже видели» в ленте. Не карточка и не событие —
+   служебная отметка, поэтому набрана мельче и линиями по бокам. */
+.kt-seen-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem 0;
+    font-size: 0.75rem;
+    color: var(--kt-char-400);
+    white-space: nowrap;
+}
+
+    .kt-seen-divider::before,
+    .kt-seen-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--kt-char-100);
+    }
