@@ -384,4 +384,8 @@
   <data name="Priv_Contact" xml:space="preserve"><value>שאלות ושינויים</value></data>
   <data name="Priv_ContactText" xml:space="preserve"><value>קוד המקור של האתר פתוח, והעמוד הזה נכתב לפיו: כל טענה כאן אפשר לבדוק מול הקוד. אם משהו בטיפול בנתונים ישתנה, ישתנה גם העמוד — תאריך העדכון מופיע למעלה.</value></data>
   <data name="Bills_InAgendaSince" xml:space="preserve"><value>בסדר היום מאז</value></data>
+  <data name="Ctx_ClosingWindow" xml:space="preserve"><value>החלון נסגר</value></data>
+  <data name="Ctx_UntilSession" xml:space="preserve"><value>עד הישיבה</value></data>
+  <data name="Ctx_Committee" xml:space="preserve"><value>ועדה</value></data>
+  <data name="Ctx_Plenum" xml:space="preserve"><value>מליאה</value></data>
 </root>

@@ -384,4 +384,8 @@
   <data name="Priv_Contact" xml:space="preserve"><value>Questions and changes</value></data>
   <data name="Priv_ContactText" xml:space="preserve"><value>The site's source code is open, and this page was written from it: every statement here can be checked against the code. If anything about data handling changes, this page changes too — the update date is at the top.</value></data>
   <data name="Bills_InAgendaSince" xml:space="preserve"><value>on the agenda since</value></data>
+  <data name="Ctx_ClosingWindow" xml:space="preserve"><value>Window closing</value></data>
+  <data name="Ctx_UntilSession" xml:space="preserve"><value>until the sitting</value></data>
+  <data name="Ctx_Committee" xml:space="preserve"><value>committee</value></data>
+  <data name="Ctx_Plenum" xml:space="preserve"><value>plenum</value></data>
 </root>

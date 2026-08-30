@@ -384,4 +384,8 @@
   <data name="Priv_Contact" xml:space="preserve"><value>الأسئلة والتغييرات</value></data>
   <data name="Priv_ContactText" xml:space="preserve"><value>الكود المصدري للموقع مفتوح، وهذه الصفحة مكتوبة انطلاقًا منه: كل ما فيها يمكن التحقّق منه في الكود. وإن تغيّر شيء في معالجة البيانات تغيّرت الصفحة كذلك — وتاريخ التحديث في الأعلى.</value></data>
   <data name="Bills_InAgendaSince" xml:space="preserve"><value>على جدول الأعمال منذ</value></data>
+  <data name="Ctx_ClosingWindow" xml:space="preserve"><value>النافذة تُغلق</value></data>
+  <data name="Ctx_UntilSession" xml:space="preserve"><value>حتى الجلسة</value></data>
+  <data name="Ctx_Committee" xml:space="preserve"><value>لجنة</value></data>
+  <data name="Ctx_Plenum" xml:space="preserve"><value>الهيئة العامة</value></data>
 </root>
