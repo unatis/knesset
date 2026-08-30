@@ -388,4 +388,8 @@
   <data name="Ctx_UntilSession" xml:space="preserve"><value>до заседания</value></data>
   <data name="Ctx_Committee" xml:space="preserve"><value>комиссия</value></data>
   <data name="Ctx_Plenum" xml:space="preserve"><value>пленум</value></data>
+  <data name="Bill_Stages" xml:space="preserve"><value>Путь законопроекта</value></data>
+  <data name="Bill_StagesTruncated" xml:space="preserve"><value>Показаны первые заседания — у этого закона их больше.</value></data>
+  <data name="Bill_StagesGap" xml:space="preserve"><value>…ещё {0} между ними</value></data>
+  <data name="Bill_SittingForms" xml:space="preserve"><value>заседание|заседания|заседаний</value></data>
 </root>

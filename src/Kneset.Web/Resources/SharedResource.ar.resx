@@ -388,4 +388,8 @@
   <data name="Ctx_UntilSession" xml:space="preserve"><value>حتى الجلسة</value></data>
   <data name="Ctx_Committee" xml:space="preserve"><value>لجنة</value></data>
   <data name="Ctx_Plenum" xml:space="preserve"><value>الهيئة العامة</value></data>
+  <data name="Bill_Stages" xml:space="preserve"><value>مسار المشروع</value></data>
+  <data name="Bill_StagesTruncated" xml:space="preserve"><value>تُعرض الجلسات الأولى — لهذا المشروع المزيد.</value></data>
+  <data name="Bill_StagesGap" xml:space="preserve"><value>…{0} بينهما</value></data>
+  <data name="Bill_SittingForms" xml:space="preserve"><value>جلسة|جلسات</value></data>
 </root>

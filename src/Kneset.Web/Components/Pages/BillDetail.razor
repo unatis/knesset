@@ -1,5 +1,6 @@
 @page "/bills/{Id:int}"
 @rendermode InteractiveServer
+@using Kneset.Web.Services
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
 @inject NavigationManager Navigation
@@ -64,6 +65,40 @@ else
         </div>
         <div class="kt-win-hint">@InfluenceHint</div>
     </div>
+
+    @* Шкала стадий. В макете она помечена как лоу-фай: «у закона нет истории
+       стадий, только текущий StatusDesc и StatusChangedAt». История появилась
+       вместе с BillSession — она собирается из повесток заседаний комиссий
+       и пленума. Порядок хронологический: путь закона читается сверху вниз,
+       назначенные заседания оказываются внизу, в будущем. *@
+    @if (_head.Count > 0)
+    {
+        <section class="kt-stages mt-4">
+            <h3 class="kt-ctx-title">@L["Bill_Stages"]</h3>
+
+            <ol class="kt-stage-list">
+                @foreach (var s in _head)
+                {
+                    @StageRow(s)
+                }
+
+                @if (_hidden > 0)
+                {
+                    <li class="kt-stage-gap">
+                        <span class="kt-stage-body">
+                            @string.Format(L["Bill_StagesGap"],
+                                $"{_hidden} {Plural.Of(_hidden, L["Bill_SittingForms"])}")
+                        </span>
+                    </li>
+                }
+
+                @foreach (var s in _tail)
+                {
+                    @StageRow(s)
+                }
+            </ol>
+        </section>
+    }
 
     <div class="row mt-4">
         <div class="col-lg-8">
@@ -143,10 +178,41 @@ else
     </div>
 }
 
+@* Строка шкалы. Вынесена в шаблон, потому что рисуется дважды —
+   до пропуска и после него. *@
+@{
+    RenderFragment StageRow(BillSession s) =>
+    @<li class="@(s.StartDate > DateTime.UtcNow ? "kt-stage-future" : null)">
+        <span class="kt-num kt-stage-date">@s.StartDate.ToLocalTime().ToString("dd.MM.yyyy")</span>
+        <span class="kt-stage-body">
+            <span class="kt-stage-kind">
+                @(s.Kind == BillSessionKind.Plenum ? L["Ctx_Plenum"] : L["Ctx_Committee"])
+            </span>
+            @if (s.StatusDesc is not null)
+            {
+                <span class="kt-stage-status" dir="rtl" lang="he">@s.StatusDesc</span>
+            }
+        </span>
+    </li>;
+}
+
 @code {
     [Parameter] public int Id { get; set; }
 
     private Bill? _bill;
+
+    /// <summary>
+    /// Сколько заседаний показываем. У долгоживущих законов их десятки,
+    /// и полный список превращает карточку в протокол.
+    /// </summary>
+    private const int StageLimit = 12;
+
+    /// <summary>Сколько первых заседаний оставляем при отсечке.</summary>
+    private const int HeadCount = 3;
+
+    private List<BillSession> _head = [];
+    private List<BillSession> _tail = [];
+    private int _hidden;
 
     /// <summary>Пояснение к окну влияния — тот же ключ ресурса, что и в бейдже.</summary>
     private string InfluenceHint
@@ -174,5 +240,33 @@ else
         _bill = await db.Bills.AsNoTracking()
             .Include(b => b.Initiators).ThenInclude(i => i.Person)
             .FirstOrDefaultAsync(b => b.Id == Id);
+
+        if (_bill is not null)
+        {
+            // Отдельным запросом, а не Include: у закона бывает под два десятка
+            // заседаний, и тянуть их join'ом вместе с сорока инициаторами значит
+            // размножить строки в декартовом произведении.
+            var rows = await db.BillSessions.AsNoTracking()
+                .Where(x => x.BillId == _bill.Id)
+                .OrderBy(x => x.StartDate)
+                .ToListAsync();
+
+            // Отсечку делаем с середины, а не с конца. Обрезание «первых N»
+            // выбрасывало назначенное заседание — единственную строку шкалы,
+            // с которой можно что-то сделать сегодня. Показываем начало пути
+            // и его последние шаги, а пропуск отмечаем явно.
+            if (rows.Count > StageLimit)
+            {
+                _head = rows.Take(HeadCount).ToList();
+                _tail = rows.Skip(rows.Count - (StageLimit - HeadCount)).ToList();
+                _hidden = rows.Count - _head.Count - _tail.Count;
+            }
+            else
+            {
+                _head = rows;
+                _tail = [];
+                _hidden = 0;
+            }
+        }
     }
 }
