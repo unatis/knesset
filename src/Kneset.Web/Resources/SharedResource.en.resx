@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
 
-  <data name="Brand" xml:space="preserve"><value>🏛️ Knesset Tracker</value></data>
+  <data name="Brand" xml:space="preserve"><value>Knesset Tracker</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>Home</value></data>
   <data name="Nav_Bills" xml:space="preserve"><value>Bills</value></data>
   <data name="Nav_Members" xml:space="preserve"><value>Members</value></data>
@@ -53,13 +53,13 @@
   <data name="LoginToVote" xml:space="preserve"><value>Log in to vote</value></data>
   <data name="Reaction_InitiativeNote" xml:space="preserve"><value>Reactions are an overall opinion snapshot (including opponents); the signature below is formal support toward the threshold.</value></data>
 
-  <data name="Inf_Open" xml:space="preserve"><value>🟢 Influence window open</value></data>
+  <data name="Inf_Open" xml:space="preserve"><value>Influence window open</value></data>
   <data name="Inf_Open_Hint" xml:space="preserve"><value>The bill is in committee: sessions are public, written positions are accepted, the text is actively rewritten. The best moment to act.</value></data>
-  <data name="Inf_Limited" xml:space="preserve"><value>🟡 Influence limited</value></data>
+  <data name="Inf_Limited" xml:space="preserve"><value>Influence limited</value></data>
   <data name="Inf_Limited_Hint" xml:space="preserve"><value>Awaiting a plenum reading — influence only through MKs: reservations and votes.</value></data>
-  <data name="Inf_Late" xml:space="preserve"><value>🔴 Too late</value></data>
+  <data name="Inf_Late" xml:space="preserve"><value>Too late</value></data>
   <data name="Inf_Late_Hint" xml:space="preserve"><value>The law is passed. It can only be changed by a new amending law — for example, via a civic initiative.</value></data>
-  <data name="Inf_Frozen" xml:space="preserve"><value>⚪ Frozen</value></data>
+  <data name="Inf_Frozen" xml:space="preserve"><value>Frozen</value></data>
   <data name="Inf_Frozen_Hint" xml:space="preserve"><value>The process is stalled — nothing to influence, but you can watch for resumption.</value></data>
 
   <data name="Com_Header" xml:space="preserve"><value>Discussion</value></data>
@@ -116,8 +116,8 @@
   <data name="Meta_Source" xml:space="preserve"><value>source</value></data>
   <data name="Meta_Confidence" xml:space="preserve"><value>confidence</value></data>
 
-  <data name="Ctx_Header" xml:space="preserve"><value>🧭 Context and Interpretations</value></data>
-  <data name="Ctx_Warning" xml:space="preserve"><value>⚠️ Everything in this section is interpretation, not fact: an analysis of interests, context, and historical parallels under the platform's rules (symmetry of sides, attribution of every position, a spectrum of opinions within each side). Describing a position is not endorsing it.</value></data>
+  <data name="Ctx_Header" xml:space="preserve"><value>Context and Interpretations</value></data>
+  <data name="Ctx_Warning" xml:space="preserve"><value>Everything in this section is interpretation, not fact: an analysis of interests, context, and historical parallels under the platform's rules (symmetry of sides, attribution of every position, a spectrum of opinions within each side). Describing a position is not endorsing it.</value></data>
   <data name="Ctx_WhoBenefits" xml:space="preserve"><value>Who benefits</value></data>
   <data name="Ctx_WhoConcerned" xml:space="preserve"><value>Who is wary</value></data>
   <data name="Ctx_DeFacto" xml:space="preserve"><value>De facto goals</value></data>

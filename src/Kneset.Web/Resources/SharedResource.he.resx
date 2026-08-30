@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
 
-  <data name="Brand" xml:space="preserve"><value>🏛️ מעקב הכנסת</value></data>
+  <data name="Brand" xml:space="preserve"><value>מעקב הכנסת</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>ראשי</value></data>
   <data name="Nav_Bills" xml:space="preserve"><value>הצעות חוק</value></data>
   <data name="Nav_Members" xml:space="preserve"><value>חברי הכנסת</value></data>
@@ -53,13 +53,13 @@
   <data name="LoginToVote" xml:space="preserve"><value>התחברו כדי להצביע</value></data>
   <data name="Reaction_InitiativeNote" xml:space="preserve"><value>התגובה היא תמונת דעות כללית (כולל מתנגדים); החתימה למטה היא תמיכה רשמית לקראת הסף.</value></data>
 
-  <data name="Inf_Open" xml:space="preserve"><value>🟢 חלון ההשפעה פתוח</value></data>
+  <data name="Inf_Open" xml:space="preserve"><value>חלון ההשפעה פתוח</value></data>
   <data name="Inf_Open_Hint" xml:space="preserve"><value>הצעת החוק בוועדה: הדיונים פתוחים, הוועדה מקבלת ניירות עמדה, הנוסח משתנה. הזמן הטוב ביותר לפעול.</value></data>
-  <data name="Inf_Limited" xml:space="preserve"><value>🟡 השפעה מוגבלת</value></data>
+  <data name="Inf_Limited" xml:space="preserve"><value>השפעה מוגבלת</value></data>
   <data name="Inf_Limited_Hint" xml:space="preserve"><value>ממתין לקריאה במליאה — השפעה רק דרך חברי כנסת: הסתייגויות והצבעה.</value></data>
-  <data name="Inf_Late" xml:space="preserve"><value>🔴 מאוחר מדי</value></data>
+  <data name="Inf_Late" xml:space="preserve"><value>מאוחר מדי</value></data>
   <data name="Inf_Late_Hint" xml:space="preserve"><value>החוק התקבל. שינוי אפשרי רק בחוק מתקן — למשל דרך יוזמה אזרחית.</value></data>
-  <data name="Inf_Frozen" xml:space="preserve"><value>⚪ מוקפא</value></data>
+  <data name="Inf_Frozen" xml:space="preserve"><value>מוקפא</value></data>
   <data name="Inf_Frozen_Hint" xml:space="preserve"><value>ההליך אינו מתקדם — אין על מה להשפיע, אך אפשר לעקוב אחר חידושו.</value></data>
 
   <data name="Com_Header" xml:space="preserve"><value>דיון</value></data>
@@ -116,8 +116,8 @@
   <data name="Meta_Source" xml:space="preserve"><value>מקור</value></data>
   <data name="Meta_Confidence" xml:space="preserve"><value>ביטחון</value></data>
 
-  <data name="Ctx_Header" xml:space="preserve"><value>🧭 הקשר ופרשנויות</value></data>
-  <data name="Ctx_Warning" xml:space="preserve"><value>⚠️ כל מה שבחלק זה הוא פרשנות ולא עובדות: ניתוח אינטרסים, הקשר ומקבילות היסטוריות לפי כללי הפלטפורמה (סימטריה בין הצדדים, ייחוס כל עמדה, מגוון דעות בתוך כל צד). תיאור עמדה אינו הסכמה איתה.</value></data>
+  <data name="Ctx_Header" xml:space="preserve"><value>הקשר ופרשנויות</value></data>
+  <data name="Ctx_Warning" xml:space="preserve"><value>כל מה שבחלק זה הוא פרשנות ולא עובדות: ניתוח אינטרסים, הקשר ומקבילות היסטוריות לפי כללי הפלטפורמה (סימטריה בין הצדדים, ייחוס כל עמדה, מגוון דעות בתוך כל צד). תיאור עמדה אינו הסכמה איתה.</value></data>
   <data name="Ctx_WhoBenefits" xml:space="preserve"><value>מי מרוויח</value></data>
   <data name="Ctx_WhoConcerned" xml:space="preserve"><value>מי חושש</value></data>
   <data name="Ctx_DeFacto" xml:space="preserve"><value>מטרות בפועל</value></data>

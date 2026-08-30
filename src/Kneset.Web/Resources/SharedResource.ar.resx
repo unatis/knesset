@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
 
-  <data name="Brand" xml:space="preserve"><value>🏛️ متتبع الكنيست</value></data>
+  <data name="Brand" xml:space="preserve"><value>متتبع الكنيست</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>الرئيسية</value></data>
   <data name="Nav_Bills" xml:space="preserve"><value>مشاريع القوانين</value></data>
   <data name="Nav_Members" xml:space="preserve"><value>أعضاء الكنيست</value></data>
@@ -53,13 +53,13 @@
   <data name="LoginToVote" xml:space="preserve"><value>سجّل الدخول للتصويت</value></data>
   <data name="Reaction_InitiativeNote" xml:space="preserve"><value>التفاعل لمحة عامة عن الآراء (بمن فيهم المعارضون)؛ التوقيع أدناه دعم رسمي نحو الحد المطلوب.</value></data>
 
-  <data name="Inf_Open" xml:space="preserve"><value>🟢 نافذة التأثير مفتوحة</value></data>
+  <data name="Inf_Open" xml:space="preserve"><value>نافذة التأثير مفتوحة</value></data>
   <data name="Inf_Open_Hint" xml:space="preserve"><value>مشروع القانون في اللجنة: الجلسات علنية وتُقبل المواقف المكتوبة والنص يتغيّر. أفضل وقت للتحرّك.</value></data>
-  <data name="Inf_Limited" xml:space="preserve"><value>🟡 تأثير محدود</value></data>
+  <data name="Inf_Limited" xml:space="preserve"><value>تأثير محدود</value></data>
   <data name="Inf_Limited_Hint" xml:space="preserve"><value>بانتظار القراءة في الهيئة العامة — التأثير فقط عبر أعضاء الكنيست: تحفّظات وتصويت.</value></data>
-  <data name="Inf_Late" xml:space="preserve"><value>🔴 فات الأوان</value></data>
+  <data name="Inf_Late" xml:space="preserve"><value>فات الأوان</value></data>
   <data name="Inf_Late_Hint" xml:space="preserve"><value>أُقرّ القانون. لا يمكن تغييره إلا بقانون معدِّل — مثلًا عبر مبادرة مدنية.</value></data>
-  <data name="Inf_Frozen" xml:space="preserve"><value>⚪ مجمّد</value></data>
+  <data name="Inf_Frozen" xml:space="preserve"><value>مجمّد</value></data>
   <data name="Inf_Frozen_Hint" xml:space="preserve"><value>العملية متوقفة — لا شيء للتأثير عليه، لكن يمكن متابعة استئنافها.</value></data>
 
   <data name="Com_Header" xml:space="preserve"><value>نقاش</value></data>
@@ -116,8 +116,8 @@
   <data name="Meta_Source" xml:space="preserve"><value>مصدر</value></data>
   <data name="Meta_Confidence" xml:space="preserve"><value>الثقة</value></data>
 
-  <data name="Ctx_Header" xml:space="preserve"><value>🧭 السياق والتفسيرات</value></data>
-  <data name="Ctx_Warning" xml:space="preserve"><value>⚠️ كل ما في هذا القسم تفسير وليس حقائق: تحليل للمصالح والسياق والموازيات التاريخية وفق قواعد المنصة (تناظر الأطراف، إسناد كل موقف، طيف الآراء داخل كل طرف). وصفُ موقفٍ ما ليس تأييدًا له.</value></data>
+  <data name="Ctx_Header" xml:space="preserve"><value>السياق والتفسيرات</value></data>
+  <data name="Ctx_Warning" xml:space="preserve"><value>كل ما في هذا القسم تفسير وليس حقائق: تحليل للمصالح والسياق والموازيات التاريخية وفق قواعد المنصة (تناظر الأطراف، إسناد كل موقف، طيف الآراء داخل كل طرف). وصفُ موقفٍ ما ليس تأييدًا له.</value></data>
   <data name="Ctx_WhoBenefits" xml:space="preserve"><value>من يستفيد</value></data>
   <data name="Ctx_WhoConcerned" xml:space="preserve"><value>من يتوجّس</value></data>
   <data name="Ctx_DeFacto" xml:space="preserve"><value>الأهداف الفعلية</value></data>
