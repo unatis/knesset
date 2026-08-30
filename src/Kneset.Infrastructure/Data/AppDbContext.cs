@@ -63,6 +63,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
         modelBuilder.Entity<BillInitiator>(bi =>
         {
             bi.HasIndex(x => new { x.BillId, x.PersonId }).IsUnique();
+            // Отбор законов по депутату идёт в обратную сторону, и составной
+            // индекс выше для этого не годится: ведущий столбец в нём BillId.
+            bi.HasIndex(x => x.PersonId);
             bi.HasOne(x => x.Bill).WithMany(x => x.Initiators).HasForeignKey(x => x.BillId);
             bi.HasOne(x => x.Person).WithMany(x => x.InitiatedBills).HasForeignKey(x => x.PersonId);
         });

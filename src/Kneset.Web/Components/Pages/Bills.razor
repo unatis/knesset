@@ -37,6 +37,42 @@
     </div>
 </div>
 
+@* Фракция и депутат связаны: выбор фракции сужает список имён. Иначе
+   в селекте полторы сотни строк на иврите, и найти в них нужного человека
+   тяжелее, чем вспомнить его партию. Показываем только действующих —
+   в Persons лежат все, кто когда-либо был в Кнессете. *@
+<div class="row g-2 mb-3">
+    <div class="col-md-4">
+        <select class="form-select" value="@_factionFilter" @onchange="OnFactionChanged">
+            <option value="">@L["Bills_AllFactions"]</option>
+            @foreach (var faction in _factions)
+            {
+                <option value="@faction">@faction</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-4">
+        <select class="form-select" value="@_personFilter" @onchange="OnPersonChanged">
+            <option value="">@L["Bills_AllMembers"]</option>
+            @foreach (var person in VisibleMembers)
+            {
+                <option value="@person.Id">@person.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-4 d-flex align-items-center">
+        @* На законе бывает четыре десятка инициаторов: подписанты попадают
+           в выборку наравне с тем, кто закон внёс. Переключатель оставляет
+           выбор человеку, а не решает за него, кого считать автором. *@
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="authorOnly"
+                   checked="@_authorOnly" @onchange="OnAuthorOnlyChanged"
+                   disabled="@(string.IsNullOrEmpty(_personFilter) && string.IsNullOrEmpty(_factionFilter))" />
+            <label class="form-check-label" for="authorOnly">@L["Bills_AuthorOnly"]</label>
+        </div>
+    </div>
+</div>
+
 @if (_bills is null)
 {
     <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
@@ -125,21 +161,59 @@ else
     private string _search = "";
     private string _statusFilter = "";
     private string _knessetFilter = "";
+    private string _factionFilter = "";
+    private string _personFilter = "";
+
+    /// <summary>Считать ли только внесённые законы, без подписанных.</summary>
+    private bool _authorOnly;
+
+    private sealed record MemberOption(int Id, string Name, string? Faction);
+
+    private List<string> _factions = [];
+    private List<MemberOption> _members = [];
+
+    /// <summary>Депутаты, подходящие под выбранную фракцию.</summary>
+    private IEnumerable<MemberOption> VisibleMembers =>
+        string.IsNullOrEmpty(_factionFilter)
+            ? _members
+            : _members.Where(m => m.Faction == _factionFilter);
     private List<string> _statuses = [];
     private List<int> _knessetNums = [];
     private System.Timers.Timer? _debounce;
 
     /// <summary>Запрос из строки адреса — сюда приходит поиск из верхней панели.</summary>
+    /// <summary>Депутат из адреса — сюда ведёт ссылка с его карточки.</summary>
+    [SupplyParameterFromQuery(Name = "personId")]
+    private int? PersonQuery { get; set; }
+
     [SupplyParameterFromQuery(Name = "q")]
     private string? Query { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         if (!string.IsNullOrWhiteSpace(Query)) _search = Query;
+        if (PersonQuery is { } pid) _personFilter = pid.ToString();
 
         await using var db = await DbFactory.CreateDbContextAsync();
         _statuses = await db.Bills.Where(b => b.StatusDesc != null)
             .Select(b => b.StatusDesc!).Distinct().OrderBy(s => s).ToListAsync();
+
+        // Только действующие: в Persons лежат все, кто когда-либо был в Кнессете,
+        // и список из сотен имён в селекте бесполезен.
+        _members = (await db.Persons.AsNoTracking()
+                .Where(x => x.IsCurrent)
+                .Select(x => new { x.Id, x.FirstName, x.LastName, x.FactionName })
+                .ToListAsync())
+            .Select(x => new MemberOption(x.Id, $"{x.FirstName} {x.LastName}".Trim(), x.FactionName))
+            .OrderBy(x => x.Name, StringComparer.CurrentCulture)
+            .ToList();
+
+        _factions = _members
+            .Where(m => !string.IsNullOrEmpty(m.Faction))
+            .Select(m => m.Faction!)
+            .Distinct()
+            .OrderBy(x => x, StringComparer.CurrentCulture)
+            .ToList();
         _knessetNums = await db.Bills.Select(b => b.KnessetNum).Distinct()
             .OrderByDescending(n => n).ToListAsync();
         await LoadAsync();
@@ -159,6 +233,22 @@ else
         }
         if (!string.IsNullOrEmpty(_statusFilter))
             query = query.Where(b => b.StatusDesc == _statusFilter);
+        // Отбор по депутату и фракции идёт через таблицу инициаторов.
+        // IsInitiator отделяет внёсшего закон от подписантов: на одном законе
+        // их бывает четыре десятка, и без этого различия «законы депутата»
+        // показывали бы в основном чужие инициативы, которые он поддержал.
+        if (int.TryParse(_personFilter, out var personId))
+        {
+            query = query.Where(b => b.Initiators.Any(i =>
+                i.PersonId == personId && (!_authorOnly || i.IsInitiator)));
+        }
+        else if (!string.IsNullOrEmpty(_factionFilter))
+        {
+            var faction = _factionFilter;
+            query = query.Where(b => b.Initiators.Any(i =>
+                i.Person.FactionName == faction && (!_authorOnly || i.IsInitiator)));
+        }
+
         if (int.TryParse(_knessetFilter, out var knesset))
             query = query.Where(b => b.KnessetNum == knesset);
 
@@ -211,6 +301,34 @@ else
     private async Task OnKnessetChanged(ChangeEventArgs e)
     {
         _knessetFilter = e.Value?.ToString() ?? "";
+        _page = 0;
+        await LoadAsync();
+    }
+
+    private async Task OnFactionChanged(ChangeEventArgs e)
+    {
+        _factionFilter = e.Value?.ToString() ?? "";
+
+        // Выбранный депутат мог оказаться из другой фракции — сбрасываем,
+        // иначе фильтры противоречили бы друг другу молча.
+        if (!string.IsNullOrEmpty(_personFilter)
+            && !VisibleMembers.Any(m => m.Id.ToString() == _personFilter))
+            _personFilter = "";
+
+        _page = 0;
+        await LoadAsync();
+    }
+
+    private async Task OnPersonChanged(ChangeEventArgs e)
+    {
+        _personFilter = e.Value?.ToString() ?? "";
+        _page = 0;
+        await LoadAsync();
+    }
+
+    private async Task OnAuthorOnlyChanged(ChangeEventArgs e)
+    {
+        _authorOnly = e.Value is true;
         _page = 0;
         await LoadAsync();
     }

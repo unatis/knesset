@@ -396,4 +396,8 @@
   <data name="Ctx_SignaturesLeft" xml:space="preserve"><value>{0} short</value></data>
   <data name="Ctx_AllInitiatives" xml:space="preserve"><value>All initiatives</value></data>
   <data name="Init_SigForms" xml:space="preserve"><value>signature|signatures</value></data>
+  <data name="Bills_AllFactions" xml:space="preserve"><value>All factions</value></data>
+  <data name="Bills_AllMembers" xml:space="preserve"><value>All members</value></data>
+  <data name="Bills_AuthorOnly" xml:space="preserve"><value>authored only, not co-signed</value></data>
+  <data name="Member_ShowInList" xml:space="preserve"><value>show in the full list</value></data>
 </root>
