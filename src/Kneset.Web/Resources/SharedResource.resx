@@ -309,4 +309,79 @@
   <data name="Ctx_WeekDebate" xml:space="preserve"><value>О чём спорят за неделю</value></data>
   <data name="Ctx_DebateEmpty" xml:space="preserve"><value>За неделю комментариев не было.</value></data>
   <data name="Ctx_DebateNote" xml:space="preserve"><value>Сортировка по числу комментариев, без учёта тональности.</value></data>
+  <data name="Auth_Email" xml:space="preserve"><value>Электронная почта</value></data>
+  <data name="Auth_Password" xml:space="preserve"><value>Пароль</value></data>
+  <data name="Auth_ConfirmPassword" xml:space="preserve"><value>Подтверждение пароля</value></data>
+  <data name="Auth_LogIn" xml:space="preserve"><value>Вход</value></data>
+  <data name="Auth_LogInLocal" xml:space="preserve"><value>Вход по учётной записи сайта</value></data>
+  <data name="Auth_LogInButton" xml:space="preserve"><value>Войти</value></data>
+  <data name="Auth_RememberMe" xml:space="preserve"><value>Запомнить меня</value></data>
+  <data name="Auth_Or" xml:space="preserve"><value>или</value></data>
+  <data name="Auth_LogInPasskey" xml:space="preserve"><value>Войти по ключу доступа</value></data>
+  <data name="Auth_ForgotPassword" xml:space="preserve"><value>Забыли пароль?</value></data>
+  <data name="Auth_RegisterNew" xml:space="preserve"><value>Зарегистрироваться</value></data>
+  <data name="Auth_ResendConfirm" xml:space="preserve"><value>Отправить письмо с подтверждением снова</value></data>
+  <data name="Auth_LogInExternal" xml:space="preserve"><value>Вход через другой сервис</value></data>
+  <data name="Auth_InvalidLogin" xml:space="preserve"><value>Неверная почта или пароль.</value></data>
+  <data name="Auth_Register" xml:space="preserve"><value>Регистрация</value></data>
+  <data name="Auth_CreateAccount" xml:space="preserve"><value>Создание учётной записи</value></data>
+  <data name="Auth_RegisterExternal" xml:space="preserve"><value>Регистрация через другой сервис</value></data>
+  <data name="Auth_EnterEmail" xml:space="preserve"><value>Укажите электронную почту</value></data>
+  <data name="Auth_ResetPasswordButton" xml:space="preserve"><value>Сбросить пароль</value></data>
+  <data name="Auth_ForgotSentTitle" xml:space="preserve"><value>Письмо отправлено</value></data>
+  <data name="Auth_ForgotSentText" xml:space="preserve"><value>Проверьте почту — там ссылка для сброса пароля.</value></data>
+  <data name="Auth_ResetTitle" xml:space="preserve"><value>Сброс пароля</value></data>
+  <data name="Auth_ResetSubtitle" xml:space="preserve"><value>Задайте новый пароль</value></data>
+  <data name="Auth_ResetButton" xml:space="preserve"><value>Сбросить</value></data>
+  <data name="Auth_ResetDoneTitle" xml:space="preserve"><value>Пароль изменён</value></data>
+  <data name="Auth_ResetDoneText" xml:space="preserve"><value>Пароль изменён.</value></data>
+  <data name="Auth_GoToLogin" xml:space="preserve"><value>Войти</value></data>
+  <data name="Auth_ResendTitle" xml:space="preserve"><value>Письмо с подтверждением</value></data>
+  <data name="Auth_ResendButton" xml:space="preserve"><value>Отправить</value></data>
+  <data name="Auth_ResendSent" xml:space="preserve"><value>Письмо отправлено. Проверьте почту.</value></data>
+  <data name="Auth_ConfirmEmailTitle" xml:space="preserve"><value>Подтверждение почты</value></data>
+  <data name="Auth_ConfirmEmailOk" xml:space="preserve"><value>Спасибо, почта подтверждена.</value></data>
+  <data name="Auth_ConfirmEmailFail" xml:space="preserve"><value>Не удалось подтвердить почту.</value></data>
+  <data name="Auth_UserLoadError" xml:space="preserve"><value>Не удалось загрузить пользователя.</value></data>
+  <data name="Auth_UserNotFound" xml:space="preserve"><value>Пользователь с такой почтой не найден.</value></data>
+  <data name="Auth_RegisterConfirmTitle" xml:space="preserve"><value>Подтверждение регистрации</value></data>
+  <data name="Auth_CheckEmailConfirm" xml:space="preserve"><value>Проверьте почту, чтобы подтвердить учётную запись.</value></data>
+  <data name="Auth_NoEmailSenderNote" xml:space="preserve"><value>Настоящая отправка писем не подключена, поэтому ссылка показана прямо здесь.</value></data>
+  <data name="Auth_ConfirmLink" xml:space="preserve"><value>Подтвердить учётную запись</value></data>
+  <data name="Auth_LockedTitle" xml:space="preserve"><value>Доступ временно заблокирован</value></data>
+  <data name="Auth_LockedText" xml:space="preserve"><value>Учётная запись заблокирована, попробуйте позже.</value></data>
+  <data name="Auth_DeniedTitle" xml:space="preserve"><value>Доступ запрещён</value></data>
+  <data name="Auth_DeniedText" xml:space="preserve"><value>У вас нет доступа к этому разделу.</value></data>
+  <data name="Auth_InvalidUser" xml:space="preserve"><value>Пользователь не найден</value></data>
+  <data name="Auth_InvalidResetTitle" xml:space="preserve"><value>Ссылка недействительна</value></data>
+  <data name="Auth_InvalidResetText" xml:space="preserve"><value>Ссылка для сброса пароля недействительна.</value></data>
+  <data name="Auth_ErrorPrefix" xml:space="preserve"><value>Ошибка: {0}</value></data>
+  <data name="Val_Required" xml:space="preserve"><value>Обязательное поле</value></data>
+  <data name="Val_Email" xml:space="preserve"><value>Введите корректный адрес электронной почты</value></data>
+  <data name="Val_Length" xml:space="preserve"><value>От {0} до {1} символов</value></data>
+  <data name="Val_Mismatch" xml:space="preserve"><value>Значения не совпадают</value></data>
+  <data name="Val_PasswordMismatch" xml:space="preserve"><value>Пароли не совпадают</value></data>
+  <data name="Comment_AnonymousAuthor" xml:space="preserve"><value>Участник</value></data>
+  <data name="Priv_Nav" xml:space="preserve"><value>Конфиденциальность</value></data>
+  <data name="Priv_Title" xml:space="preserve"><value>Политика конфиденциальности</value></data>
+  <data name="Priv_Updated" xml:space="preserve"><value>Обновлено: {0}</value></data>
+  <data name="Priv_Collect" xml:space="preserve"><value>Что мы храним</value></data>
+  <data name="Priv_CollectText" xml:space="preserve"><value>Адрес электронной почты и пароль — пароль только в виде необратимого хэша, в открытом виде он не хранится. Имя для подписи, если вы его укажете: при регистрации оно не спрашивается и остаётся пустым. Язык интерфейса и режим уведомлений. Подписки: слова, депутаты и законы, за которыми вы следите. Адрес для доставки уведомлений, если вы его добавите, — он хранится отдельно от адреса для входа. Ваши позиции по законам, комментарии, гражданские инициативы и подписи под ними.</value></data>
+  <data name="Priv_Public" xml:space="preserve"><value>Что видно другим</value></data>
+  <data name="Priv_PublicText" xml:space="preserve"><value>Комментарии, гражданские инициативы и подписи под ними видны всем посетителям, включая незарегистрированных. Комментарий подписывается указанным вами именем; если имя не задано, вместо него стоит нейтральное «Участник» — адрес почты в подписи не показывается никогда. Ваша позиция по закону другим людям по отдельности не показывается: в общий счётчик она входит только числом.</value></data>
+  <data name="Priv_Political" xml:space="preserve"><value>Позиция по законам</value></data>
+  <data name="Priv_PoliticalText" xml:space="preserve"><value>Отметка «за», «против» или «не определился» — это сведения о ваших политических взглядах, и мы относимся к ним соответственно. Они хранятся привязанными к учётной записи, потому что иначе нельзя показать вам ваш же голос и дать его изменить. Публично они выходят только в виде общего счётчика и процентов, без имён. Удаление учётной записи удаляет и их.</value></data>
+  <data name="Priv_Third" xml:space="preserve"><value>Кому передаются данные</value></data>
+  <data name="Priv_ThirdText" xml:space="preserve"><value>Сайт работает на хостинге Render, база данных — Supabase; оба размещены во Франкфурте, в Европейском союзе. Шрифты страницы загружаются с серверов Google Fonts, поэтому при открытии любой страницы ваш IP-адрес и данные браузера становятся известны Google — это происходит до всякой регистрации. Кнопки «поделиться» ведут в социальные сети обычными ссылками: пока вы по ним не нажали, эти сервисы о вас ничего не узнают. Данные Кнессета мы получаем с его открытого API — там передаётся только наш запрос, без сведений о посетителях. Языковая модель для разбора законов пока не подключена, никакие данные ей не отправляются.</value></data>
+  <data name="Priv_Cookies" xml:space="preserve"><value>Cookie</value></data>
+  <data name="Priv_CookiesText" xml:space="preserve"><value>Три вида: cookie входа — чтобы не входить заново на каждой странице; cookie выбранного языка; технический маркер защиты форм от подделки запросов. Аналитики, счётчиков посещений и рекламных трекеров на сайте нет.</value></data>
+  <data name="Priv_Retention" xml:space="preserve"><value>Сколько храним</value></data>
+  <data name="Priv_RetentionText" xml:space="preserve"><value>Прочитанные уведомления удаляются автоматически через 30 дней. Остальное хранится, пока существует ваша учётная запись. Комментарий можно удалить в любой момент — рядом с ним есть кнопка удаления.</value></data>
+  <data name="Priv_Rights" xml:space="preserve"><value>Управление данными</value></data>
+  <data name="Priv_RightsText" xml:space="preserve"><value>Вы можете выгрузить свои данные и удалить учётную запись сами, без обращения к нам. Удаление необратимо: вместе с учётной записью исчезают подписки, позиции по законам и комментарии.</value></data>
+  <data name="Priv_RightsDownload" xml:space="preserve"><value>Выгрузить данные</value></data>
+  <data name="Priv_RightsDelete" xml:space="preserve"><value>Удалить учётную запись</value></data>
+  <data name="Priv_Contact" xml:space="preserve"><value>Вопросы и изменения</value></data>
+  <data name="Priv_ContactText" xml:space="preserve"><value>Исходный код сайта открыт, и эта страница написана по нему: любое утверждение здесь можно сверить с кодом. Если что-то в обработке данных изменится, изменится и эта страница — дата обновления указана сверху.</value></data>
+  <data name="Bills_InAgendaSince" xml:space="preserve"><value>в повестке с</value></data>
 </root>

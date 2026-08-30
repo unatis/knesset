@@ -1,8 +1,9 @@
-﻿@page "/Account/AccessDenied"
+@page "/Account/AccessDenied"
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Access denied</PageTitle>
+<PageTitle>@L["Auth_DeniedTitle"]</PageTitle>
 
 <header>
-    <h1 class="text-danger">Access denied</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
+    <h1 class="text-danger">@L["Auth_DeniedTitle"]</h1>
+    <p class="text-danger">@L["Auth_DeniedText"]</p>
 </header>

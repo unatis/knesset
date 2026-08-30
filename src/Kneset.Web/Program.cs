@@ -161,6 +161,11 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 
 var app = builder.Build();
 
+// Атрибуты валидации создаёт среда исполнения, внедрить в них локализатор
+// нельзя — отдаём его статически, см. Validation/LocalizedValidation.cs.
+Kneset.Web.Validation.ValidationLocalizer.Use(
+    app.Services.GetRequiredService<IStringLocalizer<SharedResource>>());
+
 app.UseForwardedHeaders();
 
 string[] supportedCultures = ["ru", "en", "he", "ar"];

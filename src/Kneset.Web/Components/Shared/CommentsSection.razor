@@ -75,7 +75,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <span class="badge @KindBadge(comment.Kind) me-1">@KindLabel(comment.Kind)</span>
-                            <strong>@comment.AuthorName</strong>
+                            <strong>@(comment.AuthorName ?? L["Comment_AnonymousAuthor"])</strong>
                             <small class="text-muted"> · @comment.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
                         </div>
                         <span class="text-nowrap">
@@ -110,7 +110,7 @@
     private string? _userId;
     private bool _busy;
 
-    private record CommentRow(int Id, string UserId, string AuthorName, CommentKind Kind, string Text, DateTime CreatedAt);
+    private record CommentRow(int Id, string UserId, string? AuthorName, CommentKind Kind, string Text, DateTime CreatedAt);
 
     private string ReturnUrl => BillId is not null ? $"/bills/{BillId}" : $"/initiatives/{InitiativeId}";
 
@@ -135,11 +135,16 @@
             ? query.Where(c => c.BillId == BillId)
             : query.Where(c => c.InitiativeId == InitiativeId);
 
+        // Подпись автора: только DisplayName, который человек задаёт сам.
+        // Прежний фолбэк на UserName публиковал адрес почты: UserName здесь
+        // равен почте (см. Register.razor), а DisplayName при регистрации
+        // не спрашивается и у всех пустой. То есть почта попадала под каждый
+        // комментарий. Без имени подписываем нейтрально.
         _comments = await query
             .OrderByDescending(c => c.CreatedAt)
             .Select(c => new CommentRow(
                 c.Id, c.UserId,
-                c.User.DisplayName ?? c.User.UserName ?? "аноним",
+                c.User.DisplayName,
                 c.Kind, c.Text, c.CreatedAt))
             .ToListAsync();
     }

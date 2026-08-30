@@ -20,6 +20,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Person> Persons => Set<Person>();
     public DbSet<BillInitiator> BillInitiators => Set<BillInitiator>();
     public DbSet<BillAnalysis> BillAnalyses => Set<BillAnalysis>();
+    public DbSet<BillSession> BillSessions => Set<BillSession>();
     public DbSet<SyncLog> SyncLogs => Set<SyncLog>();
     public DbSet<BillContextAnalysis> BillContextAnalyses => Set<BillContextAnalysis>();
     public DbSet<BillReaction> BillReactions => Set<BillReaction>();
@@ -64,6 +65,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             bi.HasIndex(x => new { x.BillId, x.PersonId }).IsUnique();
             bi.HasOne(x => x.Bill).WithMany(x => x.Initiators).HasForeignKey(x => x.BillId);
             bi.HasOne(x => x.Person).WithMany(x => x.InitiatedBills).HasForeignKey(x => x.PersonId);
+        });
+
+        modelBuilder.Entity<BillSession>(s =>
+        {
+            // Одно заседание — один пункт повестки по этому закону.
+            s.HasIndex(x => new { x.BillId, x.Kind, x.KnessetSessionId }).IsUnique();
+            // Хронология закона: история стадий читается этим индексом.
+            s.HasIndex(x => new { x.BillId, x.StartDate });
+            // Ближайшие заседания по всей базе — для сроков в столбце контекста.
+            s.HasIndex(x => x.StartDate);
+            s.HasOne(x => x.Bill).WithMany(b => b.Sessions)
+             .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<BillAnalysis>(a =>

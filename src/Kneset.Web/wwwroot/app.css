@@ -87,7 +87,7 @@
 
     /* --- переопределение Bootstrap: одна правка на весь сайт --- */
     --bs-body-font-family: var(--kt-font-sans);
-    --bs-body-font-size: 0.9375rem;
+    --bs-body-font-size: 1rem;
     --bs-body-line-height: 1.55;
     --bs-body-color: var(--kt-char-600);
     --bs-body-bg: var(--kt-char-25);
@@ -104,6 +104,15 @@
     --bs-emphasis-color: var(--kt-char-900);
     --bs-heading-color: var(--kt-char-900);
     --bs-font-monospace: var(--kt-font-mono);
+}
+
+/* Корневой размер зависит от ширины экрана: 16px на телефоне, около 17px
+   на ноутбуке, 20px на широком мониторе. Смысл в том, что большой экран
+   покупают, чтобы видеть крупнее, а не чтобы разглядывать тот же макет
+   с большего расстояния. Всё остальное в файле задано в rem и масштабируется
+   следом — включая ширины колонок ниже. */
+html {
+    font-size: clamp(16px, 14.4px + 0.22vw, 20px);
 }
 
 html, body {
@@ -548,11 +557,18 @@ a, .btn-link {
     margin-bottom: 0.75rem;
 }
 
+/* Одна колонка, как в ленте соцсети. Прежняя сетка auto-fill на широком
+   мониторе разворачивалась в пять-шесть колонок: события переставали читаться
+   как поток и превращались в стену плиток, где глазу негде остановиться.
+   Лента — это то, что просматривают сверху вниз по одному, поэтому колонка
+   одна, а её ширина ограничена в .kt-home-feed. */
 .feed-list {
     display: grid;
-    /* min(360px, 100%) обязателен: на узком экране колонка в 360px вылезла бы
-       за пределы контейнера — grid не сжимает minmax сам по себе. */
-    grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
+    /* minmax(0, 1fr), а не просто 1fr: у колонки грида неявный минимум равен
+       min-content, и длинное неразрывное название вытолкнуло бы её за пределы
+       экрана. Прежняя сетка обходила это через min(360px, 100%) — здесь та же
+       забота, записанная короче. */
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.75rem;
     align-items: start;
 }
@@ -583,7 +599,7 @@ a, .btn-link {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -610,14 +626,14 @@ a, .btn-link {
 .feed-kind-comment::before { background: var(--kt-char-300); }
 
 .feed-time {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     color: var(--kt-char-300);
     white-space: nowrap;
 }
 
 .feed-link {
     display: block;
-    font-size: 0.9375rem;
+    font-size: 1.0625rem;
     font-weight: 500;
     line-height: 1.35;
     color: var(--kt-char-900);
@@ -814,6 +830,38 @@ h1:focus {
         content: "An error has occurred."
     }
 
+/* Ивритское название внутри русского интерфейса. dir="rtl" на самом элементе
+   разворачивал не только текст, но и выравнивание: короткое название
+   прижималось к правому краю карточки, далеко от подписи типа события слева,
+   и между ними зияла дыра. unicode-bidi: plaintext оставляет двунаправленный
+   разбор — иврит по-прежнему читается справа налево, — но выравнивание берёт
+   у родителя. В русском интерфейсе название встаёт слева, в ивритском справа,
+   без единой ветки в разметке. */
+.feed-link,
+.feed-orig,
+.kt-row-title,
+.kt-row-orig,
+.kt-bill-title,
+.kt-bill-orig,
+.kt-ctx-list a {
+    unicode-bidi: plaintext;
+    /* Именно left, а не start. При plaintext значение start считается
+       от направления самого абзаца — для иврита это снова «справа», то есть
+       ровно то, от чего уходим. Выравнивание должно следовать интерфейсу,
+       поэтому в RTL-локалях его переопределяет правило ниже. */
+    text-align: left;
+}
+
+[dir="rtl"] .feed-link,
+[dir="rtl"] .feed-orig,
+[dir="rtl"] .kt-row-title,
+[dir="rtl"] .kt-row-orig,
+[dir="rtl"] .kt-bill-title,
+[dir="rtl"] .kt-bill-orig,
+[dir="rtl"] .kt-ctx-list a {
+    text-align: right;
+}
+
 /* ============================================================
    Главная: три колонки (макет 2a) — лента и столбец контекста.
    ============================================================ */
@@ -852,15 +900,23 @@ h1:focus {
     .kt-home {
         flex-direction: row;
         align-items: flex-start;
+        /* Композицию центрируем, а не растягиваем: у ленты в одну колонку
+           ширина ограничена, и без центрирования весь свободный запас
+           монитора собрался бы одним пустым полем справа. */
+        justify-content: center;
     }
 
     .kt-home-feed {
         flex: 1;
-        min-width: 520px;
+        min-width: 0;
+        /* Мера чтения в rem, а не в пикселях: вместе с корневым размером
+           колонка растёт, и число слов в строке остаётся тем же — растёт
+           именно кегль, а не длина строки. */
+        max-width: 40rem;
     }
 
     .kt-ctx {
-        width: 316px;
+        width: 20rem;
         flex-shrink: 0;
         border-inline-start: 1px solid var(--kt-char-100);
         padding-inline-start: 1.25rem;

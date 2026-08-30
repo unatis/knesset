@@ -1,0 +1,72 @@
+@page "/privacy"
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["Priv_Title"]</PageTitle>
+
+@* Политика конфиденциальности. Написана по тому, что приложение действительно
+   делает, а не по шаблону: каждый пункт можно сверить с кодом. Если поведение
+   меняется — правится и эта страница, иначе она превращается в обещание,
+   которого код не выполняет.
+
+   Ссылки на выгрузку и удаление ведут в готовые страницы Identity
+   (Manage/PersonalData, Manage/DeletePersonalData). *@
+
+<h2>@L["Priv_Title"]</h2>
+<p class="kt-num">@string.Format(L["Priv_Updated"], LastUpdated)</p>
+
+<section class="mb-4">
+    <h5>@L["Priv_Collect"]</h5>
+    <p>@L["Priv_CollectText"]</p>
+</section>
+
+<section class="mb-4">
+    <h5>@L["Priv_Public"]</h5>
+    <p>@L["Priv_PublicText"]</p>
+</section>
+
+<section class="alert alert-light border mb-4">
+    <h5>@L["Priv_Political"]</h5>
+    <p class="mb-0">@L["Priv_PoliticalText"]</p>
+</section>
+
+<section class="mb-4">
+    <h5>@L["Priv_Third"]</h5>
+    <p>@L["Priv_ThirdText"]</p>
+</section>
+
+<section class="mb-4">
+    <h5>@L["Priv_Cookies"]</h5>
+    <p>@L["Priv_CookiesText"]</p>
+</section>
+
+<section class="mb-4">
+    <h5>@L["Priv_Retention"]</h5>
+    <p>@L["Priv_RetentionText"]</p>
+</section>
+
+<section class="mb-4">
+    <h5>@L["Priv_Rights"]</h5>
+    <p>@L["Priv_RightsText"]</p>
+    <AuthorizeView>
+        <Authorized>
+            <p class="mb-0">
+                <a href="Account/Manage/PersonalData">@L["Priv_RightsDownload"]</a> ·
+                <a href="Account/Manage/DeletePersonalData">@L["Priv_RightsDelete"]</a>
+            </p>
+        </Authorized>
+    </AuthorizeView>
+</section>
+
+<section>
+    <h5>@L["Priv_Contact"]</h5>
+    <p>@L["Priv_ContactText"]</p>
+</section>
+
+@code {
+    /// <summary>
+    /// Дата последнего изменения текста. Держим константой, а не автоматической
+    /// датой сборки: политика меняется реже, чем деплой, и «обновлено сегодня»
+    /// на каждом релизе — ложный сигнал.
+    /// </summary>
+    private const string LastUpdated = "27.08.2026";
+}

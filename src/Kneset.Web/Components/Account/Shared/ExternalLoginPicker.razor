@@ -5,16 +5,15 @@
 @inject SignInManager<AppUser> SignInManager
 @inject IdentityRedirectManager RedirectManager
 
-@if (externalLogins.Length == 0)
-{
-    <div>
-        <p>
-            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-            about setting up this ASP.NET application to support logging in via external services</a>.
-        </p>
-    </div>
-}
-else
+@* Провайдеров нет — не показываем ничего. В скаффолде здесь стоял абзац
+   со ссылкой на документацию Microsoft о том, как их настроить: сообщение
+   разработчику, адресованное посетителю. Ни одного внешнего провайдера
+   в Program.cs не зарегистрировано, поэтому видели его все.
+
+   Есть ли провайдеры, знает только этот компонент, поэтому страницы входа
+   и регистрации спрашивают его через HasProviders — иначе там остался бы
+   висеть заголовок над пустотой. *@
+@if (externalLogins.Length > 0)
 {
     <form class="form-horizontal" action="Account/PerformExternalLogin" method="post">
         <div>
@@ -31,6 +30,14 @@ else
 }
 
 @code {
+    /// <summary>
+    /// Есть ли хоть один внешний провайдер. Спрашивают страницы входа
+    /// и регистрации, чтобы не рисовать заголовок над пустым блоком.
+    /// Знание о провайдерах остаётся в одном месте — здесь.
+    /// </summary>
+    public static async Task<bool> HasProvidersAsync(SignInManager<AppUser> signInManager) =>
+        (await signInManager.GetExternalAuthenticationSchemesAsync()).Any();
+
     private AuthenticationScheme[] externalLogins = [];
 
     [SupplyParameterFromQuery]

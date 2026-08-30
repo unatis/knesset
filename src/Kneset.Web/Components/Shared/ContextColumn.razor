@@ -30,7 +30,7 @@
                 @foreach (var item in _closing)
                 {
                     <li>
-                        <a href="/bills/@item.Id" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+                        <a href="/bills/@item.Id" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
                         <span class="kt-num">
                             @item.Days @Plural.Of(item.Days, L["Ctx_DayForms"])
                             @L["Ctx_InStage"]
@@ -86,7 +86,7 @@
                 @foreach (var item in _debated)
                 {
                     <li>
-                        <a href="/bills/@item.Id" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+                        <a href="/bills/@item.Id" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
                         <span class="kt-num">@item.Comments</span>
                     </li>
                 }
@@ -139,13 +139,21 @@
 
     private async Task LoadClosingAsync(AppDbContext db)
     {
+        _closing = await QueryClosingAsync(db, RelevantBillIds?.ToList());
+
+        // Подписки есть, но ни у одного из этих законов окно не открыто — тогда
+        // показываем срочное по всей базе. Иначе вход на сайт делал бы блок
+        // хуже: у гостя три закона, у подписавшегося на один закрытый — пусто.
+        if (_closing.Count == 0 && RelevantBillIds is { Count: > 0 })
+            _closing = await QueryClosingAsync(db, null);
+    }
+
+    private async Task<List<ClosingItem>> QueryClosingAsync(AppDbContext db, List<int>? ids)
+    {
         var query = db.Bills.AsNoTracking();
 
-        if (RelevantBillIds is { Count: > 0 })
-        {
-            var ids = RelevantBillIds.ToList();
+        if (ids is { Count: > 0 })
             query = query.Where(b => ids.Contains(b.Id));
-        }
 
         // Открытость окна считает InfluenceWindowBadge по ключевым словам ивритского
         // статуса, и это C#-логика — в SQL её не перевести. Но отбирать «самые
@@ -179,7 +187,7 @@
             })
             .ToListAsync();
 
-        _closing = candidates
+        return candidates
             .Where(b => InfluenceWindowBadge.IsOpen(b.StatusDesc))
             .Take(BlockSize)
             .Select(b => new ClosingItem(

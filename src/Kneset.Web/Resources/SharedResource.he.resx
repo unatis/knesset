@@ -309,4 +309,79 @@
   <data name="Ctx_WeekDebate" xml:space="preserve"><value>על מה מתווכחים השבוע</value></data>
   <data name="Ctx_DebateEmpty" xml:space="preserve"><value>לא היו תגובות השבוע.</value></data>
   <data name="Ctx_DebateNote" xml:space="preserve"><value>מסודר לפי מספר התגובות בלבד, בלי התחשבות בעמדה.</value></data>
+  <data name="Auth_Email" xml:space="preserve"><value>דואר אלקטרוני</value></data>
+  <data name="Auth_Password" xml:space="preserve"><value>סיסמה</value></data>
+  <data name="Auth_ConfirmPassword" xml:space="preserve"><value>אימות סיסמה</value></data>
+  <data name="Auth_LogIn" xml:space="preserve"><value>כניסה</value></data>
+  <data name="Auth_LogInLocal" xml:space="preserve"><value>כניסה עם חשבון האתר</value></data>
+  <data name="Auth_LogInButton" xml:space="preserve"><value>כניסה</value></data>
+  <data name="Auth_RememberMe" xml:space="preserve"><value>זכרו אותי</value></data>
+  <data name="Auth_Or" xml:space="preserve"><value>או</value></data>
+  <data name="Auth_LogInPasskey" xml:space="preserve"><value>כניסה עם מפתח גישה</value></data>
+  <data name="Auth_ForgotPassword" xml:space="preserve"><value>שכחתם סיסמה?</value></data>
+  <data name="Auth_RegisterNew" xml:space="preserve"><value>הרשמה</value></data>
+  <data name="Auth_ResendConfirm" xml:space="preserve"><value>שליחת מייל אימות מחדש</value></data>
+  <data name="Auth_LogInExternal" xml:space="preserve"><value>כניסה דרך שירות אחר</value></data>
+  <data name="Auth_InvalidLogin" xml:space="preserve"><value>דואר אלקטרוני או סיסמה שגויים.</value></data>
+  <data name="Auth_Register" xml:space="preserve"><value>הרשמה</value></data>
+  <data name="Auth_CreateAccount" xml:space="preserve"><value>יצירת חשבון</value></data>
+  <data name="Auth_RegisterExternal" xml:space="preserve"><value>הרשמה דרך שירות אחר</value></data>
+  <data name="Auth_EnterEmail" xml:space="preserve"><value>הזינו דואר אלקטרוני</value></data>
+  <data name="Auth_ResetPasswordButton" xml:space="preserve"><value>איפוס סיסמה</value></data>
+  <data name="Auth_ForgotSentTitle" xml:space="preserve"><value>המייל נשלח</value></data>
+  <data name="Auth_ForgotSentText" xml:space="preserve"><value>בדקו את הדואר — שם הקישור לאיפוס הסיסמה.</value></data>
+  <data name="Auth_ResetTitle" xml:space="preserve"><value>איפוס סיסמה</value></data>
+  <data name="Auth_ResetSubtitle" xml:space="preserve"><value>קבעו סיסמה חדשה</value></data>
+  <data name="Auth_ResetButton" xml:space="preserve"><value>איפוס</value></data>
+  <data name="Auth_ResetDoneTitle" xml:space="preserve"><value>הסיסמה שונתה</value></data>
+  <data name="Auth_ResetDoneText" xml:space="preserve"><value>הסיסמה שונתה.</value></data>
+  <data name="Auth_GoToLogin" xml:space="preserve"><value>כניסה</value></data>
+  <data name="Auth_ResendTitle" xml:space="preserve"><value>מייל אימות</value></data>
+  <data name="Auth_ResendButton" xml:space="preserve"><value>שליחה</value></data>
+  <data name="Auth_ResendSent" xml:space="preserve"><value>המייל נשלח. בדקו את הדואר.</value></data>
+  <data name="Auth_ConfirmEmailTitle" xml:space="preserve"><value>אימות דואר אלקטרוני</value></data>
+  <data name="Auth_ConfirmEmailOk" xml:space="preserve"><value>תודה, הדואר אומת.</value></data>
+  <data name="Auth_ConfirmEmailFail" xml:space="preserve"><value>לא הצלחנו לאמת את הדואר.</value></data>
+  <data name="Auth_UserLoadError" xml:space="preserve"><value>לא הצלחנו לטעון את המשתמש.</value></data>
+  <data name="Auth_UserNotFound" xml:space="preserve"><value>לא נמצא משתמש עם דואר זה.</value></data>
+  <data name="Auth_RegisterConfirmTitle" xml:space="preserve"><value>אישור הרשמה</value></data>
+  <data name="Auth_CheckEmailConfirm" xml:space="preserve"><value>בדקו את הדואר כדי לאמת את החשבון.</value></data>
+  <data name="Auth_NoEmailSenderNote" xml:space="preserve"><value>שליחת מיילים אמיתית אינה מחוברת, ולכן הקישור מוצג כאן.</value></data>
+  <data name="Auth_ConfirmLink" xml:space="preserve"><value>אימות החשבון</value></data>
+  <data name="Auth_LockedTitle" xml:space="preserve"><value>החשבון נחסם זמנית</value></data>
+  <data name="Auth_LockedText" xml:space="preserve"><value>החשבון נחסם, נסו שוב מאוחר יותר.</value></data>
+  <data name="Auth_DeniedTitle" xml:space="preserve"><value>הגישה נדחתה</value></data>
+  <data name="Auth_DeniedText" xml:space="preserve"><value>אין לכם גישה לחלק זה.</value></data>
+  <data name="Auth_InvalidUser" xml:space="preserve"><value>המשתמש לא נמצא</value></data>
+  <data name="Auth_InvalidResetTitle" xml:space="preserve"><value>הקישור אינו תקף</value></data>
+  <data name="Auth_InvalidResetText" xml:space="preserve"><value>הקישור לאיפוס הסיסמה אינו תקף.</value></data>
+  <data name="Auth_ErrorPrefix" xml:space="preserve"><value>שגיאה: {0}</value></data>
+  <data name="Val_Required" xml:space="preserve"><value>שדה חובה</value></data>
+  <data name="Val_Email" xml:space="preserve"><value>הזינו כתובת דואר אלקטרוני תקינה</value></data>
+  <data name="Val_Length" xml:space="preserve"><value>בין {0} ל־{1} תווים</value></data>
+  <data name="Val_Mismatch" xml:space="preserve"><value>הערכים אינם תואמים</value></data>
+  <data name="Val_PasswordMismatch" xml:space="preserve"><value>הסיסמאות אינן תואמות</value></data>
+  <data name="Comment_AnonymousAuthor" xml:space="preserve"><value>משתתף</value></data>
+  <data name="Priv_Nav" xml:space="preserve"><value>פרטיות</value></data>
+  <data name="Priv_Title" xml:space="preserve"><value>מדיניות פרטיות</value></data>
+  <data name="Priv_Updated" xml:space="preserve"><value>עודכן: {0}</value></data>
+  <data name="Priv_Collect" xml:space="preserve"><value>מה אנחנו שומרים</value></data>
+  <data name="Priv_CollectText" xml:space="preserve"><value>כתובת דואר אלקטרוני וסיסמה — הסיסמה נשמרת רק כגיבוב חד-כיווני, לא בטקסט גלוי. שם לתצוגה, אם הזנתם אותו: בהרשמה לא מבקשים אותו והוא נשאר ריק. שפת הממשק ואופן קבלת ההתראות. המעקבים שלכם: מילים, חברי כנסת והצעות חוק. כתובת למשלוח התראות, אם הוספתם — היא נשמרת בנפרד מכתובת הכניסה. העמדות שלכם לגבי הצעות חוק, התגובות, היוזמות האזרחיות והחתימות עליהן.</value></data>
+  <data name="Priv_Public" xml:space="preserve"><value>מה אחרים רואים</value></data>
+  <data name="Priv_PublicText" xml:space="preserve"><value>תגובות, יוזמות אזרחיות והחתימות עליהן גלויות לכל מבקר, גם למי שלא נרשם. תגובה נחתמת בשם שבחרתם; בלי שם מופיע "משתתף" נייטרלי — כתובת הדואר אינה מוצגת בחתימה לעולם. העמדה האישית שלכם לגבי הצעת חוק אינה מוצגת לאחרים: היא נכנסת למונה המשותף רק כמספר.</value></data>
+  <data name="Priv_Political" xml:space="preserve"><value>עמדות לגבי הצעות חוק</value></data>
+  <data name="Priv_PoliticalText" xml:space="preserve"><value>סימון "בעד", "נגד" או "לא החלטתי" הוא מידע על עמדותיכם הפוליטיות, ואנחנו מתייחסים אליו בהתאם. הוא נשמר מקושר לחשבון, אחרת לא היינו יכולים להראות לכם את הקול שלכם ולאפשר לשנותו. בפומבי הוא מופיע רק כמונה מסכם ובאחוזים, בלי שמות. מחיקת החשבון מוחקת גם אותו.</value></data>
+  <data name="Priv_Third" xml:space="preserve"><value>למי עוברים הנתונים</value></data>
+  <data name="Priv_ThirdText" xml:space="preserve"><value>האתר פועל על אירוח Render, מסד הנתונים הוא Supabase; שניהם ממוקמים בפרנקפורט, באיחוד האירופי. הגופנים נטענים משרתי Google Fonts, ולכן בפתיחת כל עמוד כתובת ה-IP ופרטי הדפדפן שלכם נודעים ל-Google — וזה קורה עוד לפני כל הרשמה. כפתורי השיתוף הם קישורים רגילים לרשתות החברתיות: עד שלא לחצתם, השירותים האלה אינם יודעים עליכם דבר. נתוני הכנסת מגיעים מה-API הפתוח שלה, שמקבל רק את הבקשה שלנו וללא מידע על המבקרים. מודל השפה לניתוח הצעות חוק אינו מחובר עדיין, ולא נשלחים אליו נתונים.</value></data>
+  <data name="Priv_Cookies" xml:space="preserve"><value>קובצי Cookie</value></data>
+  <data name="Priv_CookiesText" xml:space="preserve"><value>שלושה סוגים: קובץ כניסה, כדי שלא תתחברו מחדש בכל עמוד; קובץ עם השפה שבחרתם; וסימן טכני להגנת הטפסים מזיוף בקשות. אין באתר אנליטיקה, מוני מבקרים או גלאי פרסום.</value></data>
+  <data name="Priv_Retention" xml:space="preserve"><value>כמה זמן נשמר</value></data>
+  <data name="Priv_RetentionText" xml:space="preserve"><value>התראות שנקראו נמחקות אוטומטית לאחר 30 יום. כל השאר נשמר כל עוד החשבון שלכם קיים. תגובה אפשר למחוק בכל רגע — לידה יש כפתור מחיקה.</value></data>
+  <data name="Priv_Rights" xml:space="preserve"><value>ניהול הנתונים</value></data>
+  <data name="Priv_RightsText" xml:space="preserve"><value>אתם יכולים להוריד את הנתונים שלכם ולמחוק את החשבון בעצמכם, בלי לפנות אלינו. המחיקה בלתי הפיכה: יחד עם החשבון נעלמים המעקבים, העמדות והתגובות.</value></data>
+  <data name="Priv_RightsDownload" xml:space="preserve"><value>הורדת הנתונים</value></data>
+  <data name="Priv_RightsDelete" xml:space="preserve"><value>מחיקת החשבון</value></data>
+  <data name="Priv_Contact" xml:space="preserve"><value>שאלות ושינויים</value></data>
+  <data name="Priv_ContactText" xml:space="preserve"><value>קוד המקור של האתר פתוח, והעמוד הזה נכתב לפיו: כל טענה כאן אפשר לבדוק מול הקוד. אם משהו בטיפול בנתונים ישתנה, ישתנה גם העמוד — תאריך העדכון מופיע למעלה.</value></data>
+  <data name="Bills_InAgendaSince" xml:space="preserve"><value>בסדר היום מאז</value></data>
 </root>

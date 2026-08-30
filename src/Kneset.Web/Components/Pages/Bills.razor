@@ -57,11 +57,11 @@ else
                     @if (bill.Bill.NameRu is not null)
                     {
                         <div class="kt-row-title">@bill.Bill.NameRu</div>
-                        <div class="kt-row-orig" dir="rtl" lang="he">@bill.Bill.Name</div>
+                        <div class="kt-row-orig" lang="he">@bill.Bill.Name</div>
                     }
                     else
                     {
-                        <div class="kt-row-title" dir="rtl" lang="he">@bill.Bill.Name</div>
+                        <div class="kt-row-title" lang="he">@bill.Bill.Name</div>
                     }
 
                     <div class="d-flex flex-wrap align-items-center gap-2">
@@ -72,7 +72,18 @@ else
                             {
                                 <span> · <span dir="rtl" lang="he">@bill.Bill.SubTypeDesc</span></span>
                             }
-                            · @L["Updated"] @bill.Bill.LastUpdatedDate.ToString("dd.MM.yyyy")
+                            @* Показываем ту дату, по которой список и отсортирован.
+                               Прежнее «обновлён» — это LastUpdatedDate, отметка
+                               Кнессета о правке записи: после массовой синхронизации
+                               она одинакова у тысяч законов и ни о чём не говорит. *@
+                            @if (bill.Bill.FirstSessionAt is { } inAgenda)
+                            {
+                                <span> · @L["Bills_InAgendaSince"] @inAgenda.ToString("dd.MM.yyyy")</span>
+                            }
+                            else
+                            {
+                                <span> · @L["Updated"] @bill.Bill.LastUpdatedDate.ToString("dd.MM.yyyy")</span>
+                            }
                         </span>
                     </div>
                 </div>
@@ -153,7 +164,19 @@ else
 
         _totalCount = await query.CountAsync();
         _bills = await query
-            .OrderByDescending(b => b.LastUpdatedDate)
+            // Сортируем по дате первого появления в повестке заседания, а не по
+            // LastUpdatedDate: последняя — отметка «когда запись тронул Кнессет»,
+            // и после массовой синхронизации она одинакова у тысяч законов.
+            // На первой странице все 25 строк были от одного числа, то есть
+            // сортировка формально работала, а сравнивать было нечего.
+            // FirstSessionAt заполняется синхронизацией из BillSession; у законов,
+            // ни разу не попавших в повестку, его нет — для них берём момент,
+            // когда мы впервые их увидели.
+            .OrderByDescending(b => b.FirstSessionAt ?? b.FirstSeenAt)
+            // Вторичный ключ обязателен. Без него равные даты дают неопределённый
+            // порядок, а Skip/Take по неопределённому порядку — это строки,
+            // способные повториться на соседних страницах или пропасть совсем.
+            .ThenByDescending(b => b.Id)
             .Skip(_page * PageSize).Take(PageSize)
             .Select(b => new BillRow(
                 b,

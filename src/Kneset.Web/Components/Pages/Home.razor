@@ -18,37 +18,37 @@
 
    Структура 2a: лента слева, столбец контекста справа. Табы «Моё / Всё» есть
    только у вошедшего — «Моё» строится из его подписок. *@
-<AuthorizeView>
-    <NotAuthorized>
-        <section class="hero">
-            <h1>@L["Home_HeroTitle"]</h1>
-            <p class="hero-text">@L["Home_HeroText"]</p>
-
-            <ul class="hero-points">
-                <li>@L["Home_Point1"]</li>
-                <li>@L["Home_Point2"]</li>
-                <li>@L["Home_Point3"]</li>
-            </ul>
-
-            <div class="hero-actions">
-                <a class="btn btn-primary" href="Account/Register">@L["Home_CtaJoin"]</a>
-                <a class="btn btn-outline-primary" href="bills">@L["Home_CtaBrowse"]</a>
-            </div>
-        </section>
-    </NotAuthorized>
-
-    @* Вошедшему полноэкранное знакомство не нужно, но совсем без объяснения
-       сайт оставлять нельзя — узкая полоска со ссылкой на страницу о проекте. *@
-    <Authorized>
-        <div class="home-strip">
-            <span>@L["Home_StripText"]</span>
-            <a href="about">@L["Home_StripMore"]</a>
-        </div>
-    </Authorized>
-</AuthorizeView>
-
 <div class="kt-home">
     <div class="kt-home-feed">
+
+        <AuthorizeView>
+            <NotAuthorized>
+                <section class="hero">
+                    <h1>@L["Home_HeroTitle"]</h1>
+                    <p class="hero-text">@L["Home_HeroText"]</p>
+
+                    <ul class="hero-points">
+                        <li>@L["Home_Point1"]</li>
+                        <li>@L["Home_Point2"]</li>
+                        <li>@L["Home_Point3"]</li>
+                    </ul>
+
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="Account/Register">@L["Home_CtaJoin"]</a>
+                        <a class="btn btn-outline-primary" href="bills">@L["Home_CtaBrowse"]</a>
+                    </div>
+                </section>
+            </NotAuthorized>
+
+            @* Вошедшему полноэкранное знакомство не нужно, но совсем без объяснения
+               сайт оставлять нельзя — узкая полоска со ссылкой на страницу о проекте. *@
+            <Authorized>
+                <div class="home-strip">
+                    <span>@L["Home_StripText"]</span>
+                    <a href="about">@L["Home_StripMore"]</a>
+                </div>
+            </Authorized>
+        </AuthorizeView>
 
         @if (_userId is null)
         {
@@ -112,11 +112,11 @@
                         <span class="feed-time">@RelativeTime(item.At)</span>
                     </div>
 
-                    <a class="feed-link" href="@item.Url" dir="@(item.IsHebrew ? "rtl" : "auto")">@item.Title</a>
+                    <a class="feed-link" href="@item.Url" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
 
                     @if (item.Original is not null)
                     {
-                        <div class="feed-orig" dir="rtl" lang="he">@item.Original</div>
+                        <div class="feed-orig" lang="he">@item.Original</div>
                     }
 
                     @if (item.BillId is int billId)
@@ -165,13 +165,21 @@
         string Title,
         string Url,
         bool IsHebrew,
+        /// <summary>Заполнен, если карточка показывает сам закон: бейдж окна и бар реакций.</summary>
         int? BillId = null,
         string? StatusDesc = null,
         string? Subtitle = null,
         int? Signatures = null,
         int? Threshold = null,
         string? Original = null,
-        string? Because = null);
+        string? Because = null,
+        /// <summary>
+        /// К какому закону относится событие — независимо от вида карточки.
+        /// У обсуждения BillId пустой (карточка показывает цитату, а не бейдж),
+        /// но закон у события есть, и по нему считаются повод подписки и склейка
+        /// событий одного закона.
+        /// </summary>
+        int? SourceBillId = null);
 
     private sealed record Counts(int Support, int Oppose, int Undecided)
     {
@@ -255,7 +263,8 @@
                 b.FirstSeenAt, "feed-kind-bill", "Feed_NewBill",
                 b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
                 b.Id, b.StatusDesc, null, null, null,
-                b.NameRu == null ? null : b.Name))
+                b.NameRu == null ? null : b.Name,
+                null, b.Id))
             .ToListAsync());
 
         // 2. Смена стадии — главное событие для «окна влияния».
@@ -269,7 +278,8 @@
                 b.StatusChangedAt!.Value, "feed-kind-status", "Feed_StatusChanged",
                 b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
                 b.Id, b.StatusDesc, null, null, null,
-                b.NameRu == null ? null : b.Name))
+                b.NameRu == null ? null : b.Name,
+                null, b.Id))
             .ToListAsync());
 
         // 3. Гражданские инициативы — единственные события, созданные людьми.
@@ -301,16 +311,33 @@
                 c.BillId != null ? $"/bills/{c.BillId}#comment-{c.Id}"
                                  : $"/initiatives/{c.InitiativeId}#comment-{c.Id}",
                 c.Bill != null && c.Bill.NameRu == null,
-                c.BillId, null,
-                c.Text.Length > 120 ? c.Text.Substring(0, 120) + "…" : c.Text))
+                // BillId намеренно пустой: карточка обсуждения показывает цитату,
+                // а не бейдж окна с баром реакций. Закон события — в SourceBillId.
+                null, null,
+                c.Text.Length > 120 ? c.Text.Substring(0, 120) + "…" : c.Text,
+                null, null, null, null, c.BillId))
             .ToListAsync());
 
-        var feed = items.OrderByDescending(i => i.At).Take(FeedSize).ToList();
+        // Один закон — одна карточка. У закона бывает и появление, и смена стадии,
+        // и обсуждение: формально это разные события, но карточка показывает
+        // текущее состояние закона, поэтому более старое событие не добавляет
+        // ничего и читается как дубль. Во «Всём» такие пары почти не встречались
+        // рядом — выборки берутся из тысяч записей; в «Моём», где пул сужен
+        // до подписок, они сталкиваются сразу. Оставляем самое свежее событие.
+        var feed = items
+            .OrderByDescending(i => i.At)
+            .GroupBy(i => i.SourceBillId)
+            // Ключ null — это инициативы: у них нет закона, и склеивать их
+            // друг с другом нельзя, это разные сущности.
+            .SelectMany(g => g.Key is null ? g : g.Take(1))
+            .OrderByDescending(i => i.At)
+            .Take(FeedSize)
+            .ToList();
 
         // Повод подписки дописывается только в «Моём»: во «Всём» он был бы ложью —
         // события там показываются независимо от того, подписан человек или нет.
         _feed = mine
-            ? feed.Select(i => i with { Because = BecauseOf(i.BillId) }).ToList()
+            ? feed.Select(i => i with { Because = BecauseOf(i.SourceBillId) }).ToList()
             : feed;
 
         // Счётчики реакций одним запросом только по попавшим в ленту законам.

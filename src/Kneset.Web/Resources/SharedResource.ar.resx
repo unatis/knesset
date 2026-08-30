@@ -309,4 +309,79 @@
   <data name="Ctx_WeekDebate" xml:space="preserve"><value>ما يُجدل حوله هذا الأسبوع</value></data>
   <data name="Ctx_DebateEmpty" xml:space="preserve"><value>لا تعليقات هذا الأسبوع.</value></data>
   <data name="Ctx_DebateNote" xml:space="preserve"><value>مرتّب حسب عدد التعليقات فقط، دون اعتبار للموقف.</value></data>
+  <data name="Auth_Email" xml:space="preserve"><value>البريد الإلكتروني</value></data>
+  <data name="Auth_Password" xml:space="preserve"><value>كلمة المرور</value></data>
+  <data name="Auth_ConfirmPassword" xml:space="preserve"><value>تأكيد كلمة المرور</value></data>
+  <data name="Auth_LogIn" xml:space="preserve"><value>تسجيل الدخول</value></data>
+  <data name="Auth_LogInLocal" xml:space="preserve"><value>الدخول بحساب الموقع</value></data>
+  <data name="Auth_LogInButton" xml:space="preserve"><value>تسجيل الدخول</value></data>
+  <data name="Auth_RememberMe" xml:space="preserve"><value>تذكّرني</value></data>
+  <data name="Auth_Or" xml:space="preserve"><value>أو</value></data>
+  <data name="Auth_LogInPasskey" xml:space="preserve"><value>الدخول بمفتاح المرور</value></data>
+  <data name="Auth_ForgotPassword" xml:space="preserve"><value>هل نسيت كلمة المرور؟</value></data>
+  <data name="Auth_RegisterNew" xml:space="preserve"><value>التسجيل</value></data>
+  <data name="Auth_ResendConfirm" xml:space="preserve"><value>إعادة إرسال رسالة التأكيد</value></data>
+  <data name="Auth_LogInExternal" xml:space="preserve"><value>الدخول عبر خدمة أخرى</value></data>
+  <data name="Auth_InvalidLogin" xml:space="preserve"><value>البريد الإلكتروني أو كلمة المرور غير صحيحة.</value></data>
+  <data name="Auth_Register" xml:space="preserve"><value>التسجيل</value></data>
+  <data name="Auth_CreateAccount" xml:space="preserve"><value>إنشاء حساب</value></data>
+  <data name="Auth_RegisterExternal" xml:space="preserve"><value>التسجيل عبر خدمة أخرى</value></data>
+  <data name="Auth_EnterEmail" xml:space="preserve"><value>أدخل بريدك الإلكتروني</value></data>
+  <data name="Auth_ResetPasswordButton" xml:space="preserve"><value>إعادة تعيين كلمة المرور</value></data>
+  <data name="Auth_ForgotSentTitle" xml:space="preserve"><value>تم إرسال الرسالة</value></data>
+  <data name="Auth_ForgotSentText" xml:space="preserve"><value>تحقّق من بريدك، ستجد فيه رابط إعادة التعيين.</value></data>
+  <data name="Auth_ResetTitle" xml:space="preserve"><value>إعادة تعيين كلمة المرور</value></data>
+  <data name="Auth_ResetSubtitle" xml:space="preserve"><value>اختر كلمة مرور جديدة</value></data>
+  <data name="Auth_ResetButton" xml:space="preserve"><value>إعادة التعيين</value></data>
+  <data name="Auth_ResetDoneTitle" xml:space="preserve"><value>تم تغيير كلمة المرور</value></data>
+  <data name="Auth_ResetDoneText" xml:space="preserve"><value>تم تغيير كلمة المرور.</value></data>
+  <data name="Auth_GoToLogin" xml:space="preserve"><value>تسجيل الدخول</value></data>
+  <data name="Auth_ResendTitle" xml:space="preserve"><value>رسالة التأكيد</value></data>
+  <data name="Auth_ResendButton" xml:space="preserve"><value>إرسال</value></data>
+  <data name="Auth_ResendSent" xml:space="preserve"><value>تم الإرسال. تحقّق من بريدك.</value></data>
+  <data name="Auth_ConfirmEmailTitle" xml:space="preserve"><value>تأكيد البريد الإلكتروني</value></data>
+  <data name="Auth_ConfirmEmailOk" xml:space="preserve"><value>شكرًا، تم تأكيد بريدك.</value></data>
+  <data name="Auth_ConfirmEmailFail" xml:space="preserve"><value>لم نتمكّن من تأكيد بريدك.</value></data>
+  <data name="Auth_UserLoadError" xml:space="preserve"><value>لم نتمكّن من تحميل المستخدم.</value></data>
+  <data name="Auth_UserNotFound" xml:space="preserve"><value>لا يوجد مستخدم بهذا البريد.</value></data>
+  <data name="Auth_RegisterConfirmTitle" xml:space="preserve"><value>تأكيد التسجيل</value></data>
+  <data name="Auth_CheckEmailConfirm" xml:space="preserve"><value>تحقّق من بريدك لتأكيد الحساب.</value></data>
+  <data name="Auth_NoEmailSenderNote" xml:space="preserve"><value>إرسال البريد الحقيقي غير مُهيّأ، لذلك يظهر الرابط هنا.</value></data>
+  <data name="Auth_ConfirmLink" xml:space="preserve"><value>تأكيد الحساب</value></data>
+  <data name="Auth_LockedTitle" xml:space="preserve"><value>الحساب محجوب مؤقتًا</value></data>
+  <data name="Auth_LockedText" xml:space="preserve"><value>الحساب محجوب، حاول مرة أخرى لاحقًا.</value></data>
+  <data name="Auth_DeniedTitle" xml:space="preserve"><value>الوصول مرفوض</value></data>
+  <data name="Auth_DeniedText" xml:space="preserve"><value>ليس لديك صلاحية لهذا القسم.</value></data>
+  <data name="Auth_InvalidUser" xml:space="preserve"><value>المستخدم غير موجود</value></data>
+  <data name="Auth_InvalidResetTitle" xml:space="preserve"><value>الرابط غير صالح</value></data>
+  <data name="Auth_InvalidResetText" xml:space="preserve"><value>رابط إعادة تعيين كلمة المرور غير صالح.</value></data>
+  <data name="Auth_ErrorPrefix" xml:space="preserve"><value>خطأ: {0}</value></data>
+  <data name="Val_Required" xml:space="preserve"><value>هذا الحقل مطلوب</value></data>
+  <data name="Val_Email" xml:space="preserve"><value>أدخل بريدًا إلكترونيًا صحيحًا</value></data>
+  <data name="Val_Length" xml:space="preserve"><value>بين {0} و{1} حرفًا</value></data>
+  <data name="Val_Mismatch" xml:space="preserve"><value>القيمتان غير متطابقتين</value></data>
+  <data name="Val_PasswordMismatch" xml:space="preserve"><value>كلمتا المرور غير متطابقتين</value></data>
+  <data name="Comment_AnonymousAuthor" xml:space="preserve"><value>مشارك</value></data>
+  <data name="Priv_Nav" xml:space="preserve"><value>الخصوصية</value></data>
+  <data name="Priv_Title" xml:space="preserve"><value>سياسة الخصوصية</value></data>
+  <data name="Priv_Updated" xml:space="preserve"><value>آخر تحديث: {0}</value></data>
+  <data name="Priv_Collect" xml:space="preserve"><value>ما نحفظه</value></data>
+  <data name="Priv_CollectText" xml:space="preserve"><value>البريد الإلكتروني وكلمة المرور — كلمة المرور تُحفظ كبصمة غير قابلة للعكس فقط، لا كنص ظاهر. اسم العرض إن أدخلته: التسجيل لا يطلبه فيبقى فارغًا. لغة الواجهة وطريقة الإشعارات. متابعاتك: الكلمات وأعضاء الكنيست ومشاريع القوانين. عنوان تسليم الإشعارات إن أضفته — ويُحفظ منفصلًا عن عنوان الدخول. مواقفك من مشاريع القوانين وتعليقاتك ومبادراتك المدنية والتوقيعات عليها.</value></data>
+  <data name="Priv_Public" xml:space="preserve"><value>ما يراه الآخرون</value></data>
+  <data name="Priv_PublicText" xml:space="preserve"><value>التعليقات والمبادرات المدنية والتوقيعات عليها مرئية لكل زائر، حتى غير المسجّل. يُوقَّع التعليق بالاسم الذي اخترته؛ وبدون اسم يظهر "مشارك" محايد — ولا يظهر بريدك الإلكتروني في التوقيع أبدًا. موقفك الفردي من مشروع قانون لا يُعرض للآخرين: يدخل العدّاد المشترك كرقم فقط.</value></data>
+  <data name="Priv_Political" xml:space="preserve"><value>المواقف من مشاريع القوانين</value></data>
+  <data name="Priv_PoliticalText" xml:space="preserve"><value>اختيار "مع" أو "ضد" أو "لم أحدّد" هو معلومة عن آرائك السياسية، ونتعامل معها على هذا الأساس. تُحفظ مرتبطة بحسابك، وإلا لم نستطع أن نظهر لك صوتك ولا أن نتيح لك تغييره. وعلنًا لا تظهر إلا كعدّاد إجمالي ونسبة، بلا أسماء. وحذف الحساب يحذفها أيضًا.</value></data>
+  <data name="Priv_Third" xml:space="preserve"><value>من يتلقّى البيانات أيضًا</value></data>
+  <data name="Priv_ThirdText" xml:space="preserve"><value>يعمل الموقع على استضافة Render وقاعدة بيانات Supabase؛ وكلاهما في فرانكفورت داخل الاتحاد الأوروبي. تُحمَّل خطوط الصفحة من خِدمة Google Fonts، لذا يعرف Google عنوان IP الخاص بك وتفاصيل متصفحك عند فتح أي صفحة — ويحدث ذلك قبل أي تسجيل. أزرار المشاركة روابط عادية إلى الشبكات الاجتماعية: وما لم تضغط عليها لا تعرف عنك شيئًا. بيانات الكنيست تأتي من واجهته المفتوحة، التي تتلقّى طلبنا فقط دون أي معلومات عن الزوّار. ونموذج اللغة لتحليل مشاريع القوانين غير موصول بعد، ولا تُرسل إليه بيانات.</value></data>
+  <data name="Priv_Cookies" xml:space="preserve"><value>ملفات Cookie</value></data>
+  <data name="Priv_CookiesText" xml:space="preserve"><value>ثلاثة أنواع: ملف الدخول لكي لا تسجّل الدخول في كل صفحة؛ وملف يحفظ اللغة التي اخترتها؛ ورمز تقني يحمي النماذج من تزييف الطلبات. لا يوجد في الموقع تحليلات ولا عدّاد زيارات ولا متتبّعات إعلانية.</value></data>
+  <data name="Priv_Retention" xml:space="preserve"><value>مدة الحفظ</value></data>
+  <data name="Priv_RetentionText" xml:space="preserve"><value>تُحذف الإشعارات المقروءة تلقائيًا بعد 30 يومًا. وما تبقّى يُحفظ ما دام حسابك قائمًا. ويمكن حذف أي تعليق في أي وقت — بجانبه زر حذف.</value></data>
+  <data name="Priv_Rights" xml:space="preserve"><value>إدارة بياناتك</value></data>
+  <data name="Priv_RightsText" xml:space="preserve"><value>يمكنك تنزيل بياناتك وحذف حسابك بنفسك، دون مراسلتنا. والحذف غير قابل للعكس: تذهب مع الحساب المتابعات والمواقف والتعليقات.</value></data>
+  <data name="Priv_RightsDownload" xml:space="preserve"><value>تنزيل البيانات</value></data>
+  <data name="Priv_RightsDelete" xml:space="preserve"><value>حذف الحساب</value></data>
+  <data name="Priv_Contact" xml:space="preserve"><value>الأسئلة والتغييرات</value></data>
+  <data name="Priv_ContactText" xml:space="preserve"><value>الكود المصدري للموقع مفتوح، وهذه الصفحة مكتوبة انطلاقًا منه: كل ما فيها يمكن التحقّق منه في الكود. وإن تغيّر شيء في معالجة البيانات تغيّرت الصفحة كذلك — وتاريخ التحديث في الأعلى.</value></data>
+  <data name="Bills_InAgendaSince" xml:space="preserve"><value>على جدول الأعمال منذ</value></data>
 </root>
