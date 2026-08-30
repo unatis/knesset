@@ -104,3 +104,44 @@ public class KnsPersonToPosition
     public string? FactionName { get; set; }
     public bool? IsCurrent { get; set; }
 }
+
+/// <summary>
+/// Пункт повестки заседания комиссии (KNS_CmtSessionItem). Нас интересуют
+/// только пункты с ItemTypeID = 2 — это законопроекты, и тогда ItemID = BillID.
+/// </summary>
+public class KnsCmtSessionItem
+{
+    public int ItemID { get; set; }
+    public int? ItemTypeID { get; set; }
+    public int CommitteeSessionID { get; set; }
+    public int? StatusID { get; set; }
+    public DateTime LastUpdatedDate { get; set; }
+}
+
+/// <summary>Пункт повестки заседания пленума (KNS_PlmSessionItem).</summary>
+public class KnsPlmSessionItem
+{
+    public int ItemID { get; set; }
+    public int? ItemTypeID { get; set; }
+    public int PlenumSessionID { get; set; }
+    public int? StatusID { get; set; }
+    public DateTime LastUpdatedDate { get; set; }
+}
+
+/// <summary>Заседание комиссии (KNS_CommitteeSession). Нужна только дата.</summary>
+public class KnsCommitteeSession
+{
+    public int CommitteeSessionID { get; set; }
+    public int? KnessetNum { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime LastUpdatedDate { get; set; }
+}
+
+/// <summary>Заседание пленума (KNS_PlenumSession). Нужна только дата.</summary>
+public class KnsPlenumSession
+{
+    public int PlenumSessionID { get; set; }
+    public int? KnessetNum { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime LastUpdatedDate { get; set; }
+}

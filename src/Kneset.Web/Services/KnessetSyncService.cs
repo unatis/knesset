@@ -65,6 +65,7 @@ public class KnessetSyncService(
         await RunStepAsync("Photos", SyncPhotosAsync, ct);
         await RunStepAsync("Bills", SyncBillsAsync, ct);
         await RunStepAsync("BillInitiators", SyncInitiatorsAsync, ct);
+        await RunStepAsync("BillSessions", SyncBillSessionsAsync, ct);
         await RunStepAsync("IsraelLaws", SyncIsraelLawsAsync, ct);
         await RunStepAsync("LawActs", SyncLawActsAsync, ct);
         await RunStepAsync("LawAmendments", SyncLawAmendmentsAsync, ct);
@@ -319,6 +320,165 @@ public class KnessetSyncService(
         }
 
         return total;
+    }
+
+    /// <summary>
+    /// История стадий: где и когда законопроект стоял в повестке. В KNS_Bill такого
+    /// нет — там только текущий статус, без даты его наступления. Собирается из двух
+    /// пар сущностей источника: пункты повесток (KNS_CmtSessionItem, KNS_PlmSessionItem)
+    /// дают связь с законом и стадию, сами заседания — дату.
+    ///
+    /// Пункты берём инкрементально, заседания целиком: дата живёт в заседании,
+    /// и перенос его на другой день не трогает LastUpdatedDate у пунктов. Иначе
+    /// перенесённое заседание осталось бы у нас со старой датой навсегда.
+    /// </summary>
+    private async Task<int> SyncBillSessionsAsync(DateTime? since, CancellationToken ct)
+    {
+        await using var db = await dbFactory.CreateDbContextAsync(ct);
+
+        var minBillId = await db.Bills.MinAsync(b => (int?)b.KnessetBillId, ct);
+        if (minBillId is null) return 0;
+
+        var latestKnesset = await client.GetLatestKnessetNumAsync(ct);
+        var minKnesset = latestKnesset - 1;
+
+        // Дата заседания по его идентификатору. Ключ включает вид: нумерация
+        // комиссий и пленума в источнике независимая и пересекается.
+        var dates = new Dictionary<(BillSessionKind, int), DateTime>();
+
+        // AsUtc обязателен: OData отдаёт время без часового пояса, и Npgsql
+        // отказывается писать такой DateTime в timestamptz. Остальные шаги
+        // синхронизации пропускают источниковые даты через тот же помощник.
+        foreach (var cs in await client.GetCommitteeSessionsAsync(minKnesset, ct))
+            if (cs.StartDate is { } d)
+                dates[(BillSessionKind.Committee, cs.CommitteeSessionID)] = AsUtc(d);
+
+        foreach (var ps in await client.GetPlenumSessionsAsync(minKnesset, ct))
+            if (ps.StartDate is { } d)
+                dates[(BillSessionKind.Plenum, ps.PlenumSessionID)] = AsUtc(d);
+
+        if (dates.Count == 0) return 0;
+
+        var items = new List<(int KnessetBillId, BillSessionKind Kind, int SessionId, int? StatusId)>();
+
+        foreach (var i in await client.GetCommitteeSessionItemsAsync(minBillId.Value, since, ct))
+            items.Add((i.ItemID, BillSessionKind.Committee, i.CommitteeSessionID, i.StatusID));
+
+        foreach (var i in await client.GetPlenumSessionItemsAsync(minBillId.Value, since, ct))
+            items.Add((i.ItemID, BillSessionKind.Plenum, i.PlenumSessionID, i.StatusID));
+
+        var billIdMap = await db.Bills.ToDictionaryAsync(b => b.KnessetBillId, b => b.Id, ct);
+        var total = 0;
+        var touchedBills = new HashSet<int>();
+
+        foreach (var chunk in items.Chunk(1000))
+        {
+            await using var chunkDb = await dbFactory.CreateDbContextAsync(ct);
+
+            var billIds = chunk
+                .Where(i => billIdMap.ContainsKey(i.KnessetBillId))
+                .Select(i => billIdMap[i.KnessetBillId])
+                .Distinct().ToList();
+            if (billIds.Count == 0) continue;
+
+            var existing = await chunkDb.BillSessions
+                .Where(s => billIds.Contains(s.BillId))
+                .ToDictionaryAsync(s => (s.BillId, s.Kind, s.KnessetSessionId), ct);
+
+            foreach (var src in chunk)
+            {
+                if (!billIdMap.TryGetValue(src.KnessetBillId, out var billId)) continue;
+                // Заседание чужого созыва — его дату мы не забирали.
+                if (!dates.TryGetValue((src.Kind, src.SessionId), out var startDate)) continue;
+
+                var key = (billId, src.Kind, src.SessionId);
+                if (!existing.TryGetValue(key, out var row))
+                {
+                    row = new BillSession
+                    {
+                        BillId = billId,
+                        Kind = src.Kind,
+                        KnessetSessionId = src.SessionId
+                    };
+                    chunkDb.BillSessions.Add(row);
+                    existing[key] = row;
+                }
+                row.StartDate = startDate;
+                row.StatusId = src.StatusId;
+                touchedBills.Add(billId);
+            }
+
+            await chunkDb.SaveChangesAsync(ct);
+            total += chunk.Length;
+        }
+
+        await RefreshSessionDatesAsync(dates, ct);
+        await RefreshFirstSessionAsync(touchedBills, ct);
+
+        return total;
+    }
+
+    /// <summary>
+    /// Переносы заседаний. Пункты повестки при переносе не меняются, поэтому
+    /// инкрементальная выборка их не приносит, и без этого прохода дата у нас
+    /// осталась бы старой. Обновляем только там, где она разошлась.
+    /// </summary>
+    private async Task RefreshSessionDatesAsync(
+        Dictionary<(BillSessionKind, int), DateTime> dates, CancellationToken ct)
+    {
+        await using var db = await dbFactory.CreateDbContextAsync(ct);
+
+        var rows = await db.BillSessions.ToListAsync(ct);
+        var changed = 0;
+
+        foreach (var row in rows)
+        {
+            if (dates.TryGetValue((row.Kind, row.KnessetSessionId), out var actual)
+                && row.StartDate != actual)
+            {
+                row.StartDate = actual;
+                changed++;
+            }
+        }
+
+        if (changed > 0)
+        {
+            await db.SaveChangesAsync(ct);
+            logger.LogInformation("Заседания: перенесено {Count}", changed);
+        }
+    }
+
+    /// <summary>
+    /// Дата первого появления в повестке — денормализуется в Bill, по ней
+    /// сортируется список законопроектов. Пересчитываем только затронутые.
+    /// </summary>
+    private async Task RefreshFirstSessionAsync(HashSet<int> billIds, CancellationToken ct)
+    {
+        if (billIds.Count == 0) return;
+
+        await using var db = await dbFactory.CreateDbContextAsync(ct);
+
+        foreach (var chunk in billIds.Chunk(500))
+        {
+            var ids = chunk.ToList();
+            var firsts = (await db.BillSessions
+                    .Where(s => ids.Contains(s.BillId))
+                    .GroupBy(s => s.BillId)
+                    .Select(g => new { BillId = g.Key, First = g.Min(x => x.StartDate) })
+                    .ToListAsync(ct))
+                .ToDictionary(x => x.BillId, x => x.First);
+
+            // Правим загруженные сущности и сохраняем пачкой. Отдельный
+            // ExecuteUpdateAsync на каждый закон выглядит аккуратнее, но это
+            // один сетевой обход на строку: на нескольких тысячах законов
+            // и базе в другой стране шаг растягивается на минуты.
+            var bills = await db.Bills.Where(b => ids.Contains(b.Id)).ToListAsync(ct);
+            foreach (var bill in bills)
+                if (firsts.TryGetValue(bill.Id, out var first))
+                    bill.FirstSessionAt = first;
+
+            await db.SaveChangesAsync(ct);
+        }
     }
 
     /// <summary>

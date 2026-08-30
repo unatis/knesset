@@ -383,4 +383,5 @@
   <data name="Priv_RightsDelete" xml:space="preserve"><value>Удалить учётную запись</value></data>
   <data name="Priv_Contact" xml:space="preserve"><value>Вопросы и изменения</value></data>
   <data name="Priv_ContactText" xml:space="preserve"><value>Исходный код сайта открыт, и эта страница написана по нему: любое утверждение здесь можно сверить с кодом. Если что-то в обработке данных изменится, изменится и эта страница — дата обновления указана сверху.</value></data>
+  <data name="Bills_InAgendaSince" xml:space="preserve"><value>в повестке с</value></data>
 </root>

@@ -40,6 +40,48 @@ public class KnessetODataClient(HttpClient http, ILogger<KnessetODataClient> log
         return GetPagedAsync<KnsBillInitiator>("KNS_BillInitiator", filter, ct);
     }
 
+    /// <summary>
+    /// Пункты повесток комиссий по законопроектам. Фильтр по ItemID отсекает
+    /// чужие созывы: без него сущность отдаёт 41 тысячу строк за всю историю,
+    /// с ним — около четырёх. ItemTypeID = 2 оставляет только законопроекты,
+    /// иначе в выборку попадут запросы, повестки дня и заседания как таковые.
+    /// </summary>
+    public Task<List<KnsCmtSessionItem>> GetCommitteeSessionItemsAsync(
+        int minBillId, DateTime? since, CancellationToken ct)
+    {
+        var filter = $"ItemTypeID eq 2 and ItemID ge {minBillId}";
+        var sinceFilter = SinceFilter(since);
+        if (sinceFilter is not null) filter += $" and {sinceFilter}";
+        return GetPagedAsync<KnsCmtSessionItem>("KNS_CmtSessionItem", filter, ct);
+    }
+
+    /// <summary>То же для пленума: 107 тысяч строк за всю историю против восьми.</summary>
+    public Task<List<KnsPlmSessionItem>> GetPlenumSessionItemsAsync(
+        int minBillId, DateTime? since, CancellationToken ct)
+    {
+        var filter = $"ItemTypeID eq 2 and ItemID ge {minBillId}";
+        var sinceFilter = SinceFilter(since);
+        if (sinceFilter is not null) filter += $" and {sinceFilter}";
+        return GetPagedAsync<KnsPlmSessionItem>("KNS_PlmSessionItem", filter, ct);
+    }
+
+    /// <summary>
+    /// Заседания комиссий нужных созывов. Намеренно без инкремента по времени:
+    /// дата заседания живёт здесь, а не в пункте повестки, и перенос заседания
+    /// не меняет LastUpdatedDate у пунктов. Забирая заседания целиком, мы ловим
+    /// такие переносы; строк немного — около четырнадцати тысяч на два созыва.
+    /// </summary>
+    public Task<List<KnsCommitteeSession>> GetCommitteeSessionsAsync(
+        int minKnesset, CancellationToken ct) =>
+        GetPagedAsync<KnsCommitteeSession>(
+            "KNS_CommitteeSession", $"KnessetNum ge {minKnesset}", ct);
+
+    /// <summary>Заседания пленума нужных созывов — их несколько сотен.</summary>
+    public Task<List<KnsPlenumSession>> GetPlenumSessionsAsync(
+        int minKnesset, CancellationToken ct) =>
+        GetPagedAsync<KnsPlenumSession>(
+            "KNS_PlenumSession", $"KnessetNum ge {minKnesset}", ct);
+
     public Task<List<KnsIsraelLaw>> GetIsraelLawsAsync(DateTime? since, CancellationToken ct) =>
         GetPagedAsync<KnsIsraelLaw>("KNS_IsraelLaw", SinceFilter(since), ct);
 

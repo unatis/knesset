@@ -383,4 +383,5 @@
   <data name="Priv_RightsDelete" xml:space="preserve"><value>Delete your account</value></data>
   <data name="Priv_Contact" xml:space="preserve"><value>Questions and changes</value></data>
   <data name="Priv_ContactText" xml:space="preserve"><value>The site's source code is open, and this page was written from it: every statement here can be checked against the code. If anything about data handling changes, this page changes too — the update date is at the top.</value></data>
+  <data name="Bills_InAgendaSince" xml:space="preserve"><value>on the agenda since</value></data>
 </root>

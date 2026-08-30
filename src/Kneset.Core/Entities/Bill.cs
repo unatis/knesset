@@ -36,6 +36,16 @@ public class Bill
     /// </summary>
     public DateTime FirstSeenAt { get; set; }
 
+    /// <summary>
+    /// Дата самого раннего заседания, где законопроект стоял в повестке.
+    /// Ближайшее к «когда он появился в работе»: PublicationDate в источнике —
+    /// это публикация уже принятого закона, и заполнена она у единиц.
+    /// Считается синхронизацией из BillSession, поэтому денормализована сюда —
+    /// по ней сортируется список, а коррелированный подзапрос на каждую строку
+    /// одиннадцати тысяч законов не нужен. null — в повестке ни разу не был.
+    /// </summary>
+    public DateTime? FirstSessionAt { get; set; }
+
     /// <summary>Когда в последний раз менялась стадия (StatusId). null — не менялась.</summary>
     public DateTime? StatusChangedAt { get; set; }
 
@@ -43,6 +53,8 @@ public class Bill
     public string? SummaryLaw { get; set; }
 
     public List<BillInitiator> Initiators { get; set; } = [];
+
+    public List<BillSession> Sessions { get; set; } = [];
     public List<BillAnalysis> Analyses { get; set; } = [];
     public List<BillReaction> Reactions { get; set; } = [];
 }
