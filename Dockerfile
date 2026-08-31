@@ -13,7 +13,27 @@ COPY src/Kneset.Web/Kneset.Web.csproj src/Kneset.Web/
 RUN dotnet restore src/Kneset.Web/Kneset.Web.csproj
 
 COPY . .
-RUN dotnet publish src/Kneset.Web/Kneset.Web.csproj -c Release -o /app --no-restore
+
+# Публикация идёт с восстановлением, хотя слой restore выше уже прогрел кэш
+# пакетов. Флага --no-restore здесь раньше не было зря: восстанавливался один
+# Kneset.Web.csproj, а публиковался полный исходник, и на этом стыке статика,
+# приходящая из пакетов, терялась молча — в образе не оказывалось каталога
+# wwwroot/_framework со скриптом Blazor. Кэш никуда не делся, лишняя минута
+# сборки дешевле неработающего сайта.
+RUN dotnet publish src/Kneset.Web/Kneset.Web.csproj -c Release -o /app
+
+# Без blazor.web.js страница отрисовывается на сервере и выглядит целой, но
+# цепь SignalR не поднимается: ни один фильтр, ни одна кнопка не отвечают.
+# Отказ при этом тихий — на сборке всё зелено, 404 виден только в консоли
+# браузера. Поэтому проверяем здесь: пусть лучше упадёт сборка.
+RUN set -e; \
+    if [ ! -f /app/wwwroot/_framework/blazor.web.js ] \
+       || [ ! -f /app/Kneset.Web.staticwebassets.endpoints.json ]; then \
+        echo "СБОРКА ОСТАНОВЛЕНА: публикация не положила статику Blazor." >&2; \
+        echo "Ожидались wwwroot/_framework/blazor.web.js и манифест endpoints.json." >&2; \
+        ls -la /app /app/wwwroot >&2 || true; \
+        exit 1; \
+    fi
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
