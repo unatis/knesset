@@ -106,6 +106,7 @@ public class KnessetSyncService(
     {
         var statuses = await client.GetStatusesAsync(ct);
         _statusDescById = statuses
+            .Select(s => new { s.StatusID, Desc = Clean(s.Desc) })
             .Where(s => s.Desc is not null)
             .ToDictionary(s => s.StatusID, s => s.Desc!);
     }
@@ -128,10 +129,10 @@ public class KnessetSyncService(
                 person = new Person { KnessetPersonId = src.PersonID };
                 db.Persons.Add(person);
             }
-            person.FirstName = src.FirstName ?? "";
-            person.LastName = src.LastName ?? "";
-            person.GenderDesc = src.GenderDesc;
-            person.Email = src.Email;
+            person.FirstName = CleanRequired(src.FirstName);
+            person.LastName = CleanRequired(src.LastName);
+            person.GenderDesc = Clean(src.GenderDesc);
+            person.Email = Clean(src.Email);
             person.IsCurrent = src.IsCurrent ?? false;
             person.LastUpdatedDate = AsUtc(src.LastUpdatedDate);
         }
@@ -148,7 +149,7 @@ public class KnessetSyncService(
 
         var factionByPerson = memberships
             .GroupBy(m => m.PersonID)
-            .ToDictionary(g => g.Key, g => g.First().FactionName);
+            .ToDictionary(g => g.Key, g => Clean(g.First().FactionName));
 
         await using var db = await dbFactory.CreateDbContextAsync(ct);
         var ids = factionByPerson.Keys.ToList();
@@ -237,23 +238,23 @@ public class KnessetSyncService(
                 // Анализ устаревает только при содержательных изменениях (название, статус,
                 // описание) — технические обновления LastUpdatedDate не тратят генерации.
                 var contentChanged = bill.Id != 0 &&
-                    (bill.Name != (src.Name ?? "") ||
+                    (bill.Name != CleanRequired(src.Name) ||
                      bill.StatusId != src.StatusID ||
-                     bill.SummaryLaw != src.SummaryLaw);
+                     bill.SummaryLaw != Clean(src.SummaryLaw));
 
                 // Смена стадии — отдельное событие для тех, кто следит за этим законом.
                 if (bill.Id != 0 && bill.StatusId != src.StatusID)
                     bill.StatusChangedAt = DateTime.UtcNow;
 
-                bill.Name = src.Name ?? "";
+                bill.Name = CleanRequired(src.Name);
                 bill.KnessetNum = src.KnessetNum ?? 0;
-                bill.SubTypeDesc = src.SubTypeDesc;
+                bill.SubTypeDesc = Clean(src.SubTypeDesc);
                 bill.StatusId = src.StatusID;
                 bill.StatusDesc = src.StatusID is int sid && _statusDescById.TryGetValue(sid, out var desc)
                     ? desc : null;
                 bill.Number = src.Number;
                 bill.PublicationDate = AsUtcNullable(src.PublicationDate);
-                bill.SummaryLaw = src.SummaryLaw;
+                bill.SummaryLaw = Clean(src.SummaryLaw);
                 bill.LastUpdatedDate = AsUtc(src.LastUpdatedDate);
 
                 // Законопроект изменился — помечаем существующие анализы устаревшими.
@@ -522,11 +523,11 @@ public class KnessetSyncService(
                     db.IsraelLaws.Add(law);
                 }
 
-                law.Name = src.Name ?? "";
+                law.Name = CleanRequired(src.Name);
                 law.KnessetNum = src.KnessetNum;
                 law.IsBasicLaw = src.IsBasicLaw ?? false;
                 law.IsBudgetLaw = src.IsBudgetLaw ?? false;
-                law.ValidityDesc = src.LawValidityDesc;
+                law.ValidityDesc = Clean(src.LawValidityDesc);
                 law.PublicationDate = AsUtcNullable(src.PublicationDate);
                 law.ValidityStartDate = AsUtcNullable(src.ValidityStartDate);
                 law.ValidityFinishDate = AsUtcNullable(src.ValidityFinishDate);
@@ -567,7 +568,7 @@ public class KnessetSyncService(
                     existing[src.LawID] = act;
                 }
 
-                act.Name = src.Name ?? "";
+                act.Name = CleanRequired(src.Name);
                 act.PublicationDate = AsUtcNullable(src.PublicationDate);
                 act.LastUpdatedDate = AsUtc(src.LastUpdatedDate);
             }
@@ -618,8 +619,8 @@ public class KnessetSyncService(
 
                 amendment.IsraelLawId = israelLawId;
                 amendment.KnessetLawId = src.LawID;
-                amendment.BindingTypeDesc = src.BindingTypeDesc;
-                amendment.AmendmentTypeDesc = src.AmendmentTypeDesc;
+                amendment.BindingTypeDesc = Clean(src.BindingTypeDesc);
+                amendment.AmendmentTypeDesc = Clean(src.AmendmentTypeDesc);
                 // Разметка Кнессета: עקיף — косвенная, החוק המקורי — сам факт создания закона.
                 amendment.IsIndirect = src.AmendmentTypeDesc?.Contains("עקיף") ?? false;
                 amendment.IsOriginal = src.BindingTypeDesc?.Contains("המקורי") ?? false;
@@ -638,6 +639,20 @@ public class KnessetSyncService(
 
         return total;
     }
+
+    /// <summary>
+    /// Строка из Кнессета: снимаем обрамляющие пробелы, пустое считаем отсутствующим.
+    ///
+    /// В выгрузке часть значений приходит с висячим пробелом — «הליכוד » вместо
+    /// «הליכוד». На экране это незаметно, но фильтр законопроектов по фракции
+    /// сравнивает названия через ==, и любое расхождение в пробеле молча
+    /// превращает отбор в пустой результат. Чистим на входе, а не в запросах:
+    /// btrim в условии отменяет индекс, и о нём легко забыть в новом запросе.
+    /// </summary>
+    private static string? Clean(string? s) => string.IsNullOrWhiteSpace(s) ? null : s.Trim();
+
+    /// <summary>То же для полей, которые в модели не допускают null.</summary>
+    private static string CleanRequired(string? s) => Clean(s) ?? "";
 
     private static DateTime AsUtc(DateTime dt) => DateTime.SpecifyKind(dt, DateTimeKind.Utc);
     private static DateTime? AsUtcNullable(DateTime? dt) => dt is null ? null : AsUtc(dt.Value);
