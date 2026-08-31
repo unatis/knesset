@@ -66,21 +66,43 @@ public class KnessetODataClient(HttpClient http, ILogger<KnessetODataClient> log
     }
 
     /// <summary>
-    /// Заседания комиссий нужных созывов. Намеренно без инкремента по времени:
-    /// дата заседания живёт здесь, а не в пункте повестки, и перенос заседания
-    /// не меняет LastUpdatedDate у пунктов. Забирая заседания целиком, мы ловим
-    /// такие переносы; строк немного — около четырнадцати тысяч на два созыва.
+    /// Заседания комиссий нужных созывов.
+    ///
+    /// Инкремент идёт по LastUpdatedDate самого заседания — не путать с пунктом
+    /// повестки. Различие тут и было причиной, по которой сущность раньше
+    /// забиралась целиком: при переносе сидения меняется запись заседания,
+    /// а у пунктов повестки отметка остаётся прежней, и инкремент по ним
+    /// перенос пропускает. По самим заседаниям он его как раз приносит.
+    ///
+    /// Цена полной выкачки оказалась велика: только комиссий 25-го созыва
+    /// 10 825, код берёт ещё и предыдущий, а страница ограничена сотней
+    /// записей — $top=1000 сервис всё равно урезает до 100. Выходило
+    /// две-три сотни запросов на каждый прогон синхронизации.
+    ///
+    /// Взамен вызывающий обязан добирать даты неизменившихся заседаний из
+    /// своей базы: в ответе их не будет. См. SyncBillSessionsAsync.
     /// </summary>
     public Task<List<KnsCommitteeSession>> GetCommitteeSessionsAsync(
-        int minKnesset, CancellationToken ct) =>
-        GetPagedAsync<KnsCommitteeSession>(
-            "KNS_CommitteeSession", $"KnessetNum ge {minKnesset}", ct);
+        int minKnesset, DateTime? since, CancellationToken ct)
+    {
+        var filter = $"KnessetNum ge {minKnesset}";
+        var sinceFilter = SinceFilter(since);
+        if (sinceFilter is not null) filter += $" and {sinceFilter}";
+        return GetPagedAsync<KnsCommitteeSession>("KNS_CommitteeSession", filter, ct);
+    }
 
-    /// <summary>Заседания пленума нужных созывов — их несколько сотен.</summary>
+    /// <summary>
+    /// Заседания пленума нужных созывов — их несколько сотен. Инкремент по той
+    /// же причине и с тем же условием, что у комиссий.
+    /// </summary>
     public Task<List<KnsPlenumSession>> GetPlenumSessionsAsync(
-        int minKnesset, CancellationToken ct) =>
-        GetPagedAsync<KnsPlenumSession>(
-            "KNS_PlenumSession", $"KnessetNum ge {minKnesset}", ct);
+        int minKnesset, DateTime? since, CancellationToken ct)
+    {
+        var filter = $"KnessetNum ge {minKnesset}";
+        var sinceFilter = SinceFilter(since);
+        if (sinceFilter is not null) filter += $" and {sinceFilter}";
+        return GetPagedAsync<KnsPlenumSession>("KNS_PlenumSession", filter, ct);
+    }
 
     public Task<List<KnsIsraelLaw>> GetIsraelLawsAsync(DateTime? since, CancellationToken ct) =>
         GetPagedAsync<KnsIsraelLaw>("KNS_IsraelLaw", SinceFilter(since), ct);
