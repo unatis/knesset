@@ -594,4 +594,15 @@
   <data name="Bills_FactionsChosen" xml:space="preserve"><value>סיעות: {0} מתוך {1}</value></data>
   <data name="Filter_CheckAll" xml:space="preserve"><value>סימון הכול</value></data>
   <data name="Filter_ClearAll" xml:space="preserve"><value>ניקוי הכול</value></data>
+  <data name="Bill_Documents" xml:space="preserve"><value>מסמכי הצעת החוק</value></data>
+  <data name="Bill_Document" xml:space="preserve"><value>מסמך</value></data>
+  <data name="Pipe_Preliminary" xml:space="preserve"><value>דיון מוקדם</value></data>
+  <data name="Pipe_FirstPrep" xml:space="preserve"><value>הכנה לקריאה ראשונה</value></data>
+  <data name="Pipe_FirstReading" xml:space="preserve"><value>קריאה ראשונה</value></data>
+  <data name="Pipe_SecondPrep" xml:space="preserve"><value>הכנה לקריאה שנייה ושלישית</value></data>
+  <data name="Pipe_SecondThird" xml:space="preserve"><value>קריאה שנייה ושלישית</value></data>
+  <data name="Pipe_Passed" xml:space="preserve"><value>הצעת החוק התקבלה</value></data>
+  <data name="Pipe_InCommittee" xml:space="preserve"><value>בוועדה</value></data>
+  <data name="Pipe_InPlenum" xml:space="preserve"><value>במליאה</value></data>
+  <data name="Pipe_Stopped" xml:space="preserve"><value>המסלול נקטע: הצעת החוק לא המשיכה.</value></data>
 </root>

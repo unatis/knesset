@@ -1286,3 +1286,108 @@ h1:focus {
 .kt-num-hidden {
     color: var(--kt-char-400);
 }
+
+/* --- Документы законопроекта -------------------------------------------
+   Один документ — строка: подпись из источника и рядом форматы, в которых
+   он выложен. DOC и PDF это один и тот же текст, разводить их по строкам
+   значило бы удваивать список на ровном месте. */
+
+.kt-docs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.kt-docs li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding-block: 0.4rem;
+    border-block-end: 1px solid var(--kt-char-50);
+}
+
+.kt-doc-link {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-sm, 6px);
+    text-decoration: none;
+}
+
+/* --- Дорога законопроекта ----------------------------------------------
+   Стрелки-шевроны, как на сайте Кнессета: пройденное, текущее и предстоящее
+   различаются цветом, а форма показывает направление движения.
+
+   Направление берётся из логических свойств, а clip-path приходится
+   переворачивать вручную: он работает в физических координатах и в RTL
+   сам не зеркалится. */
+
+.kt-pipe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+}
+
+.kt-pipe-step {
+    flex: 1 1 8rem;
+    min-inline-size: 0;
+    padding: 0.5rem 1.4rem 0.5rem 0.9rem;
+    /* Хвост слева, остриё справа — направление чтения слева направо. */
+    clip-path: polygon(0 0, calc(100% - 0.7rem) 0, 100% 50%, calc(100% - 0.7rem) 100%, 0 100%, 0.7rem 50%);
+    background: var(--kt-char-50);
+    color: var(--kt-char-400);
+    font-size: 0.8125rem;
+    line-height: 1.25;
+}
+
+[dir="rtl"] .kt-pipe-step {
+    padding: 0.5rem 0.9rem 0.5rem 1.4rem;
+    clip-path: polygon(100% 0, 0.7rem 0, 0 50%, 0.7rem 100%, 100% 100%, calc(100% - 0.7rem) 50%);
+}
+
+/* Первый шаг без выемки в хвосте: ему неоткуда продолжать. */
+.kt-pipe-step:first-child {
+    clip-path: polygon(0 0, calc(100% - 0.7rem) 0, 100% 50%, calc(100% - 0.7rem) 100%, 0 100%);
+    padding-inline-start: 0.9rem;
+}
+
+[dir="rtl"] .kt-pipe-step:first-child {
+    clip-path: polygon(100% 0, 0.7rem 0, 0 50%, 0.7rem 100%, 100% 100%);
+}
+
+.kt-pipe-name {
+    display: block;
+    font-weight: 500;
+}
+
+.kt-pipe-where {
+    display: block;
+    opacity: 0.75;
+}
+
+/* Пройдено — приглушённая зелень: было и закончилось хорошо. */
+.kt-pipe-done {
+    background: #E4EDE2;
+    color: #4A6B45;
+}
+
+/* Сейчас — тот же огонь, что и у открытого окна влияния. */
+.kt-pipe-now {
+    background: var(--kt-ember-500);
+    color: #fff;
+    font-weight: 600;
+}
+
+.kt-pipe-stopped .kt-pipe-now {
+    background: var(--kt-char-200);
+    color: var(--kt-char-600, #5a4a34);
+}
+
+.kt-pipe-note {
+    margin-block-start: -0.5rem;
+}

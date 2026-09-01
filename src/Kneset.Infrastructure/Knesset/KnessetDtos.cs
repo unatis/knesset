@@ -107,6 +107,20 @@ public class KnsPersonToPosition
 }
 
 /// <summary>
+/// Файл законопроекта (KNS_DocumentBill). Один документ приходит по строке
+/// на формат — DOC и PDF с общим DocumentBillID.
+/// </summary>
+public class KnsDocumentBill
+{
+    public int DocumentBillID { get; set; }
+    public int BillID { get; set; }
+    public string? GroupTypeDesc { get; set; }
+    public string? ApplicationDesc { get; set; }
+    public string? FilePath { get; set; }
+    public DateTime LastUpdatedDate { get; set; }
+}
+
+/// <summary>
 /// Пункт повестки заседания комиссии (KNS_CmtSessionItem). Нас интересуют
 /// только пункты с ItemTypeID = 2 — это законопроекты, и тогда ItemID = BillID.
 /// </summary>

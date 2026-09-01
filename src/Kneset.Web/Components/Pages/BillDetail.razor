@@ -74,6 +74,14 @@ else
        вместе с BillSession — она собирается из повесток заседаний комиссий
        и пленума. Порядок хронологический: путь закона читается сверху вниз,
        назначенные заседания оказываются внизу, в будущем. *@
+    @* Дорога целиком — до истории заседаний. Сначала «сколько осталось»,
+       потом «что уже было»: без первого текущая стадия не говорит, середина
+       это пути или почти конец. *@
+    <section class="mt-4">
+        <BillPipeline StatusId="@_bill.StatusId" SubTypeDesc="@_bill.SubTypeDesc"
+                      VisitedStatusIds="@_visitedStatusIds" />
+    </section>
+
     @if (_head.Count > 0)
     {
         <section class="kt-stages mt-4">
@@ -143,6 +151,32 @@ else
             {
                 <h5>@L["Description"]</h5>
                 <p dir="rtl" lang="he">@_bill.SummaryLaw</p>
+            }
+
+            @* Текст законопроекта и пояснительная записка живут файлами на сайте
+               Кнессета. Ссылки, а не встроенный просмотр: fs.knesset.gov.il отдаёт
+               PDF с X-Frame-Options SAMEORIGIN, и рамка на чужом домене всё равно
+               осталась бы пустой. Проксировать файл через себя значит подменить
+               первоисточник копией и взять на себя его свежесть. *@
+            @if (_bill.Documents.Count > 0)
+            {
+                <h5>@L["Bill_Documents"]</h5>
+                <ul class="kt-docs mb-4">
+                    @foreach (var group in _bill.Documents
+                        .GroupBy(d => new { d.KnessetDocumentId, d.GroupTypeDesc })
+                        .OrderBy(g => g.Key.KnessetDocumentId))
+                    {
+                        <li>
+                            <span dir="rtl" lang="he">@(group.Key.GroupTypeDesc ?? L["Bill_Document"].Value)</span>
+                            @* Форматы одного документа — рядом, а не отдельными строками:
+                               DOC и PDF это один и тот же текст. *@
+                            @foreach (var doc in group.OrderBy(d => d.Format))
+                            {
+                                <a href="@doc.Url" target="_blank" rel="noopener" class="kt-doc-link">@doc.Format</a>
+                            }
+                        </li>
+                    }
+                </ul>
             }
 
             <AiAnalysisCard BillId="@_bill.Id" />
@@ -216,6 +250,9 @@ else
     /// <summary>Сколько первых заседаний оставляем при отсечке.</summary>
     private const int HeadCount = 3;
 
+    /// <summary>Стадии всех заседаний закона — шкале нужны все, а не показанные.</summary>
+    private List<int?> _visitedStatusIds = [];
+
     private List<BillSession> _head = [];
     private List<BillSession> _tail = [];
     private int _hidden;
@@ -247,6 +284,7 @@ else
 
         _bill = await db.Bills.AsNoTracking()
             .Include(b => b.Initiators).ThenInclude(i => i.Person)
+            .Include(b => b.Documents)
             .FirstOrDefaultAsync(b => b.Id == Id);
 
         if (_bill is not null)
@@ -258,6 +296,8 @@ else
                 .Where(x => x.BillId == _bill.Id)
                 .OrderBy(x => x.StartDate)
                 .ToListAsync();
+
+            _visitedStatusIds = rows.Select(x => x.StatusId).ToList();
 
             // Отсечку делаем с середины, а не с конца. Обрезание «первых N»
             // выбрасывало назначенное заседание — единственную строку шкалы,

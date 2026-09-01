@@ -55,6 +55,9 @@ public class Bill
     public List<BillInitiator> Initiators { get; set; } = [];
 
     public List<BillSession> Sessions { get; set; } = [];
+
+    /// <summary>Файлы законопроекта на сайте Кнессета: текст и пояснительная записка.</summary>
+    public List<BillDocument> Documents { get; set; } = [];
     public List<BillAnalysis> Analyses { get; set; } = [];
     public List<BillReaction> Reactions { get; set; } = [];
 }

@@ -66,6 +66,7 @@ public class KnessetSyncService(
         await RunStepAsync("Bills", SyncBillsAsync, ct);
         await RunStepAsync("BillInitiators", SyncInitiatorsAsync, ct);
         await RunStepAsync("BillSessions", SyncBillSessionsAsync, ct);
+        await RunStepAsync("BillDocuments", SyncBillDocumentsAsync, ct);
         await RunStepAsync("IsraelLaws", SyncIsraelLawsAsync, ct);
         await RunStepAsync("LawActs", SyncLawActsAsync, ct);
         await RunStepAsync("LawAmendments", SyncLawAmendmentsAsync, ct);
@@ -337,6 +338,76 @@ public class KnessetSyncService(
     /// и перенос его на другой день не трогает LastUpdatedDate у пунктов. Иначе
     /// перенесённое заседание осталось бы у нас со старой датой навсегда.
     /// </summary>
+    /// <summary>
+    /// Файлы законопроектов: сам текст с пояснительной запиской.
+    ///
+    /// Единственный источник содержания — KNS_Bill отдаёт заголовок и почти
+    /// всегда пустой SummaryLaw. Один документ приходит по строке на формат,
+    /// DOC и PDF с общим DocumentBillID, поэтому ключ строки — пара
+    /// «документ + формат».
+    /// </summary>
+    private async Task<int> SyncBillDocumentsAsync(DateTime? since, CancellationToken ct)
+    {
+        await using var db = await dbFactory.CreateDbContextAsync(ct);
+
+        var minBillId = await db.Bills.MinAsync(b => (int?)b.KnessetBillId, ct);
+        if (minBillId is null) return 0;
+
+        var documents = await client.GetBillDocumentsAsync(minBillId.Value, since, ct);
+        if (documents.Count == 0) return 0;
+
+        var billIdMap = await db.Bills.ToDictionaryAsync(b => b.KnessetBillId, b => b.Id, ct);
+        var total = 0;
+
+        foreach (var chunk in documents.Chunk(500))
+        {
+            await using var chunkDb = await dbFactory.CreateDbContextAsync(ct);
+
+            var billIds = chunk
+                .Where(d => billIdMap.ContainsKey(d.BillID))
+                .Select(d => billIdMap[d.BillID])
+                .Distinct().ToList();
+            if (billIds.Count == 0) continue;
+
+            var existing = await chunkDb.BillDocuments
+                .Where(x => billIds.Contains(x.BillId))
+                .ToDictionaryAsync(x => (x.BillId, x.KnessetDocumentId, x.Format), ct);
+
+            foreach (var src in chunk)
+            {
+                // Законопроект чужого созыва — его самого мы не забирали.
+                if (!billIdMap.TryGetValue(src.BillID, out var billId)) continue;
+
+                var format = CleanRequired(src.ApplicationDesc);
+                var url = Clean(src.FilePath);
+                // Строка без ссылки бесполезна: показывать нечего.
+                if (url is null || format.Length == 0) continue;
+
+                var key = (billId, src.DocumentBillID, format);
+                if (!existing.TryGetValue(key, out var row))
+                {
+                    row = new BillDocument
+                    {
+                        BillId = billId,
+                        KnessetDocumentId = src.DocumentBillID,
+                        Format = format
+                    };
+                    chunkDb.BillDocuments.Add(row);
+                    existing[key] = row;
+                }
+
+                row.GroupTypeDesc = Clean(src.GroupTypeDesc);
+                row.Url = url;
+                row.LastUpdatedDate = AsUtc(src.LastUpdatedDate);
+            }
+
+            await chunkDb.SaveChangesAsync(ct);
+            total += chunk.Length;
+        }
+
+        return total;
+    }
+
     private async Task<int> SyncBillSessionsAsync(DateTime? since, CancellationToken ct)
     {
         await using var db = await dbFactory.CreateDbContextAsync(ct);

@@ -66,6 +66,21 @@ public class KnessetODataClient(HttpClient http, ILogger<KnessetODataClient> log
     }
 
     /// <summary>
+    /// Файлы законопроектов. Фильтр по BillID отсекает чужие созывы: без него
+    /// сущность отдаёт 108 тысяч строк за всю историю, с ним — около тридцати
+    /// трёх. Инкремент по времени сверх того сводит обычный прогон к десяткам
+    /// записей: файлы к уже внесённому законопроекту почти не меняются.
+    /// </summary>
+    public Task<List<KnsDocumentBill>> GetBillDocumentsAsync(
+        int minBillId, DateTime? since, CancellationToken ct)
+    {
+        var filter = $"BillID ge {minBillId}";
+        var sinceFilter = SinceFilter(since);
+        if (sinceFilter is not null) filter += $" and {sinceFilter}";
+        return GetPagedAsync<KnsDocumentBill>("KNS_DocumentBill", filter, ct);
+    }
+
+    /// <summary>
     /// Заседания комиссий нужных созывов.
     ///
     /// Инкремент идёт по LastUpdatedDate самого заседания — не путать с пунктом

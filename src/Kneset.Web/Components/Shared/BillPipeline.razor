@@ -1,0 +1,124 @@
+@inject IStringLocalizer<SharedResource> L
+
+@* Дорога законопроекта целиком: где он сейчас и что ещё впереди.
+
+   Блок «путь законопроекта» рядом показывает историю — на каких заседаниях
+   он побывал. Это разные вопросы: история отвечает «где был», шкала — «сколько
+   осталось». Без второго человек видит текущую стадию, но не понимает, это
+   середина пути или почти конец.
+
+   Стадии здесь не из данных, а из процедуры: она одинакова для всех
+   законопроектов и не меняется. Данные решают только, какая из них текущая. *@
+@if (_current is not null || _reached > 0)
+{
+    <ol class="kt-pipe @(_stopped ? "kt-pipe-stopped" : null)">
+        @foreach (var stage in Stages())
+        {
+            <li class="kt-pipe-step @StateOf(stage.Step)">
+                <span class="kt-pipe-name">@L[stage.LabelKey]</span>
+                @if (stage.WhereKey is not null)
+                {
+                    <span class="kt-pipe-where">@L[stage.WhereKey]</span>
+                }
+            </li>
+        }
+    </ol>
+
+    @if (_stopped)
+    {
+        <p class="kt-num kt-pipe-note">@L["Pipe_Stopped"]</p>
+    }
+}
+
+@code {
+    [Parameter] public int? StatusId { get; set; }
+
+    /// <summary>Тип законопроекта: у правительственных нет предварительного чтения.</summary>
+    [Parameter] public string? SubTypeDesc { get; set; }
+
+    /// <summary>
+    /// Стадии, в которых законопроект побывал на заседаниях. Нужны для
+    /// остановленных: их текущий статус не говорит, докуда они дошли,
+    /// и без истории шкала была бы серой целиком — будто движения не было
+    /// вовсе. История это знает: она собрана из повесток заседаний.
+    /// </summary>
+    [Parameter] public IEnumerable<int?>? VisitedStatusIds { get; set; }
+
+    private sealed record Stage(int Step, string LabelKey, string? WhereKey);
+
+    /// <summary>
+    /// Стадия, на которой законопроект стоит сейчас. Ключ — номер статуса
+    /// из справочника Кнессета; у части статусов номеров несколько, потому что
+    /// одно описание висит на нескольких (см. фильтр стадий).
+    ///
+    /// Значение — шаг процедуры. Статусы ожидания приравнены к тому шагу,
+    /// которого ждут: «положен на стол к первому чтению» — это уже первое
+    /// чтение впереди, а не подготовка позади.
+    /// </summary>
+    private static readonly Dictionary<int, int> StepByStatus = new()
+    {
+        [104] = 1,                        // הונחה על שולחן הכנסת לדיון מוקדם
+        [150] = 1,                        // במליאה לדיון מוקדם
+        [101] = 2, [108] = 2,             // הכנה לקריאה ראשונה
+        [106] = 2, [142] = 2,             // בוועדת הכנסת לקביעת הוועדה המטפלת
+        [141] = 3, [111] = 3,             // к первому чтению
+        [113] = 4,                        // הכנה לקריאה שנייה ושלישית
+        [130] = 5, [114] = 5,             // ко второму и третьему
+        [118] = 6,                        // התקבלה בקריאה שלישית
+    };
+
+    /// <summary>
+    /// Процесс прекратился, не дойдя до конца: остановлен, объединён с другим,
+    /// преобразован в предложение к повестке. Шкала при этом показывается
+    /// приглушённой — путь был, но оборвался.
+    /// </summary>
+    private static readonly HashSet<int> StoppedStatuses = [335, 177, 122, 124];
+
+    private int? _current;
+    private int _reached;
+    private bool _stopped;
+
+    protected override void OnParametersSet()
+    {
+        _stopped = StatusId is { } s && StoppedStatuses.Contains(s);
+        _current = StatusId is { } id && StepByStatus.TryGetValue(id, out var step) ? step : null;
+
+        // Самый дальний шаг, подтверждённый заседаниями. У живого законопроекта
+        // он обычно совпадает с текущим; у остановленного только он и остаётся.
+        _reached = VisitedStatusIds?
+            .Where(x => x is not null)
+            .Select(x => StepByStatus.TryGetValue(x!.Value, out var st) ? st : 0)
+            .DefaultIfEmpty(0)
+            .Max() ?? 0;
+    }
+
+    /// <summary>
+    /// Правительственный законопроект вносят сразу к первому чтению —
+    /// предварительного чтения у него не бывает, и показывать пустой шаг
+    /// значило бы обещать этап, которого не будет.
+    /// </summary>
+    private bool HasPreliminary => SubTypeDesc?.Contains("ממשלתית") != true;
+
+    private IEnumerable<Stage> Stages()
+    {
+        if (HasPreliminary) yield return new(1, "Pipe_Preliminary", "Pipe_InPlenum");
+        yield return new(2, "Pipe_FirstPrep", "Pipe_InCommittee");
+        yield return new(3, "Pipe_FirstReading", "Pipe_InPlenum");
+        yield return new(4, "Pipe_SecondPrep", "Pipe_InCommittee");
+        yield return new(5, "Pipe_SecondThird", "Pipe_InPlenum");
+        yield return new(6, "Pipe_Passed", null);
+    }
+
+    /// <summary>
+    /// Пройденное, текущее, предстоящее. У остановленного текущего шага нет —
+    /// последний достигнутый показывается как место, где путь оборвался.
+    /// </summary>
+    private string StateOf(int step)
+    {
+        if (_current is { } now)
+            return step < now ? "kt-pipe-done" : step == now ? "kt-pipe-now" : "kt-pipe-future";
+
+        if (step < _reached) return "kt-pipe-done";
+        return step == _reached ? "kt-pipe-now" : "kt-pipe-future";
+    }
+}

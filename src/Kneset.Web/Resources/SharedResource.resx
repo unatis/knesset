@@ -594,4 +594,15 @@
   <data name="Bills_FactionsChosen" xml:space="preserve"><value>Фракции: {0} из {1}</value></data>
   <data name="Filter_CheckAll" xml:space="preserve"><value>Отметить все</value></data>
   <data name="Filter_ClearAll" xml:space="preserve"><value>Снять все</value></data>
+  <data name="Bill_Documents" xml:space="preserve"><value>Документы законопроекта</value></data>
+  <data name="Bill_Document" xml:space="preserve"><value>Документ</value></data>
+  <data name="Pipe_Preliminary" xml:space="preserve"><value>Предварительное чтение</value></data>
+  <data name="Pipe_FirstPrep" xml:space="preserve"><value>Подготовка к первому чтению</value></data>
+  <data name="Pipe_FirstReading" xml:space="preserve"><value>Первое чтение</value></data>
+  <data name="Pipe_SecondPrep" xml:space="preserve"><value>Подготовка ко второму и третьему</value></data>
+  <data name="Pipe_SecondThird" xml:space="preserve"><value>Второе и третье чтение</value></data>
+  <data name="Pipe_Passed" xml:space="preserve"><value>Закон принят</value></data>
+  <data name="Pipe_InCommittee" xml:space="preserve"><value>в комиссии</value></data>
+  <data name="Pipe_InPlenum" xml:space="preserve"><value>в зале</value></data>
+  <data name="Pipe_Stopped" xml:space="preserve"><value>Путь оборван: законопроект дальше не пошёл.</value></data>
 </root>

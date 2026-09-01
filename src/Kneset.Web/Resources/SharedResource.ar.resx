@@ -594,4 +594,15 @@
   <data name="Bills_FactionsChosen" xml:space="preserve"><value>الكتل: {0} من {1}</value></data>
   <data name="Filter_CheckAll" xml:space="preserve"><value>تحديد الكل</value></data>
   <data name="Filter_ClearAll" xml:space="preserve"><value>مسح الكل</value></data>
+  <data name="Bill_Documents" xml:space="preserve"><value>وثائق مشروع القانون</value></data>
+  <data name="Bill_Document" xml:space="preserve"><value>وثيقة</value></data>
+  <data name="Pipe_Preliminary" xml:space="preserve"><value>القراءة التمهيدية</value></data>
+  <data name="Pipe_FirstPrep" xml:space="preserve"><value>التحضير للقراءة الأولى</value></data>
+  <data name="Pipe_FirstReading" xml:space="preserve"><value>القراءة الأولى</value></data>
+  <data name="Pipe_SecondPrep" xml:space="preserve"><value>التحضير للقراءتين الثانية والثالثة</value></data>
+  <data name="Pipe_SecondThird" xml:space="preserve"><value>القراءتان الثانية والثالثة</value></data>
+  <data name="Pipe_Passed" xml:space="preserve"><value>أُقرَّ القانون</value></data>
+  <data name="Pipe_InCommittee" xml:space="preserve"><value>في اللجنة</value></data>
+  <data name="Pipe_InPlenum" xml:space="preserve"><value>في الهيئة العامة</value></data>
+  <data name="Pipe_Stopped" xml:space="preserve"><value>انقطع المسار: لم يتقدم المشروع أكثر.</value></data>
 </root>
