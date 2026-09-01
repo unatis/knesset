@@ -623,5 +623,5 @@
   <data name="Cmt_4215" xml:space="preserve"><value>הוועדה למיזמים ציבוריים</value></data>
   <data name="Bill_Committee" xml:space="preserve"><value>הוועדה המטפלת</value></data>
   <data name="Bill_WriteToCommittee" xml:space="preserve"><value>כתיבה לוועדה</value></data>
-  <data name="Bill_WriteHint" xml:space="preserve"><value>תיפתח תוכנת הדואר שלכם עם כתובת מזכירות הוועדה ונושא ההודעה. את העמדה אתם כותבים ושולחים בעצמכם — איננו שולחים דבר בשמכם.</value></data>
+  <data name="Bill_WriteHint" xml:space="preserve"><value>הכפתור יפתח את תוכנת הדואר שלכם עם כתובת מזכירות הוועדה ונושא ההודעה. אם היא לא נפתחת, העתיקו את הכתובת שלידו. את העמדה אתם כותבים ושולחים בעצמכם — איננו שולחים דבר בשמכם.</value></data>
 </root>

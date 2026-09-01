@@ -623,5 +623,5 @@
   <data name="Cmt_4215" xml:space="preserve"><value>Комиссия по общественным проектам</value></data>
   <data name="Bill_Committee" xml:space="preserve"><value>Ведущая комиссия</value></data>
   <data name="Bill_WriteToCommittee" xml:space="preserve"><value>Написать в комиссию</value></data>
-  <data name="Bill_WriteHint" xml:space="preserve"><value>Откроется ваша почтовая программа с адресом секретариата и темой письма. Текст позиции пишете сами и отправляете сами — мы ничего не отправляем за вас.</value></data>
+  <data name="Bill_WriteHint" xml:space="preserve"><value>Кнопка откроет вашу почтовую программу с адресом секретариата и темой письма. Если она не откроется, скопируйте адрес рядом. Текст позиции пишете и отправляете вы сами — мы ничего не отправляем за вас.</value></data>
 </root>

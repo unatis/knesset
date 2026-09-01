@@ -77,8 +77,14 @@ else
         {
             <div class="kt-write">
                 <a class="btn btn-sm btn-outline-primary" href="@MailTo(email)">@L["Bill_WriteToCommittee"]</a>
-                <span class="kt-num">@L["Bill_WriteHint"]</span>
+                @* Адрес рядом с кнопкой, а не только внутри mailto. У человека
+                   с почтой в браузере почтовый клиент не зарегистрирован, и
+                   кнопка молча не делает ничего; видимый адрес можно выделить
+                   и скопировать. dir=ltr обязателен: в ивритской и арабской
+                   вёрстке адрес иначе рвётся на части. *@
+                <span class="kt-write-mail" dir="ltr">@email</span>
             </div>
+            <div class="kt-num kt-write-hint">@L["Bill_WriteHint"]</div>
         }
     </div>
 

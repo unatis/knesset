@@ -623,5 +623,5 @@
   <data name="Cmt_4215" xml:space="preserve"><value>Public Projects Committee</value></data>
   <data name="Bill_Committee" xml:space="preserve"><value>Lead committee</value></data>
   <data name="Bill_WriteToCommittee" xml:space="preserve"><value>Write to the committee</value></data>
-  <data name="Bill_WriteHint" xml:space="preserve"><value>Your mail app opens with the committee secretariat address and a subject line. You write and send the letter yourself — we send nothing on your behalf.</value></data>
+  <data name="Bill_WriteHint" xml:space="preserve"><value>The button opens your mail app with the committee secretariat address and a subject line. If it does not open, copy the address next to it. You write and send the letter yourself — we send nothing on your behalf.</value></data>
 </root>
