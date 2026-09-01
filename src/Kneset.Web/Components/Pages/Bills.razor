@@ -24,24 +24,24 @@
 
            Флажки сгруппированы по окну влияния тем же классификатором, что рисует
            бейдж на карточке: одна логика, одно место правки. *@
-        <details class="kt-stages">
-            <summary class="form-select kt-stages-summary">
+        <details class="kt-stagepick">
+            <summary class="form-select kt-stagepick-summary">
                 @(_statuses.All(IsChecked)
                     ? L["Bills_StagesAll"].Value
                     : string.Format(L["Bills_StagesChosen"], _statuses.Count(IsChecked), _statuses.Count))
             </summary>
-            <div class="kt-stages-menu">
-                <div class="kt-stages-actions">
+            <div class="kt-stagepick-menu">
+                <div class="kt-stagepick-actions">
                     <button type="button" class="btn btn-sm btn-link p-0" @onclick="SelectInfluenceStages">@L["Bills_StagesInfluence"]</button>
                     <button type="button" class="btn btn-sm btn-link p-0" @onclick="SelectAllStages">@L["Bills_StagesAll"]</button>
                 </div>
                 @foreach (var group in _statuses.GroupBy(x => x.Css).OrderBy(g => GroupOrder(g.Key)))
                 {
-                    <div class="kt-stages-group">
+                    <div class="kt-stagepick-group">
                         <span class="kt-win @group.Key">@L[GroupLabelKey(group.Key)]</span>
                         @foreach (var st in group.OrderBy(x => StatusName(x), StringComparer.CurrentCulture))
                         {
-                            <label class="kt-stage-check">
+                            <label class="kt-stagepick-item">
                                 <input type="checkbox" checked="@IsChecked(st)"
                                        @onchange="e => ToggleStage(st, e)" />
                                 <span>@StatusName(st)</span>
