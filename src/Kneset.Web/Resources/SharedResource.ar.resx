@@ -623,5 +623,5 @@
   <data name="Cmt_4215" xml:space="preserve"><value>لجنة المشاريع العامة</value></data>
   <data name="Bill_Committee" xml:space="preserve"><value>اللجنة المختصة</value></data>
   <data name="Bill_WriteToCommittee" xml:space="preserve"><value>الكتابة إلى اللجنة</value></data>
-  <data name="Bill_WriteHint" xml:space="preserve"><value>سيُفتح برنامج بريدك مع عنوان أمانة اللجنة وموضوع الرسالة. تكتب الموقف وترسله بنفسك — نحن لا نرسل شيئًا نيابة عنك.</value></data>
+  <data name="Bill_WriteHint" xml:space="preserve"><value>يفتح الزر برنامج بريدك مع عنوان أمانة اللجنة وموضوع الرسالة. إن لم يُفتح، انسخ العنوان المجاور. تكتب الموقف وترسله بنفسك — نحن لا نرسل شيئًا نيابة عنك.</value></data>
 </root>

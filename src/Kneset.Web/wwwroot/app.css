@@ -1400,3 +1400,19 @@ h1:focus {
     gap: 0.75rem;
     margin-block-start: 0.75rem;
 }
+
+/* Адрес комиссии рядом с кнопкой: моноширинный, чтобы читался как значение,
+   и выделяемый целиком по двойному щелчку. */
+.kt-write-mail {
+    font-family: var(--kt-font-mono, ui-monospace, monospace);
+    font-size: 0.875rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--kt-char-25);
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-sm, 6px);
+    user-select: all;
+}
+
+.kt-write-hint {
+    margin-block-start: 0.5rem;
+}
