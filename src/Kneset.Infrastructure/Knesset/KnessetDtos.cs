@@ -16,6 +16,7 @@ public class KnsBill
     public string? Name { get; set; }
     public int? SubTypeID { get; set; }
     public string? SubTypeDesc { get; set; }
+    public int? CommitteeID { get; set; }
     public int? StatusID { get; set; }
     public int? Number { get; set; }
     public DateTime? PublicationDate { get; set; }
@@ -104,6 +105,31 @@ public class KnsPersonToPosition
     public int? FactionID { get; set; }
     public string? FactionName { get; set; }
     public bool? IsCurrent { get; set; }
+}
+
+/// <summary>Комиссия Кнессета (KNS_Committee) — с адресом секретариата.</summary>
+public class KnsCommittee
+{
+    public int CommitteeID { get; set; }
+    public string? Name { get; set; }
+    public string? Email { get; set; }
+    public int? CommitteeTypeID { get; set; }
+    public bool? IsCurrent { get; set; }
+    public DateTime LastUpdatedDate { get; set; }
+}
+
+/// <summary>
+/// Файл законопроекта (KNS_DocumentBill). Один документ приходит по строке
+/// на формат — DOC и PDF с общим DocumentBillID.
+/// </summary>
+public class KnsDocumentBill
+{
+    public int DocumentBillID { get; set; }
+    public int BillID { get; set; }
+    public string? GroupTypeDesc { get; set; }
+    public string? ApplicationDesc { get; set; }
+    public string? FilePath { get; set; }
+    public DateTime LastUpdatedDate { get; set; }
 }
 
 /// <summary>

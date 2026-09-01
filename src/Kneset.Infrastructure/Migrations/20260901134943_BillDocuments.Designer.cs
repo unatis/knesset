@@ -3,6 +3,7 @@ using System;
 using Kneset.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kneset.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260901134943_BillDocuments")]
+    partial class BillDocuments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,9 +114,6 @@ namespace Kneset.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CommitteeId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("FirstSeenAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -162,8 +162,6 @@ namespace Kneset.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CommitteeId");
 
                     b.HasIndex("KnessetBillId")
                         .IsUnique();
@@ -485,32 +483,6 @@ namespace Kneset.Infrastructure.Migrations
                     b.HasIndex("InitiativeId", "CreatedAt");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("Kneset.Core.Entities.Committee", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsCurrent")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsMain")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("LastUpdatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Committees");
                 });
 
             modelBuilder.Entity("Kneset.Core.Entities.InitiativeReaction", b =>
@@ -1162,15 +1134,6 @@ namespace Kneset.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Kneset.Core.Entities.Bill", b =>
-                {
-                    b.HasOne("Kneset.Core.Entities.Committee", "Committee")
-                        .WithMany()
-                        .HasForeignKey("CommitteeId");
-
-                    b.Navigation("Committee");
                 });
 
             modelBuilder.Entity("Kneset.Core.Entities.BillAnalysis", b =>

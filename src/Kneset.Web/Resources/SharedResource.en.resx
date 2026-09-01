@@ -594,4 +594,34 @@
   <data name="Bills_FactionsChosen" xml:space="preserve"><value>Factions: {0} of {1}</value></data>
   <data name="Filter_CheckAll" xml:space="preserve"><value>Select all</value></data>
   <data name="Filter_ClearAll" xml:space="preserve"><value>Clear all</value></data>
+  <data name="Bill_Documents" xml:space="preserve"><value>Bill documents</value></data>
+  <data name="Bill_Document" xml:space="preserve"><value>Document</value></data>
+  <data name="Pipe_Preliminary" xml:space="preserve"><value>Preliminary reading</value></data>
+  <data name="Pipe_FirstPrep" xml:space="preserve"><value>Preparing for first reading</value></data>
+  <data name="Pipe_FirstReading" xml:space="preserve"><value>First reading</value></data>
+  <data name="Pipe_SecondPrep" xml:space="preserve"><value>Preparing for second and third</value></data>
+  <data name="Pipe_SecondThird" xml:space="preserve"><value>Second and third reading</value></data>
+  <data name="Pipe_Passed" xml:space="preserve"><value>Bill passed</value></data>
+  <data name="Pipe_InCommittee" xml:space="preserve"><value>in committee</value></data>
+  <data name="Pipe_InPlenum" xml:space="preserve"><value>in plenum</value></data>
+  <data name="Pipe_Stopped" xml:space="preserve"><value>The path broke off: the bill went no further.</value></data>
+  <data name="Cmt_4186" xml:space="preserve"><value>Finance Committee</value></data>
+  <data name="Cmt_4187" xml:space="preserve"><value>National Security Committee</value></data>
+  <data name="Cmt_4188" xml:space="preserve"><value>Ethics Committee</value></data>
+  <data name="Cmt_4189" xml:space="preserve"><value>Health Committee</value></data>
+  <data name="Cmt_4190" xml:space="preserve"><value>Foreign Affairs and Defense Committee</value></data>
+  <data name="Cmt_4191" xml:space="preserve"><value>Constitution, Law and Justice Committee</value></data>
+  <data name="Cmt_4192" xml:space="preserve"><value>Education, Culture and Sports Committee</value></data>
+  <data name="Cmt_4193" xml:space="preserve"><value>Economic Affairs Committee</value></data>
+  <data name="Cmt_4195" xml:space="preserve"><value>Science and Technology Committee</value></data>
+  <data name="Cmt_4196" xml:space="preserve"><value>Labor and Welfare Committee</value></data>
+  <data name="Cmt_4197" xml:space="preserve"><value>Immigration, Absorption and Diaspora Committee</value></data>
+  <data name="Cmt_4198" xml:space="preserve"><value>Interior and Environmental Protection Committee</value></data>
+  <data name="Cmt_4199" xml:space="preserve"><value>State Control Committee</value></data>
+  <data name="Cmt_4200" xml:space="preserve"><value>Committee on the Status of Women and Gender Equality</value></data>
+  <data name="Cmt_4205" xml:space="preserve"><value>Committee for Oversight of the Israeli Citizens' Fund</value></data>
+  <data name="Cmt_4215" xml:space="preserve"><value>Public Projects Committee</value></data>
+  <data name="Bill_Committee" xml:space="preserve"><value>Lead committee</value></data>
+  <data name="Bill_WriteToCommittee" xml:space="preserve"><value>Write to the committee</value></data>
+  <data name="Bill_WriteHint" xml:space="preserve"><value>Your mail app opens with the committee secretariat address and a subject line. You write and send the letter yourself — we send nothing on your behalf.</value></data>
 </root>

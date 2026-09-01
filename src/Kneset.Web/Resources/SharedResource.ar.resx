@@ -594,4 +594,34 @@
   <data name="Bills_FactionsChosen" xml:space="preserve"><value>الكتل: {0} من {1}</value></data>
   <data name="Filter_CheckAll" xml:space="preserve"><value>تحديد الكل</value></data>
   <data name="Filter_ClearAll" xml:space="preserve"><value>مسح الكل</value></data>
+  <data name="Bill_Documents" xml:space="preserve"><value>وثائق مشروع القانون</value></data>
+  <data name="Bill_Document" xml:space="preserve"><value>وثيقة</value></data>
+  <data name="Pipe_Preliminary" xml:space="preserve"><value>القراءة التمهيدية</value></data>
+  <data name="Pipe_FirstPrep" xml:space="preserve"><value>التحضير للقراءة الأولى</value></data>
+  <data name="Pipe_FirstReading" xml:space="preserve"><value>القراءة الأولى</value></data>
+  <data name="Pipe_SecondPrep" xml:space="preserve"><value>التحضير للقراءتين الثانية والثالثة</value></data>
+  <data name="Pipe_SecondThird" xml:space="preserve"><value>القراءتان الثانية والثالثة</value></data>
+  <data name="Pipe_Passed" xml:space="preserve"><value>أُقرَّ القانون</value></data>
+  <data name="Pipe_InCommittee" xml:space="preserve"><value>في اللجنة</value></data>
+  <data name="Pipe_InPlenum" xml:space="preserve"><value>في الهيئة العامة</value></data>
+  <data name="Pipe_Stopped" xml:space="preserve"><value>انقطع المسار: لم يتقدم المشروع أكثر.</value></data>
+  <data name="Cmt_4186" xml:space="preserve"><value>لجنة المالية</value></data>
+  <data name="Cmt_4187" xml:space="preserve"><value>لجنة الأمن القومي</value></data>
+  <data name="Cmt_4188" xml:space="preserve"><value>لجنة الأخلاقيات</value></data>
+  <data name="Cmt_4189" xml:space="preserve"><value>لجنة الصحة</value></data>
+  <data name="Cmt_4190" xml:space="preserve"><value>لجنة الخارجية والأمن</value></data>
+  <data name="Cmt_4191" xml:space="preserve"><value>لجنة الدستور والقانون والقضاء</value></data>
+  <data name="Cmt_4192" xml:space="preserve"><value>لجنة التربية والثقافة والرياضة</value></data>
+  <data name="Cmt_4193" xml:space="preserve"><value>لجنة الاقتصاد</value></data>
+  <data name="Cmt_4195" xml:space="preserve"><value>لجنة العلوم والتكنولوجيا</value></data>
+  <data name="Cmt_4196" xml:space="preserve"><value>لجنة العمل والرفاه</value></data>
+  <data name="Cmt_4197" xml:space="preserve"><value>لجنة الهجرة والاستيعاب والشتات</value></data>
+  <data name="Cmt_4198" xml:space="preserve"><value>لجنة الداخلية وحماية البيئة</value></data>
+  <data name="Cmt_4199" xml:space="preserve"><value>لجنة مراقبة الدولة</value></data>
+  <data name="Cmt_4200" xml:space="preserve"><value>لجنة النهوض بمكانة المرأة والمساواة الجندرية</value></data>
+  <data name="Cmt_4205" xml:space="preserve"><value>لجنة الرقابة على صندوق مواطني إسرائيل</value></data>
+  <data name="Cmt_4215" xml:space="preserve"><value>لجنة المشاريع العامة</value></data>
+  <data name="Bill_Committee" xml:space="preserve"><value>اللجنة المختصة</value></data>
+  <data name="Bill_WriteToCommittee" xml:space="preserve"><value>الكتابة إلى اللجنة</value></data>
+  <data name="Bill_WriteHint" xml:space="preserve"><value>سيُفتح برنامج بريدك مع عنوان أمانة اللجنة وموضوع الرسالة. تكتب الموقف وترسله بنفسك — نحن لا نرسل شيئًا نيابة عنك.</value></data>
 </root>
