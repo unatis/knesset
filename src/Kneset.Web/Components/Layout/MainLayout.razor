@@ -25,7 +25,12 @@
         <div class="top-actions">
             <NotificationBell />
 
-            <div class="lang-switch">
+            @* data-enhance-nav="false" обязателен. Со мягкой навигацией Blazor
+               меняет только разметку и переиспользует уже открытую цепь SignalR,
+               а язык в ней задан при её создании. Получалось, что заголовок
+               вкладки уже на новом языке, а тело страницы — на прежнем.
+               Смена языка должна пересоздавать цепь, то есть перезагружать страницу. *@
+            <div class="lang-switch" data-enhance-nav="false">
                 <a href="/set-culture?culture=he&redirectUri=/@CurrentPath">עב</a>
                 <a href="/set-culture?culture=ar&redirectUri=/@CurrentPath">ع</a>
                 <a href="/set-culture?culture=ru&redirectUri=/@CurrentPath">РУ</a>

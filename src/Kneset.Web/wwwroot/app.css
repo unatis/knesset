@@ -1212,3 +1212,79 @@ h1:focus {
         height: 1px;
         background: var(--kt-char-100);
     }
+
+/* --- Фильтр по стадиям: множественный выбор без JS ---------------------
+   details/summary вместо select multiple. Родной множественный выбор
+   требует ctrl+клик и не показывает, что выбор вообще возможен;
+   здесь же обычные флажки, сгруппированные по окну влияния. */
+
+.kt-stages {
+    position: relative;
+}
+
+/* Класс form-select на summary даёт бутстраповскую рамку и стрелку.
+   Маркер треугольника у details при этом лишний. */
+.kt-stages-summary {
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.kt-stages-summary::-webkit-details-marker {
+    display: none;
+}
+
+.kt-stages-menu {
+    position: absolute;
+    z-index: 20;
+    inset-inline-start: 0;
+    min-inline-size: 100%;
+    /* Названия стадий длинные — «В комиссии: подготовка ко второму
+       и третьему чтению». Пусть меню шире поля, но не шире экрана. */
+    inline-size: max-content;
+    max-inline-size: min(28rem, 90vw);
+    max-block-size: 60vh;
+    overflow-y: auto;
+    margin-block-start: 0.25rem;
+    padding: 0.75rem;
+    background: var(--kt-char-0);
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-md);
+    box-shadow: var(--kt-shadow-md);
+}
+
+.kt-stages-actions {
+    display: flex;
+    gap: 1rem;
+    padding-block-end: 0.5rem;
+    margin-block-end: 0.5rem;
+    border-block-end: 1px solid var(--kt-char-50);
+}
+
+.kt-stages-group + .kt-stages-group {
+    margin-block-start: 0.75rem;
+}
+
+.kt-stages-group > .kt-win {
+    margin-block-end: 0.35rem;
+}
+
+.kt-stage-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    cursor: pointer;
+    font-size: 0.9375rem;
+    line-height: 1.35;
+}
+
+.kt-stage-check input {
+    margin-block-start: 0.2rem;
+    flex: none;
+}
+
+/* Сколько законопроектов спрятал фильтр — приглушённо, но всегда на виду. */
+.kt-num-hidden {
+    color: var(--kt-char-400);
+}

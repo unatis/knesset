@@ -546,4 +546,32 @@
   <data name="Cnf_EmailChangeFail" xml:space="preserve"><value>Could not change the email address. The link may have expired — request a new one.</value></data>
   <data name="Cnf_UserNameChangeFail" xml:space="preserve"><value>Could not update the username.</value></data>
   <data name="Val_Phone" xml:space="preserve"><value>Enter a valid phone number</value></data>
+  <data name="Status_104" xml:space="preserve"><value>Tabled: awaiting preliminary reading</value></data>
+  <data name="Status_108" xml:space="preserve"><value>In committee: preparing for first reading</value></data>
+  <data name="Status_111" xml:space="preserve"><value>Plenum: ahead of first reading</value></data>
+  <data name="Status_113" xml:space="preserve"><value>In committee: preparing for second and third reading</value></data>
+  <data name="Status_114" xml:space="preserve"><value>Plenum: ahead of second and third reading</value></data>
+  <data name="Status_118" xml:space="preserve"><value>Passed third reading</value></data>
+  <data name="Status_120" xml:space="preserve"><value>Plenum: continuity of the bill</value></data>
+  <data name="Status_122" xml:space="preserve"><value>Merged with another bill</value></data>
+  <data name="Status_124" xml:space="preserve"><value>Converted into an agenda motion</value></data>
+  <data name="Status_130" xml:space="preserve"><value>Tabled: awaiting second and third reading</value></data>
+  <data name="Status_141" xml:space="preserve"><value>Tabled: awaiting first reading</value></data>
+  <data name="Status_142" xml:space="preserve"><value>Knesset Committee: choosing the lead committee</value></data>
+  <data name="Status_150" xml:space="preserve"><value>Plenum: preliminary reading</value></data>
+  <data name="Status_165" xml:space="preserve"><value>Plenum: splitting the bill</value></data>
+  <data name="Status_175" xml:space="preserve"><value>In committee: continuity of the bill</value></data>
+  <data name="Status_335" xml:space="preserve"><value>Halted</value></data>
+  <data name="Bills_Stages" xml:space="preserve"><value>Stages</value></data>
+  <data name="Bills_StagesChosen" xml:space="preserve"><value>Stages: {0} of {1}</value></data>
+  <data name="Bills_StagesAll" xml:space="preserve"><value>All stages</value></data>
+  <data name="Bills_StagesInfluence" xml:space="preserve"><value>Where you can still act</value></data>
+  <data name="Bills_HiddenByStages" xml:space="preserve"><value>Hidden by the filter: {0}</value></data>
+  <data name="Bills_ShowEverything" xml:space="preserve"><value>show everything</value></data>
+  <data name="Status_101" xml:space="preserve"><value>In committee: preparing for first reading</value></data>
+  <data name="Status_106" xml:space="preserve"><value>Knesset Committee: choosing the lead committee</value></data>
+  <data name="Status_158" xml:space="preserve"><value>Plenum: splitting the bill</value></data>
+  <data name="Status_161" xml:space="preserve"><value>Plenum: splitting the bill</value></data>
+  <data name="Status_162" xml:space="preserve"><value>Plenum: splitting the bill</value></data>
+  <data name="Status_177" xml:space="preserve"><value>Halted</value></data>
 </root>

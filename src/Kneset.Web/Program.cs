@@ -1,4 +1,5 @@
-﻿using Kneset.Core.Abstractions;
+﻿using System.Globalization;
+using Kneset.Core.Abstractions;
 using Kneset.Core.Entities;
 using Kneset.Web;
 using Kneset.Infrastructure.Ai;
@@ -9,6 +10,7 @@ using Kneset.Web.Components;
 using Kneset.Web.Components.Account;
 using Kneset.Web.Services;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +33,12 @@ builder.Services.AddSingleton<DbBackedLocalizer>();
 builder.Services.AddSingleton<IStringLocalizer<SharedResource>>(sp =>
     sp.GetRequiredService<DbBackedLocalizer>());
 builder.Services.AddHostedService<UiTranslationSeedService>();
+
+// Язык, выбранный человеком, должен действовать и в цепи Blazor, а не только
+// при первой отрисовке страницы. Фабрика вызывается в момент создания цепи —
+// внутри запроса, где прослойка локализации уже разобрала куку.
+builder.Services.AddScoped<CircuitHandler>(_ =>
+    new CultureCircuitHandler(CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture));
 
 // Normalize принимает и формат Npgsql, и URI «postgresql://…», который показывает Supabase.
 var connectionString = PostgresConnectionString.Normalize(

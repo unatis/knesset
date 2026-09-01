@@ -18,13 +18,39 @@
                value="@_search" @oninput="OnSearchChanged" />
     </div>
     <div class="col-md-3">
-        <select class="form-select" value="@_statusFilter" @onchange="OnStatusChanged">
-            <option value="">@L["Bills_AllStatuses"]</option>
-            @foreach (var status in _statuses)
-            {
-                <option value="@status">@status</option>
-            }
-        </select>
+        @* Множественный выбор вместо одного значения: стадия — не взаимоисключающее
+           свойство для того, кто следит за темой. Родной select multiple отпадает
+           (ctrl+клик, неочевидно), поэтому details/summary и флажки внутри — без JS.
+
+           Флажки сгруппированы по окну влияния тем же классификатором, что рисует
+           бейдж на карточке: одна логика, одно место правки. *@
+        <details class="kt-stages">
+            <summary class="form-select kt-stages-summary">
+                @(_statuses.All(IsChecked)
+                    ? L["Bills_StagesAll"].Value
+                    : string.Format(L["Bills_StagesChosen"], _statuses.Count(IsChecked), _statuses.Count))
+            </summary>
+            <div class="kt-stages-menu">
+                <div class="kt-stages-actions">
+                    <button type="button" class="btn btn-sm btn-link p-0" @onclick="SelectInfluenceStages">@L["Bills_StagesInfluence"]</button>
+                    <button type="button" class="btn btn-sm btn-link p-0" @onclick="SelectAllStages">@L["Bills_StagesAll"]</button>
+                </div>
+                @foreach (var group in _statuses.GroupBy(x => x.Css).OrderBy(g => GroupOrder(g.Key)))
+                {
+                    <div class="kt-stages-group">
+                        <span class="kt-win @group.Key">@L[GroupLabelKey(group.Key)]</span>
+                        @foreach (var st in group.OrderBy(x => StatusName(x), StringComparer.CurrentCulture))
+                        {
+                            <label class="kt-stage-check">
+                                <input type="checkbox" checked="@IsChecked(st)"
+                                       @onchange="e => ToggleStage(st, e)" />
+                                <span>@StatusName(st)</span>
+                            </label>
+                        }
+                    </div>
+                }
+            </div>
+        </details>
     </div>
     <div class="col-md-2">
         <select class="form-select" value="@_knessetFilter" @onchange="OnKnessetChanged">
@@ -83,7 +109,19 @@ else if (_bills.Count == 0)
 }
 else
 {
-    <p class="kt-num">@L["Bills_Found"] @_totalCount</p>
+    <p class="kt-num">
+        @L["Bills_Found"] @_totalCount
+        @* Со включённым по умолчанию фильтром человек, ищущий конкретный закон
+           по названию, не нашёл бы его и не понял почему. Поэтому скрытое
+           всегда на виду, и снимается одним нажатием. *@
+        @if (_hiddenByStages > 0)
+        {
+            <span class="kt-num-hidden">
+                · @string.Format(L["Bills_HiddenByStages"], _hiddenByStages)
+                <button type="button" class="btn btn-sm btn-link p-0 align-baseline" @onclick="SelectAllStages">@L["Bills_ShowEverything"]</button>
+            </span>
+        }
+    </p>
 
     <div class="kt-rows mb-3">
         @foreach (var bill in _bills)
@@ -159,7 +197,11 @@ else
     private int _totalCount;
     private int _page;
     private string _search = "";
-    private string _statusFilter = "";
+    /// <summary>Отмеченные стадии. Пустое множество означало бы «ничего не показывать».</summary>
+    private HashSet<int> _statusIds = [];
+
+    /// <summary>Сколько законопроектов отсечено именно фильтром стадий.</summary>
+    private int _hiddenByStages;
     private string _knessetFilter = "";
     private string _factionFilter = "";
     private string _personFilter = "";
@@ -177,7 +219,31 @@ else
         string.IsNullOrEmpty(_factionFilter)
             ? _members
             : _members.Where(m => m.Faction == _factionFilter);
-    private List<string> _statuses = [];
+    /// <summary>Стадия: идентификатор источника, ивритское описание и группа влияния.</summary>
+    /// <summary>
+    /// Стадия глазами человека: одно название и все номера источника,
+    /// которые за ним стоят. В справочнике Кнессета одно описание висит
+    /// на нескольких номерах — «הכנה לקריאה ראשונה» это и 101, и 108,
+    /// «נעצרה» — 177 и 335. Без объединения одна стадия давала бы
+    /// два одинаковых флажка, и отметив один, человек видел бы неполную выборку.
+    /// </summary>
+    private sealed record StatusOption(string Desc, string Css, int[] Ids);
+
+    private List<StatusOption> _statuses = [];
+
+    /// <summary>
+    /// Стадии, на которых ещё можно повлиять, — они отмечены при первом открытии.
+    ///
+    /// Две стадии подготовки в комиссии: там текст переписывают постатейно,
+    /// заседания открыты и туда принимают позиции со стороны. Плюс четыре
+    /// стадии подхода к чтениям: содержание уже зафиксировано, но срок близкий
+    /// и голос депутата ещё не отдан.
+    ///
+    /// Намеренно снаружи: «внесён, ожидает предварительного чтения» — 7551 закон,
+    /// две трети базы. Большинство из них не сдвинется никогда, и попадание
+    /// в эту стадию не говорит ни о чём.
+    /// </summary>
+    private static readonly int[] InfluenceStages = [108, 113, 150, 111, 114, 130, 141];
     private List<int> _knessetNums = [];
     private System.Timers.Timer? _debounce;
 
@@ -195,8 +261,23 @@ else
         if (PersonQuery is { } pid) _personFilter = pid.ToString();
 
         await using var db = await DbFactory.CreateDbContextAsync();
-        _statuses = await db.Bills.Where(b => b.StatusDesc != null)
-            .Select(b => b.StatusDesc!).Distinct().OrderBy(s => s).ToListAsync();
+        _statuses = (await db.Bills
+                .Where(b => b.StatusId != null && b.StatusDesc != null)
+                .Select(b => new { Id = b.StatusId!.Value, Desc = b.StatusDesc! })
+                .Distinct()
+                .ToListAsync())
+            .GroupBy(x => x.Desc)
+            .Select(g => new StatusOption(
+                g.Key,
+                InfluenceWindowBadge.Classify(g.Key)?.Css ?? "kt-win-limited",
+                g.Select(x => x.Id).OrderBy(id => id).ToArray()))
+            .ToList();
+
+        // По умолчанию — только те стадии, где действие ещё имеет смысл.
+        // Пересечение со справочником: стадия из списка может не встречаться
+        // в базе вовсе, и отмечать её было бы обещанием пустого фильтра.
+        _statusIds = InfluenceSelection();
+        if (_statusIds.Count == 0) _statusIds = AllStageIds();
 
         // Только действующие: в Persons лежат все, кто когда-либо был в Кнессете,
         // и список из сотен имён в селекте бесполезен.
@@ -231,8 +312,13 @@ else
                 EF.Functions.ILike(b.Name, pattern) ||
                 (b.NameRu != null && EF.Functions.ILike(b.NameRu, pattern)));
         }
-        if (!string.IsNullOrEmpty(_statusFilter))
-            query = query.Where(b => b.StatusDesc == _statusFilter);
+        // Отбор по идентификатору стадии, а не по её ивритскому описанию:
+        // язык интерфейса на выборку больше не влияет, и расхождение в один
+        // пробел внутри строки ничего не ломает.
+        var stageIds = _statusIds;
+        var beforeStages = query;
+        if (_statusIds.Count > 0 && !_statuses.All(IsChecked))
+            query = query.Where(b => b.StatusId != null && stageIds.Contains(b.StatusId.Value));
         // Отбор по депутату и фракции идёт через таблицу инициаторов.
         // IsInitiator отделяет внёсшего закон от подписантов: на одном законе
         // их бывает четыре десятка, и без этого различия «законы депутата»
@@ -253,6 +339,9 @@ else
             query = query.Where(b => b.KnessetNum == knesset);
 
         _totalCount = await query.CountAsync();
+        _hiddenByStages = ReferenceEquals(beforeStages, query)
+            ? 0
+            : await beforeStages.CountAsync() - _totalCount;
         _bills = await query
             // Сортируем по дате первого появления в повестке заседания, а не по
             // LastUpdatedDate: последняя — отметка «когда запись тронул Кнессет»,
@@ -291,12 +380,80 @@ else
         _debounce.Start();
     }
 
-    private async Task OnStatusChanged(ChangeEventArgs e)
+    /// <summary>Стадия отмечена, если отмечен хотя бы один её номер.</summary>
+    private bool IsChecked(StatusOption st) => st.Ids.Any(_statusIds.Contains);
+
+    private HashSet<int> AllStageIds() => _statuses.SelectMany(x => x.Ids).ToHashSet();
+
+    /// <summary>Номера всех стадий, на которых ещё можно повлиять.</summary>
+    private HashSet<int> InfluenceSelection() => _statuses
+        .Where(st => st.Ids.Any(InfluenceStages.Contains))
+        .SelectMany(st => st.Ids)
+        .ToHashSet();
+
+    private async Task ToggleStage(StatusOption st, ChangeEventArgs e)
     {
-        _statusFilter = e.Value?.ToString() ?? "";
+        // Отметка ставится и снимается сразу для всех номеров стадии.
+        foreach (var id in st.Ids)
+            if (e.Value is true) _statusIds.Add(id); else _statusIds.Remove(id);
+
+        // Ни одной отметки — показывать нечего и незачем: возвращаем всё.
+        if (_statusIds.Count == 0) _statusIds = AllStageIds();
+
         _page = 0;
         await LoadAsync();
     }
+
+    private async Task SelectAllStages()
+    {
+        _statusIds = AllStageIds();
+        _page = 0;
+        await LoadAsync();
+    }
+
+    private async Task SelectInfluenceStages()
+    {
+        _statusIds = InfluenceSelection();
+        if (_statusIds.Count == 0) _statusIds = AllStageIds();
+        _page = 0;
+        await LoadAsync();
+    }
+
+    /// <summary>
+    /// Название стадии на языке интерфейса. Ключ — идентификатор из источника;
+    /// если перевода нет (в Кнессете появилась новая стадия), показываем
+    /// ивритский оригинал, а не голый ключ ресурса.
+    /// </summary>
+    private string StatusName(StatusOption st)
+    {
+        // Перевод может быть заведён не на все номера стадии — берём первый,
+        // который нашёлся. Если не нашёлся ни один (в Кнессете появилась новая
+        // стадия), показываем ивритский оригинал, а не голый ключ ресурса.
+        foreach (var id in st.Ids)
+        {
+            var s = L[$"Status_{id}"];
+            if (!s.ResourceNotFound) return s.Value;
+        }
+
+        return st.Desc;
+    }
+
+    /// <summary>Порядок групп: от открытого окна к закрытому.</summary>
+    private static int GroupOrder(string css) => css switch
+    {
+        "kt-win-open" => 0,
+        "kt-win-limited" => 1,
+        "kt-win-late" => 2,
+        _ => 3
+    };
+
+    private static string GroupLabelKey(string css) => css switch
+    {
+        "kt-win-open" => "Inf_Open",
+        "kt-win-limited" => "Inf_Limited",
+        "kt-win-late" => "Inf_Late",
+        _ => "Inf_Frozen"
+    };
 
     private async Task OnKnessetChanged(ChangeEventArgs e)
     {

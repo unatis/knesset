@@ -546,4 +546,32 @@
   <data name="Cnf_EmailChangeFail" xml:space="preserve"><value>Не удалось сменить адрес почты. Возможно, ссылка устарела — запросите новую.</value></data>
   <data name="Cnf_UserNameChangeFail" xml:space="preserve"><value>Не удалось обновить имя пользователя.</value></data>
   <data name="Val_Phone" xml:space="preserve"><value>Введите корректный номер телефона</value></data>
+  <data name="Status_104" xml:space="preserve"><value>Внесён: ожидает предварительного чтения</value></data>
+  <data name="Status_108" xml:space="preserve"><value>В комиссии: подготовка к первому чтению</value></data>
+  <data name="Status_111" xml:space="preserve"><value>В зале: перед первым чтением</value></data>
+  <data name="Status_113" xml:space="preserve"><value>В комиссии: подготовка ко второму и третьему чтению</value></data>
+  <data name="Status_114" xml:space="preserve"><value>В зале: перед вторым и третьим чтением</value></data>
+  <data name="Status_118" xml:space="preserve"><value>Принят в третьем чтении</value></data>
+  <data name="Status_120" xml:space="preserve"><value>В зале: о преемственности законопроекта</value></data>
+  <data name="Status_122" xml:space="preserve"><value>Объединён с другим законопроектом</value></data>
+  <data name="Status_124" xml:space="preserve"><value>Преобразован в предложение к повестке дня</value></data>
+  <data name="Status_130" xml:space="preserve"><value>Внесён: ожидает второго и третьего чтения</value></data>
+  <data name="Status_141" xml:space="preserve"><value>Внесён: ожидает первого чтения</value></data>
+  <data name="Status_142" xml:space="preserve"><value>В комиссии Кнессета: выбор профильной комиссии</value></data>
+  <data name="Status_150" xml:space="preserve"><value>В зале: предварительное чтение</value></data>
+  <data name="Status_165" xml:space="preserve"><value>В зале: разделение законопроекта</value></data>
+  <data name="Status_175" xml:space="preserve"><value>В комиссии: о преемственности законопроекта</value></data>
+  <data name="Status_335" xml:space="preserve"><value>Остановлен</value></data>
+  <data name="Bills_Stages" xml:space="preserve"><value>Стадии</value></data>
+  <data name="Bills_StagesChosen" xml:space="preserve"><value>Стадии: {0} из {1}</value></data>
+  <data name="Bills_StagesAll" xml:space="preserve"><value>Все стадии</value></data>
+  <data name="Bills_StagesInfluence" xml:space="preserve"><value>Где можно повлиять</value></data>
+  <data name="Bills_HiddenByStages" xml:space="preserve"><value>Скрыто фильтром: {0}</value></data>
+  <data name="Bills_ShowEverything" xml:space="preserve"><value>показать все</value></data>
+  <data name="Status_101" xml:space="preserve"><value>В комиссии: подготовка к первому чтению</value></data>
+  <data name="Status_106" xml:space="preserve"><value>В комиссии Кнессета: выбор профильной комиссии</value></data>
+  <data name="Status_158" xml:space="preserve"><value>В зале: разделение законопроекта</value></data>
+  <data name="Status_161" xml:space="preserve"><value>В зале: разделение законопроекта</value></data>
+  <data name="Status_162" xml:space="preserve"><value>В зале: разделение законопроекта</value></data>
+  <data name="Status_177" xml:space="preserve"><value>Остановлен</value></data>
 </root>
