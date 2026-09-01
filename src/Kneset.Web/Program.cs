@@ -158,6 +158,10 @@ builder.Services.AddHostedService<DraftWorker>();
 // Редакционные контекстные анализы («Контекст и интерпретации») из Seed/*.json.
 builder.Services.AddHostedService<ContextSeedService>();
 
+// Переводы названий законопроектов: настоящего переводчика пока нет,
+// названия подготовлены заранее и лежат файлом рядом с кодом.
+builder.Services.AddHostedService<BillTitleSeedService>();
+
 // Номер текущего созыва: нужен окну влияния, чтобы отличать живой
 // законопроект от прекратившегося вместе со своим созывом.
 builder.Services.AddSingleton<CurrentKnessetService>();

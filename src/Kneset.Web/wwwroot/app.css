@@ -1420,3 +1420,13 @@ h1:focus {
 .kt-write-hint {
     margin-block-start: 0.5rem;
 }
+
+/* Перевод названия под оригиналом. Тише оригинала: он помогает понять,
+   о чём закон, но юридическая формула — та, что выше. */
+.kt-bill-translated {
+    font-size: 1.125rem;
+    line-height: 1.35;
+    color: var(--kt-char-600, #5a4a34);
+    max-width: 60ch;
+    margin-block: -0.1rem 0.6rem;
+}
