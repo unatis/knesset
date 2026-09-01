@@ -574,4 +574,6 @@
   <data name="Status_161" xml:space="preserve"><value>В зале: разделение законопроекта</value></data>
   <data name="Status_162" xml:space="preserve"><value>В зале: разделение законопроекта</value></data>
   <data name="Status_177" xml:space="preserve"><value>Остановлен</value></data>
+  <data name="Inf_Pending" xml:space="preserve"><value>Ожидает комиссию</value></data>
+  <data name="Inf_Pending_Hint" xml:space="preserve"><value>Пока решают, какая комиссия займётся законом. Содержание ещё не обсуждают — окно влияния откроется, когда комиссия начнёт работу.</value></data>
 </root>

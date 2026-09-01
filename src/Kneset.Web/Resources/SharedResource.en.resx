@@ -574,4 +574,6 @@
   <data name="Status_161" xml:space="preserve"><value>Plenum: splitting the bill</value></data>
   <data name="Status_162" xml:space="preserve"><value>Plenum: splitting the bill</value></data>
   <data name="Status_177" xml:space="preserve"><value>Halted</value></data>
+  <data name="Inf_Pending" xml:space="preserve"><value>Awaiting a committee</value></data>
+  <data name="Inf_Pending_Hint" xml:space="preserve"><value>It is still being decided which committee will handle the bill. The content is not discussed yet — the window opens once the committee starts work.</value></data>
 </root>

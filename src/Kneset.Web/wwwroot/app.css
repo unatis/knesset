@@ -361,7 +361,7 @@ a, .btn-link {
     color: var(--kt-honey-500);
 }
 
-.kt-win-late, .kt-win-frozen {
+.kt-win-late, .kt-win-frozen, .kt-win-pending {
     background: var(--kt-char-50);
     border-color: var(--kt-char-100);
     color: var(--kt-char-400);

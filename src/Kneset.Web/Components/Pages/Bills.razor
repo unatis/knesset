@@ -443,14 +443,16 @@ else
     {
         "kt-win-open" => 0,
         "kt-win-limited" => 1,
-        "kt-win-late" => 2,
-        _ => 3
+        "kt-win-pending" => 2,
+        "kt-win-late" => 3,
+        _ => 4
     };
 
     private static string GroupLabelKey(string css) => css switch
     {
         "kt-win-open" => "Inf_Open",
         "kt-win-limited" => "Inf_Limited",
+        "kt-win-pending" => "Inf_Pending",
         "kt-win-late" => "Inf_Late",
         _ => "Inf_Frozen"
     };
