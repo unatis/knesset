@@ -578,4 +578,18 @@
   <data name="Inf_Pending_Hint" xml:space="preserve"><value>עדיין נקבע איזו ועדה תטפל בהצעה. התוכן טרם נדון — חלון ההשפעה ייפתח כשהוועדה תתחיל לעבוד.</value></data>
   <data name="Inf_Expired" xml:space="preserve"><value>הכנסת התחלפה</value></data>
   <data name="Inf_Expired_Hint" xml:space="preserve"><value>הצעת החוק פקעה עם סיום כהונת הכנסת: עם פיזור הכנסת ההליכים שלא הושלמו נפסקים. כדי להמשיך יש להגיש אותה מחדש או להחיל עליה דין רציפות.</value></data>
+  <data name="Faction_1095" xml:space="preserve"><value>התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ"ל</value></data>
+  <data name="Faction_1096" xml:space="preserve"><value>הליכוד</value></data>
+  <data name="Faction_1099" xml:space="preserve"><value>רע"ם</value></data>
+  <data name="Faction_1100" xml:space="preserve"><value>העבודה</value></data>
+  <data name="Faction_1101" xml:space="preserve"><value>יהדות התורה</value></data>
+  <data name="Faction_1102" xml:space="preserve"><value>יש עתיד</value></data>
+  <data name="Faction_1103" xml:space="preserve"><value>חד"ש-תע"ל</value></data>
+  <data name="Faction_1104" xml:space="preserve"><value>ישראל ביתנו</value></data>
+  <data name="Faction_1105" xml:space="preserve"><value>הציונות הדתית בראשות בצלאל סמוטריץ'</value></data>
+  <data name="Faction_1106" xml:space="preserve"><value>עוצמה יהודית בראשות איתמר בן גביר</value></data>
+  <data name="Faction_1107" xml:space="preserve"><value>נעם - בראשות אבי מעוז</value></data>
+  <data name="Faction_1108" xml:space="preserve"><value>הימין הממלכתי</value></data>
+  <data name="Faction_1110" xml:space="preserve"><value>כחול לבן - המחנה הממלכתי</value></data>
+  <data name="Bills_FactionsChosen" xml:space="preserve"><value>סיעות: {0} מתוך {1}</value></data>
 </root>

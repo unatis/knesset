@@ -149,7 +149,7 @@ public class KnessetSyncService(
 
         var factionByPerson = memberships
             .GroupBy(m => m.PersonID)
-            .ToDictionary(g => g.Key, g => Clean(g.First().FactionName));
+            .ToDictionary(g => g.Key, g => (g.First().FactionID, Clean(g.First().FactionName)));
 
         await using var db = await dbFactory.CreateDbContextAsync(ct);
         var ids = factionByPerson.Keys.ToList();
@@ -158,7 +158,11 @@ public class KnessetSyncService(
             .ToListAsync(ct);
 
         foreach (var person in persons)
-            person.FactionName = factionByPerson[person.KnessetPersonId];
+        {
+            var (id, name) = factionByPerson[person.KnessetPersonId];
+            person.FactionId = id;
+            person.FactionName = name;
+        }
 
         await db.SaveChangesAsync(ct);
         return persons.Count;

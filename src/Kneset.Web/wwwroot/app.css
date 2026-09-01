@@ -1218,23 +1218,23 @@ h1:focus {
    требует ctrl+клик и не показывает, что выбор вообще возможен;
    здесь же обычные флажки, сгруппированные по окну влияния. */
 
-.kt-stagepick {
+.kt-multi {
     position: relative;
 }
 
 /* Класс form-select на summary даёт бутстраповскую рамку и стрелку.
    Маркер треугольника у details при этом лишний. */
-.kt-stagepick-summary {
+.kt-multi-summary {
     cursor: pointer;
     list-style: none;
     user-select: none;
 }
 
-.kt-stagepick-summary::-webkit-details-marker {
+.kt-multi-summary::-webkit-details-marker {
     display: none;
 }
 
-.kt-stagepick-menu {
+.kt-multi-menu {
     position: absolute;
     z-index: 20;
     inset-inline-start: 0;
@@ -1251,7 +1251,7 @@ h1:focus {
     box-shadow: var(--kt-shadow-md);
 }
 
-.kt-stagepick-actions {
+.kt-multi-actions {
     display: flex;
     gap: 1rem;
     padding-block-end: 0.5rem;
@@ -1259,15 +1259,15 @@ h1:focus {
     border-block-end: 1px solid var(--kt-char-50);
 }
 
-.kt-stagepick-group + .kt-stagepick-group {
+.kt-multi-group + .kt-multi-group {
     margin-block-start: 0.75rem;
 }
 
-.kt-stagepick-group > .kt-win {
+.kt-multi-group > .kt-win {
     margin-block-end: 0.35rem;
 }
 
-.kt-stagepick-item {
+.kt-multi-item {
     display: flex;
     align-items: flex-start;
     gap: 0.5rem;
@@ -1277,7 +1277,7 @@ h1:focus {
     line-height: 1.35;
 }
 
-.kt-stagepick-item input {
+.kt-multi-item input {
     margin-block-start: 0.2rem;
     flex: none;
 }

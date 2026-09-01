@@ -578,4 +578,18 @@
   <data name="Inf_Pending_Hint" xml:space="preserve"><value>It is still being decided which committee will handle the bill. The content is not discussed yet — the window opens once the committee starts work.</value></data>
   <data name="Inf_Expired" xml:space="preserve"><value>Knesset term ended</value></data>
   <data name="Inf_Expired_Hint" xml:space="preserve"><value>The bill lapsed together with its Knesset: when the Knesset dissolves, unfinished proceedings end. To move further it has to be reintroduced or revived through the continuity procedure.</value></data>
+  <data name="Faction_1095" xml:space="preserve"><value>Shas</value></data>
+  <data name="Faction_1096" xml:space="preserve"><value>Likud</value></data>
+  <data name="Faction_1099" xml:space="preserve"><value>Ra'am</value></data>
+  <data name="Faction_1100" xml:space="preserve"><value>Labor</value></data>
+  <data name="Faction_1101" xml:space="preserve"><value>United Torah Judaism</value></data>
+  <data name="Faction_1102" xml:space="preserve"><value>Yesh Atid</value></data>
+  <data name="Faction_1103" xml:space="preserve"><value>Hadash-Ta'al</value></data>
+  <data name="Faction_1104" xml:space="preserve"><value>Yisrael Beiteinu</value></data>
+  <data name="Faction_1105" xml:space="preserve"><value>Religious Zionism</value></data>
+  <data name="Faction_1106" xml:space="preserve"><value>Otzma Yehudit</value></data>
+  <data name="Faction_1107" xml:space="preserve"><value>Noam</value></data>
+  <data name="Faction_1108" xml:space="preserve"><value>National Right</value></data>
+  <data name="Faction_1110" xml:space="preserve"><value>Blue and White – National Unity</value></data>
+  <data name="Bills_FactionsChosen" xml:space="preserve"><value>Factions: {0} of {1}</value></data>
 </root>

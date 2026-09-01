@@ -101,6 +101,7 @@ public class KnsPersonToPosition
     public int PersonToPositionID { get; set; }
     public int PersonID { get; set; }
     public int? KnessetNum { get; set; }
+    public int? FactionID { get; set; }
     public string? FactionName { get; set; }
     public bool? IsCurrent { get; set; }
 }

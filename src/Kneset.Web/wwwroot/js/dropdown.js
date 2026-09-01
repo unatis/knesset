@@ -1,4 +1,4 @@
-// Закрытие выпадающих списков на details/summary по клику вне их и по Escape.
+// Закрытие выпадающих списков множественного выбора по клику вне их и по Escape.
 //
 // Родной <details> закрывается только нажатием на сам заголовок: щелчок мимо
 // его не трогает, и меню остаётся висеть поверх страницы. От выпадающего
@@ -10,7 +10,7 @@
 (function () {
     'use strict';
 
-    const SELECTOR = 'details.kt-stagepick[open]';
+    const SELECTOR = 'details.kt-multi[open]';
 
     function closeAllExcept(keep) {
         document.querySelectorAll(SELECTOR).forEach(function (d) {
@@ -21,7 +21,7 @@
     // Фаза всплытия: пусть сначала отработают нажатия внутри меню.
     document.addEventListener('click', function (e) {
         const inside = e.target instanceof Element
-            ? e.target.closest('details.kt-stagepick')
+            ? e.target.closest('details.kt-multi')
             : null;
         closeAllExcept(inside);
     });
