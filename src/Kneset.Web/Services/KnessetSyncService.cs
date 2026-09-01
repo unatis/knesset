@@ -350,15 +350,13 @@ public class KnessetSyncService(
         // AsUtc обязателен: OData отдаёт время без часового пояса, и Npgsql
         // отказывается писать такой DateTime в timestamptz. Остальные шаги
         // синхронизации пропускают источниковые даты через тот же помощник.
-        foreach (var cs in await client.GetCommitteeSessionsAsync(minKnesset, ct))
+        foreach (var cs in await client.GetCommitteeSessionsAsync(minKnesset, since, ct))
             if (cs.StartDate is { } d)
                 dates[(BillSessionKind.Committee, cs.CommitteeSessionID)] = AsUtc(d);
 
-        foreach (var ps in await client.GetPlenumSessionsAsync(minKnesset, ct))
+        foreach (var ps in await client.GetPlenumSessionsAsync(minKnesset, since, ct))
             if (ps.StartDate is { } d)
                 dates[(BillSessionKind.Plenum, ps.PlenumSessionID)] = AsUtc(d);
-
-        if (dates.Count == 0) return 0;
 
         var items = new List<(int KnessetBillId, BillSessionKind Kind, int SessionId, int? StatusId)>();
 
@@ -367,6 +365,20 @@ public class KnessetSyncService(
 
         foreach (var i in await client.GetPlenumSessionItemsAsync(minBillId.Value, since, ct))
             items.Add((i.ItemID, BillSessionKind.Plenum, i.PlenumSessionID, i.StatusID));
+
+        // Справочник содержит только заседания, изменившиеся с прошлого прогона.
+        // Пункты повестки при этом приходят своим инкрементом, и заседание,
+        // на которое ссылается новый пункт, вполне могло не меняться годами —
+        // его даты в ответе источника нет. Дату такого заседания мы уже видели
+        // и сохранили денормализованно в BillSessions, оттуда и берём. Без этого
+        // строки отсекались бы ниже по «дата не найдена» и не создавались вовсе.
+        var filledFromDb = await FillKnownSessionDatesAsync(db, items, dates, ct);
+        if (filledFromDb > 0)
+            logger.LogInformation(
+                "Заседания: дат добрано из своей базы — {Count}", filledFromDb);
+
+        // Ни изменившихся заседаний, ни новых пунктов — делать нечего.
+        if (items.Count == 0 && dates.Count == 0) return 0;
 
         var billIdMap = await db.Bills.ToDictionaryAsync(b => b.KnessetBillId, b => b.Id, ct);
         var total = 0;
@@ -422,6 +434,49 @@ public class KnessetSyncService(
         await RefreshFirstSessionAsync(touchedBills, ct);
 
         return total;
+    }
+
+    /// <summary>
+    /// Доливает в справочник даты заседаний, которых нет в ответе источника.
+    ///
+    /// Заседания теперь забираются инкрементом, поэтому в ответе только
+    /// изменившиеся. Пункт повестки же может ссылаться на заседание, не
+    /// менявшееся с прошлых прогонов, — его дата у нас уже есть, сохранена
+    /// в BillSessions при первой встрече. Берём оттуда.
+    ///
+    /// Объём запроса ограничен потребностью, а не размером таблицы: на полном
+    /// прогоне since равен null, справочник приходит целиком и добирать нечего;
+    /// на инкрементальном пунктов немного по определению.
+    /// </summary>
+    private static async Task<int> FillKnownSessionDatesAsync(
+        AppDbContext db,
+        List<(int KnessetBillId, BillSessionKind Kind, int SessionId, int? StatusId)> items,
+        Dictionary<(BillSessionKind, int), DateTime> dates,
+        CancellationToken ct)
+    {
+        var filled = 0;
+
+        foreach (var kind in new[] { BillSessionKind.Committee, BillSessionKind.Plenum })
+        {
+            var needed = items
+                .Where(i => i.Kind == kind && !dates.ContainsKey((kind, i.SessionId)))
+                .Select(i => i.SessionId)
+                .Distinct()
+                .ToList();
+            if (needed.Count == 0) continue;
+
+            var known = await db.BillSessions.AsNoTracking()
+                .Where(x => x.Kind == kind && needed.Contains(x.KnessetSessionId))
+                .Select(x => new { x.KnessetSessionId, x.StartDate })
+                .Distinct()
+                .ToListAsync(ct);
+
+            foreach (var row in known)
+                if (dates.TryAdd((kind, row.KnessetSessionId), row.StartDate))
+                    filled++;
+        }
+
+        return filled;
     }
 
     /// <summary>
