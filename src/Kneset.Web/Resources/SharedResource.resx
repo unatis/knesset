@@ -605,4 +605,23 @@
   <data name="Pipe_InCommittee" xml:space="preserve"><value>в комиссии</value></data>
   <data name="Pipe_InPlenum" xml:space="preserve"><value>в зале</value></data>
   <data name="Pipe_Stopped" xml:space="preserve"><value>Путь оборван: законопроект дальше не пошёл.</value></data>
+  <data name="Cmt_4186" xml:space="preserve"><value>Финансовая комиссия</value></data>
+  <data name="Cmt_4187" xml:space="preserve"><value>Комиссия по национальной безопасности</value></data>
+  <data name="Cmt_4188" xml:space="preserve"><value>Комиссия по этике</value></data>
+  <data name="Cmt_4189" xml:space="preserve"><value>Комиссия по здравоохранению</value></data>
+  <data name="Cmt_4190" xml:space="preserve"><value>Комиссия по иностранным делам и обороне</value></data>
+  <data name="Cmt_4191" xml:space="preserve"><value>Комиссия по конституции, законодательству и правосудию</value></data>
+  <data name="Cmt_4192" xml:space="preserve"><value>Комиссия по образованию, культуре и спорту</value></data>
+  <data name="Cmt_4193" xml:space="preserve"><value>Экономическая комиссия</value></data>
+  <data name="Cmt_4195" xml:space="preserve"><value>Комиссия по науке и технологиям</value></data>
+  <data name="Cmt_4196" xml:space="preserve"><value>Комиссия по труду и социальному обеспечению</value></data>
+  <data name="Cmt_4197" xml:space="preserve"><value>Комиссия по алие, абсорбции и диаспоре</value></data>
+  <data name="Cmt_4198" xml:space="preserve"><value>Комиссия по внутренним делам и защите окружающей среды</value></data>
+  <data name="Cmt_4199" xml:space="preserve"><value>Комиссия по делам государственного контроля</value></data>
+  <data name="Cmt_4200" xml:space="preserve"><value>Комиссия по положению женщин и гендерному равенству</value></data>
+  <data name="Cmt_4205" xml:space="preserve"><value>Комиссия по надзору за Фондом граждан Израиля</value></data>
+  <data name="Cmt_4215" xml:space="preserve"><value>Комиссия по общественным проектам</value></data>
+  <data name="Bill_Committee" xml:space="preserve"><value>Ведущая комиссия</value></data>
+  <data name="Bill_WriteToCommittee" xml:space="preserve"><value>Написать в комиссию</value></data>
+  <data name="Bill_WriteHint" xml:space="preserve"><value>Откроется ваша почтовая программа с адресом секретариата и темой письма. Текст позиции пишете сами и отправляете сами — мы ничего не отправляем за вас.</value></data>
 </root>

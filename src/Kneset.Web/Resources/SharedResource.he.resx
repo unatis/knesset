@@ -605,4 +605,23 @@
   <data name="Pipe_InCommittee" xml:space="preserve"><value>בוועדה</value></data>
   <data name="Pipe_InPlenum" xml:space="preserve"><value>במליאה</value></data>
   <data name="Pipe_Stopped" xml:space="preserve"><value>המסלול נקטע: הצעת החוק לא המשיכה.</value></data>
+  <data name="Cmt_4186" xml:space="preserve"><value>ועדת הכספים</value></data>
+  <data name="Cmt_4187" xml:space="preserve"><value>הוועדה לביטחון לאומי</value></data>
+  <data name="Cmt_4188" xml:space="preserve"><value>ועדת האתיקה</value></data>
+  <data name="Cmt_4189" xml:space="preserve"><value>ועדת הבריאות</value></data>
+  <data name="Cmt_4190" xml:space="preserve"><value>ועדת החוץ והביטחון</value></data>
+  <data name="Cmt_4191" xml:space="preserve"><value>ועדת החוקה, חוק ומשפט</value></data>
+  <data name="Cmt_4192" xml:space="preserve"><value>ועדת החינוך התרבות והספורט</value></data>
+  <data name="Cmt_4193" xml:space="preserve"><value>ועדת הכלכלה</value></data>
+  <data name="Cmt_4195" xml:space="preserve"><value>ועדת המדע והטכנולוגיה</value></data>
+  <data name="Cmt_4196" xml:space="preserve"><value>ועדת העבודה והרווחה</value></data>
+  <data name="Cmt_4197" xml:space="preserve"><value>ועדת העלייה, הקליטה והתפוצות</value></data>
+  <data name="Cmt_4198" xml:space="preserve"><value>ועדת הפנים והגנת הסביבה</value></data>
+  <data name="Cmt_4199" xml:space="preserve"><value>הוועדה לענייני ביקורת המדינה</value></data>
+  <data name="Cmt_4200" xml:space="preserve"><value>הוועדה לקידום מעמד האישה ולשוויון מגדרי</value></data>
+  <data name="Cmt_4205" xml:space="preserve"><value>הוועדה לפיקוח על הקרן לאזרחי ישראל</value></data>
+  <data name="Cmt_4215" xml:space="preserve"><value>הוועדה למיזמים ציבוריים</value></data>
+  <data name="Bill_Committee" xml:space="preserve"><value>הוועדה המטפלת</value></data>
+  <data name="Bill_WriteToCommittee" xml:space="preserve"><value>כתיבה לוועדה</value></data>
+  <data name="Bill_WriteHint" xml:space="preserve"><value>תיפתח תוכנת הדואר שלכם עם כתובת מזכירות הוועדה ונושא ההודעה. את העמדה אתם כותבים ושולחים בעצמכם — איננו שולחים דבר בשמכם.</value></data>
 </root>

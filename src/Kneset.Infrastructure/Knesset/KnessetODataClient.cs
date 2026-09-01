@@ -66,6 +66,14 @@ public class KnessetODataClient(HttpClient http, ILogger<KnessetODataClient> log
     }
 
     /// <summary>
+    /// Комиссии. Объём небольшой — около пятисот вместе с подкомиссиями, —
+    /// поэтому забираются целиком: инкремент экономил бы единицы запросов,
+    /// а состав комиссий меняется редко и сразу помногу.
+    /// </summary>
+    public Task<List<KnsCommittee>> GetCommitteesAsync(CancellationToken ct) =>
+        GetPagedAsync<KnsCommittee>("KNS_Committee", null, ct);
+
+    /// <summary>
     /// Файлы законопроектов. Фильтр по BillID отсекает чужие созывы: без него
     /// сущность отдаёт 108 тысяч строк за всю историю, с ним — около тридцати
     /// трёх. Инкремент по времени сверх того сводит обычный прогон к десяткам

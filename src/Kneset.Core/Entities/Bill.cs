@@ -23,6 +23,14 @@ public class Bill
     /// <summary>Тип законопроекта (правительственный, частный и т.д.).</summary>
     public string? SubTypeDesc { get; set; }
 
+    /// <summary>
+    /// Ведущая комиссия. Заполнена не у всех законопроектов, но у всех,
+    /// стоящих на подготовке в комиссии, — то есть там, где она и нужна.
+    /// </summary>
+    public int? CommitteeId { get; set; }
+
+    public Committee? Committee { get; set; }
+
     public int? Number { get; set; }
     public DateTime? PublicationDate { get; set; }
 

@@ -22,6 +22,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<BillAnalysis> BillAnalyses => Set<BillAnalysis>();
     public DbSet<BillSession> BillSessions => Set<BillSession>();
     public DbSet<BillDocument> BillDocuments => Set<BillDocument>();
+    public DbSet<Committee> Committees => Set<Committee>();
     public DbSet<SyncLog> SyncLogs => Set<SyncLog>();
     public DbSet<BillContextAnalysis> BillContextAnalyses => Set<BillContextAnalysis>();
     public DbSet<BillReaction> BillReactions => Set<BillReaction>();
@@ -81,6 +82,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             s.HasIndex(x => x.StartDate);
             s.HasOne(x => x.Bill).WithMany(b => b.Sessions)
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Committee>(c =>
+        {
+            // Ключ приходит из источника, генерировать свой нечего.
+            c.Property(x => x.Id).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<BillDocument>(d =>

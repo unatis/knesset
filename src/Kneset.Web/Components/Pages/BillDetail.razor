@@ -67,6 +67,19 @@ else
             <BillStatusBadge StatusDesc="@_bill.StatusDesc" />
         </div>
         <div class="kt-win-hint">@InfluenceHint</div>
+
+        @* Адресат письменной позиции. Бейдж выше зовёт написать в комиссию —
+           здесь и её название, и уже собранное письмо. Тело намеренно пустое:
+           платформа, рассылающая сотни одинаковых писем, оборачивается стопкой
+           копипасты в секретариате, а одно живое письмо весит больше. *@
+        @if (_bill.Committee?.Email is { } email
+             && InfluenceWindowBadge.IsOpen(_bill.StatusDesc, _bill.KnessetNum, _currentKnesset))
+        {
+            <div class="kt-write">
+                <a class="btn btn-sm btn-outline-primary" href="@MailTo(email)">@L["Bill_WriteToCommittee"]</a>
+                <span class="kt-num">@L["Bill_WriteHint"]</span>
+            </div>
+        }
     </div>
 
     @* Шкала стадий. В макете она помечена как лоу-фай: «у закона нет истории
@@ -140,6 +153,13 @@ else
                     <span>@L["Initiators"]</span>
                     <span class="kt-num">@_bill.Initiators.Count</span>
                 </div>
+                @if (_bill.Committee is not null)
+                {
+                    <div class="kt-meta-item">
+                        <span>@L["Bill_Committee"]</span>
+                        <span>@CommitteeName(_bill.Committee)</span>
+                    </div>
+                }
                 <div class="kt-meta-item">
                     <span>@L["Source"]</span>
                     <a href="https://main.knesset.gov.il/Activity/Legislation/Laws/Pages/LawBill.aspx?t=lawsuggestionssearch&lawitemid=@_bill.KnessetBillId"
@@ -236,6 +256,27 @@ else
 @code {
     [Parameter] public int Id { get; set; }
 
+    /// <summary>
+    /// Название комиссии на языке интерфейса. Ключ — номер из справочника
+    /// Кнессета; нет перевода (подкомиссия или новая) — показываем оригинал.
+    /// </summary>
+    private string CommitteeName(Committee c)
+    {
+        var s = L[$"Cmt_{c.Id}"];
+        return s.ResourceNotFound ? c.Name : s.Value;
+    }
+
+    /// <summary>
+    /// Готовое письмо в секретариат: адрес и тема с названием законопроекта
+    /// на иврите — читать его будут там. Тело пустое, позицию человек пишет
+    /// сам и отправляет из своей почтовой программы.
+    /// </summary>
+    private string MailTo(string email)
+    {
+        var subject = Uri.EscapeDataString($"{_bill!.Name} ({_bill.KnessetBillId})");
+        return $"mailto:{email}?subject={subject}";
+    }
+
     private Bill? _bill;
 
     /// <summary>Текущий созыв — по нему бейдж отличает живой закон от прекратившегося.</summary>
@@ -285,6 +326,7 @@ else
         _bill = await db.Bills.AsNoTracking()
             .Include(b => b.Initiators).ThenInclude(i => i.Person)
             .Include(b => b.Documents)
+            .Include(b => b.Committee)
             .FirstOrDefaultAsync(b => b.Id == Id);
 
         if (_bill is not null)
