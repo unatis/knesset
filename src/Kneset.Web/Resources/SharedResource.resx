@@ -576,4 +576,6 @@
   <data name="Status_177" xml:space="preserve"><value>Остановлен</value></data>
   <data name="Inf_Pending" xml:space="preserve"><value>Ожидает комиссию</value></data>
   <data name="Inf_Pending_Hint" xml:space="preserve"><value>Пока решают, какая комиссия займётся законом. Содержание ещё не обсуждают — окно влияния откроется, когда комиссия начнёт работу.</value></data>
+  <data name="Inf_Expired" xml:space="preserve"><value>Созыв завершён</value></data>
+  <data name="Inf_Expired_Hint" xml:space="preserve"><value>Законопроект прекратился вместе со своим созывом: с роспуском Кнессета незавершённые процедуры прекращаются. Чтобы он двинулся дальше, его вносят заново или возвращают через преемственность.</value></data>
 </root>

@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
+@inject CurrentKnessetService CurrentKnesset
 
 <PageTitle>@L["Nav_Bills"]</PageTitle>
 
@@ -139,7 +140,9 @@ else
                     }
 
                     <div class="d-flex flex-wrap align-items-center gap-2">
-                        <InfluenceWindowBadge StatusDesc="@bill.Bill.StatusDesc" />
+                        <InfluenceWindowBadge StatusDesc="@bill.Bill.StatusDesc"
+                                              KnessetNum="@bill.Bill.KnessetNum"
+                                              CurrentKnesset="@_currentKnesset" />
                         <span class="kt-num">
                             @L["Knesset"] @bill.Bill.KnessetNum
                             @if (bill.Bill.SubTypeDesc is not null)
@@ -195,6 +198,9 @@ else
 
     private record BillRow(Bill Bill, int Support, int Oppose, int Undecided);
     private int _totalCount;
+
+    /// <summary>Текущий созыв — по нему видно, не прекратился ли законопроект.</summary>
+    private int? _currentKnesset;
     private int _page;
     private string _search = "";
     /// <summary>Отмеченные стадии. Пустое множество означало бы «ничего не показывать».</summary>
@@ -297,6 +303,7 @@ else
             .ToList();
         _knessetNums = await db.Bills.Select(b => b.KnessetNum).Distinct()
             .OrderByDescending(n => n).ToListAsync();
+        _currentKnesset = await CurrentKnesset.GetAsync();
         await LoadAsync();
     }
 

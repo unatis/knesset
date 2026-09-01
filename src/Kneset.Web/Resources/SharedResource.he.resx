@@ -576,4 +576,6 @@
   <data name="Status_177" xml:space="preserve"><value>נעצרה</value></data>
   <data name="Inf_Pending" xml:space="preserve"><value>ממתין לוועדה</value></data>
   <data name="Inf_Pending_Hint" xml:space="preserve"><value>עדיין נקבע איזו ועדה תטפל בהצעה. התוכן טרם נדון — חלון ההשפעה ייפתח כשהוועדה תתחיל לעבוד.</value></data>
+  <data name="Inf_Expired" xml:space="preserve"><value>הכנסת התחלפה</value></data>
+  <data name="Inf_Expired_Hint" xml:space="preserve"><value>הצעת החוק פקעה עם סיום כהונת הכנסת: עם פיזור הכנסת ההליכים שלא הושלמו נפסקים. כדי להמשיך יש להגיש אותה מחדש או להחיל עליה דין רציפות.</value></data>
 </root>

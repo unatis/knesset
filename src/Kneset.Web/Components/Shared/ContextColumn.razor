@@ -2,6 +2,7 @@
 @using Kneset.Web.Services
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
+@inject CurrentKnessetService CurrentKnesset
 
 @* Правый столбец главной (макет 2a). Блоки идут по убыванию ценности:
    срочное, вход по темам, инициативы, ждущие подписей, и спорное за неделю.
@@ -312,12 +313,18 @@
                 b.Name,
                 b.NameRu,
                 b.StatusDesc,
+                b.KnessetNum,
                 Since = b.StatusChangedAt ?? b.FirstSeenAt
             })
             .ToListAsync();
 
+        // Законопроект прошлого созыва прекратился вместе с ним — окна у него нет,
+        // сколько бы ни обещал текст статуса. Без этого в «закрывающиеся окна»
+        // затекала треть списка из позапрошлого Кнессета.
+        var currentKnesset = await CurrentKnesset.GetAsync();
+
         return candidates
-            .Where(b => InfluenceWindowBadge.IsOpen(b.StatusDesc))
+            .Where(b => InfluenceWindowBadge.IsOpen(b.StatusDesc, b.KnessetNum, currentKnesset))
             .Take(BlockSize)
             .Select(b => new ClosingItem(
                 b.Id,

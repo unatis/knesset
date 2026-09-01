@@ -30,6 +30,7 @@ public class OgImageService
     private static readonly Color TextMuted = Color.ParseHex("C8C8DC");
 
     private readonly IDbContextFactory<AppDbContext> _dbFactory;
+    private readonly CurrentKnessetService _currentKnesset;
     private readonly FontFamily[] _fallbacks;
     private readonly FontFamily[] _titleFallbacks;
     private readonly Font _brand;
@@ -37,9 +38,13 @@ public class OgImageService
     private readonly Font _subtitle;
     private readonly Font _label;
 
-    public OgImageService(IDbContextFactory<AppDbContext> dbFactory, IWebHostEnvironment env)
+    public OgImageService(
+        IDbContextFactory<AppDbContext> dbFactory,
+        CurrentKnessetService currentKnesset,
+        IWebHostEnvironment env)
     {
         _dbFactory = dbFactory;
+        _currentKnesset = currentKnesset;
 
         var fonts = new FontCollection();
         // ВАЖНО: весь текст рендерится ОДНИМ мультискриптовым шрифтом (иврит, арабский,
@@ -68,11 +73,14 @@ public class OgImageService
         var oppose = await db.BillReactions.CountAsync(r => r.BillId == billId && r.Kind == ReactionKind.Oppose, ct);
         var undecided = await db.BillReactions.CountAsync(r => r.BillId == billId && r.Kind == ReactionKind.Undecided, ct);
 
-        var influence = InfluenceWindowBadge.Classify(bill.StatusDesc);
+        var currentKnesset = await _currentKnesset.GetAsync(ct);
+        var influence = InfluenceWindowBadge.Classify(bill.StatusDesc, bill.KnessetNum, currentKnesset);
         var (influenceColor, influenceText) = influence?.LabelKey switch
         {
             "Inf_Open" => (Green, "Influence window OPEN — committee stage"),
             "Inf_Limited" => (Yellow, "Influence limited — awaiting plenum"),
+            "Inf_Pending" => (Gray, "Awaiting a committee"),
+            "Inf_Expired" => (Gray, $"Knesset {bill.KnessetNum} term ended"),
             "Inf_Late" => (Red, "Passed — too late to influence"),
             "Inf_Frozen" => (Gray, "Frozen"),
             _ => (Gray, $"Knesset {bill.KnessetNum}")
