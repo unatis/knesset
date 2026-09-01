@@ -158,6 +158,10 @@ builder.Services.AddHostedService<DraftWorker>();
 // Редакционные контекстные анализы («Контекст и интерпретации») из Seed/*.json.
 builder.Services.AddHostedService<ContextSeedService>();
 
+// Номер текущего созыва: нужен окну влияния, чтобы отличать живой
+// законопроект от прекратившегося вместе со своим созывом.
+builder.Services.AddSingleton<CurrentKnessetService>();
+
 // Динамические OG-превью для шеринга.
 builder.Services.AddSingleton<OgImageService>();
 

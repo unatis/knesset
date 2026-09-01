@@ -576,4 +576,6 @@
   <data name="Status_177" xml:space="preserve"><value>متوقّف</value></data>
   <data name="Inf_Pending" xml:space="preserve"><value>بانتظار اللجنة</value></data>
   <data name="Inf_Pending_Hint" xml:space="preserve"><value>لا يزال يُحدَّد أي لجنة ستتولى المشروع. المحتوى لم يُناقش بعد — تُفتح نافذة التأثير عندما تبدأ اللجنة عملها.</value></data>
+  <data name="Inf_Expired" xml:space="preserve"><value>انتهت ولاية الكنيست</value></data>
+  <data name="Inf_Expired_Hint" xml:space="preserve"><value>سقط المشروع بانتهاء ولاية الكنيست: بحل الكنيست تتوقف الإجراءات غير المكتملة. للمضي قدمًا يجب إعادة تقديمه أو إحياؤه عبر مبدأ الاستمرارية.</value></data>
 </root>

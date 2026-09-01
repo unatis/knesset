@@ -576,4 +576,6 @@
   <data name="Status_177" xml:space="preserve"><value>Halted</value></data>
   <data name="Inf_Pending" xml:space="preserve"><value>Awaiting a committee</value></data>
   <data name="Inf_Pending_Hint" xml:space="preserve"><value>It is still being decided which committee will handle the bill. The content is not discussed yet — the window opens once the committee starts work.</value></data>
+  <data name="Inf_Expired" xml:space="preserve"><value>Knesset term ended</value></data>
+  <data name="Inf_Expired_Hint" xml:space="preserve"><value>The bill lapsed together with its Knesset: when the Knesset dissolves, unfinished proceedings end. To move further it has to be reintroduced or revived through the continuity procedure.</value></data>
 </root>

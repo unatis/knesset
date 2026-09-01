@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
+@inject CurrentKnessetService CurrentKnesset
 @inject SubscriptionRelevanceService Relevance
 @inject InitiativeSigningService Signing
 
@@ -132,7 +133,9 @@
                     @if (item.BillId is int billId)
                     {
                         <div class="feed-meta">
-                            <InfluenceWindowBadge StatusDesc="@item.StatusDesc" />
+                            <InfluenceWindowBadge StatusDesc="@item.StatusDesc"
+                                                  KnessetNum="@item.KnessetNum"
+                                                  CurrentKnesset="@_currentKnesset" />
                         </div>
 
                         var counts = _reactions.GetValueOrDefault(billId);
@@ -235,7 +238,19 @@
         /// подписи прямо в ленте: ради подписи не должно требоваться
         /// открывать отдельную страницу.
         /// </summary>
-        int? InitiativeId = null);
+        int? InitiativeId = null,
+        /// <summary>
+        /// Созыв закона. Вместе с текущим созывом решает, не прекратился ли
+        /// законопроект: с роспуском Кнессета незавершённые процедуры кончаются,
+        /// а текст статуса при этом остаётся прежним и обещает лишнее.
+        ///
+        /// Параметр в самом конце намеренно: вызовы FeedItem позиционные,
+        /// и вставка в середину сдвинула бы все последующие аргументы.
+        /// </summary>
+        int? KnessetNum = null);
+
+    /// <summary>Текущий созыв — по нему бейдж отличает живой закон от прекратившегося.</summary>
+    private int? _currentKnesset;
 
     private sealed record Counts(int Support, int Oppose, int Undecided)
     {
@@ -292,6 +307,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _currentKnesset = await CurrentKnesset.GetAsync();
+
         if (AuthState is not null)
         {
             var auth = await AuthState;
@@ -393,7 +410,7 @@
                 b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
                 b.Id, b.StatusDesc, null, null, null,
                 b.NameRu == null ? null : b.Name,
-                null, b.Id))
+                null, b.Id, null, b.KnessetNum))
             .ToListAsync());
 
         // 2. Смена стадии — главное событие для «окна влияния».
@@ -409,7 +426,7 @@
                 b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
                 b.Id, b.StatusDesc, null, null, null,
                 b.NameRu == null ? null : b.Name,
-                null, b.Id))
+                null, b.Id, null, b.KnessetNum))
             .ToListAsync());
 
         // 3. Гражданские инициативы — единственные события, созданные людьми.

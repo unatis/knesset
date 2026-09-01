@@ -4,6 +4,7 @@
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
 @inject NavigationManager Navigation
+@inject CurrentKnessetService CurrentKnesset
 
 <PageTitle>@(_bill?.NameRu ?? _bill?.Name ?? L["Nav_Bills"])</PageTitle>
 
@@ -58,9 +59,11 @@ else
         </div>
     </div>
 
-    <div class="kt-window-band @(InfluenceWindowBadge.IsOpen(_bill.StatusDesc) ? null : "kt-window-band-late")">
+    <div class="kt-window-band @(InfluenceWindowBadge.IsOpen(_bill.StatusDesc, _bill.KnessetNum, _currentKnesset) ? null : "kt-window-band-late")">
         <div class="d-flex flex-wrap align-items-center gap-3">
-            <InfluenceWindowBadge StatusDesc="@_bill.StatusDesc" />
+            <InfluenceWindowBadge StatusDesc="@_bill.StatusDesc"
+                                  KnessetNum="@_bill.KnessetNum"
+                                  CurrentKnesset="@_currentKnesset" />
             <BillStatusBadge StatusDesc="@_bill.StatusDesc" />
         </div>
         <div class="kt-win-hint">@InfluenceHint</div>
@@ -201,6 +204,9 @@ else
 
     private Bill? _bill;
 
+    /// <summary>Текущий созыв — по нему бейдж отличает живой закон от прекратившегося.</summary>
+    private int? _currentKnesset;
+
     /// <summary>
     /// Сколько заседаний показываем. У долгоживущих законов их десятки,
     /// и полный список превращает карточку в протокол.
@@ -219,7 +225,7 @@ else
     {
         get
         {
-            var window = InfluenceWindowBadge.Classify(_bill?.StatusDesc);
+            var window = InfluenceWindowBadge.Classify(_bill?.StatusDesc, _bill?.KnessetNum, _currentKnesset);
             return window is null ? "" : L[window.Value.HintKey];
         }
     }
@@ -237,6 +243,8 @@ else
     protected override async Task OnParametersSetAsync()
     {
         await using var db = await DbFactory.CreateDbContextAsync();
+        _currentKnesset = await CurrentKnesset.GetAsync();
+
         _bill = await db.Bills.AsNoTracking()
             .Include(b => b.Initiators).ThenInclude(i => i.Person)
             .FirstOrDefaultAsync(b => b.Id == Id);
