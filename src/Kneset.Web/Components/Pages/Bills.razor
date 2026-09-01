@@ -27,14 +27,16 @@
            бейдж на карточке: одна логика, одно место правки. *@
         <details class="kt-multi">
             <summary class="form-select kt-multi-summary">
-                @(_statuses.All(IsChecked)
-                    ? L["Bills_StagesAll"].Value
-                    : string.Format(L["Bills_StagesChosen"], _statuses.Count(IsChecked), _statuses.Count))
+                @(StagesFiltered
+                    ? string.Format(L["Bills_StagesChosen"], _statuses.Count(IsChecked), _statuses.Count)
+                    : L["Bills_StagesAll"].Value)
             </summary>
             <div class="kt-multi-menu">
                 <div class="kt-multi-actions">
                     <button type="button" class="btn btn-sm btn-link p-0" @onclick="SelectInfluenceStages">@L["Bills_StagesInfluence"]</button>
-                    <button type="button" class="btn btn-sm btn-link p-0" @onclick="SelectAllStages">@L["Bills_StagesAll"]</button>
+                    <button type="button" class="btn btn-sm btn-link p-0" @onclick="ToggleAllStages">
+                        @(_statuses.All(IsChecked) ? L["Filter_ClearAll"] : L["Filter_CheckAll"])
+                    </button>
                 </div>
                 @foreach (var group in _statuses.GroupBy(x => x.Css).OrderBy(g => GroupOrder(g.Key)))
                 {
@@ -74,13 +76,15 @@
            сразу по нескольким фракциям, и заставлять выбирать одну незачем. *@
         <details class="kt-multi">
             <summary class="form-select kt-multi-summary">
-                @(_factions.All(f => _factionIds.Contains(f.Id))
-                    ? L["Bills_AllFactions"].Value
-                    : string.Format(L["Bills_FactionsChosen"], _factionIds.Count, _factions.Count))
+                @(FactionsFiltered
+                    ? string.Format(L["Bills_FactionsChosen"], _factionIds.Count, _factions.Count)
+                    : L["Bills_AllFactions"].Value)
             </summary>
             <div class="kt-multi-menu">
                 <div class="kt-multi-actions">
-                    <button type="button" class="btn btn-sm btn-link p-0" @onclick="SelectAllFactions">@L["Bills_AllFactions"]</button>
+                    <button type="button" class="btn btn-sm btn-link p-0" @onclick="ToggleAllFactions">
+                        @(AllFactionsChecked ? L["Filter_ClearAll"] : L["Filter_CheckAll"])
+                    </button>
                 </div>
                 @foreach (var f in _factions.OrderBy(FactionName, StringComparer.CurrentCulture))
                 {
@@ -109,7 +113,7 @@
         <div class="form-check">
             <input class="form-check-input" type="checkbox" id="authorOnly"
                    checked="@_authorOnly" @onchange="OnAuthorOnlyChanged"
-                   disabled="@(string.IsNullOrEmpty(_personFilter) && _factions.All(f => _factionIds.Contains(f.Id)))" />
+                   disabled="@(string.IsNullOrEmpty(_personFilter) && !FactionsFiltered)" />
             <label class="form-check-label" for="authorOnly">@L["Bills_AuthorOnly"]</label>
         </div>
     </div>
@@ -134,7 +138,7 @@ else
         {
             <span class="kt-num-hidden">
                 · @string.Format(L["Bills_HiddenByStages"], _hiddenByStages)
-                <button type="button" class="btn btn-sm btn-link p-0 align-baseline" @onclick="SelectAllStages">@L["Bills_ShowEverything"]</button>
+                <button type="button" class="btn btn-sm btn-link p-0 align-baseline" @onclick="ShowAllStages">@L["Bills_ShowEverything"]</button>
             </span>
         }
     </p>
@@ -241,7 +245,7 @@ else
 
     /// <summary>Депутаты, подходящие под выбранную фракцию.</summary>
     private IEnumerable<MemberOption> VisibleMembers =>
-        _factions.All(f => _factionIds.Contains(f.Id))
+        !FactionsFiltered
             ? _members
             : _members.Where(m => m.FactionId is { } id && _factionIds.Contains(id));
     /// <summary>Стадия: идентификатор источника, ивритское описание и группа влияния.</summary>
@@ -343,7 +347,7 @@ else
         // пробел внутри строки ничего не ломает.
         var stageIds = _statusIds;
         var beforeStages = query;
-        if (_statusIds.Count > 0 && !_statuses.All(IsChecked))
+        if (StagesFiltered)
             query = query.Where(b => b.StatusId != null && stageIds.Contains(b.StatusId.Value));
         // Отбор по депутату и фракции идёт через таблицу инициаторов.
         // IsInitiator отделяет внёсшего закон от подписантов: на одном законе
@@ -354,7 +358,7 @@ else
             query = query.Where(b => b.Initiators.Any(i =>
                 i.PersonId == personId && (!_authorOnly || i.IsInitiator)));
         }
-        else if (!_factions.All(f => _factionIds.Contains(f.Id)))
+        else if (FactionsFiltered)
         {
             // По номеру фракции, а не по её ивритскому названию: язык интерфейса
             // на выборку не влияет, и написание в источнике тоже.
@@ -426,16 +430,32 @@ else
         foreach (var id in st.Ids)
             if (e.Value is true) _statusIds.Add(id); else _statusIds.Remove(id);
 
-        // Ни одной отметки — показывать нечего и незачем: возвращаем всё.
-        if (_statusIds.Count == 0) _statusIds = AllStageIds();
-
         _page = 0;
         await LoadAsync();
     }
 
-    private async Task SelectAllStages()
+    /// <summary>
+    /// Одна ссылка на два действия: отметить все или снять все.
+    ///
+    /// Снять двенадцать флажков ради одной фракции — работа, которой не должно
+    /// быть. Обратное действие тоже нужно, поэтому не две ссылки рядом, а одна,
+    /// показывающая то, что сейчас имеет смысл.
+    /// </summary>
+    /// <summary>
+    /// Снять отбор по стадиям — за ссылкой «показать все» у счётчика.
+    /// Отмечает все, а не очищает: результат тот же, но в меню видно,
+    /// что включено всё, а не что выбор потерян.
+    /// </summary>
+    private async Task ShowAllStages()
     {
         _statusIds = AllStageIds();
+        _page = 0;
+        await LoadAsync();
+    }
+
+    private async Task ToggleAllStages()
+    {
+        _statusIds = _statuses.All(IsChecked) ? [] : AllStageIds();
         _page = 0;
         await LoadAsync();
     }
@@ -447,6 +467,19 @@ else
         _page = 0;
         await LoadAsync();
     }
+
+    /// <summary>
+    /// Отбор по стадиям действует, только когда отмечена часть.
+    /// Отмечено всё и не отмечено ничего — одно и то же: ограничения нет.
+    /// Пустой набор мог бы значить «не показывать ничего», но пустая страница
+    /// вместо списка выглядит поломкой, а не результатом выбора.
+    /// </summary>
+    private bool StagesFiltered => _statusIds.Count > 0 && !_statuses.All(IsChecked);
+
+    private bool AllFactionsChecked => _factions.All(f => _factionIds.Contains(f.Id));
+
+    /// <summary>Отбор по фракциям — по тому же правилу, что и по стадиям.</summary>
+    private bool FactionsFiltered => _factionIds.Count > 0 && !AllFactionsChecked;
 
     /// <summary>
     /// Название стадии на языке интерфейса. Ключ — идентификатор из источника;
@@ -503,21 +536,15 @@ else
         return s.ResourceNotFound ? f.Name : s.Value;
     }
 
-    private async Task SelectAllFactions()
+    private async Task ToggleAllFactions()
     {
-        _factionIds = _factions.Select(f => f.Id).ToHashSet();
-        _personFilter = "";
-        _page = 0;
-        await LoadAsync();
+        _factionIds = AllFactionsChecked ? [] : _factions.Select(f => f.Id).ToHashSet();
+        await AfterFactionChangeAsync();
     }
 
     private async Task ToggleFaction(int id, ChangeEventArgs e)
     {
         if (e.Value is true) _factionIds.Add(id); else _factionIds.Remove(id);
-
-        // Ни одной отметки — показывать нечего и незачем: возвращаем все.
-        if (_factionIds.Count == 0) _factionIds = _factions.Select(f => f.Id).ToHashSet();
-
         await AfterFactionChangeAsync();
     }
 

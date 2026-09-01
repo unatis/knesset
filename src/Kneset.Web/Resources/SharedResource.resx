@@ -592,4 +592,6 @@
   <data name="Faction_1108" xml:space="preserve"><value>Ха-Ямин ха-мамлахти</value></data>
   <data name="Faction_1110" xml:space="preserve"><value>Кахоль-Лаван — Государственный лагерь</value></data>
   <data name="Bills_FactionsChosen" xml:space="preserve"><value>Фракции: {0} из {1}</value></data>
+  <data name="Filter_CheckAll" xml:space="preserve"><value>Отметить все</value></data>
+  <data name="Filter_ClearAll" xml:space="preserve"><value>Снять все</value></data>
 </root>

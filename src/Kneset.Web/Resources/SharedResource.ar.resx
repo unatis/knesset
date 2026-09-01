@@ -592,4 +592,6 @@
   <data name="Faction_1108" xml:space="preserve"><value>اليمين الرسمي</value></data>
   <data name="Faction_1110" xml:space="preserve"><value>أزرق أبيض – المعسكر الرسمي</value></data>
   <data name="Bills_FactionsChosen" xml:space="preserve"><value>الكتل: {0} من {1}</value></data>
+  <data name="Filter_CheckAll" xml:space="preserve"><value>تحديد الكل</value></data>
+  <data name="Filter_ClearAll" xml:space="preserve"><value>مسح الكل</value></data>
 </root>

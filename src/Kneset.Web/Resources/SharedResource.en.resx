@@ -592,4 +592,6 @@
   <data name="Faction_1108" xml:space="preserve"><value>National Right</value></data>
   <data name="Faction_1110" xml:space="preserve"><value>Blue and White – National Unity</value></data>
   <data name="Bills_FactionsChosen" xml:space="preserve"><value>Factions: {0} of {1}</value></data>
+  <data name="Filter_CheckAll" xml:space="preserve"><value>Select all</value></data>
+  <data name="Filter_ClearAll" xml:space="preserve"><value>Clear all</value></data>
 </root>
