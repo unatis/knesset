@@ -578,4 +578,18 @@
   <data name="Inf_Pending_Hint" xml:space="preserve"><value>لا يزال يُحدَّد أي لجنة ستتولى المشروع. المحتوى لم يُناقش بعد — تُفتح نافذة التأثير عندما تبدأ اللجنة عملها.</value></data>
   <data name="Inf_Expired" xml:space="preserve"><value>انتهت ولاية الكنيست</value></data>
   <data name="Inf_Expired_Hint" xml:space="preserve"><value>سقط المشروع بانتهاء ولاية الكنيست: بحل الكنيست تتوقف الإجراءات غير المكتملة. للمضي قدمًا يجب إعادة تقديمه أو إحياؤه عبر مبدأ الاستمرارية.</value></data>
+  <data name="Faction_1095" xml:space="preserve"><value>شاس</value></data>
+  <data name="Faction_1096" xml:space="preserve"><value>الليكود</value></data>
+  <data name="Faction_1099" xml:space="preserve"><value>القائمة العربية الموحدة</value></data>
+  <data name="Faction_1100" xml:space="preserve"><value>حزب العمل</value></data>
+  <data name="Faction_1101" xml:space="preserve"><value>يهدوت هتوراة</value></data>
+  <data name="Faction_1102" xml:space="preserve"><value>يش عتيد</value></data>
+  <data name="Faction_1103" xml:space="preserve"><value>الجبهة والعربية للتغيير</value></data>
+  <data name="Faction_1104" xml:space="preserve"><value>إسرائيل بيتنا</value></data>
+  <data name="Faction_1105" xml:space="preserve"><value>الصهيونية الدينية</value></data>
+  <data name="Faction_1106" xml:space="preserve"><value>عوتسما يهوديت</value></data>
+  <data name="Faction_1107" xml:space="preserve"><value>نوعام</value></data>
+  <data name="Faction_1108" xml:space="preserve"><value>اليمين الرسمي</value></data>
+  <data name="Faction_1110" xml:space="preserve"><value>أزرق أبيض – المعسكر الرسمي</value></data>
+  <data name="Bills_FactionsChosen" xml:space="preserve"><value>الكتل: {0} من {1}</value></data>
 </root>

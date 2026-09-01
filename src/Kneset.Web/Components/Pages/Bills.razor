@@ -25,24 +25,24 @@
 
            Флажки сгруппированы по окну влияния тем же классификатором, что рисует
            бейдж на карточке: одна логика, одно место правки. *@
-        <details class="kt-stagepick">
-            <summary class="form-select kt-stagepick-summary">
+        <details class="kt-multi">
+            <summary class="form-select kt-multi-summary">
                 @(_statuses.All(IsChecked)
                     ? L["Bills_StagesAll"].Value
                     : string.Format(L["Bills_StagesChosen"], _statuses.Count(IsChecked), _statuses.Count))
             </summary>
-            <div class="kt-stagepick-menu">
-                <div class="kt-stagepick-actions">
+            <div class="kt-multi-menu">
+                <div class="kt-multi-actions">
                     <button type="button" class="btn btn-sm btn-link p-0" @onclick="SelectInfluenceStages">@L["Bills_StagesInfluence"]</button>
                     <button type="button" class="btn btn-sm btn-link p-0" @onclick="SelectAllStages">@L["Bills_StagesAll"]</button>
                 </div>
                 @foreach (var group in _statuses.GroupBy(x => x.Css).OrderBy(g => GroupOrder(g.Key)))
                 {
-                    <div class="kt-stagepick-group">
+                    <div class="kt-multi-group">
                         <span class="kt-win @group.Key">@L[GroupLabelKey(group.Key)]</span>
                         @foreach (var st in group.OrderBy(x => StatusName(x), StringComparer.CurrentCulture))
                         {
-                            <label class="kt-stagepick-item">
+                            <label class="kt-multi-item">
                                 <input type="checkbox" checked="@IsChecked(st)"
                                        @onchange="e => ToggleStage(st, e)" />
                                 <span>@StatusName(st)</span>
@@ -70,13 +70,28 @@
    в Persons лежат все, кто когда-либо был в Кнессете. *@
 <div class="row g-2 mb-3">
     <div class="col-md-4">
-        <select class="form-select" value="@_factionFilter" @onchange="OnFactionChanged">
-            <option value="">@L["Bills_AllFactions"]</option>
-            @foreach (var faction in _factions)
-            {
-                <option value="@faction">@faction</option>
-            }
-        </select>
+        @* Тот же множественный выбор, что и у стадий: следить за темой можно
+           сразу по нескольким фракциям, и заставлять выбирать одну незачем. *@
+        <details class="kt-multi">
+            <summary class="form-select kt-multi-summary">
+                @(_factions.All(f => _factionIds.Contains(f.Id))
+                    ? L["Bills_AllFactions"].Value
+                    : string.Format(L["Bills_FactionsChosen"], _factionIds.Count, _factions.Count))
+            </summary>
+            <div class="kt-multi-menu">
+                <div class="kt-multi-actions">
+                    <button type="button" class="btn btn-sm btn-link p-0" @onclick="SelectAllFactions">@L["Bills_AllFactions"]</button>
+                </div>
+                @foreach (var f in _factions.OrderBy(FactionName, StringComparer.CurrentCulture))
+                {
+                    <label class="kt-multi-item">
+                        <input type="checkbox" checked="@_factionIds.Contains(f.Id)"
+                               @onchange="e => ToggleFaction(f.Id, e)" />
+                        <span>@FactionName(f)</span>
+                    </label>
+                }
+            </div>
+        </details>
     </div>
     <div class="col-md-4">
         <select class="form-select" value="@_personFilter" @onchange="OnPersonChanged">
@@ -94,7 +109,7 @@
         <div class="form-check">
             <input class="form-check-input" type="checkbox" id="authorOnly"
                    checked="@_authorOnly" @onchange="OnAuthorOnlyChanged"
-                   disabled="@(string.IsNullOrEmpty(_personFilter) && string.IsNullOrEmpty(_factionFilter))" />
+                   disabled="@(string.IsNullOrEmpty(_personFilter) && _factions.All(f => _factionIds.Contains(f.Id)))" />
             <label class="form-check-label" for="authorOnly">@L["Bills_AuthorOnly"]</label>
         </div>
     </div>
@@ -209,22 +224,26 @@ else
     /// <summary>Сколько законопроектов отсечено именно фильтром стадий.</summary>
     private int _hiddenByStages;
     private string _knessetFilter = "";
-    private string _factionFilter = "";
+    /// <summary>Отмеченные фракции. По умолчанию отмечены все — отбора нет.</summary>
+    private HashSet<int> _factionIds = [];
     private string _personFilter = "";
 
     /// <summary>Считать ли только внесённые законы, без подписанных.</summary>
     private bool _authorOnly;
 
-    private sealed record MemberOption(int Id, string Name, string? Faction);
+    private sealed record MemberOption(int Id, string Name, int? FactionId, string? Faction);
 
-    private List<string> _factions = [];
+    /// <summary>Фракция: номер из справочника Кнессета и её ивритское название.</summary>
+    private sealed record FactionOption(int Id, string Name);
+
+    private List<FactionOption> _factions = [];
     private List<MemberOption> _members = [];
 
     /// <summary>Депутаты, подходящие под выбранную фракцию.</summary>
     private IEnumerable<MemberOption> VisibleMembers =>
-        string.IsNullOrEmpty(_factionFilter)
+        _factions.All(f => _factionIds.Contains(f.Id))
             ? _members
-            : _members.Where(m => m.Faction == _factionFilter);
+            : _members.Where(m => m.FactionId is { } id && _factionIds.Contains(id));
     /// <summary>Стадия: идентификатор источника, ивритское описание и группа влияния.</summary>
     /// <summary>
     /// Стадия глазами человека: одно название и все номера источника,
@@ -289,18 +308,18 @@ else
         // и список из сотен имён в селекте бесполезен.
         _members = (await db.Persons.AsNoTracking()
                 .Where(x => x.IsCurrent)
-                .Select(x => new { x.Id, x.FirstName, x.LastName, x.FactionName })
+                .Select(x => new { x.Id, x.FirstName, x.LastName, x.FactionId, x.FactionName })
                 .ToListAsync())
-            .Select(x => new MemberOption(x.Id, $"{x.FirstName} {x.LastName}".Trim(), x.FactionName))
+            .Select(x => new MemberOption(x.Id, $"{x.FirstName} {x.LastName}".Trim(), x.FactionId, x.FactionName))
             .OrderBy(x => x.Name, StringComparer.CurrentCulture)
             .ToList();
 
         _factions = _members
-            .Where(m => !string.IsNullOrEmpty(m.Faction))
-            .Select(m => m.Faction!)
-            .Distinct()
-            .OrderBy(x => x, StringComparer.CurrentCulture)
+            .Where(m => m.FactionId is not null && !string.IsNullOrEmpty(m.Faction))
+            .GroupBy(m => m.FactionId!.Value)
+            .Select(g => new FactionOption(g.Key, g.First().Faction!))
             .ToList();
+        _factionIds = _factions.Select(f => f.Id).ToHashSet();
         _knessetNums = await db.Bills.Select(b => b.KnessetNum).Distinct()
             .OrderByDescending(n => n).ToListAsync();
         _currentKnesset = await CurrentKnesset.GetAsync();
@@ -335,11 +354,14 @@ else
             query = query.Where(b => b.Initiators.Any(i =>
                 i.PersonId == personId && (!_authorOnly || i.IsInitiator)));
         }
-        else if (!string.IsNullOrEmpty(_factionFilter))
+        else if (!_factions.All(f => _factionIds.Contains(f.Id)))
         {
-            var faction = _factionFilter;
+            // По номеру фракции, а не по её ивритскому названию: язык интерфейса
+            // на выборку не влияет, и написание в источнике тоже.
+            var ids = _factionIds;
             query = query.Where(b => b.Initiators.Any(i =>
-                i.Person.FactionName == faction && (!_authorOnly || i.IsInitiator)));
+                i.Person.FactionId != null && ids.Contains(i.Person.FactionId.Value)
+                && (!_authorOnly || i.IsInitiator)));
         }
 
         if (int.TryParse(_knessetFilter, out var knesset))
@@ -471,11 +493,37 @@ else
         await LoadAsync();
     }
 
-    private async Task OnFactionChanged(ChangeEventArgs e)
+    /// <summary>
+    /// Название фракции на языке интерфейса. Ключ — номер из справочника;
+    /// нет перевода (в Кнессете появилась новая фракция) — показываем оригинал.
+    /// </summary>
+    private string FactionName(FactionOption f)
     {
-        _factionFilter = e.Value?.ToString() ?? "";
+        var s = L[$"Faction_{f.Id}"];
+        return s.ResourceNotFound ? f.Name : s.Value;
+    }
 
-        // Выбор фракции всегда снимает выбор депутата.
+    private async Task SelectAllFactions()
+    {
+        _factionIds = _factions.Select(f => f.Id).ToHashSet();
+        _personFilter = "";
+        _page = 0;
+        await LoadAsync();
+    }
+
+    private async Task ToggleFaction(int id, ChangeEventArgs e)
+    {
+        if (e.Value is true) _factionIds.Add(id); else _factionIds.Remove(id);
+
+        // Ни одной отметки — показывать нечего и незачем: возвращаем все.
+        if (_factionIds.Count == 0) _factionIds = _factions.Select(f => f.Id).ToHashSet();
+
+        await AfterFactionChangeAsync();
+    }
+
+    private async Task AfterFactionChangeAsync()
+    {
+        // Смена набора фракций всегда снимает выбор депутата.
         //
         // Раньше депутат сбрасывался только если не входил в выбранную фракцию,
         // и на этом фильтр выглядел сломанным: депутат в запросе имеет приоритет

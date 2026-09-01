@@ -17,6 +17,12 @@ public class Person
     public bool IsCurrent { get; set; }
 
     /// <summary>Название фракции (текущей или последней).</summary>
+    /// <summary>
+    /// Номер фракции в справочнике Кнессета. По нему отбирают и переводят
+    /// название: строка на иврите зависит от написания в источнике, номер — нет.
+    /// </summary>
+    public int? FactionId { get; set; }
+
     public string? FactionName { get; set; }
 
     /// <summary>ID депутата на сайте Кнессета (KNS_MkSiteCode.SiteId) — отличается от PersonID.</summary>
