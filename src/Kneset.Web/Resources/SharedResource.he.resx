@@ -546,4 +546,34 @@
   <data name="Cnf_EmailChangeFail" xml:space="preserve"><value>לא ניתן לשנות את הכתובת. ייתכן שהקישור פג — בקשו קישור חדש.</value></data>
   <data name="Cnf_UserNameChangeFail" xml:space="preserve"><value>לא ניתן לעדכן את שם המשתמש.</value></data>
   <data name="Val_Phone" xml:space="preserve"><value>הזינו מספר טלפון תקין</value></data>
+  <data name="Status_104" xml:space="preserve"><value>הונחה על שולחן הכנסת לדיון מוקדם</value></data>
+  <data name="Status_108" xml:space="preserve"><value>הכנה לקריאה ראשונה</value></data>
+  <data name="Status_111" xml:space="preserve"><value>לדיון במליאה לקראת הקריאה הראשונה</value></data>
+  <data name="Status_113" xml:space="preserve"><value>הכנה לקריאה שנייה ושלישית</value></data>
+  <data name="Status_114" xml:space="preserve"><value>לדיון במליאה לקראת קריאה שנייה-שלישית</value></data>
+  <data name="Status_118" xml:space="preserve"><value>התקבלה בקריאה שלישית</value></data>
+  <data name="Status_120" xml:space="preserve"><value>לדיון במליאה על החלת דין רציפות</value></data>
+  <data name="Status_122" xml:space="preserve"><value>מוזגה עם הצעת חוק אחרת</value></data>
+  <data name="Status_124" xml:space="preserve"><value>הוסבה להצעה לסדר היום</value></data>
+  <data name="Status_130" xml:space="preserve"><value>הונחה על שולחן הכנסת לקריאה שנייה-שלישית</value></data>
+  <data name="Status_141" xml:space="preserve"><value>הונחה על שולחן הכנסת לקריאה ראשונה</value></data>
+  <data name="Status_142" xml:space="preserve"><value>בוועדת הכנסת לקביעת הוועדה המטפלת</value></data>
+  <data name="Status_150" xml:space="preserve"><value>במליאה לדיון מוקדם</value></data>
+  <data name="Status_165" xml:space="preserve"><value>לאישור פיצול במליאה</value></data>
+  <data name="Status_175" xml:space="preserve"><value>בדיון בוועדה על החלת דין רציפות</value></data>
+  <data name="Status_335" xml:space="preserve"><value>נעצרה</value></data>
+  <data name="Bills_Stages" xml:space="preserve"><value>שלבים</value></data>
+  <data name="Bills_StagesChosen" xml:space="preserve"><value>שלבים: {0} מתוך {1}</value></data>
+  <data name="Bills_StagesAll" xml:space="preserve"><value>כל השלבים</value></data>
+  <data name="Bills_StagesInfluence" xml:space="preserve"><value>היכן אפשר עוד להשפיע</value></data>
+  <data name="Bills_HiddenByStages" xml:space="preserve"><value>מוסתר על ידי הסינון: {0}</value></data>
+  <data name="Bills_ShowEverything" xml:space="preserve"><value>הצגת הכול</value></data>
+  <data name="Status_101" xml:space="preserve"><value>הכנה לקריאה ראשונה</value></data>
+  <data name="Status_106" xml:space="preserve"><value>בוועדת הכנסת לקביעת הוועדה המטפלת</value></data>
+  <data name="Status_158" xml:space="preserve"><value>לאישור פיצול במליאה</value></data>
+  <data name="Status_161" xml:space="preserve"><value>לאישור פיצול במליאה</value></data>
+  <data name="Status_162" xml:space="preserve"><value>לאישור פיצול במליאה</value></data>
+  <data name="Status_177" xml:space="preserve"><value>נעצרה</value></data>
+  <data name="Inf_Pending" xml:space="preserve"><value>ממתין לוועדה</value></data>
+  <data name="Inf_Pending_Hint" xml:space="preserve"><value>עדיין נקבע איזו ועדה תטפל בהצעה. התוכן טרם נדון — חלון ההשפעה ייפתח כשהוועדה תתחיל לעבוד.</value></data>
 </root>

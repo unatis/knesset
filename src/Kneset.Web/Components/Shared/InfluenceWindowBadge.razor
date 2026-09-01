@@ -42,6 +42,13 @@
             || status.Contains("אושר"))
             return ("kt-win-late", "Inf_Late", "Inf_Late_Hint");
 
+        // Процедура до содержания: решается, какая комиссия возьмёт закон.
+        // Проверяется раньше общей «комиссии» — иначе слово ועדה в строке
+        // отправило бы стадию в открытое окно, а окна там нет: содержание
+        // ещё не обсуждают, и прийти со своей позицией пока некуда.
+        if (status.Contains("קביעת הוועדה"))
+            return ("kt-win-pending", "Inf_Pending", "Inf_Pending_Hint");
+
         // Работа в комиссии — главное окно влияния.
         if (status.Contains("ועדה") || status.Contains("הכנה"))
             return ("kt-win-open", "Inf_Open", "Inf_Open_Hint");
