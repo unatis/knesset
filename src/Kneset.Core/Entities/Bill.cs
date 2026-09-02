@@ -66,6 +66,9 @@ public class Bill
 
     /// <summary>Файлы законопроекта на сайте Кнессета: текст и пояснительная записка.</summary>
     public List<BillDocument> Documents { get; set; } = [];
+
+    /// <summary>Переводы названия. Оригинал остаётся в Name и первой строкой.</summary>
+    public List<BillTitle> Titles { get; set; } = [];
     public List<BillAnalysis> Analyses { get; set; } = [];
     public List<BillReaction> Reactions { get; set; } = [];
 }

@@ -39,14 +39,14 @@ else
         <meta property="og:image:height" content="630" />
     </HeadContent>
 
-    @if (_bill.NameRu is not null)
+    @* Оригинал всегда первой строкой. Название законопроекта в Израиле —
+       формула с юридическим весом, и подменять её переводом нельзя. Перевод
+       идёт под ним, помельче: он помогает понять, о чём закон, но ссылаться
+       в переписке с комиссией нужно на оригинал. *@
+    <h1 class="kt-bill-title" lang="he">@_bill.Name</h1>
+    @if (Translated() is { } translated)
     {
-        <h1 class="kt-bill-title">@_bill.NameRu</h1>
-        <div class="kt-bill-orig" lang="he">@_bill.Name</div>
-    }
-    else
-    {
-        <h1 class="kt-bill-title" lang="he">@_bill.Name</h1>
+        <div class="kt-bill-translated">@translated</div>
     }
 
     <div class="d-flex flex-wrap align-items-start gap-3">
@@ -283,6 +283,21 @@ else
         return $"mailto:{email}?subject={subject}";
     }
 
+    /// <summary>
+    /// Перевод названия на язык интерфейса, если он есть. Иврит не переводим —
+    /// на нём и лежит оригинал.
+    /// </summary>
+    private string? Translated()
+    {
+        var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        if (lang == "he") return null;
+
+        var row = _bill?.Titles.FirstOrDefault(t => t.LanguageCode == lang);
+        // Перевод устарел, если Кнессет переписал название: показываем только
+        // тот, что сделан с нынешней формулировки.
+        return row is not null && row.SourceName == _bill!.Name ? row.Text : null;
+    }
+
     private Bill? _bill;
 
     /// <summary>Текущий созыв — по нему бейдж отличает живой закон от прекратившегося.</summary>
@@ -333,6 +348,7 @@ else
             .Include(b => b.Initiators).ThenInclude(i => i.Person)
             .Include(b => b.Documents)
             .Include(b => b.Committee)
+            .Include(b => b.Titles)
             .FirstOrDefaultAsync(b => b.Id == Id);
 
         if (_bill is not null)

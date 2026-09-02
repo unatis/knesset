@@ -158,6 +158,10 @@ builder.Services.AddHostedService<DraftWorker>();
 // Редакционные контекстные анализы («Контекст и интерпретации») из Seed/*.json.
 builder.Services.AddHostedService<ContextSeedService>();
 
+// Переводы названий законопроектов: настоящего переводчика пока нет,
+// названия подготовлены заранее и лежат файлом рядом с кодом.
+builder.Services.AddHostedService<BillTitleSeedService>();
+
 // Номер текущего созыва: нужен окну влияния, чтобы отличать живой
 // законопроект от прекратившегося вместе со своим созывом.
 builder.Services.AddSingleton<CurrentKnessetService>();
@@ -223,6 +227,37 @@ app.MapRazorComponents<App>()
 // Проверка живости для хостинга. Намеренно не обращается к БД: недоступность Supabase
 // не должна помечать деплой упавшим и перезапускать работающий инстанс.
 app.MapGet("/healthz", () => Results.Text("ok"));
+
+// Служебная выгрузка для ручного перевода названий: отдаёт оригиналы
+// законопроектов из окна влияния, у которых ещё нет перевода на язык lang.
+// Только в Development — в проде маршрут не регистрируется.
+if (app.Environment.IsDevelopment())
+{
+    app.MapGet("/dev/untranslated", async (
+        string lang, int take, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        int[] influenceStages = [108, 113, 150, 111, 114, 130, 141];
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        // Один и тот же этап встречается под несколькими StatusId, поэтому
+        // отбираем по описанию — так же, как это делает фильтр на /bills.
+        var descs = await db.Bills
+            .Where(b => b.StatusId != null && influenceStages.Contains(b.StatusId.Value))
+            .Select(b => b.StatusDesc)
+            .Distinct()
+            .ToListAsync(ct);
+
+        var rows = await db.Bills
+            .Where(b => descs.Contains(b.StatusDesc))
+            .Where(b => !b.Titles.Any(t => t.LanguageCode == lang && t.SourceName == b.Name))
+            .OrderBy(b => b.KnessetBillId)
+            .Take(take)
+            .Select(b => new { id = b.KnessetBillId, name = b.Name })
+            .ToListAsync(ct);
+
+        return Results.Json(rows);
+    });
+}
 
 // Динамические OG-картинки (кэш 1 час: краулеры мессенджеров ходят часто).
 app.MapGet("/og/bills/{id:int}.png", async (

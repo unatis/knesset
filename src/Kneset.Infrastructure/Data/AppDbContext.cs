@@ -23,6 +23,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<BillSession> BillSessions => Set<BillSession>();
     public DbSet<BillDocument> BillDocuments => Set<BillDocument>();
     public DbSet<Committee> Committees => Set<Committee>();
+    public DbSet<BillTitle> BillTitles => Set<BillTitle>();
     public DbSet<SyncLog> SyncLogs => Set<SyncLog>();
     public DbSet<BillContextAnalysis> BillContextAnalyses => Set<BillContextAnalysis>();
     public DbSet<BillReaction> BillReactions => Set<BillReaction>();
@@ -81,6 +82,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             // Ближайшие заседания по всей базе — для сроков в столбце контекста.
             s.HasIndex(x => x.StartDate);
             s.HasOne(x => x.Bill).WithMany(b => b.Sessions)
+             .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<BillTitle>(t =>
+        {
+            // Один перевод на язык. Иврит здесь не хранится — он в Bill.Name.
+            t.HasIndex(x => new { x.BillId, x.LanguageCode }).IsUnique();
+            t.Property(x => x.LanguageCode).HasMaxLength(8);
+            t.Property(x => x.Text).HasMaxLength(2000);
+            t.Property(x => x.SourceName).HasMaxLength(2000);
+            t.HasOne(x => x.Bill).WithMany(b => b.Titles)
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
         });
 

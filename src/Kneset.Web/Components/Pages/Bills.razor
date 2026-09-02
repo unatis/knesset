@@ -10,8 +10,9 @@
 
 @* Визуальный слой: list-group заменён на строки с разделителями (.kt-row).
    Карточка внутри карточки съедала около 40% плотности списка.
-   Порядок заголовков перевёрнут: сначала название на языке интерфейса,
-   оригинал на иврите — второй строкой. Данные те же (NameRu / Name). *@
+   Порядок заголовков: оригинал на иврите первой строкой, перевод под ним.
+   Название законопроекта — юридическая формула, и подменять её переводом
+   нельзя; перевод помогает понять, о чём закон, но ссылаются на оригинал. *@
 
 <div class="row g-2 mb-3">
     <div class="col-md-5">
@@ -148,14 +149,12 @@ else
         {
             <a href="/bills/@bill.Bill.Id" class="kt-row">
                 <div class="kt-row-main">
-                    @if (bill.Bill.NameRu is not null)
+                    @* Оригинал первой строкой, перевод под ним — как и на странице
+                       закона: подменять юридическую формулу переводом нельзя. *@
+                    <div class="kt-row-title" lang="he">@bill.Bill.Name</div>
+                    @if (bill.Translated is { } translated)
                     {
-                        <div class="kt-row-title">@bill.Bill.NameRu</div>
-                        <div class="kt-row-orig" lang="he">@bill.Bill.Name</div>
-                    }
-                    else
-                    {
-                        <div class="kt-row-title" lang="he">@bill.Bill.Name</div>
+                        <div class="kt-row-orig">@translated</div>
                     }
 
                     <div class="d-flex flex-wrap align-items-center gap-2">
@@ -215,7 +214,7 @@ else
 
     private List<BillRow>? _bills;
 
-    private record BillRow(Bill Bill, int Support, int Oppose, int Undecided);
+    private record BillRow(Bill Bill, string? Translated, int Support, int Oppose, int Undecided);
     private int _totalCount;
 
     /// <summary>Текущий созыв — по нему видно, не прекратился ли законопроект.</summary>
@@ -371,6 +370,11 @@ else
         if (int.TryParse(_knessetFilter, out var knesset))
             query = query.Where(b => b.KnessetNum == knesset);
 
+        // Язык интерфейса для подстановки перевода названия. Иврит — оригинал,
+        // переводить нечего.
+        var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        var lang = culture == "he" ? null : culture;
+
         _totalCount = await query.CountAsync();
         _hiddenByStages = ReferenceEquals(beforeStages, query)
             ? 0
@@ -392,6 +396,14 @@ else
             .Skip(_page * PageSize).Take(PageSize)
             .Select(b => new BillRow(
                 b,
+                // Перевод названия на язык интерфейса — подзапросом в той же
+                // выборке, а не отдельным обходом строк. Показываем только
+                // сделанный с нынешней формулировки: Кнессет правит названия,
+                // и перевод старого говорил бы не о том.
+                b.Titles
+                    .Where(t => t.LanguageCode == lang && t.SourceName == b.Name)
+                    .Select(t => t.Text)
+                    .FirstOrDefault(),
                 b.Reactions.Count(r => r.Kind == ReactionKind.Support),
                 b.Reactions.Count(r => r.Kind == ReactionKind.Oppose),
                 b.Reactions.Count(r => r.Kind == ReactionKind.Undecided)))
