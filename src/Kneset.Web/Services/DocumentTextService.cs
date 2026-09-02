@@ -10,10 +10,11 @@ namespace Kneset.Web.Services;
 /// Превращает документы законопроектов в текст: скачивает файл с сайта
 /// Кнессета, разбирает и складывает результат в BillDocumentTexts.
 ///
-/// Берёт только формат DOC — по факту это .docx, и текст из него выходит
-/// логическим порядком. PDF пока не трогаем: PdfPig отдаёт иврит наизнанку
-/// и без пробелов между словами, для него нужен отдельный разбор по словам
-/// с восстановлением bidi-порядка.
+/// Основной источник — формат DOC (по факту .docx): текст из него выходит
+/// логическим порядком, и он есть у 97% законопроектов. PDF берётся только
+/// там, где docx нет, — иначе один и тот же документ разбирался бы дважды.
+/// Разбор PDF восстанавливает логический порядок по координатам глифов,
+/// потому что штатный page.Text отдаёт иврит наизнанку.
 ///
 /// Обход идёт партиями и возобновляется: «что разобрать дальше» — это запрос
 /// к базе, а не позиция в памяти, поэтому прогон можно прерывать сколько
@@ -31,9 +32,6 @@ public class DocumentTextService(
     ILogger<DocumentTextService> logger) : BackgroundService
 {
     private const string EntityName = "BillDocumentTexts";
-
-    /// <summary>Разбираем только docx — см. комментарий к классу.</summary>
-    private const string TargetFormat = "DOC";
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -98,14 +96,24 @@ public class DocumentTextService(
     private async Task<List<BillDocument>> NextBatchAsync(int size, CancellationToken ct)
     {
         await using var db = await dbFactory.CreateDbContextAsync(ct);
-        var version = DocumentTextExtractor.Version;
+        var versions = DocumentTextExtractor.CurrentVersions;
+
+        // Из PDF берём только то, чего нет в docx: у 97% законопроектов docx
+        // есть, и разбирать оба формата одного документа — двойная работа
+        // и двойное место. PDF нужен ради тех 323, где его нет.
+        var docxKeys = db.BillDocuments
+            .Where(d => d.Format == "DOC")
+            .Select(d => new { d.BillId, d.GroupTypeDesc });
 
         var pending = db.BillDocuments
-            .Where(d => d.Format == TargetFormat)
-            // Уже разобранное этой же версией парсера пропускаем — включая
+            .Where(d => d.Format == "DOC"
+                || (d.Format == "PDF"
+                    && !docxKeys.Contains(new { d.BillId, d.GroupTypeDesc })))
+            // Уже разобранное актуальной версией парсера пропускаем — включая
             // неудачи: файл, который не разбирается, не станет разбираться
             // от повторной попытки тем же кодом.
-            .Where(d => d.ExtractedText == null || d.ExtractedText.ExtractorVersion != version);
+            .Where(d => d.ExtractedText == null
+                || !versions.Contains(d.ExtractedText.ExtractorVersion));
 
         var window = await db.Bills
             .Where(b => b.StatusId != null && InfluenceStages.Contains(b.StatusId.Value))
@@ -195,7 +203,7 @@ public class DocumentTextService(
         var row = new BillDocumentText
         {
             BillDocumentId = documentId,
-            ExtractorVersion = DocumentTextExtractor.Version,
+            ExtractorVersion = DocumentTextExtractor.DocxVersion,
             ExtractedAt = DateTime.UtcNow,
         };
 
@@ -210,6 +218,7 @@ public class DocumentTextService(
         row.SourceHash = Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant();
 
         var result = DocumentTextExtractor.Extract(bytes);
+        row.ExtractorVersion = DocumentTextExtractor.VersionFor(result.Kind);
         row.Text = result.Text;
         row.CharCount = result.CharCount;
         row.Status = result.Error is not null ? "unsupported"

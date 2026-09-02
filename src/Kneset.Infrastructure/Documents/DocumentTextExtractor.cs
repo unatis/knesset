@@ -18,11 +18,27 @@ namespace Kneset.Infrastructure.Documents;
 public static class DocumentTextExtractor
 {
     /// <summary>
-    /// Версия парсера. Пишется вместе с текстом: когда разбор улучшится
-    /// (в первую очередь PDF, которому нужен bidi-порядок), смена версии
-    /// заставит обходчик переразобрать старое, не трогая остальное.
+    /// Версии парсеров — по одной на формат, а не одна общая. Иначе правка
+    /// разбора PDF заставила бы переразобрать все одиннадцать с половиной
+    /// тысяч docx, то есть скачать их заново без всякой пользы.
     /// </summary>
-    public const string Version = "openxml-v2";
+    public const string DocxVersion = "openxml-v2";
+    public const string PdfVersion = "pdfbidi-v1";
+
+    /// <summary>
+    /// Все актуальные версии. Обходчик считает документ разобранным, если
+    /// его версия есть в этом списке.
+    /// </summary>
+    public static readonly string[] CurrentVersions = [DocxVersion, PdfVersion];
+
+    public static string VersionFor(Kind kind) => kind switch
+    {
+        Kind.Docx => DocxVersion,
+        Kind.Pdf => PdfVersion,
+        // Неподдерживаемые типы тоже помечаем версией: иначе обходчик будет
+        // возвращаться к ним при каждом проходе.
+        _ => DocxVersion,
+    };
 
     public enum Kind { Unknown, Docx, Pdf, Ole2Doc, Rtf, Empty }
 
@@ -98,11 +114,136 @@ public static class DocumentTextExtractor
         return sb.ToString();
     }
 
+    /// <summary>
+    /// Текст из PDF с восстановлением логического порядка.
+    ///
+    /// page.Text использовать нельзя: он отдаёт глифы в порядке отрисовки,
+    /// и для иврита строка выходит наизнанку и без пробелов между словами.
+    /// Поэтому идём от глифов с координатами: собираем строки по базовой
+    /// линии, внутри строки читаем справа налево, а пробелы восстанавливаем
+    /// по горизонтальным зазорам между глифами.
+    /// </summary>
     private static string ExtractPdf(byte[] bytes)
     {
         using var doc = PdfDocument.Open(bytes);
-        return string.Join("\n", doc.GetPages().Select(page => page.Text));
+
+        var pages = doc.GetPages().Select(PageText).Where(t => t.Length > 0);
+        return string.Join("\n", pages);
     }
+
+    private static string PageText(UglyToad.PdfPig.Content.Page page)
+    {
+        var letters = page.Letters;
+        if (letters.Count == 0) return "";
+
+        // Направление определяем по странице целиком, а не по строке: короткая
+        // строка из одних цифр иначе получила бы своё, неверное направление.
+        var rtl = letters.Count(l => IsRtl(l.Value)) * 2 > letters.Count(l => IsLetterish(l.Value));
+
+        var avgHeight = letters.Average(l => l.GlyphRectangle.Height);
+        var avgWidth = letters.Average(l => l.GlyphRectangle.Width);
+        var lineTolerance = Math.Max(avgHeight * 0.5, 0.5);
+
+        // Группируем по базовой линии, а не по низу прямоугольника глифа:
+        // у букв с нижним выносным элементом (ן ץ ף ק) низ ниже остальных,
+        // и по нему они отрывались от своей строки в отдельную.
+        var lines = new List<List<UglyToad.PdfPig.Content.Letter>>();
+        foreach (var letter in letters.OrderByDescending(l => l.StartBaseLine.Y))
+        {
+            var current = lines.Count > 0 ? lines[^1] : null;
+            if (current is null
+                || Math.Abs(current[0].StartBaseLine.Y - letter.StartBaseLine.Y) > lineTolerance)
+            {
+                current = [];
+                lines.Add(current);
+            }
+            current.Add(letter);
+        }
+
+        var sb = new System.Text.StringBuilder();
+        foreach (var line in lines)
+        {
+            var ordered = rtl
+                ? line.OrderByDescending(l => l.GlyphRectangle.Left).ToList()
+                : line.OrderBy(l => l.GlyphRectangle.Left).ToList();
+
+            var text = new System.Text.StringBuilder();
+            for (var i = 0; i < ordered.Count; i++)
+            {
+                if (i > 0)
+                {
+                    // Зазор между соседними глифами в порядке чтения. В PDF
+                    // пробел часто не рисуется вовсе — его выдаёт только
+                    // расстояние. Порог считаем и от средней ширины по
+                    // странице, и от ширины соседних глифов: слишком
+                    // чувствительный порог рвал числа надвое, и «2021»
+                    // превращалось в «1 202».
+                    var prev = ordered[i - 1].GlyphRectangle;
+                    var cur = ordered[i].GlyphRectangle;
+                    var gap = rtl ? prev.Left - cur.Right : cur.Left - prev.Right;
+                    var threshold = Math.Max(avgWidth, Math.Max(prev.Width, cur.Width)) * 0.55;
+                    if (gap > threshold) text.Append(' ');
+                }
+                text.Append(ordered[i].Value);
+            }
+
+            var lineText = rtl ? FixLtrRuns(text.ToString()) : text.ToString();
+            if (lineText.Trim().Length > 0) sb.AppendLine(lineText.TrimEnd());
+        }
+
+        return sb.ToString().TrimEnd();
+    }
+
+    /// <summary>
+    /// Внутри RTL-строки цифры и латиница пишутся слева направо. После
+    /// разворота строки справа налево такие вкрапления оказываются
+    /// перевёрнутыми — «2026» становится «6202». Возвращаем их на место.
+    /// Заодно зеркалим скобки: в визуальном порядке они противоположны
+    /// логическому.
+    /// </summary>
+    private static string FixLtrRuns(string line)
+    {
+        var sb = new System.Text.StringBuilder(line.Length);
+        var run = new List<char>();
+
+        void Flush()
+        {
+            if (run.Count == 0) return;
+            run.Reverse();
+            sb.Append(run.ToArray());
+            run.Clear();
+        }
+
+        foreach (var ch in line)
+        {
+            if (IsRtl(ch.ToString()) || ch == ' ')
+            {
+                Flush();
+                sb.Append(Mirror(ch));
+            }
+            else
+            {
+                run.Add(Mirror(ch));
+            }
+        }
+        Flush();
+        return sb.ToString();
+    }
+
+    private static char Mirror(char ch) => ch switch
+    {
+        '(' => ')', ')' => '(',
+        '[' => ']', ']' => '[',
+        '{' => '}', '}' => '{',
+        '<' => '>', '>' => '<',
+        _ => ch,
+    };
+
+    private static bool IsRtl(string s) =>
+        s.Length > 0 && s[0] is >= '֐' and <= 'ࣿ';
+
+    private static bool IsLetterish(string s) =>
+        s.Length > 0 && (char.IsLetter(s[0]) || char.IsDigit(s[0]));
 
     /// <summary>
     /// Проверка порядка символов в иврите: если извлечение отдало глифы
