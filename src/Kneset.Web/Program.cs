@@ -440,6 +440,16 @@ if (app.Environment.IsDevelopment())
             windowWithDocx = await db.BillDocuments
                 .Where(d => d.Format == "DOC" && influenceDescs.Contains(d.Bill.StatusDesc))
                 .Select(d => d.BillId).Distinct().CountAsync(ct),
+            // Сколько PDF без docx-двойника вообще отбирается — проверка того,
+            // что условие отбора переводится в SQL, а не отсекает всё молча.
+            pdfWithoutDocx = await db.BillDocuments
+                .Where(d => d.Format == "PDF")
+                .Where(d => !db.BillDocuments
+                    .Where(x => x.Format == "DOC")
+                    .Any(x => x.BillId == d.BillId && x.GroupTypeDesc == d.GroupTypeDesc))
+                .CountAsync(ct),
+            pdfDone = await db.BillDocumentTexts
+                .CountAsync(t => t.ExtractorVersion == "pdfbidi-v1", ct),
             // Отработала ли правка с табуляциями: до неё InnerText их выбрасывал.
             byVersion = await db.BillDocumentTexts
                 .GroupBy(t => t.ExtractorVersion)
