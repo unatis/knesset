@@ -200,6 +200,31 @@ else
                             {
                                 <a href="@doc.Url" target="_blank" rel="noopener" class="kt-doc-link">@doc.Format</a>
                             }
+
+                            @* Текст — один на документ, а не на каждый формат: DOC и PDF
+                               это одно и то же содержимое. Берём docx, если он есть:
+                               из него текст извлекается логическим порядком, тогда как
+                               в PDF он восстановлен по координатам глифов. *@
+                            @{
+                                var text = group
+                                    .OrderBy(d => d.Format == "DOC" ? 0 : 1)
+                                    .Select(d => _docTexts.GetValueOrDefault(d.Id))
+                                    .FirstOrDefault(t => t is not null);
+                            }
+                            @if (text is not null)
+                            {
+                                <details class="kt-doc-text">
+                                    <summary>@L["Bill_DocText"]</summary>
+                                    <p class="kt-doc-text-note">@L["Bill_DocTextMachine"]</p>
+                                    <div class="kt-doc-text-body" dir="rtl" lang="he">@text.Preview</div>
+                                    @if (text.CharCount > text.Preview.Length)
+                                    {
+                                        <a href="/bills/@_bill.Id/text/@text.DocumentId" class="kt-doc-text-more">
+                                            @L["Bill_DocTextFull"]
+                                        </a>
+                                    }
+                                </details>
+                            }
                         </li>
                     }
                 </ul>
@@ -319,6 +344,19 @@ else
     private List<BillSession> _tail = [];
     private int _hidden;
 
+    /// <summary>
+    /// Сколько символов текста документа показываем на странице закона.
+    /// Медиана извлечённого текста около пяти тысяч символов, но у документов
+    /// комиссионных стадий бывает и двести тысяч — целиком такое в разметку
+    /// отдавать нельзя, поэтому превью, а полный текст отдельной страницей.
+    /// </summary>
+    private const int PreviewChars = 4000;
+
+    /// <summary>Превью текстов документов этого закона, по BillDocumentId.</summary>
+    private Dictionary<int, DocText> _docTexts = [];
+
+    private record DocText(int DocumentId, int CharCount, string Preview);
+
     /// <summary>Пояснение к окну влияния — тот же ключ ресурса, что и в бейдже.</summary>
     private string InfluenceHint
     {
@@ -353,6 +391,16 @@ else
 
         if (_bill is not null)
         {
+            // Тексты — отдельным запросом и только превью: Include тянул бы
+            // полные тексты всех документов закона, а это мегабайты на запрос.
+            // Обрезаем в SQL, а не в C#, чтобы лишнее не покидало базу.
+            _docTexts = (await db.BillDocumentTexts.AsNoTracking()
+                    .Where(t => t.BillDocument.BillId == _bill.Id && t.Status == "ok")
+                    .Select(t => new DocText(
+                        t.BillDocumentId, t.CharCount, t.Text.Substring(0, PreviewChars)))
+                    .ToListAsync())
+                .ToDictionary(t => t.DocumentId);
+
             // Отдельным запросом, а не Include: у закона бывает под два десятка
             // заседаний, и тянуть их join'ом вместе с сорока инициаторами значит
             // размножить строки в декартовом произведении.

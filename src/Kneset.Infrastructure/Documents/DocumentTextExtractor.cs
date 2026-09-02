@@ -23,7 +23,7 @@ public static class DocumentTextExtractor
     /// тысяч docx, то есть скачать их заново без всякой пользы.
     /// </summary>
     public const string DocxVersion = "openxml-v2";
-    public const string PdfVersion = "pdfbidi-v2";
+    public const string PdfVersion = "pdfbidi-v3";
 
     /// <summary>
     /// Все актуальные версии. Обходчик считает документ разобранным, если
@@ -82,6 +82,9 @@ public static class DocumentTextExtractor
     /// без сопоставленного символа. Заодно убираем прочие управляющие
     /// символы (кроме табуляции и перевода строки) и непарные суррогаты:
     /// смысла они не несут, а сломать запись могут.
+    ///
+    /// Отдельно — символы нулевой ширины. Они не управляющие, поэтому первую
+    /// версию чистки прошли, и в 31% PDF стояли там, где должен быть пробел.
     /// </summary>
     private static string Sanitize(string text)
     {
@@ -93,6 +96,27 @@ public static class DocumentTextExtractor
             if (ch is '\t' or '\n') { sb.Append(ch); continue; }
             if (ch == '\r') continue;                       // \r\n → \n
             if (char.IsControl(ch)) continue;
+
+            // Разделители строк и абзацев Unicode — обычным переводом строки.
+            if (ch is '\u2028' or '\u2029') { sb.Append('\n'); continue; }
+
+            // Мягкий перенос не несёт смысла в извлечённом тексте и рвёт слова.
+            if (ch == '\u00AD') continue;
+
+            // Символы нулевой ширины и метки направления. Формально они
+            // не управляющие, поэтому проверку выше проходили, — а стоят
+            // ровно там, где должен быть пробел: в 31% PDF слова оказывались
+            // склеены через U+FEFF. Заменяем пробелом, а не выбрасываем,
+            // иначе склейка станет окончательной. Свёртку кратных пробелов
+            // не делаем: в docx они осмысленно разделяют поля шапки.
+            if (ch is '\uFEFF'                       // BOM, zero-width no-break
+                or >= '\u200B' and <= '\u200F'       // нулевая ширина, LRM, RLM
+                or >= '\u202A' and <= '\u202E'       // встраивание направления
+                or >= '\u2066' and <= '\u2069')      // изоляция направления
+            {
+                sb.Append(' ');
+                continue;
+            }
 
             if (char.IsHighSurrogate(ch))
             {

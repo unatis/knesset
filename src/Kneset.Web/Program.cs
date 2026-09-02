@@ -524,6 +524,16 @@ if (app.Environment.IsDevelopment())
                         Math.Max(0, t.Text.IndexOf("קוח תעצה") - 90), 200),
                 })
                 .ToListAsync(ct),
+            // Символы нулевой ширины в извлечённом тексте: они не управляющие,
+            // поэтому чистку прошли, но стоят там, где должен быть пробел.
+            withZeroWidth = await db.BillDocumentTexts
+                .CountAsync(t => t.Text.Contains("\uFEFF"), ct),
+            withZeroWidthDocx = await db.BillDocumentTexts
+                .CountAsync(t => t.Text.Contains("\uFEFF")
+                    && t.ExtractorVersion.StartsWith("openxml"), ct),
+            withZeroWidthPdf = await db.BillDocumentTexts
+                .CountAsync(t => t.Text.Contains("\uFEFF")
+                    && t.ExtractorVersion.StartsWith("pdfbidi"), ct),
             // Контроль качества: сохранился ли иврит логическим порядком.
             // Ищем фразу «הצעת חוק» и её обращение — если извлечение
             // перевернуло строку, найдётся второе, а не первое.

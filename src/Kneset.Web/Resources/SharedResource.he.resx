@@ -596,6 +596,11 @@
   <data name="Filter_ClearAll" xml:space="preserve"><value>ניקוי הכול</value></data>
   <data name="Bill_Documents" xml:space="preserve"><value>מסמכי הצעת החוק</value></data>
   <data name="Bill_Document" xml:space="preserve"><value>מסמך</value></data>
+  <data name="Bill_DocText" xml:space="preserve"><value>טקסט המסמך</value></data>
+  <data name="Bill_DocTextMachine" xml:space="preserve"><value>חולץ מהקובץ אוטומטית. המקור המחייב הוא הקובץ עצמו.</value></data>
+  <data name="Bill_DocTextFull" xml:space="preserve"><value>הצג את הטקסט המלא</value></data>
+  <data name="Bill_DocTextSource" xml:space="preserve"><value>פתיחת המקור</value></data>
+  <data name="Bill_DocTextNone" xml:space="preserve"><value>הטקסט אינו זמין: המסמך מכיל תמונה של העמוד בלבד.</value></data>
   <data name="Pipe_Preliminary" xml:space="preserve"><value>דיון מוקדם</value></data>
   <data name="Pipe_FirstPrep" xml:space="preserve"><value>הכנה לקריאה ראשונה</value></data>
   <data name="Pipe_FirstReading" xml:space="preserve"><value>קריאה ראשונה</value></data>
