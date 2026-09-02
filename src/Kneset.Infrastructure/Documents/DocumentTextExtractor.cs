@@ -62,8 +62,8 @@ public static class DocumentTextExtractor
         {
             return kind switch
             {
-                Kind.Docx => new Result(kind, ExtractDocx(bytes), null),
-                Kind.Pdf => new Result(kind, ExtractPdf(bytes), null),
+                Kind.Docx => new Result(kind, Sanitize(ExtractDocx(bytes)), null),
+                Kind.Pdf => new Result(kind, Sanitize(ExtractPdf(bytes)), null),
                 _ => new Result(kind, "", $"тип {kind} не поддерживается"),
             };
         }
@@ -71,6 +71,43 @@ public static class DocumentTextExtractor
         {
             return new Result(kind, "", ex.GetType().Name + ": " + ex.Message);
         }
+    }
+
+    /// <summary>
+    /// Чистка текста перед записью в базу.
+    ///
+    /// Postgres не хранит нулевой байт в text: попытка записи валит запрос
+    /// с «invalid byte sequence for encoding UTF8: 0x00», причём падает вся
+    /// партия, а не один документ. Ноль приходит из PDF — так выглядит глиф
+    /// без сопоставленного символа. Заодно убираем прочие управляющие
+    /// символы (кроме табуляции и перевода строки) и непарные суррогаты:
+    /// смысла они не несут, а сломать запись могут.
+    /// </summary>
+    private static string Sanitize(string text)
+    {
+        var sb = new System.Text.StringBuilder(text.Length);
+        for (var i = 0; i < text.Length; i++)
+        {
+            var ch = text[i];
+
+            if (ch is '\t' or '\n') { sb.Append(ch); continue; }
+            if (ch == '\r') continue;                       // \r\n → \n
+            if (char.IsControl(ch)) continue;
+
+            if (char.IsHighSurrogate(ch))
+            {
+                if (i + 1 < text.Length && char.IsLowSurrogate(text[i + 1]))
+                {
+                    sb.Append(ch).Append(text[i + 1]);
+                    i++;
+                }
+                continue;                                   // непарный — выбрасываем
+            }
+            if (char.IsLowSurrogate(ch)) continue;          // непарный
+
+            sb.Append(ch);
+        }
+        return sb.ToString();
     }
 
     private static string ExtractDocx(byte[] bytes)

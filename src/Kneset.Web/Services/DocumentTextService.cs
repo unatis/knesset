@@ -101,14 +101,15 @@ public class DocumentTextService(
         // Из PDF берём только то, чего нет в docx: у 97% законопроектов docx
         // есть, и разбирать оба формата одного документа — двойная работа
         // и двойное место. PDF нужен ради тех 323, где его нет.
-        var docxKeys = db.BillDocuments
-            .Where(d => d.Format == "DOC")
-            .Select(d => new { d.BillId, d.GroupTypeDesc });
-
+        //
+        // Условие пишется через Any, а не Contains по анонимному типу:
+        // второе EF переводит в SQL непредсказуемо и может молча отсечь всё.
         var pending = db.BillDocuments
             .Where(d => d.Format == "DOC"
                 || (d.Format == "PDF"
-                    && !docxKeys.Contains(new { d.BillId, d.GroupTypeDesc })))
+                    && !db.BillDocuments.Any(x => x.Format == "DOC"
+                        && x.BillId == d.BillId
+                        && x.GroupTypeDesc == d.GroupTypeDesc)))
             // Уже разобранное актуальной версией парсера пропускаем — включая
             // неудачи: файл, который не разбирается, не станет разбираться
             // от повторной попытки тем же кодом.
@@ -147,17 +148,72 @@ public class DocumentTextService(
         var http = httpFactory.CreateClient();
         http.Timeout = TimeSpan.FromSeconds(90);
 
+        // Сначала скачиваем и разбираем всё в память, и только потом пишем.
+        // Так неудачная запись не смешивается с сетевой работой и её можно
+        // повторить по одному документу.
+        var rows = new List<BillDocumentText>(batch.Count);
+        foreach (var doc in batch)
+        {
+            rows.Add(Extract(await FetchAsync(http, doc.Url, ct), doc.Id));
+
+            // Вежливость к серверу Кнессета: пятнадцать тысяч файлов —
+            // это не повод выгружать их залпом.
+            if (delayMs > 0) await Task.Delay(delayMs, ct);
+        }
+
+        try
+        {
+            await SaveAsync(rows, ct);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            // Партией не прошло — сохраняем по одному, чтобы негодный документ
+            // не тянул за собой остальные сорок девять. Раньше такая партия
+            // валила весь проход: один нулевой байт в тексте из PDF, и Postgres
+            // отвергал весь запрос целиком.
+            logger.LogWarning(ex,
+                "Партия не записалась целиком, сохраняю по одному документу");
+
+            foreach (var row in rows)
+            {
+                try
+                {
+                    await SaveAsync([row], ct);
+                }
+                catch (Exception single) when (single is not OperationCanceledException)
+                {
+                    // Не записывается сам текст — сохраняем хотя бы отметку
+                    // о неудаче, иначе документ будет возвращаться в очередь
+                    // при каждом проходе.
+                    row.Text = "";
+                    row.CharCount = 0;
+                    row.Status = "error";
+                    row.Error = single.GetType().Name;
+                    await SaveAsync([row], ct);
+                }
+            }
+        }
+
+        return batch.Count;
+    }
+
+    /// <summary>
+    /// Запись результатов: обновляет существующие строки и добавляет новые.
+    /// Свой контекст на вызов — после неудачного SaveChanges трекер остаётся
+    /// в подвешенном состоянии, и повторять запись в том же контексте нельзя.
+    /// </summary>
+    private async Task SaveAsync(IReadOnlyList<BillDocumentText> rows, CancellationToken ct)
+    {
         await using var db = await dbFactory.CreateDbContextAsync(ct);
-        var ids = batch.Select(d => d.Id).ToList();
+
+        var ids = rows.Select(r => r.BillDocumentId).ToList();
         var existing = await db.BillDocumentTexts
             .Where(t => ids.Contains(t.BillDocumentId))
             .ToDictionaryAsync(t => t.BillDocumentId, ct);
 
-        foreach (var doc in batch)
+        foreach (var row in rows)
         {
-            var row = Extract(await FetchAsync(http, doc.Url, ct), doc.Id);
-
-            if (existing.TryGetValue(doc.Id, out var prev))
+            if (existing.TryGetValue(row.BillDocumentId, out var prev))
             {
                 prev.Text = row.Text;
                 prev.CharCount = row.CharCount;
@@ -170,16 +226,22 @@ public class DocumentTextService(
             }
             else
             {
-                db.BillDocumentTexts.Add(row);
+                db.BillDocumentTexts.Add(new BillDocumentText
+                {
+                    BillDocumentId = row.BillDocumentId,
+                    Text = row.Text,
+                    CharCount = row.CharCount,
+                    ExtractorVersion = row.ExtractorVersion,
+                    SourceHash = row.SourceHash,
+                    SourceBytes = row.SourceBytes,
+                    ExtractedAt = row.ExtractedAt,
+                    Status = row.Status,
+                    Error = row.Error,
+                });
             }
-
-            // Вежливость к серверу Кнессета: 11.5 тысяч файлов — это не повод
-            // выгружать их залпом.
-            if (delayMs > 0) await Task.Delay(delayMs, ct);
         }
 
         await db.SaveChangesAsync(ct);
-        return batch.Count;
     }
 
     private static async Task<(byte[]? Bytes, string? Error)> FetchAsync(
