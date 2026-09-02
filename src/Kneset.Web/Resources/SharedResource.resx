@@ -596,6 +596,11 @@
   <data name="Filter_ClearAll" xml:space="preserve"><value>Снять все</value></data>
   <data name="Bill_Documents" xml:space="preserve"><value>Документы законопроекта</value></data>
   <data name="Bill_Document" xml:space="preserve"><value>Документ</value></data>
+  <data name="Bill_DocText" xml:space="preserve"><value>Текст документа</value></data>
+  <data name="Bill_DocTextMachine" xml:space="preserve"><value>Извлечено из файла автоматически. Первоисточник — файл по ссылке.</value></data>
+  <data name="Bill_DocTextFull" xml:space="preserve"><value>Показать полностью</value></data>
+  <data name="Bill_DocTextSource" xml:space="preserve"><value>Открыть оригинал</value></data>
+  <data name="Bill_DocTextNone" xml:space="preserve"><value>Текст недоступен: документ содержит только изображение страницы.</value></data>
   <data name="Pipe_Preliminary" xml:space="preserve"><value>Предварительное чтение</value></data>
   <data name="Pipe_FirstPrep" xml:space="preserve"><value>Подготовка к первому чтению</value></data>
   <data name="Pipe_FirstReading" xml:space="preserve"><value>Первое чтение</value></data>

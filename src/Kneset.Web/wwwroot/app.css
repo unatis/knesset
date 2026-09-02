@@ -1320,6 +1320,60 @@ h1:focus {
     text-decoration: none;
 }
 
+/* --- Текст документа ----------------------------------------------------
+   Извлечённый текст — производная, а не первоисточник, поэтому он свёрнут
+   и подписан. Ссылка на файл остаётся рядом в любом случае. */
+
+.kt-doc-text {
+    flex-basis: 100%;
+}
+
+.kt-doc-text > summary {
+    cursor: pointer;
+    font-size: 0.8125rem;
+    color: var(--kt-char-600, #555);
+}
+
+.kt-doc-text-note {
+    font-size: 0.75rem;
+    color: var(--kt-char-600, #555);
+    margin-block: 0.4rem 0.3rem;
+}
+
+/* Текст на иврите при любом языке интерфейса: направление и язык заданы
+   в разметке, здесь только вид. pre-wrap сохраняет абзацы и табуляции,
+   которые несёт извлечённый текст, но переносит длинные строки. */
+.kt-doc-text-body {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    max-height: 22rem;
+    overflow-y: auto;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-sm, 6px);
+    background: var(--kt-char-25, #fafafa);
+}
+
+.kt-doc-text-more {
+    display: inline-block;
+    margin-block-start: 0.4rem;
+    font-size: 0.8125rem;
+}
+
+/* Отдельная страница полного текста: ограничения по высоте не нужны —
+   там текст и есть содержимое страницы. */
+.kt-doc-page {
+    max-width: 70ch;
+    margin-inline: auto;
+}
+
+.kt-doc-text-full {
+    max-height: none;
+    overflow-y: visible;
+}
+
 /* --- Дорога законопроекта ----------------------------------------------
    Стрелки-шевроны, как на сайте Кнессета: пройденное, текущее и предстоящее
    различаются цветом, а форма показывает направление движения.

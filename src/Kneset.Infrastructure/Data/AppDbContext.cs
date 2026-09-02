@@ -22,6 +22,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<BillAnalysis> BillAnalyses => Set<BillAnalysis>();
     public DbSet<BillSession> BillSessions => Set<BillSession>();
     public DbSet<BillDocument> BillDocuments => Set<BillDocument>();
+    public DbSet<BillDocumentText> BillDocumentTexts => Set<BillDocumentText>();
     public DbSet<Committee> Committees => Set<Committee>();
     public DbSet<BillTitle> BillTitles => Set<BillTitle>();
     public DbSet<SyncLog> SyncLogs => Set<SyncLog>();
@@ -109,6 +110,23 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             d.HasIndex(x => new { x.BillId, x.KnessetDocumentId, x.Format }).IsUnique();
             d.HasOne(x => x.Bill).WithMany(b => b.Documents)
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<BillDocumentText>(t =>
+        {
+            // Один текст на документ. Переразбор обновляет строку, а не
+            // добавляет новую: история текста не нужна, нужен актуальный.
+            t.HasIndex(x => x.BillDocumentId).IsUnique();
+            // Обходчик спрашивает «что ещё не разобрано» — индекс по статусу
+            // и версии парсера делает этот запрос дешёвым.
+            t.HasIndex(x => new { x.Status, x.ExtractorVersion });
+            t.Property(x => x.ExtractorVersion).HasMaxLength(50);
+            t.Property(x => x.SourceHash).HasMaxLength(64);
+            t.Property(x => x.Status).HasMaxLength(20);
+            t.Property(x => x.Error).HasMaxLength(500);
+            t.HasOne(x => x.BillDocument).WithOne(d => d.ExtractedText)
+             .HasForeignKey<BillDocumentText>(x => x.BillDocumentId)
+             .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<BillAnalysis>(a =>

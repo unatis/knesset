@@ -596,6 +596,11 @@
   <data name="Filter_ClearAll" xml:space="preserve"><value>Clear all</value></data>
   <data name="Bill_Documents" xml:space="preserve"><value>Bill documents</value></data>
   <data name="Bill_Document" xml:space="preserve"><value>Document</value></data>
+  <data name="Bill_DocText" xml:space="preserve"><value>Document text</value></data>
+  <data name="Bill_DocTextMachine" xml:space="preserve"><value>Extracted from the file automatically. The file itself is the authoritative source.</value></data>
+  <data name="Bill_DocTextFull" xml:space="preserve"><value>Show full text</value></data>
+  <data name="Bill_DocTextSource" xml:space="preserve"><value>Open the original</value></data>
+  <data name="Bill_DocTextNone" xml:space="preserve"><value>Text unavailable: the document contains only a page image.</value></data>
   <data name="Pipe_Preliminary" xml:space="preserve"><value>Preliminary reading</value></data>
   <data name="Pipe_FirstPrep" xml:space="preserve"><value>Preparing for first reading</value></data>
   <data name="Pipe_FirstReading" xml:space="preserve"><value>First reading</value></data>

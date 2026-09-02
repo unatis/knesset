@@ -130,6 +130,11 @@ if (builder.Configuration.GetValue("Sync:Enabled", true))
     builder.Services.AddHostedService<KnessetSyncService>();
 }
 
+// Документы в текст. Выключено по умолчанию: разовый проход по корпусу —
+// это несколько часов и 11.5 тысяч запросов к Кнессету, он не должен
+// стартовать сам при каждом подъёме приложения.
+builder.Services.AddHostedService<DocumentTextService>();
+
 // AI-анализ: провайдер выбирается конфигом. "Stub" — демо-данные без API-ключа;
 // "Claude" будет добавлен на позднем этапе (ClaudeBillAnalyzer + Anthropic SDK).
 var aiProvider = builder.Configuration["Ai:Provider"] ?? "Stub";
@@ -233,6 +238,444 @@ app.MapGet("/healthz", () => Results.Text("ok"));
 // Только в Development — в проде маршрут не регистрируется.
 if (app.Environment.IsDevelopment())
 {
+    // Статистика по документам законопроектов — оценить объём работы по
+    // превращению их в текст и переводу.
+    // Сколько места занято в базе. На бесплатном тарифе Supabase лимит 500 МБ,
+    // и от остатка зависит, можно ли хранить извлечённые тексты документов.
+    // Зонд по документам: что на самом деле лежит по ссылкам. Метка Format
+    // у Кнессета ненадёжна — «DOC» может оказаться и Word 97, и RTF, и docx,
+    // а от этого зависит выбор парсера. Смотрим сигнатуру, а не метку.
+    // Пробное извлечение текста: скачивает выборку и разбирает её,
+    // показывая объём и порядок символов в иврите. Нужно, чтобы решить,
+    // из какого формата разбирать и годится ли PDF вообще.
+    // Переразбор конкретных документов по KnessetDocumentId. Нужен, чтобы
+    // проверять правку разбора на тех самых файлах, где нашёлся дефект,
+    // а не на случайной выборке. Ничего не сохраняет.
+    // Вход для AI-анализа: то же, что получил бы BillAnalysisRequest.
+    // Нужен, чтобы сравнивать провайдеров на строго одинаковых данных,
+    // а не на том, что каждый скрипт собрал по-своему.
+    app.MapGet("/dev/analysis-input", async (
+        int take, int minChars, int maxChars,
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        int[] influenceStages = [108, 113, 150, 111, 114, 130, 141];
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        var descs = await db.Bills
+            .Where(b => b.StatusId != null && influenceStages.Contains(b.StatusId.Value))
+            .Select(b => b.StatusDesc).Distinct().ToListAsync(ct);
+
+        // Берём законопроекты окна влияния, у которых текст умещается
+        // целиком: сравнение моделей не должно упираться в то, что одной
+        // достался обрезанный документ. Порядок детерминированный —
+        // выборка должна воспроизводиться.
+        var rows = await db.Bills
+            .Where(b => descs.Contains(b.StatusDesc))
+            .Select(b => new
+            {
+                b.Id,
+                b.KnessetBillId,
+                b.Name,
+                b.SubTypeDesc,
+                b.StatusDesc,
+                b.KnessetNum,
+                b.SummaryLaw,
+                committee = b.Committee != null ? b.Committee.Name : null,
+                initiators = b.Initiators
+                    .Where(i => i.Person != null)
+                    .Select(i => i.Person!.FirstName + " " + i.Person!.LastName)
+                    .Take(10).ToList(),
+                // Предпочитаем docx: логический порядок против
+                // восстановленного по координатам глифов.
+                doc = b.Documents
+                    .Where(d => d.ExtractedText != null && d.ExtractedText.Status == "ok")
+                    .OrderBy(d => d.Format == "DOC" ? 0 : 1)
+                    .Select(d => new
+                    {
+                        d.Id,
+                        d.GroupTypeDesc,
+                        d.Format,
+                        text = d.ExtractedText!.Text,
+                        chars = d.ExtractedText!.CharCount,
+                    })
+                    .FirstOrDefault(),
+            })
+            .Where(x => x.doc != null && x.doc.chars >= minChars && x.doc.chars <= maxChars)
+            .OrderBy(x => x.KnessetBillId)
+            .Take(take)
+            .ToListAsync(ct);
+
+        return Results.Json(rows);
+    });
+
+    app.MapGet("/dev/reextract", async (
+        string ids, IDbContextFactory<AppDbContext> factory,
+        IHttpClientFactory httpFactory, CancellationToken ct) =>
+    {
+        var wanted = ids.Split(',').Select(int.Parse).ToList();
+
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var docs = await db.BillDocuments
+            .Where(d => wanted.Contains(d.KnessetDocumentId))
+            .ToListAsync(ct);
+
+        var http = httpFactory.CreateClient();
+        http.Timeout = TimeSpan.FromSeconds(120);
+
+        var results = new List<object>();
+        foreach (var d in docs)
+        {
+            var bytes = await http.GetByteArrayAsync(d.Url, ct);
+            var r = Kneset.Infrastructure.Documents.DocumentTextExtractor.Extract(bytes);
+            var (forward, reversed) = Kneset.Infrastructure.Documents
+                .DocumentTextExtractor.HebrewOrder(r.Text);
+
+            var revAt = r.Text.IndexOf("קוח תעצה", StringComparison.Ordinal);
+            results.Add(new
+            {
+                d.KnessetDocumentId, d.Format, d.GroupTypeDesc,
+                chars = r.CharCount,
+                forward, reversed,
+                around = revAt >= 0
+                    ? r.Text.Substring(Math.Max(0, revAt - 90),
+                        Math.Min(200, r.Text.Length - Math.Max(0, revAt - 90)))
+                    : r.Text[..Math.Min(160, r.Text.Length)],
+            });
+        }
+
+        return Results.Json(results);
+    });
+
+    app.MapGet("/dev/docextract", async (
+        int take, IDbContextFactory<AppDbContext> factory,
+        IHttpClientFactory httpFactory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        var groups = await db.BillDocuments
+            .GroupBy(d => new { d.Format, d.GroupTypeDesc })
+            .Select(g => new { g.Key.Format, g.Key.GroupTypeDesc, count = g.Count() })
+            .OrderByDescending(x => x.count)
+            .ToListAsync(ct);
+
+        var sample = new List<BillDocument>();
+        foreach (var g in groups)
+        {
+            if (sample.Count >= take) break;
+            sample.AddRange(await db.BillDocuments
+                .Where(d => d.Format == g.Format && d.GroupTypeDesc == g.GroupTypeDesc)
+                .OrderBy(d => d.KnessetDocumentId)
+                .Take(2).ToListAsync(ct));
+        }
+
+        var http = httpFactory.CreateClient();
+        http.Timeout = TimeSpan.FromSeconds(60);
+
+        var results = new List<object>();
+        foreach (var d in sample.Take(take))
+        {
+            try
+            {
+                var bytes = await http.GetByteArrayAsync(d.Url, ct);
+                var r = Kneset.Infrastructure.Documents.DocumentTextExtractor.Extract(bytes);
+                var (forward, reversed) = Kneset.Infrastructure.Documents
+                    .DocumentTextExtractor.HebrewOrder(r.Text);
+
+                results.Add(new
+                {
+                    d.KnessetDocumentId, d.Format, d.GroupTypeDesc,
+                    bytes = bytes.Length,
+                    kind = r.Kind.ToString(),
+                    chars = r.CharCount,
+                    forward, reversed,
+                    r.Error,
+                    head = r.Text.Length > 0 ? r.Text[..Math.Min(160, r.Text.Length)].Replace("\n", " / ") : "",
+                });
+            }
+            catch (Exception ex)
+            {
+                results.Add(new
+                {
+                    d.KnessetDocumentId, d.Format, d.GroupTypeDesc,
+                    error = ex.GetType().Name + ": " + ex.Message,
+                });
+            }
+
+            await Task.Delay(300, ct);
+        }
+
+        return Results.Json(results);
+    });
+
+    app.MapGet("/dev/docprobe", async (
+        int take, IDbContextFactory<AppDbContext> factory,
+        IHttpClientFactory httpFactory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        // Ступенчатая выборка: по два документа на каждую пару формат+тип,
+        // иначе получим сорок одинаковых законопроектов к предварительному чтению.
+        var groups = await db.BillDocuments
+            .GroupBy(d => new { d.Format, d.GroupTypeDesc })
+            .Select(g => new { g.Key.Format, g.Key.GroupTypeDesc, count = g.Count() })
+            .OrderByDescending(x => x.count)
+            .ToListAsync(ct);
+
+        var sample = new List<BillDocument>();
+        foreach (var g in groups)
+        {
+            if (sample.Count >= take) break;
+            sample.AddRange(await db.BillDocuments
+                .Where(d => d.Format == g.Format && d.GroupTypeDesc == g.GroupTypeDesc)
+                .OrderBy(d => d.KnessetDocumentId)
+                .Take(2).ToListAsync(ct));
+        }
+
+        var http = httpFactory.CreateClient();
+        http.Timeout = TimeSpan.FromSeconds(60);
+
+        var results = new List<object>();
+        foreach (var d in sample.Take(take))
+        {
+            try
+            {
+                using var resp = await http.GetAsync(d.Url, ct);
+                var bytes = resp.IsSuccessStatusCode
+                    ? await resp.Content.ReadAsByteArrayAsync(ct)
+                    : Array.Empty<byte>();
+                results.Add(new
+                {
+                    d.KnessetDocumentId, d.Format, d.GroupTypeDesc,
+                    status = (int)resp.StatusCode,
+                    contentType = resp.Content.Headers.ContentType?.ToString(),
+                    length = bytes.Length,
+                    head = Convert.ToHexString(bytes.Take(8).ToArray()),
+                    kind = Sniff(bytes),
+                });
+            }
+            catch (Exception ex)
+            {
+                results.Add(new
+                {
+                    d.KnessetDocumentId, d.Format, d.GroupTypeDesc,
+                    error = ex.GetType().Name,
+                });
+            }
+
+            // Вежливость к серверу Кнессета: не долбим его подряд.
+            await Task.Delay(300, ct);
+        }
+
+        return Results.Json(results);
+
+        static string Sniff(byte[] b) =>
+            b.Length < 8 ? "пусто"
+            : b[0] == 0xD0 && b[1] == 0xCF ? "OLE2 — Word 97 .doc"
+            : b[0] == 0x50 && b[1] == 0x4B ? "ZIP — .docx/.xlsx/.pptx"
+            : b[0] == 0x25 && b[1] == 0x50 ? "PDF"
+            : b[0] == 0x7B && b[1] == 0x5C ? "RTF"
+            : b[0] == 0xFF && b[1] == 0xD8 ? "JPEG"
+            : "неизвестно";
+    });
+
+    app.MapGet("/dev/dbsize", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var conn = db.Database.GetDbConnection();
+        await conn.OpenAsync(ct);
+
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            SELECT 'ВСЕГО' AS name, pg_database_size(current_database()) AS bytes
+            UNION ALL
+            SELECT relname, pg_total_relation_size(c.oid)
+            FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+            WHERE n.nspname = 'public' AND c.relkind = 'r'
+            ORDER BY bytes DESC
+            """;
+
+        var rows = new List<object>();
+        await using var reader = await cmd.ExecuteReaderAsync(ct);
+        while (await reader.ReadAsync(ct))
+            rows.Add(new { name = reader.GetString(0), bytes = reader.GetInt64(1) });
+
+        return Results.Json(rows);
+    });
+
+    app.MapGet("/dev/docstats", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        int[] influenceStages = [108, 113, 150, 111, 114, 130, 141];
+        var influenceDescs = await db.Bills
+            .Where(b => b.StatusId != null && influenceStages.Contains(b.StatusId.Value))
+            .Select(b => b.StatusDesc).Distinct().ToListAsync(ct);
+
+        var byFormat = await db.BillDocuments
+            .GroupBy(d => new { d.Format, d.GroupTypeDesc })
+            .Select(g => new { g.Key.Format, g.Key.GroupTypeDesc, count = g.Count() })
+            .OrderByDescending(x => x.count)
+            .ToListAsync(ct);
+
+        return Results.Json(new
+        {
+            bills = await db.Bills.CountAsync(ct),
+            documents = await db.BillDocuments.CountAsync(ct),
+            billsWithDocs = await db.BillDocuments.Select(d => d.BillId).Distinct().CountAsync(ct),
+            byFormat,
+            // Метка DOC на практике означает .docx, а из него иврит
+            // извлекается логическим порядком. Отсюда вопрос: у скольких
+            // законопроектов вообще есть docx, а сколько остаются с одним PDF.
+            withDocx = await db.BillDocuments.Where(d => d.Format == "DOC")
+                .Select(d => d.BillId).Distinct().CountAsync(ct),
+            pdfOnly = await db.BillDocuments.Where(d => d.Format == "PDF")
+                .Select(d => d.BillId).Distinct()
+                .Except(db.BillDocuments.Where(d => d.Format == "DOC").Select(d => d.BillId).Distinct())
+                .CountAsync(ct),
+            // То же в разрезе окна влияния — там перевод и анализ нужны в первую очередь.
+            windowWithDocx = await db.BillDocuments
+                .Where(d => d.Format == "DOC" && influenceDescs.Contains(d.Bill.StatusDesc))
+                .Select(d => d.BillId).Distinct().CountAsync(ct),
+            // Сколько PDF без docx-двойника вообще отбирается — проверка того,
+            // что условие отбора переводится в SQL, а не отсекает всё молча.
+            pdfWithoutDocx = await db.BillDocuments
+                .Where(d => d.Format == "PDF")
+                .Where(d => !db.BillDocuments
+                    .Where(x => x.Format == "DOC")
+                    .Any(x => x.BillId == d.BillId && x.GroupTypeDesc == d.GroupTypeDesc))
+                .CountAsync(ct),
+            pdfDone = await db.BillDocumentTexts
+                .CountAsync(t => t.ExtractorVersion == "pdfbidi-v1", ct),
+            // Отработала ли правка с табуляциями: до неё InnerText их выбрасывал.
+            byVersion = await db.BillDocumentTexts
+                .GroupBy(t => t.ExtractorVersion)
+                .Select(g => new
+                {
+                    version = g.Key,
+                    count = g.Count(),
+                    withTabs = g.Count(x => x.Text.Contains("\t")),
+                    glued = g.Count(x => x.Text.Contains("חבר הכנסתג")),
+                })
+                .ToListAsync(ct),
+            // Какие именно документы вышли наизнанку — чтобы чинить причину,
+            // а не догадку о ней.
+            reversedDocs = await db.BillDocumentTexts
+                .Where(t => t.Text.Contains("קוח תעצה"))
+                .Select(t => new
+                {
+                    t.BillDocumentId,
+                    doc = t.BillDocument.KnessetDocumentId,
+                    t.BillDocument.Format,
+                    t.BillDocument.GroupTypeDesc,
+                    t.CharCount,
+                    t.SourceBytes,
+                    t.BillDocument.Url,
+                    head = t.Text.Substring(0, 120),
+                    // Соотношение прямых и обратных вхождений отвечает на вопрос,
+                    // сломан документ целиком или это единичный фрагмент.
+                    revAt = t.Text.IndexOf("קוח תעצה"),
+                    fwdAt = t.Text.IndexOf("הצעת חוק"),
+                    around = t.Text.Substring(
+                        Math.Max(0, t.Text.IndexOf("קוח תעצה") - 90), 200),
+                })
+                .ToListAsync(ct),
+            // Символы нулевой ширины в извлечённом тексте: они не управляющие,
+            // поэтому чистку прошли, но стоят там, где должен быть пробел.
+            withZeroWidth = await db.BillDocumentTexts
+                .CountAsync(t => t.Text.Contains("\uFEFF"), ct),
+            withZeroWidthDocx = await db.BillDocumentTexts
+                .CountAsync(t => t.Text.Contains("\uFEFF")
+                    && t.ExtractorVersion.StartsWith("openxml"), ct),
+            withZeroWidthPdf = await db.BillDocumentTexts
+                .CountAsync(t => t.Text.Contains("\uFEFF")
+                    && t.ExtractorVersion.StartsWith("pdfbidi"), ct),
+            // Контроль качества: сохранился ли иврит логическим порядком.
+            // Ищем фразу «הצעת חוק» и её обращение — если извлечение
+            // перевернуло строку, найдётся второе, а не первое.
+            hebrewForward = await db.BillDocumentTexts
+                .CountAsync(t => t.Text.Contains("הצעת חוק"), ct),
+            hebrewReversed = await db.BillDocumentTexts
+                .CountAsync(t => t.Text.Contains("קוח תעצה"), ct),
+            sample = await db.BillDocumentTexts
+                .Where(t => t.Status == "ok")
+                .OrderBy(t => t.Id).Take(3)
+                .Select(t => t.Text.Substring(0, 150))
+                .ToListAsync(ct),
+            // Законопроекты окна влияния без единого файла: свежие они
+            // (Кнессет ещё не опубликовал) или старые (пробел синхронизации)?
+            noDocsBills = await db.Bills
+                .Where(b => influenceDescs.Contains(b.StatusDesc) && !b.Documents.Any())
+                .OrderBy(b => b.LastUpdatedDate)
+                .Select(b => new
+                {
+                    b.KnessetBillId,
+                    b.KnessetNum,
+                    b.StatusDesc,
+                    b.PublicationDate,
+                    b.LastUpdatedDate,
+                    b.FirstSeenAt,
+                    name = b.Name.Substring(0, Math.Min(60, b.Name.Length)),
+                })
+                .ToListAsync(ct),
+
+            // Водяной знак синхронизации документов — с какого момента
+            // мы вообще их забирали.
+            docSyncLog = await db.SyncLogs
+                .Where(l => l.EntityName.Contains("Document"))
+                .OrderByDescending(l => l.StartedUtc)
+                .Select(l => new { l.EntityName, l.StartedUtc, l.FinishedUtc, l.RecordsUpserted, l.Error })
+                .Take(5)
+                .ToListAsync(ct),
+
+            // Покрытие в разрезе ЗАКОНОПРОЕКТОВ, а не документов: у закона
+            // может быть пять файлов, и важно, есть ли текст хотя бы у одного.
+            billsTotal = await db.Bills.CountAsync(ct),
+            billsWithText = await db.Bills.CountAsync(b =>
+                b.Documents.Any(d => d.ExtractedText != null && d.ExtractedText.Status == "ok"), ct),
+            billsNoDocs = await db.Bills.CountAsync(b => !b.Documents.Any(), ct),
+            billsDocsNoText = await db.Bills.CountAsync(b =>
+                b.Documents.Any()
+                && !b.Documents.Any(d => d.ExtractedText != null && d.ExtractedText.Status == "ok"), ct),
+
+            // То же по окну влияния.
+            windowTotal = await db.Bills.CountAsync(b => influenceDescs.Contains(b.StatusDesc), ct),
+            windowWithText = await db.Bills.CountAsync(b =>
+                influenceDescs.Contains(b.StatusDesc)
+                && b.Documents.Any(d => d.ExtractedText != null && d.ExtractedText.Status == "ok"), ct),
+            windowNoDocs = await db.Bills.CountAsync(b =>
+                influenceDescs.Contains(b.StatusDesc) && !b.Documents.Any(), ct),
+            windowDocsNoText = await db.Bills.CountAsync(b =>
+                influenceDescs.Contains(b.StatusDesc) && b.Documents.Any()
+                && !b.Documents.Any(d => d.ExtractedText != null && d.ExtractedText.Status == "ok"), ct),
+
+            // Ход извлечения текста: по статусам и сколько символов уже лежит.
+            extraction = await db.BillDocumentTexts
+                .GroupBy(t => t.Status)
+                .Select(g => new { status = g.Key, count = g.Count(), chars = g.Sum(x => (long)x.CharCount) })
+                .ToListAsync(ct),
+            docsTotal = await db.BillDocuments.CountAsync(d => d.Format == "DOC", ct),
+            docsDone = await db.BillDocuments
+                .CountAsync(d => d.Format == "DOC" && d.ExtractedText != null, ct),
+            windowPdfOnly = await db.BillDocuments
+                .Where(d => d.Format == "PDF" && influenceDescs.Contains(d.Bill.StatusDesc))
+                .Select(d => d.BillId).Distinct()
+                .Except(db.BillDocuments.Where(d => d.Format == "DOC").Select(d => d.BillId).Distinct())
+                .CountAsync(ct),
+            // DOC и PDF часто один и тот же текст: уникальным считаем
+            // пару (законопроект, тип документа).
+            uniqueTexts = await db.BillDocuments
+                .Select(d => new { d.BillId, d.GroupTypeDesc })
+                .Distinct().CountAsync(ct),
+            // Сколько из них попадает в окно влияния.
+            inWindow = await db.BillDocuments
+                .Where(d => influenceDescs.Contains(d.Bill.StatusDesc))
+                .Select(d => new { d.BillId, d.GroupTypeDesc })
+                .Distinct().CountAsync(ct),
+        });
+    });
+
     app.MapGet("/dev/untranslated", async (
         string lang, int take, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
     {

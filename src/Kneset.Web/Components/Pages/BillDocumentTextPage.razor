@@ -1,0 +1,84 @@
+@page "/bills/{BillId:int}/text/{DocId:int}"
+@using Kneset.Core.Entities
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+
+@* Полный текст одного документа отдельной страницей.
+   На странице закона показывается только превью: у документов комиссионных
+   стадий текст доходит до двухсот тысяч символов, и отдавать такое в разметку
+   вместе со всем остальным содержимым страницы нельзя. Здесь страница пустая
+   и грузится один текст — это единственное её назначение.
+
+   Рендер серверный, без InteractiveServer: страница статична, интерактивность
+   ей не нужна, а цепь Blazor на двести тысяч символов — лишняя нагрузка. *@
+
+<PageTitle>@(_groupType ?? L["Bill_DocText"].Value)</PageTitle>
+
+@if (_missing)
+{
+    <p class="text-muted">@L["Bill_DocTextNone"]</p>
+}
+else if (_text is null)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else
+{
+    <div class="kt-doc-page">
+        <p class="mb-1">
+            <a href="/bills/@BillId">← @L["Nav_Bills"]</a>
+        </p>
+
+        <h1 class="h4" dir="rtl" lang="he">@_groupType</h1>
+
+        <p class="kt-doc-text-note">
+            @L["Bill_DocTextMachine"]
+            @if (_url is not null)
+            {
+                <a href="@_url" target="_blank" rel="noopener">@L["Bill_DocTextSource"]</a>
+            }
+        </p>
+
+        <div class="kt-doc-text-body kt-doc-text-full" dir="rtl" lang="he">@_text</div>
+    </div>
+}
+
+@code {
+    [Parameter] public int BillId { get; set; }
+
+    /// <summary>Идентификатор документа в нашей базе (BillDocuments.Id).</summary>
+    [Parameter] public int DocId { get; set; }
+
+    private string? _text;
+    private string? _groupType;
+    private string? _url;
+    private bool _missing;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        // Сверяем и закон, и документ: ссылка с чужим BillId не должна
+        // показывать текст, а то получится обход структуры страниц.
+        var row = await db.BillDocumentTexts.AsNoTracking()
+            .Where(t => t.BillDocumentId == DocId && t.BillDocument.BillId == BillId)
+            .Select(t => new
+            {
+                t.Text,
+                t.Status,
+                t.BillDocument.GroupTypeDesc,
+                t.BillDocument.Url,
+            })
+            .FirstOrDefaultAsync();
+
+        if (row is null || row.Status != "ok")
+        {
+            _missing = true;
+            return;
+        }
+
+        _text = row.Text;
+        _groupType = row.GroupTypeDesc;
+        _url = row.Url;
+    }
+}
