@@ -32,6 +32,16 @@ public record BillAnalysisResult
     [JsonPropertyName("arguments_against")]
     public List<AnalysisPoint> ArgumentsAgainst { get; init; } = [];
 
+    /// <summary>
+    /// Разбор затронутых прав человека. Обязательное поле, а не дополнение:
+    /// закон почти всегда что-то ограничивает в пользу чего-то другого,
+    /// и это главное, что гражданину нужно понять. Замер показал, что без
+    /// отдельного поля тема всплывает случайно — одна модель затрагивала
+    /// права во всех одиннадцати разборах, другая в двух.
+    /// </summary>
+    [JsonPropertyName("rights_impact")]
+    public RightsImpact? RightsImpact { get; init; }
+
     /// <summary>Вопросы, на которые текст инициативы не даёт ответа.</summary>
     [JsonPropertyName("open_questions")]
     public List<string> OpenQuestions { get; init; } = [];
@@ -61,6 +71,65 @@ public record AnalysisPoint
     /// <summary>Уверенность 0..1.</summary>
     [JsonPropertyName("confidence")]
     public double? Confidence { get; init; }
+}
+
+/// <summary>
+/// Как законопроект соотносится с правами человека. Структура повторяет
+/// проверку из статьи 8 Основного закона о достоинстве человека и его свободе
+/// («оговорка об ограничении»): какое право затронуто, ради какой достойной
+/// цели и не чрезмерно ли.
+/// </summary>
+public record RightsImpact
+{
+    /// <summary>Затронутые права — с указанием обладателя каждого.</summary>
+    [JsonPropertyName("affected_rights")]
+    public List<RightImpact> AffectedRights { get; init; } = [];
+
+    /// <summary>
+    /// Заявленная цель ограничения — как она сформулирована в документе,
+    /// а не в пересказе.
+    /// </summary>
+    [JsonPropertyName("stated_purpose")]
+    public string? StatedPurpose { get; init; }
+
+    /// <summary>
+    /// Проверка на пропорциональность по тексту документа: рациональная связь
+    /// с целью, наименее ущемляющее средство, перевешивает ли выигрыш вред.
+    /// Если оснований для проверки в документе нет — kind должен быть
+    /// insufficient_data, а не вывод о соразмерности.
+    /// </summary>
+    [JsonPropertyName("proportionality")]
+    public AnalysisPoint? Proportionality { get; init; }
+}
+
+/// <summary>Одно затронутое право.</summary>
+public record RightImpact
+{
+    /// <summary>Какое право: достоинство, частная жизнь, свобода занятия…</summary>
+    [JsonPropertyName("right")]
+    public string Right { get; init; } = "";
+
+    /// <summary>
+    /// Чьё право. Обязательно: одна и та же мера обычно защищает право одного
+    /// и ограничивает право другого, а нередко задевает и того, кого защищает.
+    /// </summary>
+    [JsonPropertyName("holder")]
+    public string Holder { get; init; } = "";
+
+    /// <summary>Что с ним происходит: restricts | protects | expands.</summary>
+    [JsonPropertyName("effect")]
+    public string Effect { get; init; } = "";
+
+    /// <summary>Правовое основание: Основной закон и статья, судебный прецедент.</summary>
+    [JsonPropertyName("basis")]
+    public string? Basis { get; init; }
+
+    /// <summary>Тип утверждения — тот же набор, что у AnalysisPoint.</summary>
+    [JsonPropertyName("kind")]
+    public string Kind { get; init; } = "inference";
+
+    [JsonPropertyName("source_ref")]
+    public string? SourceRef { get; init; }
 }
 
 public record FinancialImpact
