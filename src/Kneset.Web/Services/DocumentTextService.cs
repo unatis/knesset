@@ -33,6 +33,9 @@ public class DocumentTextService(
 {
     private const string EntityName = "BillDocumentTexts";
 
+    /// <summary>Порог размера исходного файла: больше — не разбираем.</summary>
+    private const int MaxSourceBytes = 25 * 1024 * 1024;
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         if (!config.GetValue("Documents:Extract:Enabled", false))
@@ -84,7 +87,18 @@ public class DocumentTextService(
             logger.LogError(ex, "Извлечение текста документов прервано");
         }
 
-        await db.SaveChangesAsync(CancellationToken.None);
+        // Закрытие журнала — вне try выше, поэтому со своей защитой:
+        // необработанное исключение в фоновом сервисе останавливает весь
+        // хост, а падать из-за неудачной записи в журнал незачем.
+        try
+        {
+            await db.SaveChangesAsync(CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Не удалось закрыть журнал прохода");
+        }
+
         logger.LogInformation("Текст документов: проход завершён, разобрано {Processed}", processed);
     }
 
@@ -148,97 +162,79 @@ public class DocumentTextService(
         var http = httpFactory.CreateClient();
         http.Timeout = TimeSpan.FromSeconds(90);
 
-        // Сначала скачиваем и разбираем всё в память, и только потом пишем.
-        // Так неудачная запись не смешивается с сетевой работой и её можно
-        // повторить по одному документу.
-        var rows = new List<BillDocumentText>(batch.Count);
+        // Пишем каждый документ сразу после разбора, а не всю партию в конце.
+        // Накопление пятидесяти текстов в памяти уронило процесс на PDF-части
+        // прохода: среди документов комиссионных стадий попадаются очень
+        // большие, и партия целиком в памяти оказалась слишком дорогой.
+        // Один запрос на документ — это лишние минуты на весь корпус,
+        // но зато предсказуемый расход памяти.
         foreach (var doc in batch)
         {
-            rows.Add(Extract(await FetchAsync(http, doc.Url, ct), doc.Id));
+            var row = Extract(await FetchAsync(http, doc.Url, ct), doc.Id);
+
+            try
+            {
+                await SaveAsync(row, ct);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                // Не записывается сам текст — сохраняем хотя бы отметку
+                // о неудаче, иначе документ будет возвращаться в очередь
+                // при каждом проходе.
+                logger.LogWarning(ex, "Документ {Id} не записался, помечаю ошибкой", doc.Id);
+                row.Text = "";
+                row.CharCount = 0;
+                row.Status = "error";
+                row.Error = ex.GetType().Name;
+                await SaveAsync(row, ct);
+            }
 
             // Вежливость к серверу Кнессета: пятнадцать тысяч файлов —
             // это не повод выгружать их залпом.
             if (delayMs > 0) await Task.Delay(delayMs, ct);
         }
 
-        try
-        {
-            await SaveAsync(rows, ct);
-        }
-        catch (Exception ex) when (ex is not OperationCanceledException)
-        {
-            // Партией не прошло — сохраняем по одному, чтобы негодный документ
-            // не тянул за собой остальные сорок девять. Раньше такая партия
-            // валила весь проход: один нулевой байт в тексте из PDF, и Postgres
-            // отвергал весь запрос целиком.
-            logger.LogWarning(ex,
-                "Партия не записалась целиком, сохраняю по одному документу");
-
-            foreach (var row in rows)
-            {
-                try
-                {
-                    await SaveAsync([row], ct);
-                }
-                catch (Exception single) when (single is not OperationCanceledException)
-                {
-                    // Не записывается сам текст — сохраняем хотя бы отметку
-                    // о неудаче, иначе документ будет возвращаться в очередь
-                    // при каждом проходе.
-                    row.Text = "";
-                    row.CharCount = 0;
-                    row.Status = "error";
-                    row.Error = single.GetType().Name;
-                    await SaveAsync([row], ct);
-                }
-            }
-        }
-
         return batch.Count;
     }
 
     /// <summary>
-    /// Запись результатов: обновляет существующие строки и добавляет новые.
-    /// Свой контекст на вызов — после неудачного SaveChanges трекер остаётся
-    /// в подвешенном состоянии, и повторять запись в том же контексте нельзя.
+    /// Запись одного результата: обновляет существующую строку или добавляет
+    /// новую. Свой контекст на вызов — после неудачного SaveChanges трекер
+    /// остаётся в подвешенном состоянии, и повторять запись в том же
+    /// контексте нельзя.
     /// </summary>
-    private async Task SaveAsync(IReadOnlyList<BillDocumentText> rows, CancellationToken ct)
+    private async Task SaveAsync(BillDocumentText row, CancellationToken ct)
     {
         await using var db = await dbFactory.CreateDbContextAsync(ct);
 
-        var ids = rows.Select(r => r.BillDocumentId).ToList();
-        var existing = await db.BillDocumentTexts
-            .Where(t => ids.Contains(t.BillDocumentId))
-            .ToDictionaryAsync(t => t.BillDocumentId, ct);
+        var prev = await db.BillDocumentTexts
+            .FirstOrDefaultAsync(t => t.BillDocumentId == row.BillDocumentId, ct);
 
-        foreach (var row in rows)
+        if (prev is null)
         {
-            if (existing.TryGetValue(row.BillDocumentId, out var prev))
+            db.BillDocumentTexts.Add(new BillDocumentText
             {
-                prev.Text = row.Text;
-                prev.CharCount = row.CharCount;
-                prev.ExtractorVersion = row.ExtractorVersion;
-                prev.SourceHash = row.SourceHash;
-                prev.SourceBytes = row.SourceBytes;
-                prev.ExtractedAt = row.ExtractedAt;
-                prev.Status = row.Status;
-                prev.Error = row.Error;
-            }
-            else
-            {
-                db.BillDocumentTexts.Add(new BillDocumentText
-                {
-                    BillDocumentId = row.BillDocumentId,
-                    Text = row.Text,
-                    CharCount = row.CharCount,
-                    ExtractorVersion = row.ExtractorVersion,
-                    SourceHash = row.SourceHash,
-                    SourceBytes = row.SourceBytes,
-                    ExtractedAt = row.ExtractedAt,
-                    Status = row.Status,
-                    Error = row.Error,
-                });
-            }
+                BillDocumentId = row.BillDocumentId,
+                Text = row.Text,
+                CharCount = row.CharCount,
+                ExtractorVersion = row.ExtractorVersion,
+                SourceHash = row.SourceHash,
+                SourceBytes = row.SourceBytes,
+                ExtractedAt = row.ExtractedAt,
+                Status = row.Status,
+                Error = row.Error,
+            });
+        }
+        else
+        {
+            prev.Text = row.Text;
+            prev.CharCount = row.CharCount;
+            prev.ExtractorVersion = row.ExtractorVersion;
+            prev.SourceHash = row.SourceHash;
+            prev.SourceBytes = row.SourceBytes;
+            prev.ExtractedAt = row.ExtractedAt;
+            prev.Status = row.Status;
+            prev.Error = row.Error;
         }
 
         await db.SaveChangesAsync(ct);
@@ -278,6 +274,17 @@ public class DocumentTextService(
 
         row.SourceBytes = bytes.Length;
         row.SourceHash = Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant();
+
+        // Предохранитель по размеру: разбор PDF держит в памяти и документ,
+        // и все его глифы, поэтому один гигантский файл способен уронить
+        // процесс. Самый большой в разведке был 3.7 МБ, так что порог
+        // с запасом, но небесконечный.
+        if (bytes.Length > MaxSourceBytes)
+        {
+            row.Status = "unsupported";
+            row.Error = $"файл {bytes.Length / 1048576} МБ больше порога";
+            return row;
+        }
 
         var result = DocumentTextExtractor.Extract(bytes);
         row.ExtractorVersion = DocumentTextExtractor.VersionFor(result.Kind);
