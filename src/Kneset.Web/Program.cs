@@ -251,6 +251,63 @@ if (app.Environment.IsDevelopment())
     // Переразбор конкретных документов по KnessetDocumentId. Нужен, чтобы
     // проверять правку разбора на тех самых файлах, где нашёлся дефект,
     // а не на случайной выборке. Ничего не сохраняет.
+    // Вход для AI-анализа: то же, что получил бы BillAnalysisRequest.
+    // Нужен, чтобы сравнивать провайдеров на строго одинаковых данных,
+    // а не на том, что каждый скрипт собрал по-своему.
+    app.MapGet("/dev/analysis-input", async (
+        int take, int minChars, int maxChars,
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        int[] influenceStages = [108, 113, 150, 111, 114, 130, 141];
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        var descs = await db.Bills
+            .Where(b => b.StatusId != null && influenceStages.Contains(b.StatusId.Value))
+            .Select(b => b.StatusDesc).Distinct().ToListAsync(ct);
+
+        // Берём законопроекты окна влияния, у которых текст умещается
+        // целиком: сравнение моделей не должно упираться в то, что одной
+        // достался обрезанный документ. Порядок детерминированный —
+        // выборка должна воспроизводиться.
+        var rows = await db.Bills
+            .Where(b => descs.Contains(b.StatusDesc))
+            .Select(b => new
+            {
+                b.Id,
+                b.KnessetBillId,
+                b.Name,
+                b.SubTypeDesc,
+                b.StatusDesc,
+                b.KnessetNum,
+                b.SummaryLaw,
+                committee = b.Committee != null ? b.Committee.Name : null,
+                initiators = b.Initiators
+                    .Where(i => i.Person != null)
+                    .Select(i => i.Person!.FirstName + " " + i.Person!.LastName)
+                    .Take(10).ToList(),
+                // Предпочитаем docx: логический порядок против
+                // восстановленного по координатам глифов.
+                doc = b.Documents
+                    .Where(d => d.ExtractedText != null && d.ExtractedText.Status == "ok")
+                    .OrderBy(d => d.Format == "DOC" ? 0 : 1)
+                    .Select(d => new
+                    {
+                        d.Id,
+                        d.GroupTypeDesc,
+                        d.Format,
+                        text = d.ExtractedText!.Text,
+                        chars = d.ExtractedText!.CharCount,
+                    })
+                    .FirstOrDefault(),
+            })
+            .Where(x => x.doc != null && x.doc.chars >= minChars && x.doc.chars <= maxChars)
+            .OrderBy(x => x.KnessetBillId)
+            .Take(take)
+            .ToListAsync(ct);
+
+        return Results.Json(rows);
+    });
+
     app.MapGet("/dev/reextract", async (
         string ids, IDbContextFactory<AppDbContext> factory,
         IHttpClientFactory httpFactory, CancellationToken ct) =>
