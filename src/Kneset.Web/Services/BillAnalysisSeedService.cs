@@ -109,7 +109,11 @@ public class BillAnalysisSeedService(
 
             if (existing.TryGetValue((bill.Id, seed.LanguageCode), out var row))
             {
-                if (row.AnalysisJson == payload && row.ModelVersion == seed.ModelVersion) continue;
+                // Сравниваем версию модели, а не сам JSON: колонка типа jsonb
+                // нормализуется Postgres (порядок ключей, пробелы), поэтому
+                // побайтовое сравнение никогда не совпадёт и загрузчик
+                // перезаписывал бы все записи при каждом старте.
+                if (row.ModelVersion == seed.ModelVersion) continue;
                 refreshed++;
             }
             else

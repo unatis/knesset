@@ -61,6 +61,18 @@ public class AnalysisWorker(
         BillAnalysisResult master;
         if (masterEntity is null)
         {
+            // Текст документа — то, на чём вообще держится разбор: политика
+            // требует ссылок на источник, а без текста ссылаться не на что,
+            // и анализ выходит пересказом названия. Берём docx, если он есть:
+            // там логический порядок, тогда как в PDF он восстановлен
+            // по координатам глифов.
+            var fullText = await db.BillDocumentTexts.AsNoTracking()
+                .Where(t => t.BillDocument.BillId == bill.Id && t.Status == "ok")
+                .OrderBy(t => t.BillDocument.Format == "DOC" ? 0 : 1)
+                .ThenByDescending(t => t.CharCount)
+                .Select(t => t.Text)
+                .FirstOrDefaultAsync(ct);
+
             master = await analyzer.AnalyzeAsync(new BillAnalysisRequest
             {
                 BillId = bill.Id,
@@ -69,6 +81,7 @@ public class AnalysisWorker(
                 StatusDesc = bill.StatusDesc,
                 KnessetNum = bill.KnessetNum,
                 SummaryLaw = bill.SummaryLaw,
+                FullText = fullText,
                 LanguageCode = MasterLang
             }, ct);
 
