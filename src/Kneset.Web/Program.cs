@@ -536,6 +536,53 @@ if (app.Environment.IsDevelopment())
                 .OrderBy(t => t.Id).Take(3)
                 .Select(t => t.Text.Substring(0, 150))
                 .ToListAsync(ct),
+            // Законопроекты окна влияния без единого файла: свежие они
+            // (Кнессет ещё не опубликовал) или старые (пробел синхронизации)?
+            noDocsBills = await db.Bills
+                .Where(b => influenceDescs.Contains(b.StatusDesc) && !b.Documents.Any())
+                .OrderBy(b => b.LastUpdatedDate)
+                .Select(b => new
+                {
+                    b.KnessetBillId,
+                    b.KnessetNum,
+                    b.StatusDesc,
+                    b.PublicationDate,
+                    b.LastUpdatedDate,
+                    b.FirstSeenAt,
+                    name = b.Name.Substring(0, Math.Min(60, b.Name.Length)),
+                })
+                .ToListAsync(ct),
+
+            // Водяной знак синхронизации документов — с какого момента
+            // мы вообще их забирали.
+            docSyncLog = await db.SyncLogs
+                .Where(l => l.EntityName.Contains("Document"))
+                .OrderByDescending(l => l.StartedUtc)
+                .Select(l => new { l.EntityName, l.StartedUtc, l.FinishedUtc, l.RecordsUpserted, l.Error })
+                .Take(5)
+                .ToListAsync(ct),
+
+            // Покрытие в разрезе ЗАКОНОПРОЕКТОВ, а не документов: у закона
+            // может быть пять файлов, и важно, есть ли текст хотя бы у одного.
+            billsTotal = await db.Bills.CountAsync(ct),
+            billsWithText = await db.Bills.CountAsync(b =>
+                b.Documents.Any(d => d.ExtractedText != null && d.ExtractedText.Status == "ok"), ct),
+            billsNoDocs = await db.Bills.CountAsync(b => !b.Documents.Any(), ct),
+            billsDocsNoText = await db.Bills.CountAsync(b =>
+                b.Documents.Any()
+                && !b.Documents.Any(d => d.ExtractedText != null && d.ExtractedText.Status == "ok"), ct),
+
+            // То же по окну влияния.
+            windowTotal = await db.Bills.CountAsync(b => influenceDescs.Contains(b.StatusDesc), ct),
+            windowWithText = await db.Bills.CountAsync(b =>
+                influenceDescs.Contains(b.StatusDesc)
+                && b.Documents.Any(d => d.ExtractedText != null && d.ExtractedText.Status == "ok"), ct),
+            windowNoDocs = await db.Bills.CountAsync(b =>
+                influenceDescs.Contains(b.StatusDesc) && !b.Documents.Any(), ct),
+            windowDocsNoText = await db.Bills.CountAsync(b =>
+                influenceDescs.Contains(b.StatusDesc) && b.Documents.Any()
+                && !b.Documents.Any(d => d.ExtractedText != null && d.ExtractedText.Status == "ok"), ct),
+
             // Ход извлечения текста: по статусам и сколько символов уже лежит.
             extraction = await db.BillDocumentTexts
                 .GroupBy(t => t.Status)
