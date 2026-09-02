@@ -23,7 +23,7 @@ public static class DocumentTextExtractor
     /// тысяч docx, то есть скачать их заново без всякой пользы.
     /// </summary>
     public const string DocxVersion = "openxml-v2";
-    public const string PdfVersion = "pdfbidi-v1";
+    public const string PdfVersion = "pdfbidi-v2";
 
     /// <summary>
     /// Все актуальные версии. Обходчик считает документ разобранным, если
@@ -200,35 +200,68 @@ public static class DocumentTextExtractor
         var sb = new System.Text.StringBuilder();
         foreach (var line in lines)
         {
-            var ordered = rtl
-                ? line.OrderByDescending(l => l.GlyphRectangle.Left).ToList()
-                : line.OrderBy(l => l.GlyphRectangle.Left).ToList();
+            // Направление по странице ненадёжно: в документах
+            // исследовательского центра много латиницы, цифр и ссылок,
+            // иврит не набирает большинства, и страница получала LTR —
+            // что для иврита и означает переворот. Поэтому собираем оба
+            // варианта всегда и берём тот, который читается: считаем частые
+            // служебные слова иврита. Направление страницы остаётся только
+            // решением при равенстве.
+            var straight = BuildLine(line, rtl, avgWidth);
+            var flipped = BuildLine(line, !rtl, avgWidth);
 
-            var text = new System.Text.StringBuilder();
-            for (var i = 0; i < ordered.Count; i++)
-            {
-                if (i > 0)
-                {
-                    // Зазор между соседними глифами в порядке чтения. В PDF
-                    // пробел часто не рисуется вовсе — его выдаёт только
-                    // расстояние. Порог считаем и от средней ширины по
-                    // странице, и от ширины соседних глифов: слишком
-                    // чувствительный порог рвал числа надвое, и «2021»
-                    // превращалось в «1 202».
-                    var prev = ordered[i - 1].GlyphRectangle;
-                    var cur = ordered[i].GlyphRectangle;
-                    var gap = rtl ? prev.Left - cur.Right : cur.Left - prev.Right;
-                    var threshold = Math.Max(avgWidth, Math.Max(prev.Width, cur.Width)) * 0.55;
-                    if (gap > threshold) text.Append(' ');
-                }
-                text.Append(ordered[i].Value);
-            }
+            var candidate = Readability(flipped) > Readability(straight) ? flipped : straight;
 
-            var lineText = rtl ? FixLtrRuns(text.ToString()) : text.ToString();
-            if (lineText.Trim().Length > 0) sb.AppendLine(lineText.TrimEnd());
+            if (candidate.Trim().Length > 0) sb.AppendLine(candidate.TrimEnd());
         }
 
         return sb.ToString().TrimEnd();
+    }
+
+    private static string BuildLine(
+        List<UglyToad.PdfPig.Content.Letter> line, bool rtl, double avgWidth)
+    {
+        var ordered = rtl
+            ? line.OrderByDescending(l => l.GlyphRectangle.Left).ToList()
+            : line.OrderBy(l => l.GlyphRectangle.Left).ToList();
+
+        var text = new System.Text.StringBuilder();
+        for (var i = 0; i < ordered.Count; i++)
+        {
+            if (i > 0)
+            {
+                // Зазор между соседними глифами в порядке чтения. В PDF
+                // пробел часто не рисуется вовсе — его выдаёт только
+                // расстояние. Порог считаем и от средней ширины по
+                // странице, и от ширины соседних глифов: слишком
+                // чувствительный порог рвал числа надвое, и «2021»
+                // превращалось в «1 202».
+                var prev = ordered[i - 1].GlyphRectangle;
+                var cur = ordered[i].GlyphRectangle;
+                var gap = rtl ? prev.Left - cur.Right : cur.Left - prev.Right;
+                var threshold = Math.Max(avgWidth, Math.Max(prev.Width, cur.Width)) * 0.55;
+                if (gap > threshold) text.Append(' ');
+            }
+            text.Append(ordered[i].Value);
+        }
+
+        return rtl ? FixLtrRuns(text.ToString()) : text.ToString();
+    }
+
+    /// <summary>
+    /// Насколько строка похожа на осмысленный иврит. Считаем частые
+    /// служебные слова — они есть почти в любом тексте, а в перевёрнутой
+    /// строке превращаются в несуществующие последовательности.
+    /// Взяты только те, чьё обращение само не является словом.
+    /// </summary>
+    private static readonly string[] HebrewMarkers =
+        ["של", "על", "הוא", "אשר", "הצעת", "משפט", "לפי", "חוק", "אינו", "כאשר"];
+
+    private static int Readability(string text)
+    {
+        var score = 0;
+        foreach (var marker in HebrewMarkers) score += Count(text, marker);
+        return score;
     }
 
     /// <summary>

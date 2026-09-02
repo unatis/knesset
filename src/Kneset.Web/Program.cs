@@ -248,6 +248,47 @@ if (app.Environment.IsDevelopment())
     // Пробное извлечение текста: скачивает выборку и разбирает её,
     // показывая объём и порядок символов в иврите. Нужно, чтобы решить,
     // из какого формата разбирать и годится ли PDF вообще.
+    // Переразбор конкретных документов по KnessetDocumentId. Нужен, чтобы
+    // проверять правку разбора на тех самых файлах, где нашёлся дефект,
+    // а не на случайной выборке. Ничего не сохраняет.
+    app.MapGet("/dev/reextract", async (
+        string ids, IDbContextFactory<AppDbContext> factory,
+        IHttpClientFactory httpFactory, CancellationToken ct) =>
+    {
+        var wanted = ids.Split(',').Select(int.Parse).ToList();
+
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var docs = await db.BillDocuments
+            .Where(d => wanted.Contains(d.KnessetDocumentId))
+            .ToListAsync(ct);
+
+        var http = httpFactory.CreateClient();
+        http.Timeout = TimeSpan.FromSeconds(120);
+
+        var results = new List<object>();
+        foreach (var d in docs)
+        {
+            var bytes = await http.GetByteArrayAsync(d.Url, ct);
+            var r = Kneset.Infrastructure.Documents.DocumentTextExtractor.Extract(bytes);
+            var (forward, reversed) = Kneset.Infrastructure.Documents
+                .DocumentTextExtractor.HebrewOrder(r.Text);
+
+            var revAt = r.Text.IndexOf("קוח תעצה", StringComparison.Ordinal);
+            results.Add(new
+            {
+                d.KnessetDocumentId, d.Format, d.GroupTypeDesc,
+                chars = r.CharCount,
+                forward, reversed,
+                around = revAt >= 0
+                    ? r.Text.Substring(Math.Max(0, revAt - 90),
+                        Math.Min(200, r.Text.Length - Math.Max(0, revAt - 90)))
+                    : r.Text[..Math.Min(160, r.Text.Length)],
+            });
+        }
+
+        return Results.Json(results);
+    });
+
     app.MapGet("/dev/docextract", async (
         int take, IDbContextFactory<AppDbContext> factory,
         IHttpClientFactory httpFactory, CancellationToken ct) =>
@@ -459,6 +500,28 @@ if (app.Environment.IsDevelopment())
                     count = g.Count(),
                     withTabs = g.Count(x => x.Text.Contains("\t")),
                     glued = g.Count(x => x.Text.Contains("חבר הכנסתג")),
+                })
+                .ToListAsync(ct),
+            // Какие именно документы вышли наизнанку — чтобы чинить причину,
+            // а не догадку о ней.
+            reversedDocs = await db.BillDocumentTexts
+                .Where(t => t.Text.Contains("קוח תעצה"))
+                .Select(t => new
+                {
+                    t.BillDocumentId,
+                    doc = t.BillDocument.KnessetDocumentId,
+                    t.BillDocument.Format,
+                    t.BillDocument.GroupTypeDesc,
+                    t.CharCount,
+                    t.SourceBytes,
+                    t.BillDocument.Url,
+                    head = t.Text.Substring(0, 120),
+                    // Соотношение прямых и обратных вхождений отвечает на вопрос,
+                    // сломан документ целиком или это единичный фрагмент.
+                    revAt = t.Text.IndexOf("קוח תעצה"),
+                    fwdAt = t.Text.IndexOf("הצעת חוק"),
+                    around = t.Text.Substring(
+                        Math.Max(0, t.Text.IndexOf("קוח תעצה") - 90), 200),
                 })
                 .ToListAsync(ct),
             // Контроль качества: сохранился ли иврит логическим порядком.
