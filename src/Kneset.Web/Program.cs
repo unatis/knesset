@@ -167,6 +167,11 @@ builder.Services.AddHostedService<ContextSeedService>();
 // названия подготовлены заранее и лежат файлом рядом с кодом.
 builder.Services.AddHostedService<BillTitleSeedService>();
 
+// Готовые AI-анализы на выборке законопроектов — витрина, пока провайдер
+// не подключён. Убрать вместе с файлом Seed/bill-analyses.json, когда
+// анализ начнёт генерироваться сам.
+builder.Services.AddHostedService<BillAnalysisSeedService>();
+
 // Номер текущего созыва: нужен окну влияния, чтобы отличать живой
 // законопроект от прекратившегося вместе со своим созывом.
 builder.Services.AddSingleton<CurrentKnessetService>();
