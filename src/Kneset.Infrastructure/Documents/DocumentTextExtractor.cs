@@ -139,7 +139,7 @@ public static class DocumentTextExtractor
         using var stream = new MemoryStream(bytes, writable: false);
         using var doc = WordprocessingDocument.Open(stream, isEditable: false);
 
-        var body = doc.MainDocumentPart?.Document.Body;
+        var body = doc.MainDocumentPart?.Document?.Body;
         if (body is null) return "";
 
         // По абзацам, а не InnerText целиком: InnerText склеивает весь документ
@@ -201,8 +201,8 @@ public static class DocumentTextExtractor
         // строка из одних цифр иначе получила бы своё, неверное направление.
         var rtl = letters.Count(l => IsRtl(l.Value)) * 2 > letters.Count(l => IsLetterish(l.Value));
 
-        var avgHeight = letters.Average(l => l.GlyphRectangle.Height);
-        var avgWidth = letters.Average(l => l.GlyphRectangle.Width);
+        var avgHeight = letters.Average(l => l.BoundingBox.Height);
+        var avgWidth = letters.Average(l => l.BoundingBox.Width);
         var lineTolerance = Math.Max(avgHeight * 0.5, 0.5);
 
         // Группируем по базовой линии, а не по низу прямоугольника глифа:
@@ -246,8 +246,8 @@ public static class DocumentTextExtractor
         List<UglyToad.PdfPig.Content.Letter> line, bool rtl, double avgWidth)
     {
         var ordered = rtl
-            ? line.OrderByDescending(l => l.GlyphRectangle.Left).ToList()
-            : line.OrderBy(l => l.GlyphRectangle.Left).ToList();
+            ? line.OrderByDescending(l => l.BoundingBox.Left).ToList()
+            : line.OrderBy(l => l.BoundingBox.Left).ToList();
 
         var text = new System.Text.StringBuilder();
         for (var i = 0; i < ordered.Count; i++)
@@ -260,8 +260,8 @@ public static class DocumentTextExtractor
                 // странице, и от ширины соседних глифов: слишком
                 // чувствительный порог рвал числа надвое, и «2021»
                 // превращалось в «1 202».
-                var prev = ordered[i - 1].GlyphRectangle;
-                var cur = ordered[i].GlyphRectangle;
+                var prev = ordered[i - 1].BoundingBox;
+                var cur = ordered[i].BoundingBox;
                 var gap = rtl ? prev.Left - cur.Right : cur.Left - prev.Right;
                 var threshold = Math.Max(avgWidth, Math.Max(prev.Width, cur.Width)) * 0.55;
                 if (gap > threshold) text.Append(' ');

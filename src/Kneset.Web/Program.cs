@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Anthropic;
 using Kneset.Core.Abstractions;
 using Kneset.Core.Entities;
 using Kneset.Web;
@@ -135,27 +136,77 @@ if (builder.Configuration.GetValue("Sync:Enabled", true))
 // стартовать сам при каждом подъёме приложения.
 builder.Services.AddHostedService<DocumentTextService>();
 
-// AI-анализ: провайдер выбирается конфигом. "Stub" — демо-данные без API-ключа;
-// "Claude" будет добавлен на позднем этапе (ClaudeBillAnalyzer + Anthropic SDK).
+// AI-анализ: провайдер выбирается конфигом. "Stub" — демо-данные без ключа,
+// "Claude" — настоящий разбор через Claude API.
+//
+// Модели анализа и перевода задаются отдельно и это не экономия ради экономии.
+// Замер на 11 законопроектах: анализ — то место, где модели расходятся
+// по существу (одна заполняла нехватку данных выдуманными позициями),
+// а перевод готового разбора решений не принимает, там достаточно дешёвой
+// модели. Отсюда Opus на анализ и Sonnet на перевод по умолчанию.
 var aiProvider = builder.Configuration["Ai:Provider"] ?? "Stub";
-builder.Services.AddSingleton<IBillAnalyzer>(aiProvider switch
+var analysisModel = builder.Configuration["Ai:AnalysisModel"] ?? "claude-opus-5";
+var translationModel = builder.Configuration["Ai:TranslationModel"] ?? "claude-sonnet-5";
+
+if (aiProvider == "Claude")
+{
+    var apiKey = builder.Configuration["Ai:ApiKey"]
+        ?? Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY")
+        ?? throw new InvalidOperationException(
+            "Ai:Provider=Claude требует ключ: Ai:ApiKey или ANTHROPIC_API_KEY");
+
+    builder.Services.AddSingleton(new AnthropicClient { ApiKey = apiKey });
+    builder.Services.AddHttpClient();
+}
+
+builder.Services.AddSingleton<IBillAnalyzer>(sp => aiProvider switch
 {
     "Stub" => new StubBillAnalyzer(),
+    "Claude" => new ClaudeBillAnalyzer(
+        sp.GetRequiredService<AnthropicClient>(), analysisModel),
     _ => throw new InvalidOperationException(
-        $"Неизвестный AI-провайдер '{aiProvider}'. Доступно: Stub. Провайдер Claude будет добавлен позже.")
+        $"Неизвестный AI-провайдер '{aiProvider}'. Доступно: Stub, Claude.")
 });
-builder.Services.AddSingleton<IAnalysisTranslator>(aiProvider switch
+
+// Перевод разбора. Если задан ключ Gemini, переводим бесплатно, пока
+// не упрёмся в суточную квоту (20 запросов на модель), и только потом платно.
+// Gemini годится именно здесь: изобретать позиции при переводе нечего,
+// а на 2 316 названиях законопроектов он справился без нареканий и бесплатно.
+builder.Services.AddSingleton<IAnalysisTranslator>(sp =>
 {
-    "Stub" => new StubAnalysisTranslator(),
-    _ => throw new InvalidOperationException($"Неизвестный AI-провайдер '{aiProvider}'.")
+    if (aiProvider == "Stub") return new StubAnalysisTranslator();
+    if (aiProvider != "Claude")
+    {
+        throw new InvalidOperationException($"Неизвестный AI-провайдер '{aiProvider}'.");
+    }
+
+    var paid = new ClaudeAnalysisTranslator(
+        sp.GetRequiredService<AnthropicClient>(), translationModel);
+
+    var geminiKey = builder.Configuration["Ai:Gemini:Key"]
+        ?? Environment.GetEnvironmentVariable("GEMINI_KEY");
+    if (string.IsNullOrWhiteSpace(geminiKey)) return paid;
+
+    var free = new GeminiAnalysisTranslator(
+        sp.GetRequiredService<IHttpClientFactory>().CreateClient(),
+        geminiKey,
+        builder.Configuration["Ai:Gemini:Model"] ?? "gemini-3.5-flash");
+
+    return new FallbackAnalysisTranslator(
+        free, paid, sp.GetRequiredService<ILogger<FallbackAnalysisTranslator>>());
 });
 builder.Services.AddSingleton<AnalysisQueue>();
 builder.Services.AddHostedService<AnalysisWorker>();
 
-builder.Services.AddSingleton<IInitiativeDrafter>(aiProvider switch
+// Структурирование гражданских инициатив — отдельная задача, к провайдеру
+// пока не переведена. Свой ключ конфига, чтобы Ai:Provider=Claude не создавал
+// впечатления, будто она тоже работает через модель.
+var drafterProvider = builder.Configuration["Ai:DrafterProvider"] ?? "Stub";
+builder.Services.AddSingleton<IInitiativeDrafter>(drafterProvider switch
 {
     "Stub" => new StubInitiativeDrafter(),
-    _ => throw new InvalidOperationException($"Неизвестный AI-провайдер '{aiProvider}'.")
+    _ => throw new InvalidOperationException(
+        $"Неизвестный провайдер структурирования '{drafterProvider}'. Доступно: Stub.")
 });
 builder.Services.AddSingleton<DraftQueue>();
 builder.Services.AddHostedService<DraftWorker>();
@@ -166,6 +217,11 @@ builder.Services.AddHostedService<ContextSeedService>();
 // Переводы названий законопроектов: настоящего переводчика пока нет,
 // названия подготовлены заранее и лежат файлом рядом с кодом.
 builder.Services.AddHostedService<BillTitleSeedService>();
+
+// Готовые AI-анализы на выборке законопроектов — витрина, пока провайдер
+// не подключён. Убрать вместе с файлом Seed/bill-analyses.json, когда
+// анализ начнёт генерироваться сам.
+builder.Services.AddHostedService<BillAnalysisSeedService>();
 
 // Номер текущего созыва: нужен окну влияния, чтобы отличать живой
 // законопроект от прекратившегося вместе со своим созывом.
