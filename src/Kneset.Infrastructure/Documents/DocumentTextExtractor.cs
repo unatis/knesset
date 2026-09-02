@@ -17,6 +17,13 @@ namespace Kneset.Infrastructure.Documents;
 /// </summary>
 public static class DocumentTextExtractor
 {
+    /// <summary>
+    /// Версия парсера. Пишется вместе с текстом: когда разбор улучшится
+    /// (в первую очередь PDF, которому нужен bidi-порядок), смена версии
+    /// заставит обходчик переразобрать старое, не трогая остальное.
+    /// </summary>
+    public const string Version = "openxml-v2";
+
     public enum Kind { Unknown, Docx, Pdf, Ole2Doc, Rtf, Empty }
 
     public record Result(Kind Kind, string Text, string? Error)
@@ -61,10 +68,34 @@ public static class DocumentTextExtractor
         // По абзацам, а не InnerText целиком: InnerText склеивает весь документ
         // в одну строку без границ абзацев, и текст становится нечитаемым.
         var paragraphs = body.Descendants<Paragraph>()
-            .Select(p => p.InnerText.Trim())
+            .Select(ParagraphText)
+            .Select(t => t.Trim())
             .Where(t => t.Length > 0);
 
         return string.Join("\n", paragraphs);
+    }
+
+    /// <summary>
+    /// Текст абзаца с сохранением разделителей.
+    ///
+    /// InnerText нельзя: он молча выбрасывает табуляции и переводы строк,
+    /// а в шапке законопроекта Кнессета поля разделены именно табуляцией —
+    /// и «חבר הכנסת» склеивалось с именем депутата в одно слово.
+    /// </summary>
+    private static string ParagraphText(Paragraph p)
+    {
+        var sb = new System.Text.StringBuilder();
+        foreach (var node in p.Descendants())
+        {
+            switch (node)
+            {
+                case Text t: sb.Append(t.Text); break;
+                case TabChar: sb.Append('\t'); break;
+                case Break: sb.Append('\n'); break;
+                case CarriageReturn: sb.Append('\n'); break;
+            }
+        }
+        return sb.ToString();
     }
 
     private static string ExtractPdf(byte[] bytes)

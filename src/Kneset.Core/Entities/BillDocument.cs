@@ -40,4 +40,10 @@ public class BillDocument
     public string Url { get; set; } = "";
 
     public DateTime LastUpdatedDate { get; set; }
+
+    /// <summary>
+    /// Извлечённый текст, если файл уже разобран. Лежит в отдельной таблице
+    /// и подгружается только там, где нужен — поиску и AI-анализу.
+    /// </summary>
+    public BillDocumentText? ExtractedText { get; set; }
 }

@@ -130,6 +130,11 @@ if (builder.Configuration.GetValue("Sync:Enabled", true))
     builder.Services.AddHostedService<KnessetSyncService>();
 }
 
+// Документы в текст. Выключено по умолчанию: разовый проход по корпусу —
+// это несколько часов и 11.5 тысяч запросов к Кнессету, он не должен
+// стартовать сам при каждом подъёме приложения.
+builder.Services.AddHostedService<DocumentTextService>();
+
 // AI-анализ: провайдер выбирается конфигом. "Stub" — демо-данные без API-ключа;
 // "Claude" будет добавлен на позднем этапе (ClaudeBillAnalyzer + Anthropic SDK).
 var aiProvider = builder.Configuration["Ai:Provider"] ?? "Stub";
@@ -435,6 +440,37 @@ if (app.Environment.IsDevelopment())
             windowWithDocx = await db.BillDocuments
                 .Where(d => d.Format == "DOC" && influenceDescs.Contains(d.Bill.StatusDesc))
                 .Select(d => d.BillId).Distinct().CountAsync(ct),
+            // Отработала ли правка с табуляциями: до неё InnerText их выбрасывал.
+            byVersion = await db.BillDocumentTexts
+                .GroupBy(t => t.ExtractorVersion)
+                .Select(g => new
+                {
+                    version = g.Key,
+                    count = g.Count(),
+                    withTabs = g.Count(x => x.Text.Contains("\t")),
+                    glued = g.Count(x => x.Text.Contains("חבר הכנסתג")),
+                })
+                .ToListAsync(ct),
+            // Контроль качества: сохранился ли иврит логическим порядком.
+            // Ищем фразу «הצעת חוק» и её обращение — если извлечение
+            // перевернуло строку, найдётся второе, а не первое.
+            hebrewForward = await db.BillDocumentTexts
+                .CountAsync(t => t.Text.Contains("הצעת חוק"), ct),
+            hebrewReversed = await db.BillDocumentTexts
+                .CountAsync(t => t.Text.Contains("קוח תעצה"), ct),
+            sample = await db.BillDocumentTexts
+                .Where(t => t.Status == "ok")
+                .OrderBy(t => t.Id).Take(3)
+                .Select(t => t.Text.Substring(0, 150))
+                .ToListAsync(ct),
+            // Ход извлечения текста: по статусам и сколько символов уже лежит.
+            extraction = await db.BillDocumentTexts
+                .GroupBy(t => t.Status)
+                .Select(g => new { status = g.Key, count = g.Count(), chars = g.Sum(x => (long)x.CharCount) })
+                .ToListAsync(ct),
+            docsTotal = await db.BillDocuments.CountAsync(d => d.Format == "DOC", ct),
+            docsDone = await db.BillDocuments
+                .CountAsync(d => d.Format == "DOC" && d.ExtractedText != null, ct),
             windowPdfOnly = await db.BillDocuments
                 .Where(d => d.Format == "PDF" && influenceDescs.Contains(d.Bill.StatusDesc))
                 .Select(d => d.BillId).Distinct()
