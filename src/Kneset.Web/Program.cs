@@ -314,6 +314,184 @@ if (app.Environment.IsDevelopment())
     // их заново. Нужно после правки политики или промпта: сами по себе
     // разборы не перегенерируются, IsStale ставится только при изменении
     // текста законопроекта в Кнессете.
+    // Сколько разборов от заглушки лежит в базе и сколько из них считаются
+    // свежими. Свежая заглушка блокирует генерацию настоящего разбора:
+    // воркер работает только когда свежего нет.
+    // Сколько версий разбора накопилось у одного законопроекта и различаются
+    // ли они по содержанию. История нужна, чтобы сравнить, как менялся разбор;
+    // одинаковые заглушки сравнивать не с чем.
+    // Разовая операция: снять блокировку с законопроектов, у которых свежий
+    // разбор сделан заглушкой. Воркер генерирует только когда свежего нет,
+    // поэтому демо-запись навсегда занимает место настоящего разбора.
+    //
+    // mode=stale помечает устаревшими (обратимо, история сохраняется),
+    // mode=delete удаляет (необратимо, зато не копит пустые версии).
+    // Скачивает шрифты Google к себе, чтобы браузер посетителя не обращался
+    // к чужому домену. Разовая операция: результат — файлы в wwwroot/fonts
+    // и готовые правила @font-face, которыми заменяется @import в app.css.
+    //
+    // Делается из приложения, а не вручную, по двум причинам: подмножества
+    // (latin, cyrillic и прочие) и их unicode-range знает только сам Google,
+    // а переписывать их руками — верный способ потерять диапазон и получить
+    // квадратики вместо букв.
+    app.MapGet("/dev/fetch-fonts", async (
+        IHttpClientFactory httpFactory, IWebHostEnvironment env, CancellationToken ct) =>
+    {
+        var http = httpFactory.CreateClient();
+        http.Timeout = TimeSpan.FromSeconds(60);
+        // Современный User-Agent нужен, чтобы Google отдал woff2, а не ttf:
+        // формат он выбирает по клиенту.
+        http.DefaultRequestHeaders.Add("User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+            "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36");
+
+        const string cssUrl = "https://fonts.googleapis.com/css2" +
+            "?family=Instrument+Serif:ital@0;1" +
+            "&family=Geist:wght@400;500;600;700" +
+            "&family=JetBrains+Mono:wght@400;500&display=swap";
+
+        var css = await http.GetStringAsync(cssUrl, ct);
+
+        var dir = Path.Combine(env.WebRootPath, "fonts");
+        Directory.CreateDirectory(dir);
+
+        // Нужны только письменности, которых нет в локальных многоскриптовых
+        // файлах. Иврит и арабский приходят из них, греческий и вьетнамский
+        // не нужны вовсе — качать их значит платить весом за неиспользуемое.
+        string[] wanted = ["latin", "latin-ext", "cyrillic", "cyrillic-ext"];
+
+        var blocks = System.Text.RegularExpressions.Regex.Matches(
+            css, @"/\*\s*(?<subset>[a-z\-]+)\s*\*/\s*(?<body>@font-face\s*\{[^}]*\})",
+            System.Text.RegularExpressions.RegexOptions.Singleline);
+
+        // Типизированная запись, а не анонимный объект: по ней потом
+        // суммируется вес, а через рефлексию это читалось бы отвратительно.
+        var saved = new List<(string Family, string Weight, string Style,
+            string Subset, string Name, int Bytes)>();
+        var rules = new System.Text.StringBuilder();
+
+        foreach (System.Text.RegularExpressions.Match block in blocks)
+        {
+            var subset = block.Groups["subset"].Value;
+            if (!wanted.Contains(subset)) continue;
+
+            var body = block.Groups["body"].Value;
+            var url = System.Text.RegularExpressions.Regex
+                .Match(body, @"url\((?<u>https://[^)]+\.woff2)\)").Groups["u"].Value;
+            if (url.Length == 0) continue;
+
+            var family = System.Text.RegularExpressions.Regex
+                .Match(body, "font-family:\\s*['\"](?<f>[^'\"]+)").Groups["f"].Value;
+            var weight = System.Text.RegularExpressions.Regex
+                .Match(body, @"font-weight:\s*(?<w>[^;]+)").Groups["w"].Value.Trim();
+            var style = System.Text.RegularExpressions.Regex
+                .Match(body, @"font-style:\s*(?<s>[^;]+)").Groups["s"].Value.Trim();
+            var range = System.Text.RegularExpressions.Regex
+                .Match(body, @"unicode-range:\s*(?<r>[^;]+)").Groups["r"].Value.Trim();
+
+            var name = $"{family.Replace(" ", "")}-{weight}-{(style == "italic" ? "i" : "n")}-{subset}.woff2";
+            var bytes = await http.GetByteArrayAsync(url, ct);
+            await File.WriteAllBytesAsync(Path.Combine(dir, name), bytes, ct);
+
+            saved.Add((family, weight, style, subset, name, bytes.Length));
+
+            rules.AppendLine("@font-face {");
+            rules.AppendLine($"    font-family: '{family}';");
+            rules.AppendLine($"    font-style: {(style.Length > 0 ? style : "normal")};");
+            rules.AppendLine($"    font-weight: {(weight.Length > 0 ? weight : "400")};");
+            rules.AppendLine("    font-display: swap;");
+            rules.AppendLine($"    src: url('fonts/{name}') format('woff2');");
+            if (range.Length > 0) rules.AppendLine($"    unicode-range: {range};");
+            rules.AppendLine("}");
+        }
+
+        return Results.Json(new
+        {
+            saved = saved.Count,
+            totalKb = saved.Sum(x => x.Bytes) / 1024,
+            files = saved.Select(x => new
+            {
+                x.Family, x.Weight, x.Style, x.Subset, x.Name, kb = x.Bytes / 1024,
+            }),
+            css = rules.ToString(),
+        });
+    });
+
+    app.MapGet("/dev/stale-stubs", async (
+        string mode, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        var stubs = db.BillAnalyses.Where(a => a.ModelVersion.StartsWith("stub"));
+
+        var affected = mode switch
+        {
+            "stale" => await stubs.Where(a => !a.IsStale)
+                .ExecuteUpdateAsync(s => s.SetProperty(a => a.IsStale, true), ct),
+            "delete" => await stubs.ExecuteDeleteAsync(ct),
+            _ => throw new ArgumentException("mode: stale или delete"),
+        };
+
+        return Results.Json(new { mode, affected });
+    });
+
+    app.MapGet("/dev/analysis-dupes", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        var rows = await db.BillAnalyses
+            .Select(a => new
+            {
+                a.BillId,
+                a.LanguageCode,
+                a.ModelVersion,
+                a.IsStale,
+                len = a.AnalysisJson.Length,
+            })
+            .ToListAsync(ct);
+
+        var perBill = rows
+            .GroupBy(r => r.BillId)
+            .Select(g => new
+            {
+                billId = g.Key,
+                versions = g.Count(),
+                langs = g.Select(x => x.LanguageCode).Distinct().Count(),
+                // Одинаковая длина при одинаковой версии модели — почти
+                // наверняка тот же текст.
+                distinctContent = g.Select(x => x.ModelVersion + ":" + x.len).Distinct().Count(),
+            })
+            .OrderByDescending(x => x.versions)
+            .Take(10)
+            .ToList();
+
+        return Results.Json(new
+        {
+            total = rows.Count,
+            bills = rows.Select(r => r.BillId).Distinct().Count(),
+            top = perBill,
+        });
+    });
+
+    app.MapGet("/dev/stub-analyses", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        return Results.Json(new
+        {
+            byVersion = await db.BillAnalyses
+                .GroupBy(a => new { a.ModelVersion, a.IsStale })
+                .Select(g => new { g.Key.ModelVersion, g.Key.IsStale, count = g.Count() })
+                .OrderByDescending(x => x.count)
+                .ToListAsync(ct),
+            // Законопроекты, у которых свежий разбор — от заглушки.
+            billsBlockedByStub = await db.BillAnalyses
+                .Where(a => !a.IsStale && a.ModelVersion.StartsWith("stub"))
+                .Select(a => a.BillId).Distinct().CountAsync(ct),
+        });
+    });
+
     app.MapGet("/dev/stale-analysis", async (
         int billId, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
     {
