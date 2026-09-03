@@ -48,7 +48,7 @@ public class GeminiAnalysisTranslator(
             generationConfig = new
             {
                 responseMimeType = "application/json",
-                responseSchema = AnalysisJsonSchema.AsElement(),
+                responseSchema = AnalysisJsonSchema.ForGemini(),
                 temperature = 0,
             },
         };
@@ -70,7 +70,14 @@ public class GeminiAnalysisTranslator(
                 $"Суточная квота Gemini для модели {model} исчерпана");
         }
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            // Тело ответа в сообщении: без него причина 400 неотличима
+            // от любой другой, и её приходится угадывать.
+            var error = await response.Content.ReadAsStringAsync(ct);
+            throw new HttpRequestException(
+                $"Gemini {(int)response.StatusCode}: {error.ReplaceLineEndings(" ")}");
+        }
 
         using var payload = JsonDocument.Parse(await response.Content.ReadAsStringAsync(ct));
         var text = payload.RootElement

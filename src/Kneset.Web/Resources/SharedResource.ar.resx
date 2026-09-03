@@ -103,6 +103,17 @@
   <data name="Ai_Risks" xml:space="preserve"><value>مخاطر محتملة</value></data>
   <data name="Ai_Arguments" xml:space="preserve"><value>حجج الأطراف</value></data>
   <data name="Ai_Financial" xml:space="preserve"><value>الآثار الاقتصادية</value></data>
+  <data name="Ai_Rights" xml:space="preserve"><value>حقوق الإنسان</value></data>
+  <data name="Ai_RightsPurpose" xml:space="preserve"><value>الغاية المعلنة للتقييد</value></data>
+  <data name="Ai_Proportionality" xml:space="preserve"><value>التناسب</value></data>
+  <data name="Ai_RightRestricts" xml:space="preserve"><value>يقيّد</value></data>
+  <data name="Ai_RightProtects" xml:space="preserve"><value>يحمي</value></data>
+  <data name="Ai_RightExpands" xml:space="preserve"><value>يوسّع</value></data>
+  <data name="Ai_KindFact" xml:space="preserve"><value>واقعة</value></data>
+  <data name="Ai_KindInference" xml:space="preserve"><value>استنتاج</value></data>
+  <data name="Ai_KindRisk" xml:space="preserve"><value>خطر محتمل</value></data>
+  <data name="Ai_KindPosition" xml:space="preserve"><value>موقف</value></data>
+  <data name="Ai_KindInsufficient" xml:space="preserve"><value>بيانات غير كافية</value></data>
   <data name="Ai_Citizens" xml:space="preserve"><value>المواطنون</value></data>
   <data name="Ai_Budget" xml:space="preserve"><value>الميزانية</value></data>
   <data name="Ai_OpenQuestions" xml:space="preserve"><value>أسئلة مفتوحة</value></data>

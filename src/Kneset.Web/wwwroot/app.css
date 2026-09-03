@@ -1484,3 +1484,24 @@ h1:focus {
     max-width: 60ch;
     margin-block: -0.1rem 0.6rem;
 }
+
+/* --- Права человека в AI-анализе ----------------------------------------
+   Обладатель права выводится всегда, поэтому строка длинная: правовое
+   основание уходит на отдельную строку помельче, иначе список не читается. */
+
+.kt-rights {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+}
+
+.kt-rights > li {
+    padding-block: 0.35rem;
+    border-block-end: 1px solid var(--kt-char-50);
+}
+
+.kt-rights-basis {
+    font-size: 0.8125rem;
+    color: var(--kt-char-600, #555);
+    margin-block-start: 0.15rem;
+}

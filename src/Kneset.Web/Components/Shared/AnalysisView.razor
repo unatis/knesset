@@ -78,6 +78,45 @@
         </div>
     }
 
+    @* Права человека. Отдельным блоком и выше денег: закон почти всегда
+       что-то ограничивает в пользу чего-то другого, и это главное, что
+       гражданину нужно понять. Обладатель права выводится обязательно —
+       одна и та же мера обычно защищает право одного и ограничивает
+       право другого. *@
+    @if (Analysis.RightsImpact is { } rights && rights.AffectedRights.Count > 0)
+    {
+        <h6>@L["Ai_Rights"]</h6>
+
+        @if (!string.IsNullOrWhiteSpace(rights.StatedPurpose))
+        {
+            <p class="mb-2"><strong>@L["Ai_RightsPurpose"]:</strong> @rights.StatedPurpose</p>
+        }
+
+        <ul class="kt-rights">
+            @foreach (var right in rights.AffectedRights)
+            {
+                <li>
+                    <span class="badge @EffectCss(right.Effect) me-1">@EffectLabel(right.Effect)</span>
+                    <strong>@right.Right</strong>
+                    <span class="text-muted"> — @right.Holder</span>
+                    @if (!string.IsNullOrWhiteSpace(right.Basis))
+                    {
+                        <div class="kt-rights-basis">@right.Basis</div>
+                    }
+                </li>
+            }
+        </ul>
+
+        @if (rights.Proportionality is { } proportionality)
+        {
+            <p class="mb-3">
+                <strong>@L["Ai_Proportionality"]:</strong>
+                @proportionality.Text
+                <span class="badge bg-light text-dark border ms-1">@KindLabel(proportionality.Kind)</span>
+            </p>
+        }
+    }
+
     @if (Analysis.FinancialImpact is not null)
     {
         <h6>@L["Ai_Financial"]</h6>
@@ -107,4 +146,36 @@
 
 @code {
     [Parameter, EditorRequired] public BillAnalysisResult? Analysis { get; set; }
+
+    /// <summary>
+    /// Цвет по эффекту для права. Ограничение — предупреждающий, защита
+    /// и расширение — нет: цвет здесь несёт направление, а не оценку.
+    /// Политика запрещает ярлыки «хороший/плохой», и ограничение права
+    /// само по себе не является нарушением — вопрос в пропорциональности.
+    /// </summary>
+    private static string EffectCss(string effect) => effect switch
+    {
+        "restricts" => "bg-warning-subtle text-dark border",
+        "protects" => "bg-success-subtle text-dark border",
+        "expands" => "bg-info-subtle text-dark border",
+        _ => "bg-light text-dark border",
+    };
+
+    private string EffectLabel(string effect) => effect switch
+    {
+        "restricts" => L["Ai_RightRestricts"],
+        "protects" => L["Ai_RightProtects"],
+        "expands" => L["Ai_RightExpands"],
+        _ => effect,
+    };
+
+    private string KindLabel(string kind) => kind switch
+    {
+        "fact" => L["Ai_KindFact"],
+        "inference" => L["Ai_KindInference"],
+        "risk" => L["Ai_KindRisk"],
+        "position" => L["Ai_KindPosition"],
+        "insufficient_data" => L["Ai_KindInsufficient"],
+        _ => kind,
+    };
 }
