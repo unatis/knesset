@@ -326,6 +326,97 @@ if (app.Environment.IsDevelopment())
     //
     // mode=stale помечает устаревшими (обратимо, история сохраняется),
     // mode=delete удаляет (необратимо, зато не копит пустые версии).
+    // Скачивает шрифты Google к себе, чтобы браузер посетителя не обращался
+    // к чужому домену. Разовая операция: результат — файлы в wwwroot/fonts
+    // и готовые правила @font-face, которыми заменяется @import в app.css.
+    //
+    // Делается из приложения, а не вручную, по двум причинам: подмножества
+    // (latin, cyrillic и прочие) и их unicode-range знает только сам Google,
+    // а переписывать их руками — верный способ потерять диапазон и получить
+    // квадратики вместо букв.
+    app.MapGet("/dev/fetch-fonts", async (
+        IHttpClientFactory httpFactory, IWebHostEnvironment env, CancellationToken ct) =>
+    {
+        var http = httpFactory.CreateClient();
+        http.Timeout = TimeSpan.FromSeconds(60);
+        // Современный User-Agent нужен, чтобы Google отдал woff2, а не ttf:
+        // формат он выбирает по клиенту.
+        http.DefaultRequestHeaders.Add("User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+            "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36");
+
+        const string cssUrl = "https://fonts.googleapis.com/css2" +
+            "?family=Instrument+Serif:ital@0;1" +
+            "&family=Geist:wght@400;500;600;700" +
+            "&family=JetBrains+Mono:wght@400;500&display=swap";
+
+        var css = await http.GetStringAsync(cssUrl, ct);
+
+        var dir = Path.Combine(env.WebRootPath, "fonts");
+        Directory.CreateDirectory(dir);
+
+        // Нужны только письменности, которых нет в локальных многоскриптовых
+        // файлах. Иврит и арабский приходят из них, греческий и вьетнамский
+        // не нужны вовсе — качать их значит платить весом за неиспользуемое.
+        string[] wanted = ["latin", "latin-ext", "cyrillic", "cyrillic-ext"];
+
+        var blocks = System.Text.RegularExpressions.Regex.Matches(
+            css, @"/\*\s*(?<subset>[a-z\-]+)\s*\*/\s*(?<body>@font-face\s*\{[^}]*\})",
+            System.Text.RegularExpressions.RegexOptions.Singleline);
+
+        // Типизированная запись, а не анонимный объект: по ней потом
+        // суммируется вес, а через рефлексию это читалось бы отвратительно.
+        var saved = new List<(string Family, string Weight, string Style,
+            string Subset, string Name, int Bytes)>();
+        var rules = new System.Text.StringBuilder();
+
+        foreach (System.Text.RegularExpressions.Match block in blocks)
+        {
+            var subset = block.Groups["subset"].Value;
+            if (!wanted.Contains(subset)) continue;
+
+            var body = block.Groups["body"].Value;
+            var url = System.Text.RegularExpressions.Regex
+                .Match(body, @"url\((?<u>https://[^)]+\.woff2)\)").Groups["u"].Value;
+            if (url.Length == 0) continue;
+
+            var family = System.Text.RegularExpressions.Regex
+                .Match(body, "font-family:\\s*['\"](?<f>[^'\"]+)").Groups["f"].Value;
+            var weight = System.Text.RegularExpressions.Regex
+                .Match(body, @"font-weight:\s*(?<w>[^;]+)").Groups["w"].Value.Trim();
+            var style = System.Text.RegularExpressions.Regex
+                .Match(body, @"font-style:\s*(?<s>[^;]+)").Groups["s"].Value.Trim();
+            var range = System.Text.RegularExpressions.Regex
+                .Match(body, @"unicode-range:\s*(?<r>[^;]+)").Groups["r"].Value.Trim();
+
+            var name = $"{family.Replace(" ", "")}-{weight}-{(style == "italic" ? "i" : "n")}-{subset}.woff2";
+            var bytes = await http.GetByteArrayAsync(url, ct);
+            await File.WriteAllBytesAsync(Path.Combine(dir, name), bytes, ct);
+
+            saved.Add((family, weight, style, subset, name, bytes.Length));
+
+            rules.AppendLine("@font-face {");
+            rules.AppendLine($"    font-family: '{family}';");
+            rules.AppendLine($"    font-style: {(style.Length > 0 ? style : "normal")};");
+            rules.AppendLine($"    font-weight: {(weight.Length > 0 ? weight : "400")};");
+            rules.AppendLine("    font-display: swap;");
+            rules.AppendLine($"    src: url('fonts/{name}') format('woff2');");
+            if (range.Length > 0) rules.AppendLine($"    unicode-range: {range};");
+            rules.AppendLine("}");
+        }
+
+        return Results.Json(new
+        {
+            saved = saved.Count,
+            totalKb = saved.Sum(x => x.Bytes) / 1024,
+            files = saved.Select(x => new
+            {
+                x.Family, x.Weight, x.Style, x.Subset, x.Name, kb = x.Bytes / 1024,
+            }),
+            css = rules.ToString(),
+        });
+    });
+
     app.MapGet("/dev/stale-stubs", async (
         string mode, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
     {
