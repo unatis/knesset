@@ -314,6 +314,93 @@ if (app.Environment.IsDevelopment())
     // их заново. Нужно после правки политики или промпта: сами по себе
     // разборы не перегенерируются, IsStale ставится только при изменении
     // текста законопроекта в Кнессете.
+    // Сколько разборов от заглушки лежит в базе и сколько из них считаются
+    // свежими. Свежая заглушка блокирует генерацию настоящего разбора:
+    // воркер работает только когда свежего нет.
+    // Сколько версий разбора накопилось у одного законопроекта и различаются
+    // ли они по содержанию. История нужна, чтобы сравнить, как менялся разбор;
+    // одинаковые заглушки сравнивать не с чем.
+    // Разовая операция: снять блокировку с законопроектов, у которых свежий
+    // разбор сделан заглушкой. Воркер генерирует только когда свежего нет,
+    // поэтому демо-запись навсегда занимает место настоящего разбора.
+    //
+    // mode=stale помечает устаревшими (обратимо, история сохраняется),
+    // mode=delete удаляет (необратимо, зато не копит пустые версии).
+    app.MapGet("/dev/stale-stubs", async (
+        string mode, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        var stubs = db.BillAnalyses.Where(a => a.ModelVersion.StartsWith("stub"));
+
+        var affected = mode switch
+        {
+            "stale" => await stubs.Where(a => !a.IsStale)
+                .ExecuteUpdateAsync(s => s.SetProperty(a => a.IsStale, true), ct),
+            "delete" => await stubs.ExecuteDeleteAsync(ct),
+            _ => throw new ArgumentException("mode: stale или delete"),
+        };
+
+        return Results.Json(new { mode, affected });
+    });
+
+    app.MapGet("/dev/analysis-dupes", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        var rows = await db.BillAnalyses
+            .Select(a => new
+            {
+                a.BillId,
+                a.LanguageCode,
+                a.ModelVersion,
+                a.IsStale,
+                len = a.AnalysisJson.Length,
+            })
+            .ToListAsync(ct);
+
+        var perBill = rows
+            .GroupBy(r => r.BillId)
+            .Select(g => new
+            {
+                billId = g.Key,
+                versions = g.Count(),
+                langs = g.Select(x => x.LanguageCode).Distinct().Count(),
+                // Одинаковая длина при одинаковой версии модели — почти
+                // наверняка тот же текст.
+                distinctContent = g.Select(x => x.ModelVersion + ":" + x.len).Distinct().Count(),
+            })
+            .OrderByDescending(x => x.versions)
+            .Take(10)
+            .ToList();
+
+        return Results.Json(new
+        {
+            total = rows.Count,
+            bills = rows.Select(r => r.BillId).Distinct().Count(),
+            top = perBill,
+        });
+    });
+
+    app.MapGet("/dev/stub-analyses", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        return Results.Json(new
+        {
+            byVersion = await db.BillAnalyses
+                .GroupBy(a => new { a.ModelVersion, a.IsStale })
+                .Select(g => new { g.Key.ModelVersion, g.Key.IsStale, count = g.Count() })
+                .OrderByDescending(x => x.count)
+                .ToListAsync(ct),
+            // Законопроекты, у которых свежий разбор — от заглушки.
+            billsBlockedByStub = await db.BillAnalyses
+                .Where(a => !a.IsStale && a.ModelVersion.StartsWith("stub"))
+                .Select(a => a.BillId).Distinct().CountAsync(ct),
+        });
+    });
+
     app.MapGet("/dev/stale-analysis", async (
         int billId, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
     {
