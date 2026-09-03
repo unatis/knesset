@@ -9,15 +9,16 @@ namespace Kneset.Infrastructure.Ai;
 /// </summary>
 public class StubAnalysisTranslator : IAnalysisTranslator
 {
-    public string ModelVersion => "stub-translate-v1";
-
-    public async Task<BillAnalysisResult> TranslateAsync(
+    public async Task<AnalysisTranslation> TranslateAsync(
         BillAnalysisResult source, string targetLanguage, CancellationToken ct = default)
     {
         await Task.Delay(TimeSpan.FromSeconds(1), ct);
-        return source with
-        {
-            ProviderNote = $"⚠ Демо: перевод на «{targetLanguage}» появится с подключением AI-провайдера."
-        };
+        return new AnalysisTranslation(
+            source with
+            {
+                ProviderNote =
+                    $"⚠ Демо: перевод на «{targetLanguage}» появится с подключением AI-провайдера.",
+            },
+            "stub-translate-v1");
     }
 }

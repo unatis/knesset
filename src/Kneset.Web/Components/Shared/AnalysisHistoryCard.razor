@@ -1,3 +1,4 @@
+@using System.Globalization
 @using System.Text.Json
 @inject IStringLocalizer<SharedResource> L
 @inject IDbContextFactory<AppDbContext> DbFactory
@@ -15,7 +16,10 @@
                 <li class="list-group-item">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                         <span>
-                            <span class="badge bg-light text-dark border">@item.LanguageCode.ToUpperInvariant()</span>
+                            @foreach (var lang in item.Languages)
+                            {
+                                <span class="badge bg-light text-dark border me-1">@lang.ToUpperInvariant()</span>
+                            }
                             <strong>@item.GeneratedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</strong>
                             <small class="text-muted"> · @item.ModelVersion</small>
                             @if (item.IsStale)
@@ -51,7 +55,7 @@
     private int? _expandedId;
 
     private record HistoryItem(
-        int Id, string LanguageCode, string ModelVersion,
+        int Id, List<string> Languages, string ModelVersion,
         DateTime GeneratedAt, bool IsStale, BillAnalysisResult? Analysis);
 
     protected override async Task OnParametersSetAsync()
@@ -62,13 +66,44 @@
             .OrderByDescending(a => a.GeneratedAt)
             .ToListAsync();
 
-        _items = entities.Select(e =>
-        {
-            BillAnalysisResult? parsed = null;
-            try { parsed = JsonSerializer.Deserialize<BillAnalysisResult>(e.AnalysisJson); }
-            catch (JsonException) { /* повреждённая запись — показываем без содержимого */ }
-            return new HistoryItem(e.Id, e.LanguageCode, e.ModelVersion, e.GeneratedAt, e.IsStale, parsed);
-        }).ToList();
+        // Одна запись на генерацию, а не на строку в базе. Мастер-разбор
+        // и его переводы — это один и тот же разбор на разных языках, и они
+        // выглядели в истории как два отдельных «анализа»: пользователь видел
+        // «история (2)» и решал, что закон разбирали дважды.
+        //
+        // Группируем по BillLastUpdatedAt: мастер и все его переводы берут
+        // это поле из одного снимка законопроекта, поэтому оно и есть признак
+        // генерации. IsStale в ключе потому, что при повторной генерации
+        // без правки законопроекта снимок тот же, а генерация уже другая.
+        _items = entities
+            .GroupBy(e => (e.BillLastUpdatedAt, e.IsStale))
+            .Select(g =>
+            {
+                // Показываем содержимое на языке интерфейса, иначе мастер,
+                // иначе что есть: человеку нужен текст, который он прочтёт.
+                var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                var shown = g.FirstOrDefault(e => e.LanguageCode == lang)
+                            ?? g.FirstOrDefault(e => e.LanguageCode == "en")
+                            ?? g.First();
+
+                BillAnalysisResult? parsed = null;
+                try { parsed = JsonSerializer.Deserialize<BillAnalysisResult>(shown.AnalysisJson); }
+                catch (JsonException) { /* повреждённая запись — показываем без содержимого */ }
+
+                return new HistoryItem(
+                    shown.Id,
+                    // Языки генерации — все, что есть: так видно, на какие
+                    // из них разбор уже переведён, а на какие ещё нет.
+                    g.Select(e => e.LanguageCode).Distinct().OrderBy(x => x).ToList(),
+                    // Модель мастера: переводы делает другая и более дешёвая,
+                    // и в истории важна та, что делала сам разбор.
+                    (g.FirstOrDefault(e => e.LanguageCode == "en") ?? g.First()).ModelVersion,
+                    g.Max(e => e.GeneratedAt),
+                    shown.IsStale,
+                    parsed);
+            })
+            .OrderByDescending(i => i.GeneratedAt)
+            .ToList();
     }
 
     private void Toggle(int id) => _expandedId = _expandedId == id ? null : id;

@@ -9,8 +9,18 @@ namespace Kneset.Core.Abstractions;
 /// </summary>
 public interface IAnalysisTranslator
 {
-    string ModelVersion { get; }
-
-    Task<BillAnalysisResult> TranslateAsync(
+    Task<AnalysisTranslation> TranslateAsync(
         BillAnalysisResult source, string targetLanguage, CancellationToken ct = default);
 }
+
+/// <summary>
+/// Перевод и та модель, которая его действительно сделала.
+///
+/// Версия возвращается результатом, а не читается свойством провайдера,
+/// намеренно. Прежде интерфейс отдавал <c>ModelVersion</c> отдельно,
+/// и составной переводчик (бесплатный до квоты, потом платный) сообщал
+/// в нём того, к кому пойдёт СЛЕДУЮЩИМ. В базу попадала запись
+/// «gemini-3.5-flash» о переводе, который сделал Claude, — то есть поле
+/// происхождения врало. Так эту ошибку нельзя написать снова.
+/// </summary>
+public record AnalysisTranslation(BillAnalysisResult Analysis, string ModelVersion);

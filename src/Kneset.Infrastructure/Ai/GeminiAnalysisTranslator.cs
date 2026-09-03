@@ -26,12 +26,10 @@ public class GeminiAnalysisTranslator(
     string apiKey,
     string model = "gemini-3.5-flash") : IAnalysisTranslator
 {
-    public string ModelVersion => model;
-
     /// <summary>Квота исчерпана — вызывающий должен уйти к другому провайдеру.</summary>
     public class QuotaExhaustedException(string message) : Exception(message);
 
-    public async Task<BillAnalysisResult> TranslateAsync(
+    public async Task<AnalysisTranslation> TranslateAsync(
         BillAnalysisResult source, string targetLanguage, CancellationToken ct = default)
     {
         var body = new
@@ -90,8 +88,10 @@ public class GeminiAnalysisTranslator(
             ?? throw new InvalidOperationException(
                 $"Модель {model} не вернула текст с переводом");
 
-        return JsonSerializer.Deserialize<BillAnalysisResult>(text)
-               ?? throw new InvalidOperationException(
-                   $"Перевод от {model} не разобрался по схеме BillAnalysisResult");
+        var result = JsonSerializer.Deserialize<BillAnalysisResult>(text)
+                     ?? throw new InvalidOperationException(
+                         $"Перевод от {model} не разобрался по схеме BillAnalysisResult");
+
+        return new AnalysisTranslation(result, model);
     }
 }

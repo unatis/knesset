@@ -22,9 +22,7 @@ public class ClaudeAnalysisTranslator(
     AnthropicClient client,
     string model = "claude-sonnet-5") : IAnalysisTranslator
 {
-    public string ModelVersion => model;
-
-    public async Task<BillAnalysisResult> TranslateAsync(
+    public async Task<AnalysisTranslation> TranslateAsync(
         BillAnalysisResult source, string targetLanguage, CancellationToken ct = default)
     {
         var response = await client.Messages.Create(new MessageCreateParams
@@ -62,9 +60,11 @@ public class ClaudeAnalysisTranslator(
             ?? throw new InvalidOperationException(
                 $"Модель {model} не вернула текстовый блок с переводом");
 
-        return JsonSerializer.Deserialize<BillAnalysisResult>(json)
-               ?? throw new InvalidOperationException(
-                   $"Перевод от {model} не разобрался по схеме BillAnalysisResult");
+        var result = JsonSerializer.Deserialize<BillAnalysisResult>(json)
+                     ?? throw new InvalidOperationException(
+                         $"Перевод от {model} не разобрался по схеме BillAnalysisResult");
+
+        return new AnalysisTranslation(result, model);
     }
 }
 

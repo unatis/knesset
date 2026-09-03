@@ -110,13 +110,16 @@ public class AnalysisWorker(
             .AnyAsync(a => a.BillId == billId && a.LanguageCode == lang && !a.IsStale, ct);
         if (hasFreshTranslation) return;
 
-        var translated = await translator.TranslateAsync(master, lang, ct);
+        // Версия берётся из результата, а не у переводчика: составной
+        // переводчик выбирает провайдера по ходу дела, и его свойство
+        // сообщало того, к кому он пойдёт следующим.
+        var (translated, translatorVersion) = await translator.TranslateAsync(master, lang, ct);
 
         db.BillAnalyses.Add(new BillAnalysis
         {
             BillId = bill.Id,
             AnalysisJson = JsonSerializer.Serialize(translated),
-            ModelVersion = translator.ModelVersion,
+            ModelVersion = translatorVersion,
             LanguageCode = lang,
             GeneratedAt = DateTime.UtcNow,
             BillLastUpdatedAt = bill.LastUpdatedDate
@@ -131,6 +134,6 @@ public class AnalysisWorker(
 
         await db.SaveChangesAsync(ct);
         logger.LogInformation("Перевод анализа {BillId} на {Lang} сохранён ({Model})",
-            billId, lang, translator.ModelVersion);
+            billId, lang, translatorVersion);
     }
 }
