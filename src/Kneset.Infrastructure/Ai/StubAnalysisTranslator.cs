@@ -10,7 +10,8 @@ namespace Kneset.Infrastructure.Ai;
 public class StubAnalysisTranslator : IAnalysisTranslator
 {
     public async Task<AnalysisTranslation> TranslateAsync(
-        BillAnalysisResult source, string targetLanguage, CancellationToken ct = default)
+        BillAnalysisResult source, string targetLanguage,
+        string? sourceDocument = null, CancellationToken ct = default)
     {
         await Task.Delay(TimeSpan.FromSeconds(1), ct);
         return new AnalysisTranslation(

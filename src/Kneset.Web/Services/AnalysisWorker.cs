@@ -23,6 +23,14 @@ public class AnalysisWorker(
 {
     private const string MasterLang = "en";
 
+    /// <summary>
+    /// Язык, на котором написаны документы Кнессета. При переводе разбора
+    /// на этот язык переводчику подаётся сам документ: иначе термины идут
+    /// кругом — иврит в документе, английский в мастере, обратный перевод
+    /// на иврит — и возвращаются пересказом вместо формулировок закона.
+    /// </summary>
+    private const string DocumentLang = "he";
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await foreach (var (billId, lang) in queue.ReadAllAsync(stoppingToken))
@@ -61,17 +69,7 @@ public class AnalysisWorker(
         BillAnalysisResult master;
         if (masterEntity is null)
         {
-            // Текст документа — то, на чём вообще держится разбор: политика
-            // требует ссылок на источник, а без текста ссылаться не на что,
-            // и анализ выходит пересказом названия. Берём docx, если он есть:
-            // там логический порядок, тогда как в PDF он восстановлен
-            // по координатам глифов.
-            var fullText = await db.BillDocumentTexts.AsNoTracking()
-                .Where(t => t.BillDocument.BillId == bill.Id && t.Status == "ok")
-                .OrderBy(t => t.BillDocument.Format == "DOC" ? 0 : 1)
-                .ThenByDescending(t => t.CharCount)
-                .Select(t => t.Text)
-                .FirstOrDefaultAsync(ct);
+            var fullText = await LoadDocumentTextAsync(db, bill.Id, ct);
 
             master = await analyzer.AnalyzeAsync(new BillAnalysisRequest
             {
@@ -110,10 +108,19 @@ public class AnalysisWorker(
             .AnyAsync(a => a.BillId == billId && a.LanguageCode == lang && !a.IsStale, ct);
         if (hasFreshTranslation) return;
 
+        // При переводе на язык документа подаём оригинал: переводчик берёт
+        // термины из него, а не переводит английские обратно. В остальных
+        // случаях документ не нужен — он обычно крупнее самого разбора,
+        // и платить за его токены незачем.
+        var sourceDocument = lang == DocumentLang
+            ? await LoadDocumentTextAsync(db, bill.Id, ct)
+            : null;
+
         // Версия берётся из результата, а не у переводчика: составной
         // переводчик выбирает провайдера по ходу дела, и его свойство
         // сообщало того, к кому он пойдёт следующим.
-        var (translated, translatorVersion) = await translator.TranslateAsync(master, lang, ct);
+        var (translated, translatorVersion) =
+            await translator.TranslateAsync(master, lang, sourceDocument, ct);
 
         db.BillAnalyses.Add(new BillAnalysis
         {
@@ -136,4 +143,22 @@ public class AnalysisWorker(
         logger.LogInformation("Перевод анализа {BillId} на {Lang} сохранён ({Model})",
             billId, lang, translatorVersion);
     }
+
+    /// <summary>
+    /// Текст документа законопроекта. То, на чём держится разбор: политика
+    /// требует ссылок на источник, а без текста ссылаться не на что,
+    /// и анализ выходит пересказом названия.
+    ///
+    /// Предпочитаем docx: там текст лежит логическим порядком, тогда как
+    /// в PDF он восстановлен по координатам глифов. При равенстве берём
+    /// самый длинный — короткие извлечения обычно значат неполный разбор.
+    /// </summary>
+    private static async Task<string?> LoadDocumentTextAsync(
+        AppDbContext db, int billId, CancellationToken ct) =>
+        await db.BillDocumentTexts.AsNoTracking()
+            .Where(t => t.BillDocument.BillId == billId && t.Status == "ok")
+            .OrderBy(t => t.BillDocument.Format == "DOC" ? 0 : 1)
+            .ThenByDescending(t => t.CharCount)
+            .Select(t => t.Text)
+            .FirstOrDefaultAsync(ct);
 }

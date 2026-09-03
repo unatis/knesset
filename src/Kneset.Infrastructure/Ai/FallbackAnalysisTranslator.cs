@@ -32,13 +32,14 @@ public class FallbackAnalysisTranslator(
     private bool QuotaAvailable => _exhaustedOn != DateOnly.FromDateTime(DateTime.UtcNow);
 
     public async Task<AnalysisTranslation> TranslateAsync(
-        BillAnalysisResult source, string targetLanguage, CancellationToken ct = default)
+        BillAnalysisResult source, string targetLanguage,
+        string? sourceDocument = null, CancellationToken ct = default)
     {
         if (QuotaAvailable)
         {
             try
             {
-                var free_ = await free.TranslateAsync(source, targetLanguage, ct);
+                var free_ = await free.TranslateAsync(source, targetLanguage, sourceDocument, ct);
 
                 var diff = AnalysisShape.Diff(source, free_.Analysis);
                 if (diff.Length == 0) return free_;
@@ -63,7 +64,7 @@ public class FallbackAnalysisTranslator(
             }
         }
 
-        var paidResult = await paid.TranslateAsync(source, targetLanguage, ct);
+        var paidResult = await paid.TranslateAsync(source, targetLanguage, sourceDocument, ct);
 
         var paidDiff = AnalysisShape.Diff(source, paidResult.Analysis);
         if (paidDiff.Length > 0)

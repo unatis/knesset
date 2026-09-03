@@ -23,7 +23,8 @@ public class ClaudeAnalysisTranslator(
     string model = "claude-sonnet-5") : IAnalysisTranslator
 {
     public async Task<AnalysisTranslation> TranslateAsync(
-        BillAnalysisResult source, string targetLanguage, CancellationToken ct = default)
+        BillAnalysisResult source, string targetLanguage,
+        string? sourceDocument = null, CancellationToken ct = default)
     {
         var response = await client.Messages.Create(new MessageCreateParams
         {
@@ -47,7 +48,7 @@ public class ClaudeAnalysisTranslator(
                 new()
                 {
                     Role = Role.User,
-                    Content = TranslationPrompt.User(source, targetLanguage),
+                    Content = TranslationPrompt.User(source, targetLanguage, sourceDocument),
                 },
             ],
         }, ct);
@@ -89,16 +90,29 @@ internal static class TranslationPrompt
         - Ничего не добавляй и не убирай — ни пунктов, ни оговорок, ни оценок.
         - Юридические термины передавай принятыми в целевом языке
           эквивалентами, а не калькой.
-        - Иврит не воспроизводи: при переносе ивритских слов в другую
-          письменность модели подставляют внутрь слова чужие буквы.
         - Ответ строго по JSON-схеме, без текста вокруг.
+
+        Если приложен оригинал документа, значит целевой язык — это язык,
+        на котором документ написан. Тогда термины и названия НЕ переводи
+        обратно, а бери из оригинала в точности так, как они там стоят:
+        разбор сделан на английском, и обратный перевод вернул бы пересказ
+        вместо формулировок самого закона. Это относится к названиям законов
+        и статей, юридическим понятиям и именам органов и должностей.
+
+        Если оригинала нет — иврит в ответе не воспроизводи: при переносе
+        ивритских слов в другую письменность модели подставляют внутрь слова
+        чужие буквы. Ссылайся на место и передавай смысл.
         """;
 
-    public static string User(BillAnalysisResult source, string targetLanguage) => $"""
+    public static string User(
+        BillAnalysisResult source, string targetLanguage, string? sourceDocument) => $"""
         Целевой язык: {targetLanguage}
 
         Разбор для перевода:
         {JsonSerializer.Serialize(source, JsonOptions)}
+        {(string.IsNullOrWhiteSpace(sourceDocument)
+            ? ""
+            : $"\nОригинал документа на целевом языке — источник терминологии:\n---\n{sourceDocument}\n---")}
         """;
 
     private static readonly JsonSerializerOptions JsonOptions = new()

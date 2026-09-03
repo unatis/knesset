@@ -30,7 +30,8 @@ public class GeminiAnalysisTranslator(
     public class QuotaExhaustedException(string message) : Exception(message);
 
     public async Task<AnalysisTranslation> TranslateAsync(
-        BillAnalysisResult source, string targetLanguage, CancellationToken ct = default)
+        BillAnalysisResult source, string targetLanguage,
+        string? sourceDocument = null, CancellationToken ct = default)
     {
         var body = new
         {
@@ -40,7 +41,7 @@ public class GeminiAnalysisTranslator(
                 new
                 {
                     role = "user",
-                    parts = new[] { new { text = TranslationPrompt.User(source, targetLanguage) } },
+                    parts = new[] { new { text = TranslationPrompt.User(source, targetLanguage, sourceDocument) } },
                 },
             },
             generationConfig = new
