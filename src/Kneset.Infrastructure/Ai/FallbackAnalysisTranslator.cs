@@ -29,31 +29,25 @@ public class FallbackAnalysisTranslator(
 {
     private DateOnly? _exhaustedOn;
 
-    /// <summary>
-    /// Версия зависит от того, кто перевёл, поэтому здесь — только тот,
-    /// к кому пойдём следующим. Фактического исполнителя каждой записи
-    /// хранит BillAnalysis.ModelVersion.
-    /// </summary>
-    public string ModelVersion => QuotaAvailable ? free.ModelVersion : paid.ModelVersion;
-
     private bool QuotaAvailable => _exhaustedOn != DateOnly.FromDateTime(DateTime.UtcNow);
 
-    public async Task<BillAnalysisResult> TranslateAsync(
-        BillAnalysisResult source, string targetLanguage, CancellationToken ct = default)
+    public async Task<AnalysisTranslation> TranslateAsync(
+        BillAnalysisResult source, string targetLanguage,
+        string? sourceDocument = null, CancellationToken ct = default)
     {
         if (QuotaAvailable)
         {
             try
             {
-                var result = await free.TranslateAsync(source, targetLanguage, ct);
+                var free_ = await free.TranslateAsync(source, targetLanguage, sourceDocument, ct);
 
-                var diff = AnalysisShape.Diff(source, result);
-                if (diff.Length == 0) return result;
+                var diff = AnalysisShape.Diff(source, free_.Analysis);
+                if (diff.Length == 0) return free_;
 
                 logger.LogWarning(
                     "Перевод на {Lang} от {Model} расходится с оригиналом по структуре " +
                     "({Diff}) — отдаю платному провайдеру",
-                    targetLanguage, free.ModelVersion, diff);
+                    targetLanguage, free_.ModelVersion, diff);
             }
             catch (GeminiAnalysisTranslator.QuotaExhaustedException ex)
             {
@@ -70,9 +64,9 @@ public class FallbackAnalysisTranslator(
             }
         }
 
-        var paidResult = await paid.TranslateAsync(source, targetLanguage, ct);
+        var paidResult = await paid.TranslateAsync(source, targetLanguage, sourceDocument, ct);
 
-        var paidDiff = AnalysisShape.Diff(source, paidResult);
+        var paidDiff = AnalysisShape.Diff(source, paidResult.Analysis);
         if (paidDiff.Length > 0)
         {
             // Здесь уже не к кому уходить — записываем в лог и отдаём как есть:
@@ -80,7 +74,7 @@ public class FallbackAnalysisTranslator(
             // чтобы оставить пользователя без разбора вообще.
             logger.LogWarning(
                 "Перевод на {Lang} от {Model} расходится с оригиналом по структуре: {Diff}",
-                targetLanguage, paid.ModelVersion, paidDiff);
+                targetLanguage, paidResult.ModelVersion, paidDiff);
         }
 
         return paidResult;
