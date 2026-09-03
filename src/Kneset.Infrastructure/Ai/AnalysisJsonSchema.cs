@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Kneset.Infrastructure.Ai;
 
@@ -88,8 +89,35 @@ public static class AnalysisJsonSchema
     public static Dictionary<string, JsonElement> ForClaude() =>
         JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Json)!;
 
-    /// <summary>Та же схема как есть — для responseSchema у Gemini.</summary>
-    public static JsonElement AsElement() => JsonDocument.Parse(Json).RootElement.Clone();
+    /// <summary>
+    /// Схема для responseSchema у Gemini — без additionalProperties.
+    ///
+    /// Structured output у Claude требует «additionalProperties: false»
+    /// на каждом объекте, иначе 400. Gemini принимает подмножество OpenAPI
+    /// и на то же поле отвечает своим 400. Поэтому одна схема как источник
+    /// правды и вычитание того, чего второй провайдер не понимает, —
+    /// две отдельные схемы однажды разошлись бы молча.
+    /// </summary>
+    public static JsonNode ForGemini()
+    {
+        var node = JsonNode.Parse(Json)!;
+        Strip(node);
+        return node;
+    }
+
+    private static void Strip(JsonNode? node)
+    {
+        switch (node)
+        {
+            case JsonObject obj:
+                obj.Remove("additionalProperties");
+                foreach (var child in obj.ToList()) Strip(child.Value);
+                break;
+            case JsonArray array:
+                foreach (var item in array) Strip(item);
+                break;
+        }
+    }
 
     /// <summary>
     /// Технические требования к ответу, общие для всех провайдеров.

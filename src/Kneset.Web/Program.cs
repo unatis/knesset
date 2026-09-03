@@ -310,6 +310,24 @@ if (app.Environment.IsDevelopment())
     // Вход для AI-анализа: то же, что получил бы BillAnalysisRequest.
     // Нужен, чтобы сравнивать провайдеров на строго одинаковых данных,
     // а не на том, что каждый скрипт собрал по-своему.
+    // Помечает разборы законопроекта устаревшими, чтобы воркер сгенерировал
+    // их заново. Нужно после правки политики или промпта: сами по себе
+    // разборы не перегенерируются, IsStale ставится только при изменении
+    // текста законопроекта в Кнессете.
+    app.MapGet("/dev/stale-analysis", async (
+        int billId, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var rows = await db.BillAnalyses
+            .Where(a => a.BillId == billId && !a.IsStale)
+            .ToListAsync(ct);
+
+        foreach (var row in rows) row.IsStale = true;
+        await db.SaveChangesAsync(ct);
+
+        return Results.Json(new { billId, marked = rows.Count });
+    });
+
     app.MapGet("/dev/analysis-input", async (
         int take, int minChars, int maxChars,
         IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
