@@ -38,7 +38,9 @@
   <data name="OpenAtKnesset" xml:space="preserve"><value>Open on the Knesset website ↗</value></data>
   <data name="Description" xml:space="preserve"><value>Description (from the Knesset)</value></data>
   <data name="Initiators" xml:space="preserve"><value>Initiators</value></data>
-  <data name="NoInitiators" xml:space="preserve"><value>No data — government bills are submitted without individual initiators.</value></data>
+  <data name="NoInitiators" xml:space="preserve"><value>No data on initiators.</value></data>
+  <data name="SubmittedByGovernment" xml:space="preserve"><value>Submitted by the government — government bills are laid before the Knesset without individual initiators.</value></data>
+  <data name="SubmittedByCommittee" xml:space="preserve"><value>Submitted by a Knesset committee — on the committee's behalf, not an individual member's.</value></data>
   <data name="InitiatorBadge" xml:space="preserve"><value>initiator</value></data>
 
   <data name="Reaction_Header" xml:space="preserve"><value>Public reaction</value></data>

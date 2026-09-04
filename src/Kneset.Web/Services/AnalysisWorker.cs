@@ -16,6 +16,7 @@ namespace Kneset.Web.Services;
 /// </summary>
 public class AnalysisWorker(
     AnalysisQueue queue,
+    AnalysisClaims claims,
     IBillAnalyzer analyzer,
     IAnalysisTranslator translator,
     IDbContextFactory<AppDbContext> dbFactory,
@@ -60,18 +61,45 @@ public class AnalysisWorker(
         var bill = await db.Bills.AsNoTracking().FirstOrDefaultAsync(b => b.Id == billId, ct);
         if (bill is null) return;
 
-        // 1. Мастер-анализ (en): генерируем, если свежего нет.
-        var masterEntity = await db.BillAnalyses
-            .Where(a => a.BillId == billId && a.LanguageCode == MasterLang && !a.IsStale)
-            .OrderByDescending(a => a.GeneratedAt)
-            .FirstOrDefaultAsync(ct);
+        var master = await EnsureMasterAsync(db, bill, ct);
+        if (master is null) return;
 
-        BillAnalysisResult master;
-        if (masterEntity is null)
+        if (lang == MasterLang) return;
+
+        await EnsureTranslationAsync(db, bill, master, lang, ct);
+    }
+
+    /// <summary>
+    /// Мастер-анализ (en): берёт свежий или генерирует. null означает
+    /// «сейчас его делает другой экземпляр» — тогда переводить нечего,
+    /// и задача просто заканчивается.
+    ///
+    /// Захват берётся под ключом <see cref="AnalysisJob.MasterStep"/>, а не
+    /// под языком: разбор один на все языки, и запрос на русский и на
+    /// арабский не должны заказать два разбора.
+    /// </summary>
+    private async Task<BillAnalysisResult?> EnsureMasterAsync(
+        AppDbContext db, Bill bill, CancellationToken ct)
+    {
+        var existing = await LoadFreshAsync(db, bill.Id, MasterLang, ct);
+        if (existing is not null) return existing;
+
+        if (!await claims.TryClaimAsync(bill.Id, AnalysisJob.MasterStep, ct)) return null;
+
+        // Ещё одна проверка уже под захватом: между чтением выше и захватом
+        // мог успеть завершиться другой экземпляр, и тогда платить незачем.
+        existing = await LoadFreshAsync(db, bill.Id, MasterLang, ct);
+        if (existing is not null)
+        {
+            await claims.ReleaseAsync(bill.Id, AnalysisJob.MasterStep, null, ct);
+            return existing;
+        }
+
+        try
         {
             var fullText = await LoadDocumentTextAsync(db, bill.Id, ct);
 
-            master = await analyzer.AnalyzeAsync(new BillAnalysisRequest
+            var master = await analyzer.AnalyzeAsync(new BillAnalysisRequest
             {
                 BillId = bill.Id,
                 NameHebrew = bill.Name,
@@ -93,55 +121,96 @@ public class AnalysisWorker(
                 BillLastUpdatedAt = bill.LastUpdatedDate
             });
             await db.SaveChangesAsync(ct);
-            logger.LogInformation("Мастер-анализ {BillId} сохранён ({Model})", billId, analyzer.ModelVersion);
+            logger.LogInformation(
+                "Мастер-анализ {BillId} сохранён ({Model})", bill.Id, analyzer.ModelVersion);
+
+            await claims.ReleaseAsync(bill.Id, AnalysisJob.MasterStep, null, ct);
+            return master;
         }
-        else
+        catch (Exception ex)
         {
-            master = JsonSerializer.Deserialize<BillAnalysisResult>(masterEntity.AnalysisJson)
-                     ?? throw new InvalidOperationException($"Не разобран мастер-анализ {masterEntity.Id}");
+            await claims.ReleaseAsync(bill.Id, AnalysisJob.MasterStep, ex.Message, CancellationToken.None);
+            throw;
         }
+    }
 
-        if (lang == MasterLang) return;
+    /// <summary>Перевод мастер-анализа на запрошенный язык, если свежего нет.</summary>
+    private async Task EnsureTranslationAsync(
+        AppDbContext db, Bill bill, BillAnalysisResult master, string lang, CancellationToken ct)
+    {
+        var hasFresh = await db.BillAnalyses
+            .AnyAsync(a => a.BillId == bill.Id && a.LanguageCode == lang && !a.IsStale, ct);
+        if (hasFresh) return;
 
-        // 2. Перевод на запрошенный язык, если свежего нет.
-        var hasFreshTranslation = await db.BillAnalyses
-            .AnyAsync(a => a.BillId == billId && a.LanguageCode == lang && !a.IsStale, ct);
-        if (hasFreshTranslation) return;
+        if (!await claims.TryClaimAsync(bill.Id, lang, ct)) return;
 
-        // При переводе на язык документа подаём оригинал: переводчик берёт
-        // термины из него, а не переводит английские обратно. В остальных
-        // случаях документ не нужен — он обычно крупнее самого разбора,
-        // и платить за его токены незачем.
-        var sourceDocument = lang == DocumentLang
-            ? await LoadDocumentTextAsync(db, bill.Id, ct)
-            : null;
-
-        // Версия берётся из результата, а не у переводчика: составной
-        // переводчик выбирает провайдера по ходу дела, и его свойство
-        // сообщало того, к кому он пойдёт следующим.
-        var (translated, translatorVersion) =
-            await translator.TranslateAsync(master, lang, sourceDocument, ct);
-
-        db.BillAnalyses.Add(new BillAnalysis
+        // Та же проверка под захватом — именно её отсутствие и стоило нам
+        // двух оплаченных русских переводов законопроекта 42.
+        hasFresh = await db.BillAnalyses
+            .AnyAsync(a => a.BillId == bill.Id && a.LanguageCode == lang && !a.IsStale, ct);
+        if (hasFresh)
         {
-            BillId = bill.Id,
-            AnalysisJson = JsonSerializer.Serialize(translated),
-            ModelVersion = translatorVersion,
-            LanguageCode = lang,
-            GeneratedAt = DateTime.UtcNow,
-            BillLastUpdatedAt = bill.LastUpdatedDate
-        });
-
-        // Переведённое название — в карточку закона (пока только русское поле).
-        if (lang == "ru" && translated.TranslatedName.Length > 0 && !translated.TranslatedName.StartsWith('['))
-        {
-            await db.Bills.Where(b => b.Id == bill.Id)
-                .ExecuteUpdateAsync(s => s.SetProperty(b => b.NameRu, translated.TranslatedName), ct);
+            await claims.ReleaseAsync(bill.Id, lang, null, ct);
+            return;
         }
 
-        await db.SaveChangesAsync(ct);
-        logger.LogInformation("Перевод анализа {BillId} на {Lang} сохранён ({Model})",
-            billId, lang, translatorVersion);
+        try
+        {
+            // При переводе на язык документа подаём оригинал: переводчик берёт
+            // термины из него, а не переводит английские обратно. В остальных
+            // случаях документ не нужен — он обычно крупнее самого разбора,
+            // и платить за его токены незачем.
+            var sourceDocument = lang == DocumentLang
+                ? await LoadDocumentTextAsync(db, bill.Id, ct)
+                : null;
+
+            // Версия берётся из результата, а не у переводчика: составной
+            // переводчик выбирает провайдера по ходу дела, и его свойство
+            // сообщало того, к кому он пойдёт следующим.
+            var (translated, translatorVersion) =
+                await translator.TranslateAsync(master, lang, sourceDocument, ct);
+
+            db.BillAnalyses.Add(new BillAnalysis
+            {
+                BillId = bill.Id,
+                AnalysisJson = JsonSerializer.Serialize(translated),
+                ModelVersion = translatorVersion,
+                LanguageCode = lang,
+                GeneratedAt = DateTime.UtcNow,
+                BillLastUpdatedAt = bill.LastUpdatedDate
+            });
+
+            // Переведённое название — в карточку закона (пока только русское поле).
+            if (lang == "ru" && translated.TranslatedName.Length > 0
+                && !translated.TranslatedName.StartsWith('['))
+            {
+                await db.Bills.Where(b => b.Id == bill.Id)
+                    .ExecuteUpdateAsync(s => s.SetProperty(b => b.NameRu, translated.TranslatedName), ct);
+            }
+
+            await db.SaveChangesAsync(ct);
+            logger.LogInformation("Перевод анализа {BillId} на {Lang} сохранён ({Model})",
+                bill.Id, lang, translatorVersion);
+
+            await claims.ReleaseAsync(bill.Id, lang, null, ct);
+        }
+        catch (Exception ex)
+        {
+            await claims.ReleaseAsync(bill.Id, lang, ex.Message, CancellationToken.None);
+            throw;
+        }
+    }
+
+    private static async Task<BillAnalysisResult?> LoadFreshAsync(
+        AppDbContext db, int billId, string lang, CancellationToken ct)
+    {
+        var json = await db.BillAnalyses.AsNoTracking()
+            .Where(a => a.BillId == billId && a.LanguageCode == lang && !a.IsStale)
+            .OrderByDescending(a => a.GeneratedAt)
+            .Select(a => a.AnalysisJson)
+            .FirstOrDefaultAsync(ct);
+
+        return json is null ? null : JsonSerializer.Deserialize<BillAnalysisResult>(json);
     }
 
     /// <summary>

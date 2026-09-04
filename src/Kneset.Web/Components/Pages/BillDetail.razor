@@ -245,9 +245,33 @@ else
             <div class="card">
                 <div class="card-header">@L["Initiators"] (@_bill.Initiators.Count)</div>
                 <ul class="list-group list-group-flush">
+                    @* Пустой список объясняем по типу законопроекта, а не одной
+                       фразой на все случаи. Раньше здесь всегда стояло «нет
+                       данных, правительственные законопроекты вносятся без
+                       личных инициаторов» — и 25 законопроектов, внесённых
+                       комиссиями Кнессета, сообщали читателю, что они
+                       правительственные. Проверено по базе: у частных
+                       инициатив (10 903) инициаторы есть все до одного,
+                       пустой список бывает только у `ממשלתית` и `ועדה`.
+
+                       Министерство назвать не можем: в OData у KNS_Bill поля
+                       министерства нет, а связь KNS_IsraelLawMinistry висит
+                       на законе, не на законопроекте — то есть ответственное
+                       министерство появляется только после принятия. *@
                     @if (_bill.Initiators.Count == 0)
                     {
-                        <li class="list-group-item text-muted">@L["NoInitiators"]</li>
+                        <li class="list-group-item text-muted">
+                            @(_bill.SubTypeDesc switch
+                            {
+                                "ממשלתית" => L["SubmittedByGovernment"],
+                                "ועדה" => L["SubmittedByCommittee"],
+                                _ => L["NoInitiators"],
+                            })
+                            @if (_bill.SubTypeDesc == "ועדה" && _bill.Committee is not null)
+                            {
+                                <span dir="rtl" lang="he"> @_bill.Committee.Name</span>
+                            }
+                        </li>
                     }
                     @foreach (var initiator in _bill.Initiators
                         .OrderByDescending(i => i.IsInitiator).ThenBy(i => i.Ordinal))

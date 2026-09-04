@@ -202,6 +202,9 @@ builder.Services.AddSingleton<IAnalysisTranslator>(sp =>
         free, paid, sp.GetRequiredService<ILogger<FallbackAnalysisTranslator>>());
 });
 builder.Services.AddSingleton<AnalysisQueue>();
+// Захват шага разбора в базе: два экземпляра приложения на одной базе
+// не должны сделать и оплатить одну работу дважды.
+builder.Services.AddSingleton<AnalysisClaims>();
 builder.Services.AddHostedService<AnalysisWorker>();
 
 // Структурирование гражданских инициатив — отдельная задача, к провайдеру
@@ -421,6 +424,160 @@ if (app.Environment.IsDevelopment())
             }),
             css = rules.ToString(),
         });
+    });
+
+    // Лишние разборы: больше одной неустаревшей записи на пару
+    // (законопроект, язык). Такое рождается гонкой двух экземпляров
+    // приложения на одной базе.
+    //
+    // Сырой SQL нарочно: проекция через EF падает на материализации —
+    // в части строк лежат NULL там, где модель их не допускает. Джейсон
+    // собирает сама база, поэтому модель тут ни при чём. Заодно видно,
+    // где именно пустые значения.
+    app.MapGet("/dev/analysis-dupes-fresh", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var conn = db.Database.GetDbConnection();
+        await conn.OpenAsync(ct);
+
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            WITH fresh AS (
+                SELECT "Id", "BillId", "LanguageCode", "ModelVersion",
+                       "GeneratedAt", "BillLastUpdatedAt",
+                       length("AnalysisJson"::text) AS len   -- столбец jsonb, length() к нему не применим
+                FROM "BillAnalyses" WHERE NOT "IsStale"
+            ),
+            dup AS (
+                SELECT "BillId", "LanguageCode", count(*) AS n
+                FROM fresh GROUP BY "BillId", "LanguageCode" HAVING count(*) > 1
+            )
+            SELECT coalesce(json_agg(x ORDER BY x."BillId", x."LanguageCode"), '[]')::text
+            FROM (
+                SELECT d."BillId", d."LanguageCode", d.n,
+                       (SELECT count(DISTINCT f."BillLastUpdatedAt") = 1
+                          FROM fresh f
+                         WHERE f."BillId" = d."BillId"
+                           AND f."LanguageCode" = d."LanguageCode") AS "sameSnapshot",
+                       (SELECT count(*) FROM fresh f
+                         WHERE f."BillId" = d."BillId"
+                           AND f."LanguageCode" = d."LanguageCode"
+                           AND f."BillLastUpdatedAt" IS NULL) AS "nullSnapshots",
+                       (SELECT json_agg(json_build_object(
+                                   'id', f."Id", 'model', f."ModelVersion",
+                                   'generatedAt', f."GeneratedAt", 'len', f.len)
+                                ORDER BY f."GeneratedAt" DESC)
+                          FROM fresh f
+                         WHERE f."BillId" = d."BillId"
+                           AND f."LanguageCode" = d."LanguageCode") AS rows
+                FROM dup d
+            ) x
+            """;
+
+        var json = (string?)await cmd.ExecuteScalarAsync(ct) ?? "[]";
+        return Results.Content(json, "application/json");
+    });
+
+    // Одна запись разбора целиком — чтобы сохранить копию перед удалением.
+    app.MapGet("/dev/analysis-row", async (
+        int id, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var conn = db.Database.GetDbConnection();
+        await conn.OpenAsync(ct);
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            SELECT coalesce(to_json(t)::text, 'null') FROM (
+                SELECT "Id", "BillId", "LanguageCode", "ModelVersion", "GeneratedAt",
+                       "IsStale", "BillLastUpdatedAt", "AnalysisJson"
+                FROM "BillAnalyses" WHERE "Id" = @id
+            ) t
+            """;
+        var p = cmd.CreateParameter();
+        p.ParameterName = "id";
+        p.Value = id;
+        cmd.Parameters.Add(p);
+        return Results.Content((string?)await cmd.ExecuteScalarAsync(ct) ?? "null", "application/json");
+    });
+
+    // Удаление одной записи разбора строго по id. Нарочно по id, а не по
+    // правилу вида «оставить свежую»: правило, ошибившись, выметает лишнее
+    // молча, а здесь удаляется ровно то, что названо, и ответ говорит что.
+    app.MapPost("/dev/delete-analysis", async (
+        int id, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var deleted = await db.BillAnalyses.Where(a => a.Id == id).ExecuteDeleteAsync(ct);
+        return Results.Json(new { id, deleted });
+    });
+
+    // Захваты шагов разбора: кто что держит и чем кончилось.
+    app.MapGet("/dev/claims", async (
+        int? billId, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        return Results.Json(await db.AnalysisJobs.AsNoTracking()
+            .Where(j => billId == null || j.BillId == billId)
+            .OrderByDescending(j => j.ClaimedAt)
+            .Take(50)
+            .ToListAsync(ct));
+    });
+
+    // Проверка блокировки: зовёт тот же захват, что и воркер. Если шаг
+    // уже держит живой процесс, должно вернуться claimed=false — и это
+    // единственное, что отделяет нас от второй оплаты той же работы.
+    app.MapGet("/dev/try-claim", async (
+        int billId, string step, AnalysisClaims claims, CancellationToken ct) =>
+        Results.Json(new { billId, step, claimed = await claims.TryClaimAsync(billId, step, ct) }));
+
+    app.MapGet("/dev/release-claim", async (
+        int billId, string step, string? error, AnalysisClaims claims, CancellationToken ct) =>
+    {
+        await claims.ReleaseAsync(billId, step, error, ct);
+        return Results.Json(new { billId, step, released = true });
+    });
+
+    // Документы одного законопроекта с размером извлечённого текста.
+    // Нужно, когда разбор не получился: первый подозреваемый — объём,
+    // который уехал в модель.
+    app.MapGet("/dev/bill-docs", async (
+        int billId, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        return Results.Json(await db.BillDocuments
+            .Where(d => d.BillId == billId)
+            .Select(d => new
+            {
+                d.Id,
+                d.Format,
+                d.GroupTypeDesc,
+                text = db.BillDocumentTexts
+                    .Where(t => t.BillDocumentId == d.Id)
+                    .Select(t => new { t.Status, t.CharCount, t.ExtractorVersion, t.Error })
+                    .FirstOrDefault(),
+            })
+            .ToListAsync(ct));
+    });
+
+    // Законопроекты без инициаторов — по типам. Страница объясняет пустой
+    // список тем, что законопроект правительственный; проверяем, так ли это
+    // на самом деле, прежде чем утверждать это читателю.
+    app.MapGet("/dev/no-initiators", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        return Results.Json(await db.Bills
+            .GroupBy(b => b.SubTypeDesc)
+            .Select(g => new
+            {
+                subType = g.Key,
+                total = g.Count(),
+                withoutInitiators = g.Count(b => !b.Initiators.Any()),
+                sample = g.Where(b => !b.Initiators.Any()).Select(b => b.Id).FirstOrDefault(),
+            })
+            .OrderByDescending(x => x.total)
+            .ToListAsync(ct));
     });
 
     // Все разборы одного законопроекта: какие языки есть, кто сделал,

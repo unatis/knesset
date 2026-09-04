@@ -38,7 +38,9 @@
   <data name="OpenAtKnesset" xml:space="preserve"><value>פתיחה באתר הכנסת ↗</value></data>
   <data name="Description" xml:space="preserve"><value>תיאור (מהכנסת)</value></data>
   <data name="Initiators" xml:space="preserve"><value>יוזמים</value></data>
-  <data name="NoInitiators" xml:space="preserve"><value>אין נתונים — הצעות חוק ממשלתיות מוגשות ללא יוזמים אישיים.</value></data>
+  <data name="NoInitiators" xml:space="preserve"><value>אין נתונים על יוזמים.</value></data>
+  <data name="SubmittedByGovernment" xml:space="preserve"><value>הוגשה על ידי הממשלה — הצעות חוק ממשלתיות מוגשות ללא יוזמים אישיים.</value></data>
+  <data name="SubmittedByCommittee" xml:space="preserve"><value>הוגשה על ידי ועדה של הכנסת — בשם הוועדה ולא של חבר כנסת מסוים.</value></data>
   <data name="InitiatorBadge" xml:space="preserve"><value>יוזם</value></data>
 
   <data name="Reaction_Header" xml:space="preserve"><value>תגובת הציבור</value></data>

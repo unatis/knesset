@@ -38,7 +38,9 @@
   <data name="OpenAtKnesset" xml:space="preserve"><value>فتح في موقع الكنيست ↗</value></data>
   <data name="Description" xml:space="preserve"><value>الوصف (من الكنيست)</value></data>
   <data name="Initiators" xml:space="preserve"><value>المبادرون</value></data>
-  <data name="NoInitiators" xml:space="preserve"><value>لا بيانات — مشاريع القوانين الحكومية تُقدَّم دون مبادرين أفراد.</value></data>
+  <data name="NoInitiators" xml:space="preserve"><value>لا توجد بيانات عن المبادرين.</value></data>
+  <data name="SubmittedByGovernment" xml:space="preserve"><value>مقدَّم من الحكومة — مشاريع القوانين الحكومية تُقدَّم دون مبادرين أفراد.</value></data>
+  <data name="SubmittedByCommittee" xml:space="preserve"><value>مقدَّم من لجنة في الكنيست — باسم اللجنة لا باسم عضو كنيست بعينه.</value></data>
   <data name="InitiatorBadge" xml:space="preserve"><value>مبادر</value></data>
 
   <data name="Reaction_Header" xml:space="preserve"><value>تفاعل الجمهور</value></data>
