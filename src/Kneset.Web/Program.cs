@@ -417,6 +417,28 @@ if (app.Environment.IsDevelopment())
         });
     });
 
+    // Все разборы одного законопроекта: какие языки есть, кто сделал,
+    // не устарели ли. Нужно, когда карточка показывает не тот язык,
+    // который выбран, — по одному экрану не понять, перевод ещё идёт
+    // или он упал.
+    app.MapGet("/dev/bill-analyses", async (
+        int billId, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        return Results.Json(await db.BillAnalyses
+            .Where(a => a.BillId == billId)
+            .OrderBy(a => a.GeneratedAt)
+            .Select(a => new
+            {
+                a.LanguageCode,
+                a.ModelVersion,
+                a.IsStale,
+                a.GeneratedAt,
+                chars = (int?)(a.AnalysisJson == null ? null : (int?)a.AnalysisJson.Length),
+            })
+            .ToListAsync(ct));
+    });
+
     app.MapGet("/dev/stale-stubs", async (
         string mode, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
     {

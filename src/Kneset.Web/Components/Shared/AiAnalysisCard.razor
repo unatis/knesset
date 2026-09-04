@@ -34,11 +34,31 @@
         }
         else
         {
-            @if (_shownLang != UserLang && _generating)
+            @* Показан не тот язык, который выбран, — говорим об этом всегда,
+               а не только пока задача висит в очереди.
+
+               Раньше условие включало _generating, то есть зависело от флага
+               очереди в памяти. Флаг теряется при перезапуске приложения
+               и не виден другому экземпляру, поэтому человек мог получить
+               английский разбор без всякого объяснения — что и случилось:
+               мастер сохраняется на английском, перевод приходит через
+               минуту, и в это окно страница молчала о причине. *@
+            @if (_shownLang != UserLang)
             {
-                <div class="alert alert-info py-2 d-flex align-items-center gap-2">
-                    <div class="spinner-border spinner-border-sm"></div>
-                    <span>@L["Ai_TranslationPending"]</span>
+                <div class="alert alert-info py-2 d-flex align-items-center gap-2 flex-wrap">
+                    @if (_generating)
+                    {
+                        <div class="spinner-border spinner-border-sm"></div>
+                    }
+                    @* «Готовится» — правда только пока задача в очереди.
+                       Если её там нет, перевода просто нет, и обещать
+                       обратное нельзя: человек будет ждать напрасно. *@
+                    <span>@L[_generating ? "Ai_TranslationPending" : "Ai_TranslationMissing"]</span>
+                    @if (!_generating)
+                    {
+                        <button class="btn btn-sm btn-outline-primary"
+                                @onclick="RequestAnalysis">@L["Ai_Retry"]</button>
+                    }
                 </div>
             }
 
