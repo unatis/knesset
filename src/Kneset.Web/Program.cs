@@ -187,8 +187,14 @@ builder.Services.AddSingleton<IAnalysisTranslator>(sp =>
         ?? Environment.GetEnvironmentVariable("GEMINI_KEY");
     if (string.IsNullOrWhiteSpace(geminiKey)) return paid;
 
+    // Таймаут выше стандартных ста секунд: перевод целого разбора
+    // на бесплатном тарифе в них не укладывался, запрос обрывался,
+    // и на бесплатной попытке терялись впустую и время, и место в квоте.
+    var geminiHttp = sp.GetRequiredService<IHttpClientFactory>().CreateClient();
+    geminiHttp.Timeout = TimeSpan.FromMinutes(5);
+
     var free = new GeminiAnalysisTranslator(
-        sp.GetRequiredService<IHttpClientFactory>().CreateClient(),
+        geminiHttp,
         geminiKey,
         builder.Configuration["Ai:Gemini:Model"] ?? "gemini-3.5-flash");
 

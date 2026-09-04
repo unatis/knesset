@@ -21,7 +21,7 @@
         {
             <div class="text-center p-3"><div class="spinner-border spinner-border-sm"></div></div>
         }
-        else if (_analysis is null && _generating)
+        else if (_analysis is null && TranslationExpected)
         {
             <div class="d-flex align-items-center gap-2 text-muted">
                 <div class="spinner-border spinner-border-sm"></div>
@@ -46,15 +46,16 @@
             @if (_shownLang != UserLang)
             {
                 <div class="alert alert-info py-2 d-flex align-items-center gap-2 flex-wrap">
-                    @if (_generating)
+                    @if (TranslationExpected)
                     {
                         <div class="spinner-border spinner-border-sm"></div>
                     }
-                    @* «Готовится» — правда только пока задача в очереди.
-                       Если её там нет, перевода просто нет, и обещать
-                       обратное нельзя: человек будет ждать напрасно. *@
-                    <span>@L[_generating ? "Ai_TranslationPending" : "Ai_TranslationMissing"]</span>
-                    @if (!_generating)
+                    @* «Готовится» — правда, пока задача в очереди или ещё
+                       будет поставлена. Если попытка уже закончилась,
+                       а нужного языка так и нет, обещать подготовку нельзя:
+                       человек будет ждать напрасно. Тогда — кнопка. *@
+                    <span>@L[TranslationExpected ? "Ai_TranslationPending" : "Ai_TranslationMissing"]</span>
+                    @if (!TranslationExpected)
                     {
                         <button class="btn btn-sm btn-outline-primary"
                                 @onclick="RequestAnalysis">@L["Ai_Retry"]</button>
@@ -79,8 +80,20 @@
     private DateTime? _generatedAt;
     private string? _modelVersion;
     private string _shownLang = "";
+    private bool _polling;
+    private readonly CancellationTokenSource _pollCts = new();
 
     private static string UserLang => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+    /// <summary>
+    /// Перевод на язык пользователя ещё ожидается: либо задача в очереди,
+    /// либо компонент пока не интерактивен и поставит её сразу после
+    /// подключения цепи. Второе важно: уведомление отрисовывается уже при
+    /// пререндере, где запрос ещё не сделан, — и без этой поправки человек
+    /// первым делом видел «перевода нет» с кнопкой, хотя перевод вот-вот
+    /// начнётся сам.
+    /// </summary>
+    private bool TranslationExpected => _generating || !RendererInfo.IsInteractive;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -103,6 +116,12 @@
         if (RendererInfo.IsInteractive && (_shownLang != UserLang || _analysis is null))
         {
             RequestAnalysis();
+
+            if (!_polling)
+            {
+                _polling = true;
+                _ = PollUntilTranslatedAsync();
+            }
         }
     }
 
@@ -152,5 +171,47 @@
         });
     }
 
-    public void Dispose() => Queue.Completed -= OnAnalysisCompleted;
+    /// <summary>
+    /// Подстраховка к событию очереди: пока нужного языка нет, перечитываем
+    /// базу раз в пять секунд.
+    ///
+    /// Событие Completed живёт в памяти процесса. Оно теряется, если
+    /// приложение перезапустилось за время генерации (на бесплатном тарифе
+    /// Render это обычное дело) или если разбор посчитал другой экземпляр.
+    /// Тогда перевод уже лежит в базе, а страница о нём не знает —
+    /// и человеку приходится перезагружать вручную, о чём и был отзыв.
+    ///
+    /// Опрос стоит один короткий запрос в базу и живёт только пока ждём;
+    /// потолок нужен, чтобы забытая открытая вкладка не стучала вечно.
+    /// </summary>
+    private async Task PollUntilTranslatedAsync()
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+        var deadline = DateTime.UtcNow.AddMinutes(5);
+
+        try
+        {
+            while (DateTime.UtcNow < deadline && await timer.WaitForNextTickAsync(_pollCts.Token))
+            {
+                await LoadAsync();
+                StateHasChanged();
+                if (_analysis is not null && _shownLang == UserLang) return;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Страницу закрыли — ждать больше некому.
+        }
+        finally
+        {
+            _polling = false;
+        }
+    }
+
+    public void Dispose()
+    {
+        Queue.Completed -= OnAnalysisCompleted;
+        _pollCts.Cancel();
+        _pollCts.Dispose();
+    }
 }
