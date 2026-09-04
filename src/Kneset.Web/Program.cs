@@ -202,6 +202,9 @@ builder.Services.AddSingleton<IAnalysisTranslator>(sp =>
         free, paid, sp.GetRequiredService<ILogger<FallbackAnalysisTranslator>>());
 });
 builder.Services.AddSingleton<AnalysisQueue>();
+// Захват шага разбора в базе: два экземпляра приложения на одной базе
+// не должны сделать и оплатить одну работу дважды.
+builder.Services.AddSingleton<AnalysisClaims>();
 builder.Services.AddHostedService<AnalysisWorker>();
 
 // Структурирование гражданских инициатив — отдельная задача, к провайдеру
@@ -421,6 +424,32 @@ if (app.Environment.IsDevelopment())
             }),
             css = rules.ToString(),
         });
+    });
+
+    // Захваты шагов разбора: кто что держит и чем кончилось.
+    app.MapGet("/dev/claims", async (
+        int? billId, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        return Results.Json(await db.AnalysisJobs.AsNoTracking()
+            .Where(j => billId == null || j.BillId == billId)
+            .OrderByDescending(j => j.ClaimedAt)
+            .Take(50)
+            .ToListAsync(ct));
+    });
+
+    // Проверка блокировки: зовёт тот же захват, что и воркер. Если шаг
+    // уже держит живой процесс, должно вернуться claimed=false — и это
+    // единственное, что отделяет нас от второй оплаты той же работы.
+    app.MapGet("/dev/try-claim", async (
+        int billId, string step, AnalysisClaims claims, CancellationToken ct) =>
+        Results.Json(new { billId, step, claimed = await claims.TryClaimAsync(billId, step, ct) }));
+
+    app.MapGet("/dev/release-claim", async (
+        int billId, string step, string? error, AnalysisClaims claims, CancellationToken ct) =>
+    {
+        await claims.ReleaseAsync(billId, step, error, ct);
+        return Results.Json(new { billId, step, released = true });
     });
 
     // Документы одного законопроекта с размером извлечённого текста.

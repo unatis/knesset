@@ -21,6 +21,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<BillInitiator> BillInitiators => Set<BillInitiator>();
     public DbSet<BillAnalysis> BillAnalyses => Set<BillAnalysis>();
     public DbSet<BillSession> BillSessions => Set<BillSession>();
+    public DbSet<AnalysisJob> AnalysisJobs => Set<AnalysisJob>();
     public DbSet<BillDocument> BillDocuments => Set<BillDocument>();
     public DbSet<BillDocumentText> BillDocumentTexts => Set<BillDocumentText>();
     public DbSet<Committee> Committees => Set<Committee>();
@@ -83,6 +84,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             // Ближайшие заседания по всей базе — для сроков в столбце контекста.
             s.HasIndex(x => x.StartDate);
             s.HasOne(x => x.Bill).WithMany(b => b.Sessions)
+             .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<AnalysisJob>(j =>
+        {
+            // Уникальность здесь и есть весь механизм: захват берётся вставкой,
+            // и проигравший узнаёт об этом по нарушению ограничения, а не
+            // по чтению, которое у двух процессов может совпасть.
+            j.HasIndex(x => new { x.BillId, x.Step }).IsUnique();
+            j.Property(x => x.Step).HasMaxLength(16);
+            j.Property(x => x.State).HasMaxLength(16);
+            j.Property(x => x.ClaimedBy).HasMaxLength(64);
+            j.Property(x => x.Error).HasMaxLength(2000);
+            j.HasOne<Bill>().WithMany()
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
         });
 
