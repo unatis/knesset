@@ -423,6 +423,47 @@ if (app.Environment.IsDevelopment())
         });
     });
 
+    // Документы одного законопроекта с размером извлечённого текста.
+    // Нужно, когда разбор не получился: первый подозреваемый — объём,
+    // который уехал в модель.
+    app.MapGet("/dev/bill-docs", async (
+        int billId, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        return Results.Json(await db.BillDocuments
+            .Where(d => d.BillId == billId)
+            .Select(d => new
+            {
+                d.Id,
+                d.Format,
+                d.GroupTypeDesc,
+                text = db.BillDocumentTexts
+                    .Where(t => t.BillDocumentId == d.Id)
+                    .Select(t => new { t.Status, t.CharCount, t.ExtractorVersion, t.Error })
+                    .FirstOrDefault(),
+            })
+            .ToListAsync(ct));
+    });
+
+    // Законопроекты без инициаторов — по типам. Страница объясняет пустой
+    // список тем, что законопроект правительственный; проверяем, так ли это
+    // на самом деле, прежде чем утверждать это читателю.
+    app.MapGet("/dev/no-initiators", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        return Results.Json(await db.Bills
+            .GroupBy(b => b.SubTypeDesc)
+            .Select(g => new
+            {
+                subType = g.Key,
+                total = g.Count(),
+                withoutInitiators = g.Count(b => !b.Initiators.Any()),
+            })
+            .OrderByDescending(x => x.total)
+            .ToListAsync(ct));
+    });
+
     // Все разборы одного законопроекта: какие языки есть, кто сделал,
     // не устарели ли. Нужно, когда карточка показывает не тот язык,
     // который выбран, — по одному экрану не понять, перевод ещё идёт

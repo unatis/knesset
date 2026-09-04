@@ -38,7 +38,9 @@
   <data name="OpenAtKnesset" xml:space="preserve"><value>Открыть на сайте Кнессета ↗</value></data>
   <data name="Description" xml:space="preserve"><value>Описание (из Кнессета)</value></data>
   <data name="Initiators" xml:space="preserve"><value>Инициаторы</value></data>
-  <data name="NoInitiators" xml:space="preserve"><value>Нет данных — правительственные законопроекты вносятся без личных инициаторов.</value></data>
+  <data name="NoInitiators" xml:space="preserve"><value>Нет данных об инициаторах.</value></data>
+  <data name="SubmittedByGovernment" xml:space="preserve"><value>Внесён правительством — правительственные законопроекты вносятся без личных инициаторов.</value></data>
+  <data name="SubmittedByCommittee" xml:space="preserve"><value>Внесён комиссией Кнессета — от имени комиссии, а не отдельного депутата.</value></data>
   <data name="InitiatorBadge" xml:space="preserve"><value>инициатор</value></data>
 
   <data name="Reaction_Header" xml:space="preserve"><value>Реакция общества</value></data>
