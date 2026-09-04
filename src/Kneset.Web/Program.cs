@@ -426,6 +426,92 @@ if (app.Environment.IsDevelopment())
         });
     });
 
+    // Лишние разборы: больше одной неустаревшей записи на пару
+    // (законопроект, язык). Такое рождается гонкой двух экземпляров
+    // приложения на одной базе.
+    //
+    // Сырой SQL нарочно: проекция через EF падает на материализации —
+    // в части строк лежат NULL там, где модель их не допускает. Джейсон
+    // собирает сама база, поэтому модель тут ни при чём. Заодно видно,
+    // где именно пустые значения.
+    app.MapGet("/dev/analysis-dupes-fresh", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var conn = db.Database.GetDbConnection();
+        await conn.OpenAsync(ct);
+
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            WITH fresh AS (
+                SELECT "Id", "BillId", "LanguageCode", "ModelVersion",
+                       "GeneratedAt", "BillLastUpdatedAt",
+                       length("AnalysisJson"::text) AS len   -- столбец jsonb, length() к нему не применим
+                FROM "BillAnalyses" WHERE NOT "IsStale"
+            ),
+            dup AS (
+                SELECT "BillId", "LanguageCode", count(*) AS n
+                FROM fresh GROUP BY "BillId", "LanguageCode" HAVING count(*) > 1
+            )
+            SELECT coalesce(json_agg(x ORDER BY x."BillId", x."LanguageCode"), '[]')::text
+            FROM (
+                SELECT d."BillId", d."LanguageCode", d.n,
+                       (SELECT count(DISTINCT f."BillLastUpdatedAt") = 1
+                          FROM fresh f
+                         WHERE f."BillId" = d."BillId"
+                           AND f."LanguageCode" = d."LanguageCode") AS "sameSnapshot",
+                       (SELECT count(*) FROM fresh f
+                         WHERE f."BillId" = d."BillId"
+                           AND f."LanguageCode" = d."LanguageCode"
+                           AND f."BillLastUpdatedAt" IS NULL) AS "nullSnapshots",
+                       (SELECT json_agg(json_build_object(
+                                   'id', f."Id", 'model', f."ModelVersion",
+                                   'generatedAt', f."GeneratedAt", 'len', f.len)
+                                ORDER BY f."GeneratedAt" DESC)
+                          FROM fresh f
+                         WHERE f."BillId" = d."BillId"
+                           AND f."LanguageCode" = d."LanguageCode") AS rows
+                FROM dup d
+            ) x
+            """;
+
+        var json = (string?)await cmd.ExecuteScalarAsync(ct) ?? "[]";
+        return Results.Content(json, "application/json");
+    });
+
+    // Одна запись разбора целиком — чтобы сохранить копию перед удалением.
+    app.MapGet("/dev/analysis-row", async (
+        int id, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var conn = db.Database.GetDbConnection();
+        await conn.OpenAsync(ct);
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            SELECT coalesce(to_json(t)::text, 'null') FROM (
+                SELECT "Id", "BillId", "LanguageCode", "ModelVersion", "GeneratedAt",
+                       "IsStale", "BillLastUpdatedAt", "AnalysisJson"
+                FROM "BillAnalyses" WHERE "Id" = @id
+            ) t
+            """;
+        var p = cmd.CreateParameter();
+        p.ParameterName = "id";
+        p.Value = id;
+        cmd.Parameters.Add(p);
+        return Results.Content((string?)await cmd.ExecuteScalarAsync(ct) ?? "null", "application/json");
+    });
+
+    // Удаление одной записи разбора строго по id. Нарочно по id, а не по
+    // правилу вида «оставить свежую»: правило, ошибившись, выметает лишнее
+    // молча, а здесь удаляется ровно то, что названо, и ответ говорит что.
+    app.MapPost("/dev/delete-analysis", async (
+        int id, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var deleted = await db.BillAnalyses.Where(a => a.Id == id).ExecuteDeleteAsync(ct);
+        return Results.Json(new { id, deleted });
+    });
+
     // Захваты шагов разбора: кто что держит и чем кончилось.
     app.MapGet("/dev/claims", async (
         int? billId, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
