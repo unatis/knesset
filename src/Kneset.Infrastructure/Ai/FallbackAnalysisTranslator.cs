@@ -55,10 +55,19 @@ public class FallbackAnalysisTranslator(
                 logger.LogInformation(
                     "{Message}. До конца суток перевожу платным провайдером", ex.Message);
             }
-            catch (Exception ex) when (ex is not OperationCanceledException)
+            catch (Exception ex) when (ex is not OperationCanceledException
+                                       || !ct.IsCancellationRequested)
             {
                 // Сетевая неполадка у бесплатного провайдера не повод терять
                 // перевод: платный доступен.
+                //
+                // Про условие: истёкший таймаут HttpClient приходит как
+                // TaskCanceledException, то есть как наследник
+                // OperationCanceledException. Прежний фильтр принимал его
+                // за отмену со стороны вызывающего и пропускал наружу —
+                // и перевод терялся целиком, хотя платный провайдер был
+                // доступен. Отличаем по самому токену: если его никто
+                // не отменял, это не отмена, а неполадка.
                 logger.LogWarning(ex,
                     "Бесплатный переводчик не справился, отдаю платному");
             }
