@@ -459,6 +459,7 @@ if (app.Environment.IsDevelopment())
                 subType = g.Key,
                 total = g.Count(),
                 withoutInitiators = g.Count(b => !b.Initiators.Any()),
+                sample = g.Where(b => !b.Initiators.Any()).Select(b => b.Id).FirstOrDefault(),
             })
             .OrderByDescending(x => x.total)
             .ToListAsync(ct));
