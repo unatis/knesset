@@ -188,6 +188,7 @@
   <data name="Hist_Show" xml:space="preserve"><value>عرض</value></data>
   <data name="Hist_Hide" xml:space="preserve"><value>إخفاء</value></data>
   <data name="Ai_TranslationPending" xml:space="preserve"><value>تجري ترجمة إلى لغتك — يُعرض التحليل بلغة أخرى مؤقتًا.</value></data>
+  <data name="Ai_TranslationMissing" xml:space="preserve"><value>التحليل معروض بلغة أخرى — الترجمة إلى لغتكم غير متوفّرة بعد.</value></data>
 
   <data name="Share_Header" xml:space="preserve"><value>مشاركة</value></data>
   <data name="Share_Copy" xml:space="preserve"><value>نسخ الرابط</value></data>

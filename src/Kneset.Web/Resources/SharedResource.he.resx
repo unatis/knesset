@@ -188,6 +188,7 @@
   <data name="Hist_Show" xml:space="preserve"><value>הצגה</value></data>
   <data name="Hist_Hide" xml:space="preserve"><value>הסתרה</value></data>
   <data name="Ai_TranslationPending" xml:space="preserve"><value>התרגום לשפתך בהכנה — בינתיים מוצג הניתוח בשפה אחרת.</value></data>
+  <data name="Ai_TranslationMissing" xml:space="preserve"><value>הניתוח מוצג בשפה אחרת — תרגום לשפה שלכם עדיין אינו קיים.</value></data>
 
   <data name="Share_Header" xml:space="preserve"><value>שיתוף</value></data>
   <data name="Share_Copy" xml:space="preserve"><value>העתקת קישור</value></data>

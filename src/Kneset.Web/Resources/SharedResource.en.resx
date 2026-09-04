@@ -188,6 +188,7 @@
   <data name="Hist_Show" xml:space="preserve"><value>show</value></data>
   <data name="Hist_Hide" xml:space="preserve"><value>hide</value></data>
   <data name="Ai_TranslationPending" xml:space="preserve"><value>A translation into your language is being prepared — showing the analysis in another language for now.</value></data>
+  <data name="Ai_TranslationMissing" xml:space="preserve"><value>The analysis is shown in another language — yours is not available yet.</value></data>
 
   <data name="Share_Header" xml:space="preserve"><value>Share</value></data>
   <data name="Share_Copy" xml:space="preserve"><value>Copy link</value></data>
