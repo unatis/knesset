@@ -136,7 +136,10 @@ public class KnessetSyncService(
             person.LastName = CleanRequired(src.LastName);
             person.GenderDesc = Clean(src.GenderDesc);
             person.Email = Clean(src.Email);
-            person.IsCurrent = src.IsCurrent ?? false;
+            // IsCurrent здесь нарочно не трогаем. У KNS_Person это поле
+            // означает не «действующий депутат»: таких записей 139 при 120
+            // мандатах. Признак проставляет шаг фракций — по должности
+            // «член фракции», которая даёт ровно 120.
             person.LastUpdatedDate = AsUtc(src.LastUpdatedDate);
         }
 
@@ -156,6 +159,34 @@ public class KnessetSyncService(
 
         await using var db = await dbFactory.CreateDbContextAsync(ct);
         var ids = factionByPerson.Keys.ToList();
+
+        // Снять признак с тех, кого в списке больше нет. Без этого шага
+        // ушедший депутат навсегда оставался «действующим» со своей старой
+        // фракцией: мы записывали только тех, кого вернул запрос, и никогда
+        // никого не стирали. В базе из-за этого числился 121 депутат
+        // при 120 мандатах, а Ликуд был разбит надвое.
+        //
+        // Порог — защита от неполной выборки: мандатов 120, и если запрос
+        // вернул заметно меньше, это сломанная загрузка, а не роспуск
+        // фракций. Стирать состав по такой выборке нельзя.
+        var cleared = 0;
+        if (ids.Count >= 100)
+        {
+            cleared = await db.Persons
+                .Where(p => !ids.Contains(p.KnessetPersonId)
+                            && (p.IsCurrent || p.FactionId != null || p.FactionName != null))
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(p => p.IsCurrent, false)
+                    .SetProperty(p => p.FactionId, (int?)null)
+                    .SetProperty(p => p.FactionName, (string?)null), ct);
+        }
+        else
+        {
+            logger.LogWarning(
+                "Фракции: получено {Count} членств при 120 мандатах — состав не стираю",
+                ids.Count);
+        }
+
         var persons = await db.Persons
             .Where(p => ids.Contains(p.KnessetPersonId))
             .ToListAsync(ct);
@@ -165,9 +196,13 @@ public class KnessetSyncService(
             var (id, name) = factionByPerson[person.KnessetPersonId];
             person.FactionId = id;
             person.FactionName = name;
+            person.IsCurrent = true;
         }
 
         await db.SaveChangesAsync(ct);
+        logger.LogInformation(
+            "Фракции: действующих депутатов {Current}, снят признак с {Cleared}",
+            persons.Count, cleared);
         return persons.Count;
     }
 

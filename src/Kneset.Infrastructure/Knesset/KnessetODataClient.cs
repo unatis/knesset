@@ -20,9 +20,28 @@ public class KnessetODataClient(HttpClient http, ILogger<KnessetODataClient> log
     public Task<List<KnsMkSiteCode>> GetMkSiteCodesAsync(CancellationToken ct) =>
         GetPagedAsync<KnsMkSiteCode>("KNS_MkSiteCode", filter: null, ct);
 
+    /// <summary>
+    /// Должность «член фракции» (חבר/ת סיעה). Именно по ней считаются
+    /// депутаты действующего созыва: таких строк ровно 120, как и мандатов.
+    /// </summary>
+    private const int FactionMemberPosition = 54;
+
+    /// <summary>
+    /// Депутаты действующего созыва с их фракциями — по одной строке
+    /// на человека.
+    ///
+    /// Фильтр по должности, а не по «любой текущей должности, у которой
+    /// заполнена фракция». Прежний вариант давал 132 строки вместо 120:
+    /// один человек держит несколько должностей сразу — депутат, член
+    /// комиссии, глава фракции, — и каждая идёт отдельной строкой,
+    /// после чего фракция выбиралась из произвольной.
+    ///
+    /// Поле IsCurrent у KNS_Person для этого не годится: там 139 записей,
+    /// то есть оно означает не «действующий депутат».
+    /// </summary>
     public Task<List<KnsPersonToPosition>> GetCurrentFactionMembershipsAsync(CancellationToken ct) =>
         GetPagedAsync<KnsPersonToPosition>("KNS_PersonToPosition",
-            "IsCurrent eq true and FactionName ne null", ct);
+            $"IsCurrent eq true and PositionID eq {FactionMemberPosition}", ct);
 
     public Task<List<KnsBill>> GetBillsAsync(int minKnessetNum, DateTime? since, CancellationToken ct)
     {
