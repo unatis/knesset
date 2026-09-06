@@ -80,33 +80,45 @@ else
                         </div>
                     }
 
-                    @* Уровень 1 — партии *@
-                    <div class="kt-fmap-level">
-                        @foreach (var party in u.Parties)
-                        {
-                            <div class="kt-fmap-party">
-                                <span class="kt-eyebrow">@L["Factions_PartyOne"]</span>
-                                <b dir="@(party.IsHebrew ? "rtl" : null)"
-                                   lang="@(party.IsHebrew ? "he" : null)">@party.Name</b>
-                            </div>
-                        }
-                    </div>
-
-                    @* Объединение: линии от партий сходятся в одно *@
-                    <div class="kt-fmap-join">
-                        <div class="kt-fmap-legs is-up">
-                            @for (var i = 0; i < u.Parties.Count; i++)
+                    @* Уровень партий рисуется только когда он что-то добавляет:
+                       у одиннадцати фракций из тринадцати партия называется
+                       так же, как фракция, и «Ликуд сформирована из Ликуд» —
+                       чистый шум. Подробности начинаются там, где партий
+                       несколько или имя партии отличается от имени фракции. *@
+                    @if (u.ShowParties)
+                    {
+                        <div class="kt-fmap-level">
+                            @foreach (var party in u.Parties)
                             {
-                                <div class="kt-fmap-leg @(i == 0 ? "is-first" : "") @(i == u.Parties.Count - 1 ? "is-last" : "")"></div>
+                                <div class="kt-fmap-party">
+                                    <span class="kt-eyebrow">@L["Factions_PartyOne"]</span>
+                                    <b dir="@(party.IsHebrew ? "rtl" : null)"
+                                       lang="@(party.IsHebrew ? "he" : null)">@party.Name</b>
+                                </div>
                             }
                         </div>
-                        <div class="kt-fmap-stem"><span class="kt-fmap-arrow"></span></div>
-                    </div>
+
+                        @* Объединение: линии от партий сходятся в одно *@
+                        <div class="kt-fmap-join">
+                            <div class="kt-fmap-legs is-up">
+                                @for (var i = 0; i < u.Parties.Count; i++)
+                                {
+                                    <div class="kt-fmap-leg @(i == 0 ? "is-first" : "") @(i == u.Parties.Count - 1 ? "is-last" : "")"></div>
+                                }
+                            </div>
+                            <div class="kt-fmap-stem"><span class="kt-fmap-arrow"></span></div>
+                        </div>
+                    }
 
                     @if (u.OriginName is { Length: > 0 })
                     {
                         @* Уровень 2 — чем эти партии были вместе до раскола *@
+                        @* Подпись типа обязательна: без неё коробка посередине
+                           читалась как непонятно что — «это партия? фракция?
+                           так и называется?». Список на выборах и фракция —
+                           разные вещи, и коробка должна говорить, что она. *@
                         <div class="kt-fmap-origin">
+                            <span class="kt-eyebrow">@L[$"FactionGroupKind_{u.GroupKey}"]</span>
                             <b>@u.OriginName</b>
                             @if (u.OriginNote is { Length: > 0 })
                             {
@@ -204,7 +216,17 @@ else
                         string? OriginName = null, string? OriginNote = null)
     {
         /// <summary>Ширина в колонках — по самому широкому уровню.</summary>
-        public int Slots => Math.Max(Parties.Count, Factions.Count);
+        public int Slots => Math.Max(ShowParties ? Parties.Count : 1, Factions.Count);
+
+        /// <summary>
+        /// Есть ли смысл показывать уровень партий. Нет, если у каждой
+        /// фракции ровно одна партия и она называется так же: тогда
+        /// повторять нечего. Да, если партий несколько или имя партии
+        /// расходится с именем фракции — а это и есть содержание карты.
+        /// </summary>
+        public bool ShowParties =>
+            Parties.Count != Factions.Count
+            || Parties.Zip(Factions).Any(pair => pair.First.Name != pair.Second.Name);
     }
 
     protected override async Task OnInitializedAsync()

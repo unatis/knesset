@@ -672,8 +672,10 @@
   <data name="FactionNote_1108" xml:space="preserve"><value>Фракция новая, партия прежняя — новой партии не появилось</value></data>
   <data name="FactionGroupParent_Split2024" xml:space="preserve"><value>Ха-Махане ха-мамлахти</value></data>
   <data name="FactionGroupParentNote_Split2024" xml:space="preserve"><value>фракция до раскола</value></data>
-  <data name="FactionGroupParent_List2022" xml:space="preserve"><value>Совместный список</value></data>
-  <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 мандатов на выборах 2022 года</value></data>
+  <data name="FactionGroupParent_List2022" xml:space="preserve"><value>Религиозный сионизм</value></data>
+  <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 мандатов, ноябрь 2022. Список назывался так же, как его крупнейшая партия.</value></data>
   <data name="Factions_FormedFromOne" xml:space="preserve"><value>Сформирована из партии</value></data>
   <data name="Factions_FormedFromMany" xml:space="preserve"><value>Сформирована из партий</value></data>
+  <data name="FactionGroupKind_List2022" xml:space="preserve"><value>Список на выборах</value></data>
+  <data name="FactionGroupKind_Split2024" xml:space="preserve"><value>Фракция до раскола</value></data>
 </root>

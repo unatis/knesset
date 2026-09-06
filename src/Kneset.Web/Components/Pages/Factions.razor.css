@@ -237,11 +237,15 @@
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
-    padding: 0.6rem 1rem;
+    padding: 0.6rem 1.1rem;
     background: var(--kt-kind-bg);
     border: 2px dashed var(--kt-kind-line);
     border-radius: var(--kt-r-md);
     text-align: center;
+}
+
+.kt-fmap-origin .kt-eyebrow {
+    padding-bottom: 0.15rem;
 }
 
 .kt-fmap-origin b {
