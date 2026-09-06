@@ -8,7 +8,7 @@
   <data name="Brand" xml:space="preserve"><value>Knesset Tracker</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>Home</value></data>
   <data name="Nav_Bills" xml:space="preserve"><value>Bills</value></data>
-  <data name="Nav_Members" xml:space="preserve"><value>Members</value></data>
+  <data name="Nav_Members" xml:space="preserve"><value>Knesset members</value></data>
   <data name="Nav_Initiatives" xml:space="preserve"><value>Initiatives</value></data>
   <data name="Nav_Register" xml:space="preserve"><value>Register</value></data>
   <data name="Nav_Login" xml:space="preserve"><value>Log in</value></data>
@@ -214,7 +214,7 @@
   <data name="Notif_DigestDay" xml:space="preserve"><value>{0} new bills</value></data>
   <data name="Notif_Settings" xml:space="preserve"><value>Notification settings</value></data>
   <data name="Notif_SubAll" xml:space="preserve"><value>Notify me about all new bills</value></data>
-  <data name="Notif_SubPersons" xml:space="preserve"><value>Members you follow</value></data>
+  <data name="Notif_SubPersons" xml:space="preserve"><value>Knesset members you follow</value></data>
   <data name="Notif_SubKeywords" xml:space="preserve"><value>Keywords</value></data>
   <data name="Notif_SubBills" xml:space="preserve"><value>Bills you follow</value></data>
   <data name="Notif_KeywordHint" xml:space="preserve"><value>Bill titles arrive from the Knesset in Hebrew, so a Hebrew keyword matches more reliably. Translations appear only after AI analysis.</value></data>
@@ -375,14 +375,14 @@
   <data name="Val_Length" xml:space="preserve"><value>Between {0} and {1} characters</value></data>
   <data name="Val_Mismatch" xml:space="preserve"><value>The values do not match</value></data>
   <data name="Val_PasswordMismatch" xml:space="preserve"><value>The passwords do not match</value></data>
-  <data name="Comment_AnonymousAuthor" xml:space="preserve"><value>Member</value></data>
+  <data name="Comment_AnonymousAuthor" xml:space="preserve"><value>Participant</value></data>
   <data name="Priv_Nav" xml:space="preserve"><value>Privacy</value></data>
   <data name="Priv_Title" xml:space="preserve"><value>Privacy policy</value></data>
   <data name="Priv_Updated" xml:space="preserve"><value>Updated: {0}</value></data>
   <data name="Priv_Collect" xml:space="preserve"><value>What we store</value></data>
   <data name="Priv_CollectText" xml:space="preserve"><value>Your email address and password — the password only as an irreversible hash, never in plain text. A display name if you set one: registration does not ask for it, so it starts out empty. Interface language and notification mode. Your subscriptions: the words, MKs and bills you follow. A delivery address for notifications if you add one — it is stored separately from your sign-in address. Your positions on bills, your comments, your civic initiatives and the signatures you give them.</value></data>
   <data name="Priv_Public" xml:space="preserve"><value>What others can see</value></data>
-  <data name="Priv_PublicText" xml:space="preserve"><value>Comments, civic initiatives and their signatures are visible to every visitor, including those who are not registered. A comment is signed with the display name you chose; without one it shows a neutral "Member" — your email address never appears in the signature. Your individual position on a bill is not shown to others: it only enters the shared counter as a number.</value></data>
+  <data name="Priv_PublicText" xml:space="preserve"><value>Comments, civic initiatives and their signatures are visible to every visitor, including those who are not registered. A comment is signed with the display name you chose; without one it shows a neutral "Participant" — your email address never appears in the signature. Your individual position on a bill is not shown to others: it only enters the shared counter as a number.</value></data>
   <data name="Priv_Political" xml:space="preserve"><value>Positions on bills</value></data>
   <data name="Priv_PoliticalText" xml:space="preserve"><value>Marking a bill "for", "against" or "undecided" is information about your political views, and we treat it as such. It is stored against your account because otherwise we could not show you your own vote or let you change it. Publicly it appears only as an aggregate count and percentage, with no names. Deleting your account deletes it too.</value></data>
   <data name="Priv_Third" xml:space="preserve"><value>Who else receives data</value></data>
