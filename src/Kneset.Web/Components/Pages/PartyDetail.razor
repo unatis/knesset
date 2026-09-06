@@ -1,0 +1,194 @@
+@page "/parties/{Slug}"
+@using System.Globalization
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@(_name ?? L["Factions_PartyOne"])</PageTitle>
+
+@* Страница партии.
+
+   Главная честность этой страницы — в том, чего мы не знаем. Кнессет
+   публикует, кто из депутатов в какой фракции, но не публикует, кто
+   из них от какой партии. Поэтому:
+   у фракции из одной партии депутаты фракции — это депутаты партии;
+   у фракции из нескольких партий разделить их нельзя, и страница
+   говорит об этом прямо, а не делит наугад. *@
+
+@if (_notFound)
+{
+    <p class="text-muted">@L["Party_NotFound"] <a href="/factions">@L["Nav_Factions"]</a></p>
+}
+else if (_name is null)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else
+{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/factions">@L["Nav_Factions"]</a></li>
+            <li class="breadcrumb-item active">@_name</li>
+        </ol>
+    </nav>
+
+    <div class="kt-fpage">
+        <header class="kt-fpage-head">
+            <div>
+                <span class="kt-eyebrow">@L["Factions_PartyOne"]</span>
+                <h1>@_name</h1>
+                @if (_nameHe != _name)
+                {
+                    <div class="kt-fpage-he" dir="rtl" lang="he">@_nameHe</div>
+                }
+            </div>
+        </header>
+
+        <section class="kt-fpage-block">
+            <h2 class="kt-eyebrow">@L["Party_InFaction"]</h2>
+            <a class="kt-fpage-faction" href="/factions/@_factionId">
+                <span class="kt-fpage-seats"><b>@_seats</b> <span>@SeatWord(_seats)</span></span>
+                <b>@_factionName</b>
+                @if (_siblings.Count > 0)
+                {
+                    <small>@L["Party_SharedWith"] @string.Join(", ", _siblings)</small>
+                }
+            </a>
+        </section>
+
+        @if (_originName is { Length: > 0 })
+        {
+            <section class="kt-fpage-block">
+                <h2 class="kt-eyebrow">@L["Faction_Origin"]</h2>
+                <p class="kt-fpage-origin">
+                    <b>@_originKind</b>
+                    <span>@_originName</span>
+                    @if (_originNote is { Length: > 0 })
+                    {
+                        <small>@_originNote</small>
+                    }
+                    @if (_groupDate is { } d)
+                    {
+                        <small>@d.ToString("d MMMM yyyy", CultureInfo.CurrentUICulture)</small>
+                    }
+                </p>
+            </section>
+        }
+
+        <section class="kt-fpage-block">
+            <h2 class="kt-eyebrow">@L["Nav_Members"] · @_members.Count</h2>
+
+            @* Приписать депутата партии внутри составной фракции нельзя:
+               таких данных Кнессет не даёт. Говорим об этом, а не делим. *@
+            @if (_siblings.Count > 0)
+            {
+                <p class="kt-fpage-caveat">@L["Party_MembersUnknown"]</p>
+            }
+
+            <div class="kt-fpage-members">
+                @foreach (var m in _members)
+                {
+                    <a href="/members/@m.Id" class="kt-fpage-member">
+                        <MemberPhoto Member="m" Size="48" />
+                        <span dir="rtl" lang="he">@m.FullName</span>
+                    </a>
+                }
+            </div>
+        </section>
+
+        <footer class="kt-fpage-source">
+            <span>@L["Party_Source"]</span>
+            @if (_verifiedAt is { } v)
+            {
+                <span>@L["Factions_Verified"] @v.ToString("d MMMM yyyy", CultureInfo.CurrentUICulture).</span>
+            }
+            @if (_sourceUrl is { Length: > 0 })
+            {
+                <a href="https://@_sourceUrl" target="_blank" rel="noopener">@_sourceUrl</a>
+            }
+        </footer>
+    </div>
+}
+
+@code {
+    [Parameter] public string Slug { get; set; } = "";
+
+    private bool _notFound;
+    private string? _name;
+    private string _nameHe = "";
+    private int _factionId;
+    private string? _factionName;
+    private int _seats;
+    private List<string> _siblings = [];
+    private List<Person> _members = [];
+    private string? _originKind;
+    private string? _originName;
+    private string? _originNote;
+    private DateOnly? _groupDate;
+    private DateOnly? _verifiedAt;
+    private string? _sourceUrl;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        var party = await db.FactionParties.AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Slug == Slug);
+
+        if (party is null)
+        {
+            _notFound = true;
+            return;
+        }
+
+        // Фракция отдельным запросом, а не ThenInclude: путь
+        // партия → фракция → партии образует цикл, и EF запрещает такие
+        // Include в запросах без отслеживания.
+        var faction = await db.Factions.AsNoTracking()
+            .Include(f => f.Parties)
+            .FirstAsync(f => f.Id == party.FactionId);
+
+        var ru = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ru";
+        _nameHe = party.NameHe;
+        _name = ru && party.NameRu is { Length: > 0 } ? party.NameRu : party.NameHe;
+
+        _factionId = faction.Id;
+        _factionName = Localized($"Faction_{faction.Id}") ?? faction.NameHe;
+        _verifiedAt = faction.VerifiedAt;
+        _sourceUrl = faction.Source is { Length: > 0 } s && s.Contains('/') ? s : null;
+
+        _siblings = faction.Parties
+            .Where(p => p.Slug != party.Slug)
+            .OrderBy(p => p.Ordinal)
+            .Select(p => ru && p.NameRu is { Length: > 0 } ? p.NameRu : p.NameHe)
+            .ToList();
+
+        _members = await db.Persons.AsNoTracking()
+            .Where(p => p.IsCurrent && p.FactionId == faction.Id)
+            .OrderBy(p => p.LastName).ThenBy(p => p.FirstName)
+            .ToListAsync();
+        _seats = _members.Count;
+
+        if (faction.GroupKey is { Length: > 0 } key)
+        {
+            _originKind = Localized($"FactionGroupKind_{key}");
+            _originName = Localized($"FactionGroupParent_{key}");
+            _originNote = Localized($"FactionGroupParentNote_{key}");
+            _groupDate = faction.GroupDate;
+        }
+    }
+
+    private string? Localized(string key)
+    {
+        var value = L[key];
+        return value.ResourceNotFound ? null : value.Value;
+    }
+
+    private string SeatWord(int n)
+    {
+        var t = n % 10;
+        var h = n % 100;
+        if (t == 1 && h != 11) return L["Factions_SeatOne"];
+        if (t is >= 2 and <= 4 && h is < 12 or > 14) return L["Factions_SeatFew"];
+        return L["Factions_SeatMany"];
+    }
+}

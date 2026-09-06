@@ -17,6 +17,10 @@ public class KnessetODataClient(HttpClient http, ILogger<KnessetODataClient> log
     public Task<List<KnsPerson>> GetPersonsAsync(DateTime? since, CancellationToken ct) =>
         GetPagedAsync<KnsPerson>("KNS_Person", SinceFilter(since), ct);
 
+    /// <summary>Сессии пленума всех созывов. Объём небольшой, берём целиком.</summary>
+    public Task<List<KnsKnessetDates>> GetKnessetDatesAsync(CancellationToken ct) =>
+        GetPagedAsync<KnsKnessetDates>("KNS_KnessetDates", filter: null, ct);
+
     public Task<List<KnsMkSiteCode>> GetMkSiteCodesAsync(CancellationToken ct) =>
         GetPagedAsync<KnsMkSiteCode>("KNS_MkSiteCode", filter: null, ct);
 

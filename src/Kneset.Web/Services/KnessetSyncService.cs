@@ -60,6 +60,7 @@ public class KnessetSyncService(
     private async Task SyncAllAsync(CancellationToken ct)
     {
         await SyncStatusesAsync(ct);
+        await RunStepAsync("KnessetTerms", SyncKnessetTermsAsync, ct);
         await RunStepAsync("Persons", SyncPersonsAsync, ct);
         await RunStepAsync("Factions", SyncFactionsAsync, ct);
         await RunStepAsync("Photos", SyncPhotosAsync, ct);
@@ -112,6 +113,53 @@ public class KnessetSyncService(
             .Select(s => new { s.StatusID, Desc = Clean(s.Desc) })
             .Where(s => s.Desc is not null)
             .ToDictionary(s => s.StatusID, s => s.Desc!);
+    }
+
+    /// <summary>
+    /// Границы созывов. В API это сессии пленума — по строке на сессию,
+    /// у 25-го созыва их восемь. Сворачиваем в один созыв: начало —
+    /// самая ранняя сессия, конец — самая поздняя.
+    /// </summary>
+    private async Task<int> SyncKnessetTermsAsync(DateTime? since, CancellationToken ct)
+    {
+        var rows = await client.GetKnessetDatesAsync(ct);
+        if (rows.Count == 0) return 0;
+
+        var terms = rows
+            .Where(r => r.PlenumStart is not null)
+            .GroupBy(r => r.KnessetNum)
+            .Select(g => new
+            {
+                Num = g.Key,
+                Name = Clean(g.First().Name),
+                Start = DateOnly.FromDateTime(g.Min(r => r.PlenumStart!.Value)),
+                // Конец созыва известен, только если у всех сессий он проставлен:
+                // у идущего созыва последняя сессия ещё не закрыта.
+                Finish = g.All(r => r.PlenumFinish is not null)
+                    ? DateOnly.FromDateTime(g.Max(r => r.PlenumFinish!.Value))
+                    : (DateOnly?)null,
+                IsCurrent = g.Any(r => r.IsCurrent == true),
+            })
+            .ToList();
+
+        await using var db = await dbFactory.CreateDbContextAsync(ct);
+        var existing = await db.KnessetTerms.ToDictionaryAsync(t => t.Id, ct);
+
+        foreach (var src in terms)
+        {
+            if (!existing.TryGetValue(src.Num, out var term))
+            {
+                term = new KnessetTerm { Id = src.Num };
+                db.KnessetTerms.Add(term);
+            }
+            term.Name = src.Name;
+            term.StartDate = src.Start;
+            term.FinishDate = src.Finish;
+            term.IsCurrent = src.IsCurrent;
+        }
+
+        await db.SaveChangesAsync(ct);
+        return terms.Count;
     }
 
     private async Task<int> SyncPersonsAsync(DateTime? since, CancellationToken ct)

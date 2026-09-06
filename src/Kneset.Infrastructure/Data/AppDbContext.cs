@@ -22,6 +22,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<BillAnalysis> BillAnalyses => Set<BillAnalysis>();
     public DbSet<BillSession> BillSessions => Set<BillSession>();
     public DbSet<AnalysisJob> AnalysisJobs => Set<AnalysisJob>();
+    public DbSet<KnessetTerm> KnessetTerms => Set<KnessetTerm>();
     public DbSet<Faction> Factions => Set<Faction>();
     public DbSet<FactionParty> FactionParties => Set<FactionParty>();
     public DbSet<BillDocument> BillDocuments => Set<BillDocument>();
@@ -89,6 +90,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
         });
 
+        modelBuilder.Entity<KnessetTerm>(t =>
+        {
+            // Ключ — номер созыва: он стабилен и нагляден в запросах.
+            t.Property(x => x.Id).ValueGeneratedNever();
+            t.Property(x => x.Name).HasMaxLength(100);
+        });
+
         modelBuilder.Entity<Faction>(f =>
         {
             // Ключ — FactionID Кнессета: он стабилен, и свой суррогат
@@ -105,6 +113,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
         {
             // Одна партия не повторяется внутри фракции.
             p.HasIndex(x => new { x.FactionId, x.NameHe }).IsUnique();
+            p.HasIndex(x => x.Slug).IsUnique();
+            p.Property(x => x.Slug).HasMaxLength(64);
             p.Property(x => x.NameHe).HasMaxLength(300);
             p.Property(x => x.NameRu).HasMaxLength(300);
             p.HasOne(x => x.Faction).WithMany(f => f.Parties)

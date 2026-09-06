@@ -666,7 +666,7 @@
   <data name="Factions_SeatFew" xml:space="preserve"><value>мандата</value></data>
   <data name="Factions_SeatMany" xml:space="preserve"><value>мандатов</value></data>
   <data name="Factions_Source" xml:space="preserve"><value>Состав и мандаты — API Кнессета, должность «член фракции». Партийный слой ведётся вручную.</value></data>
-  <data name="Factions_Verified" xml:space="preserve"><value>сверен</value></data>
+  <data name="Factions_Verified" xml:space="preserve"><value>Сверено</value></data>
   <data name="FactionGroup_List2022" xml:space="preserve"><value>Один список на три фракции</value></data>
   <data name="FactionGroup_Split2024" xml:space="preserve"><value>Раскол фракции</value></data>
   <data name="FactionNote_1108" xml:space="preserve"><value>Фракция новая, партия прежняя — новой партии не появилось</value></data>
@@ -678,4 +678,15 @@
   <data name="Factions_FormedFromMany" xml:space="preserve"><value>Сформирована из партий</value></data>
   <data name="FactionGroupKind_List2022" xml:space="preserve"><value>Список на выборах</value></data>
   <data name="FactionGroupKind_Split2024" xml:space="preserve"><value>Фракция до раскола</value></data>
+  <data name="Factions_Term" xml:space="preserve"><value>Созыв</value></data>
+  <data name="Factions_TermEnded" xml:space="preserve"><value>созыв завершён</value></data>
+  <data name="Factions_AsOf" xml:space="preserve"><value>данные на</value></data>
+  <data name="Factions_SourceLink" xml:space="preserve"><value>Открытые данные Кнессета</value></data>
+  <data name="Faction_NotFound" xml:space="preserve"><value>Такой фракции нет.</value></data>
+  <data name="Faction_Origin" xml:space="preserve"><value>Происхождение</value></data>
+  <data name="Party_NotFound" xml:space="preserve"><value>Такой партии нет.</value></data>
+  <data name="Party_InFaction" xml:space="preserve"><value>Входит во фракцию</value></data>
+  <data name="Party_SharedWith" xml:space="preserve"><value>вместе с</value></data>
+  <data name="Party_MembersUnknown" xml:space="preserve"><value>Кнессет публикует, кто из депутатов в какой фракции, но не публикует, кто из них от какой партии. Поэтому здесь показаны все депутаты фракции — разделить их по партиям было бы догадкой.</value></data>
+  <data name="Party_Source" xml:space="preserve"><value>Партийный слой не публикуется Кнессетом и ведётся вручную. Депутаты и мандаты — из API Кнессета.</value></data>
 </root>

@@ -666,7 +666,7 @@
   <data name="Factions_SeatFew" xml:space="preserve"><value>seats</value></data>
   <data name="Factions_SeatMany" xml:space="preserve"><value>seats</value></data>
   <data name="Factions_Source" xml:space="preserve"><value>Composition and seats come from the Knesset API, position “faction member”. The party layer is maintained by hand.</value></data>
-  <data name="Factions_Verified" xml:space="preserve"><value>verified</value></data>
+  <data name="Factions_Verified" xml:space="preserve"><value>Verified</value></data>
   <data name="FactionGroup_List2022" xml:space="preserve"><value>One list, three factions</value></data>
   <data name="FactionGroup_Split2024" xml:space="preserve"><value>Faction split</value></data>
   <data name="FactionNote_1108" xml:space="preserve"><value>The faction is new, the party is not — no new party was created</value></data>
@@ -678,4 +678,15 @@
   <data name="Factions_FormedFromMany" xml:space="preserve"><value>Formed from the parties</value></data>
   <data name="FactionGroupKind_List2022" xml:space="preserve"><value>Election list</value></data>
   <data name="FactionGroupKind_Split2024" xml:space="preserve"><value>The faction before the split</value></data>
+  <data name="Factions_Term" xml:space="preserve"><value>Knesset</value></data>
+  <data name="Factions_TermEnded" xml:space="preserve"><value>the term has ended</value></data>
+  <data name="Factions_AsOf" xml:space="preserve"><value>data as of</value></data>
+  <data name="Factions_SourceLink" xml:space="preserve"><value>Knesset open data</value></data>
+  <data name="Faction_NotFound" xml:space="preserve"><value>No such faction.</value></data>
+  <data name="Faction_Origin" xml:space="preserve"><value>Origin</value></data>
+  <data name="Party_NotFound" xml:space="preserve"><value>No such party.</value></data>
+  <data name="Party_InFaction" xml:space="preserve"><value>Sits in the faction</value></data>
+  <data name="Party_SharedWith" xml:space="preserve"><value>together with</value></data>
+  <data name="Party_MembersUnknown" xml:space="preserve"><value>The Knesset publishes which faction each member belongs to, but not which party. So all members of the faction are listed here — splitting them by party would be guesswork.</value></data>
+  <data name="Party_Source" xml:space="preserve"><value>The party layer is not published by the Knesset and is maintained by hand. Members and seats come from the Knesset API.</value></data>
 </root>

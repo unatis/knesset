@@ -172,3 +172,15 @@ public class KnsPlenumSession
     public DateTime? StartDate { get; set; }
     public DateTime LastUpdatedDate { get; set; }
 }
+
+/// <summary>Сессия пленума созыва (KNS_KnessetDates). Границы созыва
+/// собираются из них сворачиванием: минимум начала, максимум конца.</summary>
+public class KnsKnessetDates
+{
+    public int KnessetDateID { get; set; }
+    public int KnessetNum { get; set; }
+    public string? Name { get; set; }
+    public DateTime? PlenumStart { get; set; }
+    public DateTime? PlenumFinish { get; set; }
+    public bool? IsCurrent { get; set; }
+}

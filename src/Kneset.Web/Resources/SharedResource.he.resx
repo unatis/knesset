@@ -678,4 +678,15 @@
   <data name="Factions_FormedFromMany" xml:space="preserve"><value>מורכבת ממפלגות</value></data>
   <data name="FactionGroupKind_List2022" xml:space="preserve"><value>רשימה בבחירות</value></data>
   <data name="FactionGroupKind_Split2024" xml:space="preserve"><value>הסיעה לפני ההתפלגות</value></data>
+  <data name="Factions_Term" xml:space="preserve"><value>הכנסת</value></data>
+  <data name="Factions_TermEnded" xml:space="preserve"><value>הכהונה הסתיימה</value></data>
+  <data name="Factions_AsOf" xml:space="preserve"><value>הנתונים נכונים ל־</value></data>
+  <data name="Factions_SourceLink" xml:space="preserve"><value>הנתונים הפתוחים של הכנסת</value></data>
+  <data name="Faction_NotFound" xml:space="preserve"><value>אין סיעה כזו.</value></data>
+  <data name="Faction_Origin" xml:space="preserve"><value>מוצא</value></data>
+  <data name="Party_NotFound" xml:space="preserve"><value>אין מפלגה כזו.</value></data>
+  <data name="Party_InFaction" xml:space="preserve"><value>חברה בסיעה</value></data>
+  <data name="Party_SharedWith" xml:space="preserve"><value>יחד עם</value></data>
+  <data name="Party_MembersUnknown" xml:space="preserve"><value>הכנסת מפרסמת לאיזו סיעה משתייך כל חבר כנסת, אך לא לאיזו מפלגה. לכן מוצגים כאן כל חברי הסיעה — חלוקה שלהם לפי מפלגות הייתה ניחוש.</value></data>
+  <data name="Party_Source" xml:space="preserve"><value>שכבת המפלגות אינה מתפרסמת על ידי הכנסת ומתוחזקת ידנית. חברי הכנסת והמנדטים — מה-API של הכנסת.</value></data>
 </root>
