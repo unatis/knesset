@@ -678,4 +678,8 @@
   <data name="Factions_FormedFromMany" xml:space="preserve"><value>مكوَّنة من أحزاب</value></data>
   <data name="FactionGroupKind_List2022" xml:space="preserve"><value>قائمة انتخابية</value></data>
   <data name="FactionGroupKind_Split2024" xml:space="preserve"><value>الكتلة قبل الانشقاق</value></data>
+  <data name="Factions_Term" xml:space="preserve"><value>الكنيست</value></data>
+  <data name="Factions_TermEnded" xml:space="preserve"><value>انتهت الولاية</value></data>
+  <data name="Factions_AsOf" xml:space="preserve"><value>البيانات حتى</value></data>
+  <data name="Factions_SourceLink" xml:space="preserve"><value>البيانات المفتوحة للكنيست</value></data>
 </root>

@@ -22,6 +22,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<BillAnalysis> BillAnalyses => Set<BillAnalysis>();
     public DbSet<BillSession> BillSessions => Set<BillSession>();
     public DbSet<AnalysisJob> AnalysisJobs => Set<AnalysisJob>();
+    public DbSet<KnessetTerm> KnessetTerms => Set<KnessetTerm>();
     public DbSet<Faction> Factions => Set<Faction>();
     public DbSet<FactionParty> FactionParties => Set<FactionParty>();
     public DbSet<BillDocument> BillDocuments => Set<BillDocument>();
@@ -87,6 +88,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             s.HasIndex(x => x.StartDate);
             s.HasOne(x => x.Bill).WithMany(b => b.Sessions)
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<KnessetTerm>(t =>
+        {
+            // Ключ — номер созыва: он стабилен и нагляден в запросах.
+            t.Property(x => x.Id).ValueGeneratedNever();
+            t.Property(x => x.Name).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Faction>(f =>

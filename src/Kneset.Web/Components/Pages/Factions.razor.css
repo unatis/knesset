@@ -76,6 +76,27 @@
     color: var(--kt-char-400);
 }
 
+/* Возраст и границы данных. Стоит рядом с полосой, а не в подвале:
+   состав завершившегося созыва — это история, и узнать об этом надо
+   раньше, чем дочитаешь страницу. */
+.kt-fmap-when {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+}
+
+.kt-fmap-ended {
+    margin-inline-start: 0.5rem;
+    padding: 0.05rem 0.5rem;
+    border-radius: var(--kt-r-pill);
+    background: var(--kt-terra-50);
+    color: var(--kt-terra-600);
+    font-weight: 500;
+}
+
 .kt-fmap-strip {
     display: flex;
     gap: 3px;
@@ -428,6 +449,9 @@
 }
 
 .kt-fmap-source {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--kt-char-100);
     font-size: 0.8125rem;

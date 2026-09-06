@@ -51,6 +51,30 @@ else
                 <span class="kt-eyebrow">@L["Factions_StripTitle"]</span>
                 <span class="kt-fmap-hint">@L["Factions_StripHint"]</span>
             </div>
+
+            @* Читатель должен видеть, на что он смотрит: 25-й созыв
+               завершился 17 июля 2026, и его состав — уже история,
+               а не сегодняшний расклад. Обе даты берутся из данных
+               Кнессета (KNS_KnessetDates), не вписаны руками. *@
+            @if (_term is not null)
+            {
+                <div class="kt-fmap-when">
+                    <span>@L["Factions_Term"] @_term.Id</span>
+                    <span class="kt-fmap-dot">·</span>
+                    @* Диапазон собирается в коде: между выражениями Razor
+                       съедает перенос строки, и без этого выходило «2022—». *@
+                    <span>@TermRange(_term)</span>
+                    @if (_term.FinishDate is { } finish && finish < DateOnly.FromDateTime(DateTime.UtcNow))
+                    {
+                        <span class="kt-fmap-ended">@L["Factions_TermEnded"]</span>
+                    }
+                    @if (_syncedAt is { } synced)
+                    {
+                        <span class="kt-fmap-dot">·</span>
+                        <span>@L["Factions_AsOf"] @Day(synced)</span>
+                    }
+                </div>
+            }
             <div class="kt-fmap-strip">
                 @foreach (var f in _strip!)
                 {
@@ -183,12 +207,18 @@ else
             </div>
         </section>
 
+        @* Флексом с зазором, а не текстом подряд: между выражениями Razor
+           съедает пробелы, и выходило «вручную.сверен». *@
         <footer class="kt-fmap-source">
-            @L["Factions_Source"]
+            <span>@L["Factions_Source"]</span>
             @if (_verifiedAt is { } v)
             {
-                <text> @L["Factions_Verified"] @v.ToString("d MMMM yyyy", CultureInfo.CurrentUICulture).</text>
+                <span>@L["Factions_Verified"] @Day(v).</span>
             }
+            @* Ссылка на источник, чтобы читатель мог проверить, а не верить
+               на слово: это тот же сервис, из которого мы синхронизируемся. *@
+            <a href="https://knesset.gov.il/Odata/ParliamentInfo.svc/"
+               target="_blank" rel="noopener">@L["Factions_SourceLink"]</a>
         </footer>
     </div>
 }
@@ -201,6 +231,8 @@ else
     private int _factionCount;
     private DateOnly? _verifiedAt;
     private int? _knessetNum;
+    private KnessetTerm? _term;
+    private DateOnly? _syncedAt;
 
     private record Party(string Name, bool IsHebrew);
 
@@ -246,6 +278,18 @@ else
         var curated = await db.Factions.AsNoTracking()
             .Include(f => f.Parties)
             .ToDictionaryAsync(f => f.Id);
+
+        // Границы созыва — из данных Кнессета; если созыва с таким номером
+        // ещё не синхронизировали, строка просто не показывается.
+        _term = await db.KnessetTerms.AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Id == _knessetNum);
+
+        // «Данные на» — время последней успешной синхронизации фракций,
+        // а не время открытия страницы: показывать надо возраст данных.
+        var lastSync = await db.SyncLogs.AsNoTracking()
+            .Where(l => l.EntityName == "Factions" && l.Error == null && l.FinishedUtc != null)
+            .MaxAsync(l => (DateTime?)l.StartedUtc);
+        _syncedAt = lastSync is { } ls ? DateOnly.FromDateTime(ls) : null;
 
         _verifiedAt = curated.Values.Max(f => f.VerifiedAt);
         _totalSeats = seats.Values.Sum();
@@ -306,6 +350,12 @@ else
             Localized($"FactionGroupParent_{key}"),
             Localized($"FactionGroupParentNote_{key}"));
     }
+
+    private static string Day(DateOnly d) =>
+        d.ToString("d MMMM yyyy", CultureInfo.CurrentUICulture);
+
+    private string TermRange(KnessetTerm t) =>
+        t.FinishDate is { } finish ? $"{Day(t.StartDate)} — {Day(finish)}" : Day(t.StartDate);
 
     private string? Localized(string key)
     {
