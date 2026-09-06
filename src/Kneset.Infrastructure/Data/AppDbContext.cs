@@ -113,6 +113,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
         {
             // Одна партия не повторяется внутри фракции.
             p.HasIndex(x => new { x.FactionId, x.NameHe }).IsUnique();
+            p.HasIndex(x => x.Slug).IsUnique();
+            p.Property(x => x.Slug).HasMaxLength(64);
             p.Property(x => x.NameHe).HasMaxLength(300);
             p.Property(x => x.NameRu).HasMaxLength(300);
             p.HasOne(x => x.Faction).WithMany(f => f.Parties)

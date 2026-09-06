@@ -1741,3 +1741,206 @@ h1:focus {
     color: var(--kt-char-600, #555);
     margin-block-start: 0.15rem;
 }
+
+/* --- страницы фракции и партии --- */
+
+/* Здесь, а не в scoped-файле страницы: анатомия у обеих одна — шапка,
+   блоки, список депутатов, подвал с источником. Scoped-стиль действует
+   только на свой компонент, и пришлось бы держать две почти одинаковые
+   копии, то есть гарантировать их расхождение. */
+
+.kt-fpage {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.kt-fpage-head {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.kt-fpage-head h1 {
+    margin: 0.15rem 0 0;
+}
+
+.kt-fpage-he {
+    margin-top: 0.25rem;
+    font-size: 1.0625rem;
+    color: var(--kt-char-400);
+}
+
+.kt-fpage-seats {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+}
+
+.kt-fpage-seats b {
+    font-family: var(--kt-font-mono);
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--kt-char-900);
+}
+
+.kt-fpage-seats span {
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+}
+
+.kt-fpage-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.kt-fpage-block h2 {
+    margin: 0;
+}
+
+/* --- партии и фракция --- */
+
+.kt-fpage-parties {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.kt-fpage-party,
+.kt-fpage-faction {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.85rem 1.1rem;
+    min-width: 14rem;
+    background: var(--kt-char-0);
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-md);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.kt-fpage-party:hover,
+.kt-fpage-faction:hover {
+    border-color: var(--kt-ember-200);
+    box-shadow: var(--kt-shadow-md);
+    text-decoration: none;
+}
+
+.kt-fpage-party b,
+.kt-fpage-faction b {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--kt-char-900);
+}
+
+.kt-fpage-party small,
+.kt-fpage-faction small {
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+}
+
+.kt-fpage-faction {
+    align-self: flex-start;
+}
+
+.kt-fpage-faction .kt-fpage-seats b {
+    font-size: 1.5rem;
+}
+
+/* --- происхождение --- */
+
+.kt-fpage-origin {
+    margin: 0;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.85rem 1.1rem;
+    background: var(--kt-terra-50);
+    border: 2px dashed var(--kt-terra-400);
+    border-radius: var(--kt-r-md);
+    max-width: 46ch;
+}
+
+.kt-fpage-origin b {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--kt-terra-600);
+    opacity: 0.8;
+}
+
+.kt-fpage-origin > span {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--kt-terra-600);
+}
+
+.kt-fpage-origin small {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--kt-terra-600);
+    opacity: 0.8;
+}
+
+/* --- депутаты --- */
+
+.kt-fpage-caveat {
+    margin: 0;
+    max-width: 70ch;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--kt-char-400);
+    text-wrap: pretty;
+}
+
+.kt-fpage-members {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 0.5rem;
+}
+
+.kt-fpage-member {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--kt-r-md);
+    text-decoration: none;
+    color: var(--kt-char-700);
+    transition: background-color 120ms ease;
+}
+
+.kt-fpage-member:hover {
+    background: var(--kt-char-50);
+    text-decoration: none;
+}
+
+.kt-fpage-note {
+    margin: 0;
+    align-self: flex-start;
+    max-width: 60ch;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--kt-terra-600);
+    background: var(--kt-terra-50);
+    border-radius: var(--kt-r-sm);
+    padding: 0.6rem 0.8rem;
+}
+
+.kt-fpage-source {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--kt-char-100);
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+}

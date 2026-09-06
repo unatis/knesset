@@ -55,6 +55,13 @@ public class FactionParty
     public int FactionId { get; set; }
     public Faction Faction { get; set; } = null!;
 
+    /// <summary>
+    /// Постоянный адрес партии в ссылках (/parties/&lt;slug&gt;).
+    /// Внутренний ключ для этого не годится: сидер переписывает партии
+    /// фракции целиком, и ключи меняются при каждой заливке файла.
+    /// </summary>
+    public string Slug { get; set; } = "";
+
     public int Ordinal { get; set; }
 
     public string NameHe { get; set; } = "";

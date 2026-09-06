@@ -80,12 +80,13 @@ public class FactionPartySeedService(
 
             // Партии переписываем целиком: их две-три на фракцию.
             var wanted = src.Parties
-                .Select((p, i) => new { p.NameHe, p.NameRu, Ordinal = i })
+                .Select((p, i) => new { p.Slug, p.NameHe, p.NameRu, Ordinal = i })
                 .ToList();
 
             var same = faction.Parties.Count == wanted.Count
                        && faction.Parties.OrderBy(p => p.Ordinal)
-                           .Zip(wanted, (a, b) => a.NameHe == b.NameHe
+                           .Zip(wanted, (a, b) => a.Slug == b.Slug
+                                                  && a.NameHe == b.NameHe
                                                   && a.NameRu == b.NameRu
                                                   && a.Ordinal == b.Ordinal)
                            .All(x => x);
@@ -97,6 +98,7 @@ public class FactionPartySeedService(
                     .Select(p => new FactionParty
                     {
                         FactionId = faction.Id,
+                        Slug = p.Slug,
                         NameHe = p.NameHe,
                         NameRu = p.NameRu,
                         Ordinal = p.Ordinal,
@@ -144,6 +146,7 @@ public class FactionPartySeedService(
 
     private record SeedParty
     {
+        [JsonPropertyName("slug")] public string Slug { get; init; } = "";
         [JsonPropertyName("name_he")] public string NameHe { get; init; } = "";
         [JsonPropertyName("name_ru")] public string? NameRu { get; init; }
     }

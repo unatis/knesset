@@ -197,6 +197,25 @@
     text-wrap: pretty;
 }
 
+/* Кубик и карточка — ссылки: партия ведёт на свою страницу,
+   фракция на свою. */
+.kt-fmap-party,
+.kt-fmap-card {
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.kt-fmap-party:hover,
+.kt-fmap-card:hover {
+    box-shadow: var(--kt-shadow-md);
+    text-decoration: none;
+}
+
+.kt-fmap-card:hover {
+    border-color: var(--kt-ember-200);
+}
+
 .kt-fmap-card {
     flex: 1 1 0;
     min-width: 0;
@@ -231,6 +250,7 @@
 }
 
 .kt-fmap-name {
+    display: block;
     margin: 0;
     font-family: var(--kt-font-sans);
     font-size: 1rem;
@@ -241,6 +261,7 @@
 }
 
 .kt-fmap-note {
+    display: block;
     margin: 0.15rem 0 0;
     font-size: 0.75rem;
     line-height: 1.45;

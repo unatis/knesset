@@ -682,4 +682,11 @@
   <data name="Factions_TermEnded" xml:space="preserve"><value>созыв завершён</value></data>
   <data name="Factions_AsOf" xml:space="preserve"><value>данные на</value></data>
   <data name="Factions_SourceLink" xml:space="preserve"><value>Открытые данные Кнессета</value></data>
+  <data name="Faction_NotFound" xml:space="preserve"><value>Такой фракции нет.</value></data>
+  <data name="Faction_Origin" xml:space="preserve"><value>Происхождение</value></data>
+  <data name="Party_NotFound" xml:space="preserve"><value>Такой партии нет.</value></data>
+  <data name="Party_InFaction" xml:space="preserve"><value>Входит во фракцию</value></data>
+  <data name="Party_SharedWith" xml:space="preserve"><value>вместе с</value></data>
+  <data name="Party_MembersUnknown" xml:space="preserve"><value>Кнессет публикует, кто из депутатов в какой фракции, но не публикует, кто из них от какой партии. Поэтому здесь показаны все депутаты фракции — разделить их по партиям было бы догадкой.</value></data>
+  <data name="Party_Source" xml:space="preserve"><value>Партийный слой не публикуется Кнессетом и ведётся вручную. Депутаты и мандаты — из API Кнессета.</value></data>
 </root>

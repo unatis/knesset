@@ -682,4 +682,11 @@
   <data name="Factions_TermEnded" xml:space="preserve"><value>انتهت الولاية</value></data>
   <data name="Factions_AsOf" xml:space="preserve"><value>البيانات حتى</value></data>
   <data name="Factions_SourceLink" xml:space="preserve"><value>البيانات المفتوحة للكنيست</value></data>
+  <data name="Faction_NotFound" xml:space="preserve"><value>لا توجد كتلة بهذا الاسم.</value></data>
+  <data name="Faction_Origin" xml:space="preserve"><value>الأصل</value></data>
+  <data name="Party_NotFound" xml:space="preserve"><value>لا يوجد حزب بهذا الاسم.</value></data>
+  <data name="Party_InFaction" xml:space="preserve"><value>ينتمي إلى الكتلة</value></data>
+  <data name="Party_SharedWith" xml:space="preserve"><value>مع</value></data>
+  <data name="Party_MembersUnknown" xml:space="preserve"><value>ينشر الكنيست انتماء كل عضو إلى كتلة، لكنه لا ينشر انتماءه الحزبي. لذلك يظهر هنا جميع أعضاء الكتلة — وتوزيعهم على الأحزاب سيكون تخمينًا.</value></data>
+  <data name="Party_Source" xml:space="preserve"><value>طبقة الأحزاب لا ينشرها الكنيست وتُدار يدويًا. الأعضاء والمقاعد من واجهة الكنيست البرمجية.</value></data>
 </root>

@@ -114,11 +114,11 @@ else
                         <div class="kt-fmap-level">
                             @foreach (var party in u.Parties)
                             {
-                                <div class="kt-fmap-party">
+                                <a class="kt-fmap-party" href="/parties/@party.Slug">
                                     <span class="kt-eyebrow">@L["Factions_PartyOne"]</span>
                                     <b dir="@(party.IsHebrew ? "rtl" : null)"
                                        lang="@(party.IsHebrew ? "he" : null)">@party.Name</b>
-                                </div>
+                                </a>
                             }
                         </div>
 
@@ -168,17 +168,19 @@ else
                     <div class="kt-fmap-level">
                         @foreach (var f in u.Factions)
                         {
-                            <article class="kt-fmap-card">
-                                <div class="kt-fmap-seats">
+                            @* Карточка — ссылка на страницу фракции,
+                               кубик партии — на страницу партии. *@
+                            <a class="kt-fmap-card" href="/factions/@f.Id">
+                                <span class="kt-fmap-seats">
                                     <b>@f.Seats</b>
                                     <span>@SeatWord(f.Seats)</span>
-                                </div>
-                                <h2 class="kt-fmap-name">@f.Name</h2>
+                                </span>
+                                <span class="kt-fmap-name">@f.Name</span>
                                 @if (f.Note is { Length: > 0 })
                                 {
-                                    <p class="kt-fmap-note">@f.Note</p>
+                                    <span class="kt-fmap-note">@f.Note</span>
                                 }
-                            </article>
+                            </a>
                         }
                     </div>
                 </div>
@@ -234,7 +236,7 @@ else
     private KnessetTerm? _term;
     private DateOnly? _syncedAt;
 
-    private record Party(string Name, bool IsHebrew);
+    private record Party(string Slug, string Name, bool IsHebrew);
 
     private record Card(int Id, string Name, int Seats, string Kind,
                         List<Party> Parties, string? Note);
@@ -303,8 +305,8 @@ else
             var parties = (c?.Parties ?? [])
                 .OrderBy(p => p.Ordinal)
                 .Select(p => ru && p.NameRu is { Length: > 0 }
-                    ? new Party(p.NameRu, false)
-                    : new Party(p.NameHe, true))
+                    ? new Party(p.Slug, p.NameRu, false)
+                    : new Party(p.Slug, p.NameHe, true))
                 .ToList();
 
             var note = L[$"FactionNote_{id}"];

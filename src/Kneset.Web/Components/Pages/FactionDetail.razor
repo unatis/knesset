@@ -1,0 +1,187 @@
+@page "/factions/{Id:int}"
+@using System.Globalization
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@(_name ?? L["Nav_Factions"])</PageTitle>
+
+@* Страница фракции. Без InteractiveServer — только чтение.
+
+   Что здесь честно можно показать: состав по партиям (курируемый слой),
+   депутатов (из данных Кнессета) и происхождение фракции. Чего нельзя —
+   мандатов по партиям внутри фракции: Кнессет не публикует, кто из
+   депутатов от какой партии, и делить их было бы выдумкой. *@
+
+@if (_notFound)
+{
+    <p class="text-muted">@L["Faction_NotFound"] <a href="/factions">@L["Nav_Factions"]</a></p>
+}
+else if (_name is null)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else
+{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/factions">@L["Nav_Factions"]</a></li>
+            <li class="breadcrumb-item active">@_name</li>
+        </ol>
+    </nav>
+
+    <div class="kt-fpage">
+        <header class="kt-fpage-head">
+            <div>
+                <span class="kt-eyebrow">@L["Factions_FactionCount"]</span>
+                <h1>@_name</h1>
+                @if (_nameHe is { Length: > 0 } && _nameHe != _name)
+                {
+                    <div class="kt-fpage-he" dir="rtl" lang="he">@_nameHe</div>
+                }
+            </div>
+            <div class="kt-fpage-seats">
+                <b>@_seats</b>
+                <span>@SeatWord(_seats)</span>
+            </div>
+        </header>
+
+        @if (_note is { Length: > 0 })
+        {
+            <p class="kt-fpage-note">@_note</p>
+        }
+
+        <section class="kt-fpage-block">
+            <h2 class="kt-eyebrow">@(_parties.Count > 1 ? L["Factions_FormedFromMany"] : L["Factions_FormedFromOne"])</h2>
+            <div class="kt-fpage-parties">
+                @foreach (var p in _parties)
+                {
+                    <a class="kt-fpage-party" href="/parties/@p.Slug">
+                        <span class="kt-eyebrow">@L["Factions_PartyOne"]</span>
+                        <b>@p.Name</b>
+                        @if (p.NameHe != p.Name)
+                        {
+                            <small dir="rtl" lang="he">@p.NameHe</small>
+                        }
+                    </a>
+                }
+            </div>
+        </section>
+
+        @if (_originName is { Length: > 0 })
+        {
+            <section class="kt-fpage-block">
+                <h2 class="kt-eyebrow">@L["Faction_Origin"]</h2>
+                <p class="kt-fpage-origin">
+                    <b>@_originKind</b>
+                    <span>@_originName</span>
+                    @if (_originNote is { Length: > 0 })
+                    {
+                        <small>@_originNote</small>
+                    }
+                    @if (_groupDate is { } d)
+                    {
+                        <small>@d.ToString("d MMMM yyyy", CultureInfo.CurrentUICulture)</small>
+                    }
+                </p>
+            </section>
+        }
+
+        <section class="kt-fpage-block">
+            <h2 class="kt-eyebrow">@L["Nav_Members"] · @_members.Count</h2>
+            <div class="kt-fpage-members">
+                @foreach (var m in _members)
+                {
+                    <a href="/members/@m.Id" class="kt-fpage-member">
+                        <MemberPhoto Member="m" Size="48" />
+                        <span dir="rtl" lang="he">@m.FullName</span>
+                    </a>
+                }
+            </div>
+        </section>
+
+        <footer class="kt-fpage-source">
+            <span>@L["Factions_Source"]</span>
+            <a href="https://knesset.gov.il/Odata/ParliamentInfo.svc/"
+               target="_blank" rel="noopener">@L["Factions_SourceLink"]</a>
+        </footer>
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private bool _notFound;
+    private string? _name;
+    private string? _nameHe;
+    private string? _note;
+    private int _seats;
+    private List<PartyLink> _parties = [];
+    private List<Person> _members = [];
+    private string? _originKind;
+    private string? _originName;
+    private string? _originNote;
+    private DateOnly? _groupDate;
+
+    private record PartyLink(string Slug, string Name, string NameHe);
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        _members = await db.Persons.AsNoTracking()
+            .Where(p => p.IsCurrent && p.FactionId == Id)
+            .OrderBy(p => p.LastName).ThenBy(p => p.FirstName)
+            .ToListAsync();
+
+        var faction = await db.Factions.AsNoTracking()
+            .Include(f => f.Parties)
+            .FirstOrDefaultAsync(f => f.Id == Id);
+
+        // Фракция существует, если о ней знает хоть один источник:
+        // курируемый слой или состав депутатов.
+        if (faction is null && _members.Count == 0)
+        {
+            _notFound = true;
+            return;
+        }
+
+        _seats = _members.Count;
+        _nameHe = faction?.NameHe;
+        _name = Localized($"Faction_{Id}") ?? faction?.NameHe ?? Id.ToString();
+
+        var note = L[$"FactionNote_{Id}"];
+        _note = note.ResourceNotFound ? null : note.Value;
+
+        var ru = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ru";
+        _parties = (faction?.Parties ?? [])
+            .OrderBy(p => p.Ordinal)
+            .Select(p => new PartyLink(
+                p.Slug,
+                ru && p.NameRu is { Length: > 0 } ? p.NameRu : p.NameHe,
+                p.NameHe))
+            .ToList();
+
+        if (faction?.GroupKey is { Length: > 0 } key)
+        {
+            _originKind = Localized($"FactionGroupKind_{key}");
+            _originName = Localized($"FactionGroupParent_{key}");
+            _originNote = Localized($"FactionGroupParentNote_{key}");
+            _groupDate = faction.GroupDate;
+        }
+    }
+
+    private string? Localized(string key)
+    {
+        var value = L[key];
+        return value.ResourceNotFound ? null : value.Value;
+    }
+
+    private string SeatWord(int n)
+    {
+        var t = n % 10;
+        var h = n % 100;
+        if (t == 1 && h != 11) return L["Factions_SeatOne"];
+        if (t is >= 2 and <= 4 && h is < 12 or > 14) return L["Factions_SeatFew"];
+        return L["Factions_SeatMany"];
+    }
+}
