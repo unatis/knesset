@@ -1,0 +1,309 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #C94A0D; text-decoration: none; }
+    a:hover { color: #A33B0B; text-decoration: underline; }
+    .kt-hatch {
+      background-image: repeating-linear-gradient(
+        135deg, transparent 0 6px, rgba(255, 253, 250, 0.55) 6px 8px);
+    }
+    /* Карточка — она же ссылка: на фракцию, партию или депутата. */
+    .kt-card { transition: box-shadow 120ms ease, border-color 120ms ease; cursor: pointer; }
+    .kt-card:hover { box-shadow: 0 4px 8px -2px rgba(70,40,10,0.10), 0 2px 4px -1px rgba(70,40,10,0.08); }
+  </style>
+</helmet>
+
+<div style="font-family: 'Geist', system-ui, sans-serif; background: #FAF6EF; color: #3F3A2E; display: flex; min-height: 100%; box-sizing: border-box;">
+
+  <!-- Боковое меню приложения. Новый пункт один: «Партии и фракции».
+       Стоит перед «Депутатами»: сначала расклад целиком, потом отдельные люди. -->
+  <aside style="width: 216px; flex-shrink: 0; background: #FAF6EF; border-inline-end: 1px solid #E6DDC9; padding: 12px 0; display: flex; flex-direction: column; gap: 2px;">
+    <div style="padding: 10px 20px 16px; font-family: 'Instrument Serif', Georgia, serif; font-size: 20px; color: #110F0B;">Кнессет-Трекер</div>
+    <sc-for list="{{nav}}" as="n" hint-placeholder-count="7">
+      <div style="padding-inline: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; font-size: 15px; background: {{n.bg}}; color: {{n.ink}}; font-weight: {{n.weight}};">{{n.label}}</div>
+      </div>
+    </sc-for>
+  </aside>
+
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+
+    <!-- Верхняя панель: поиск и язык живут здесь, в меню не дублируются -->
+    <div style="height: 56px; flex-shrink: 0; border-bottom: 1px solid #E6DDC9; display: flex; align-items: center; gap: 16px; padding: 0 24px;">
+      <div style="flex: 0 1 380px; height: 34px; border: 1px solid #E6DDC9; border-radius: 999px; background: #FFFDFA; display: flex; align-items: center; padding: 0 14px; color: #AEA084; font-size: 14px;">Поиск законопроекта</div>
+      <div style="margin-inline-start: auto; display: flex; align-items: center; gap: 14px; font-size: 13px; color: #857962;">
+        <span style="color: #C94A0D; font-weight: 500;">РУ</span>
+        <span>EN</span>
+        <span>עב</span>
+        <span>ع</span>
+        <span style="color: #CFC3A8;">·</span>
+        <span>Войти</span>
+      </div>
+    </div>
+
+    <div style="padding: 40px 56px 56px; display: flex; flex-direction: column; gap: 36px; flex: 1;">
+
+  <!-- Шапка -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #857962; font-weight: 500;">Кнессет 25</div>
+    <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 52px; line-height: 1.05; font-weight: 400; color: #110F0B; margin: 0;">Политический расклад</h1>
+    <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; color: #5C5443; font-size: 15px;">
+      <span><b style="font-family: 'JetBrains Mono', monospace; color: #110F0B;">120</b> мандатов</span>
+      <span style="color: #CFC3A8;">·</span>
+      <span><b style="font-family: 'JetBrains Mono', monospace; color: #110F0B;">13</b> фракций</span>
+      <span style="color: #CFC3A8;">·</span>
+      <span><b style="font-family: 'JetBrains Mono', monospace; color: #110F0B;">15</b> партий</span>
+    </div>
+    <p style="margin: 6px 0 0; max-width: 74ch; font-size: 15px; line-height: 1.6; color: #5C5443; text-wrap: pretty;">
+      Фракция — группа депутатов в Кнессете, партия — организация вне его. Совпадают они не всегда: где расходятся, связь нарисована линией.
+    </p>
+  </div>
+
+  <!-- Пропорциональная полоса -->
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+      <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #857962; font-weight: 500;">Все 120 мандатов</div>
+      <div style="font-size: 13px; color: #857962;">ширина — доля мандатов, штриховка — фракция из нескольких партий</div>
+    </div>
+    <div style="display: flex; gap: 3px; height: 60px; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 2px rgba(70,40,10,0.06), 0 1px 3px rgba(70,40,10,0.08);">
+      <sc-for list="{{strip}}" as="f" hint-placeholder-count="13">
+        <div class="{{f.hatch}}" style="flex-grow: {{f.seats}}; flex-basis: 0; min-width: 8px; background: {{f.stripBg}}; border-bottom: 4px solid {{f.accent}}; display: flex; align-items: center; justify-content: center; padding: 0 6px; box-sizing: border-box; overflow: hidden;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: {{f.stripInk}}; white-space: nowrap;">{{f.stripLabel}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- Карта: карточки, а где есть ветвление — оно нарисовано -->
+  <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start;">
+    <sc-for list="{{units}}" as="u" hint-placeholder-count="10">
+      <div style="width: {{u.width}}; display: flex; flex-direction: column; gap: 0;">
+
+        <!-- Заголовок ветвления -->
+        <sc-if value="{{u.grouped}}" hint-placeholder-val="{{true}}">
+          <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; padding: 0 2px 8px;">
+            <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: {{u.ink}};">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="{{u.accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 3v12"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path>
+              </svg>
+              {{u.title}}
+            </span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #857962;">{{u.date}}</span>
+          </div>
+
+          <!-- Рельса: горизонталь через всю группу, отводы точно по центрам карточек -->
+          <div style="display: flex; gap: 16px; height: 26px;">
+            <sc-for list="{{u.rail}}" as="c" hint-placeholder-count="3">
+              <div style="flex: 1 1 0; position: relative;">
+                <div style="position: absolute; top: 0; left: {{c.l}}; right: {{c.r}}; border-top: 2px solid {{u.accent}};"></div>
+                <div style="position: absolute; top: 0; bottom: 0; left: calc(50% - 1px); width: 2px; background: {{u.accent}};"></div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <!-- Карточки фракций -->
+        <div style="display: flex; gap: 16px; align-items: stretch;">
+          <sc-for list="{{u.factions}}" as="f" hint-placeholder-count="1">
+            <div class="kt-card" style="flex: 1 1 0; display: flex; flex-direction: column; gap: 12px; padding: 18px; background: #FFFDFA; border: 1px solid #E6DDC9; border-top: 3px solid {{f.accent}}; border-radius: 10px; box-shadow: 0 1px 2px rgba(70,40,10,0.06);">
+
+              <div style="display: flex; align-items: baseline; gap: 10px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 26px; line-height: 1; color: #110F0B;">{{f.seats}}</span>
+                <span style="font-size: 12px; color: #857962;">{{f.seatWord}}</span>
+              </div>
+
+              <div style="font-size: 16px; font-weight: 500; line-height: 1.3; color: #110F0B; text-wrap: pretty;">{{f.name}}</div>
+
+              <!-- Партии. Если их несколько — ветвление рисуется внутри карточки -->
+              <div style="display: flex; flex-direction: column; gap: 0; margin-top: auto; padding-top: 10px; border-top: 1px solid #F2ECDF;">
+                <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #AEA084; padding-bottom: 8px;">{{f.partyWord}}</div>
+
+                <sc-if value="{{f.forked}}" hint-placeholder-val="{{true}}">
+                  <div style="display: flex; gap: 8px; height: 16px;">
+                    <sc-for list="{{f.fork}}" as="c" hint-placeholder-count="2">
+                      <div style="flex: 1 1 0; position: relative;">
+                        <div style="position: absolute; top: 0; left: {{c.l}}; right: {{c.r}}; border-top: 2px solid #D48327;"></div>
+                        <div style="position: absolute; top: 0; bottom: 0; left: calc(50% - 1px); width: 2px; background: #D48327;"></div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <div style="display: flex; gap: 8px;">
+                  <sc-for list="{{f.parties}}" as="p" hint-placeholder-count="1">
+                    <span class="kt-card" style="flex: 1 1 0; text-align: center; font-size: 13px; padding: 5px 9px; border-radius: 8px; background: {{p.bg}}; color: {{p.ink}};">{{p.name}}</span>
+                  </sc-for>
+                </div>
+              </div>
+
+              <sc-if value="{{f.note}}" hint-placeholder-val="{{true}}">
+                <div style="font-size: 12px; line-height: 1.45; color: #77321E; background: #FBEEE9; border-radius: 6px; padding: 8px 10px;">{{f.note}}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <!-- Как читать -->
+  <div style="display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; padding: 18px 20px; background: #FFFDFA; border: 1px solid #E6DDC9; border-radius: 10px;">
+    <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #857962; font-weight: 500; padding-top: 2px;">Как читать</div>
+    <div style="display: flex; gap: 24px; flex-wrap: wrap; flex-grow: 1;">
+      <sc-for list="{{legend}}" as="l" hint-placeholder-count="3">
+        <div style="display: flex; gap: 10px; align-items: flex-start; max-width: 34ch;">
+          <span style="width: 14px; height: 14px; border-radius: 4px; background: {{l.bg}}; border-bottom: 3px solid {{l.accent}}; flex-shrink: 0; margin-top: 3px;"></span>
+          <span style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 14px; font-weight: 500; color: #2B271F;">{{l.title}}</span>
+            <span style="font-size: 13px; line-height: 1.45; color: #857962;">{{l.note}}</span>
+          </span>
+        </div>
+      </sc-for>
+      <div style="display: flex; gap: 10px; align-items: flex-start; max-width: 34ch;">
+        <span style="width: 14px; height: 14px; border-top: 2px solid #857962; border-left: 2px solid #857962; flex-shrink: 0; margin-top: 5px;"></span>
+        <span style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 14px; font-weight: 500; color: #2B271F;">Линия</span>
+          <span style="font-size: 13px; line-height: 1.45; color: #857962;">Общее происхождение. Каждый бокс — ссылка: фракция, партия, депутат.</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #E6DDC9; display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px; color: #857962;">
+    <span>Состав и мандаты — API Кнессета, должность «член фракции».</span>
+    <span style="color: #CFC3A8;">·</span>
+      <span>Партийный слой ведётся вручную, сверен 5 сентября 2026.</span>
+    </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1800,"height":1360}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const KIND = {
+      single: { accent: '#CFC3A8', bg: '#F2ECDF', title: 'Одна партия',      note: 'Фракция и партия совпадают' },
+      joint:  { accent: '#D48327', bg: '#F7E0C0', title: 'Несколько партий', note: 'Отдельные партии идут одним списком — ветвление внутри карточки' },
+      split:  { accent: '#B95A3C', bg: '#F3D1C4', title: 'Общее происхождение', note: 'Фракции вышли из одного списка или из одной фракции' },
+    };
+
+    const F = {
+      likud:   { id: 1096, name: 'Ликуд', seats: 32, parties: ['Ликуд'], kind: 'single' },
+      yesh:    { id: 1102, name: 'Еш Атид', seats: 24, parties: ['Еш Атид'], kind: 'single' },
+      shas:    { id: 1095, name: 'ШАС', seats: 11, parties: ['ШАС'], kind: 'single' },
+      kahol:   { id: 1110, name: 'Кахоль-Лаван — Государственный лагерь', seats: 8, parties: ['Кахоль-Лаван'], kind: 'split' },
+      yamin:   { id: 1108, name: 'Ха-Ямин ха-мамлахти', seats: 4, parties: ['Тиква Хадаша'], kind: 'split',
+                 note: 'Фракция новая, партия прежняя — новой партии не появилось' },
+      utj:     { id: 1101, name: 'Яадут ха-Тора', seats: 7, parties: ['Дегель ха-Тора', 'Агудат Исраэль'], kind: 'joint' },
+      rz:      { id: 1105, name: 'Религиозный сионизм', seats: 7, parties: ['Религиозный сионизм'], kind: 'split' },
+      otzma:   { id: 1106, name: 'Оцма Йегудит', seats: 6, parties: ['Оцма Йегудит'], kind: 'split' },
+      noam:    { id: 1107, name: 'Ноам', seats: 1, parties: ['Ноам'], kind: 'split' },
+      beitenu: { id: 1104, name: 'Наш дом Израиль', seats: 6, parties: ['Наш дом Израиль'], kind: 'single' },
+      raam:    { id: 1099, name: 'РААМ', seats: 5, parties: ['Объединённый арабский список'], kind: 'single' },
+      hadash:  { id: 1103, name: 'ХАДАШ-ТААЛ', seats: 5, parties: ['ХАДАШ', 'ТААЛ'], kind: 'joint' },
+      avoda:   { id: 1100, name: 'Авода', seats: 4, parties: ['Авода'], kind: 'single' },
+    };
+
+    // Порядок: по мандатам, но связанные фракции стоят рядом — иначе линию
+    // между ними не провести. Группа занимает место своей крупнейшей.
+    const layout = [
+      { f: [F.likud] },
+      { f: [F.yesh] },
+      { f: [F.shas] },
+      { f: [F.kahol, F.yamin], title: 'Раскол фракции', date: '12 марта 2024', kind: 'split' },
+      { f: [F.rz, F.otzma, F.noam], title: 'Один список на три фракции', date: '20 ноября 2022', kind: 'split' },
+      { f: [F.utj] },
+      { f: [F.beitenu] },
+      { f: [F.raam] },
+      { f: [F.hadash] },
+      { f: [F.avoda] },
+    ];
+
+    const seatWord = (n) => {
+      const t = n % 10, h = n % 100;
+      if (t === 1 && h !== 11) return 'мандат';
+      if (t >= 2 && t <= 4 && (h < 12 || h > 14)) return 'мандата';
+      return 'мандатов';
+    };
+
+    // Отводы рельсы: крайние ведут к центрам крайних карточек,
+    // средние тянутся через промежуток (-8px = половина зазора).
+    const rail = (n) => Array.from({ length: n }, (_, i) => ({
+      l: i === 0 ? '50%' : '-8px',
+      r: i === n - 1 ? '50%' : '-8px',
+    }));
+
+    const decorate = (f) => {
+      const k = KIND[f.kind];
+      const many = f.parties.length > 1;
+      return {
+        ...f,
+        accent: k.accent,
+        seatWord: seatWord(f.seats),
+        partyWord: many ? 'Партии' : 'Партия',
+        forked: many,
+        fork: many ? rail(f.parties.length) : [],
+        parties: f.parties.map((name) => ({
+          name,
+          bg: many ? '#FCF3E8' : '#F2ECDF',
+          ink: many ? '#8F5314' : '#3F3A2E',
+        })),
+      };
+    };
+
+    const SLOT = 280, GAP = 16;
+
+    const NAV = ['Главная', 'Законопроекты', 'Законы', 'Партии и фракции',
+                 'Депутаты', 'Инициативы', 'О проекте'];
+    const active = 'Партии и фракции';
+
+    return {
+      nav: NAV.map((label) => ({
+        label,
+        bg: label === active ? '#FFF4EC' : 'transparent',
+        ink: label === active ? '#C94A0D' : '#3F3A2E',
+        weight: label === active ? '500' : '400',
+      })),
+      units: layout.map((u) => {
+        const n = u.f.length;
+        const k = u.kind ? KIND[u.kind] : null;
+        return {
+          width: (n * SLOT + (n - 1) * GAP) + 'px',
+          grouped: n > 1,
+          title: u.title,
+          date: u.date,
+          accent: k ? k.accent : '#CFC3A8',
+          ink: k ? '#77321E' : '#3F3A2E',
+          rail: rail(n),
+          factions: u.f.map(decorate),
+        };
+      }),
+      strip: Object.values(F)
+        .slice()
+        .sort((a, b) => b.seats - a.seats)
+        .map((f) => ({
+          seats: f.seats,
+          accent: KIND[f.kind].accent,
+          stripBg: KIND[f.kind].bg,
+          stripInk: f.seats >= 4 ? '#2B271F' : 'transparent',
+          stripLabel: f.seats >= 4 ? String(f.seats) : '',
+          hatch: f.parties.length > 1 ? 'kt-hatch' : '',
+        })),
+      legend: [KIND.single, KIND.joint, KIND.split].map((k) => ({ ...k })),
+    };
+  }
+}
+</script>
+</body>
+</html>

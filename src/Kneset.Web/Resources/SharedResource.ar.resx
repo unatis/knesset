@@ -643,4 +643,31 @@
   <data name="Bill_Committee" xml:space="preserve"><value>اللجنة المختصة</value></data>
   <data name="Bill_WriteToCommittee" xml:space="preserve"><value>الكتابة إلى اللجنة</value></data>
   <data name="Bill_WriteHint" xml:space="preserve"><value>يفتح الزر برنامج بريدك مع عنوان أمانة اللجنة وموضوع الرسالة. إن لم يُفتح، انسخ العنوان المجاور. تكتب الموقف وترسله بنفسك — نحن لا نرسل شيئًا نيابة عنك.</value></data>
+  <data name="Nav_Factions" xml:space="preserve"><value>الأحزاب والكتل</value></data>
+  <data name="Factions_Title" xml:space="preserve"><value>الخارطة السياسية</value></data>
+  <data name="Factions_Lead" xml:space="preserve"><value>الكتلة مجموعة من أعضاء الكنيست، والحزب تنظيم خارجه. لا يتطابقان دائمًا — وحيث يفترقان، تُرسم الصلة بخط.</value></data>
+  <data name="Factions_Mandates" xml:space="preserve"><value>مقعدًا</value></data>
+  <data name="Factions_FactionCount" xml:space="preserve"><value>كتلة</value></data>
+  <data name="Factions_PartyCount" xml:space="preserve"><value>حزبًا</value></data>
+  <data name="Factions_StripTitle" xml:space="preserve"><value>التشكيلة بأكملها</value></data>
+  <data name="Factions_StripHint" xml:space="preserve"><value>العرض يمثّل حصة المقاعد، والتظليل يدلّ على كتلة مكوّنة من عدة أحزاب</value></data>
+  <data name="Factions_HowToRead" xml:space="preserve"><value>كيف تُقرأ</value></data>
+  <data name="Factions_KindSingle" xml:space="preserve"><value>حزب واحد</value></data>
+  <data name="Factions_KindSingleNote" xml:space="preserve"><value>الكتلة والحزب متطابقان</value></data>
+  <data name="Factions_KindJoint" xml:space="preserve"><value>عدة أحزاب</value></data>
+  <data name="Factions_KindJointNote" xml:space="preserve"><value>أحزاب منفصلة في قائمة واحدة — التفرّع مرسوم داخل البطاقة</value></data>
+  <data name="Factions_KindSplit" xml:space="preserve"><value>أصل مشترك</value></data>
+  <data name="Factions_KindSplitNote" xml:space="preserve"><value>كتل خرجت من قائمة واحدة أو من كتلة واحدة</value></data>
+  <data name="Factions_LineTitle" xml:space="preserve"><value>الخط</value></data>
+  <data name="Factions_LineNote" xml:space="preserve"><value>أصل مشترك. كل مربّع رابط: كتلة أو حزب أو عضو كنيست.</value></data>
+  <data name="Factions_PartyOne" xml:space="preserve"><value>الحزب</value></data>
+  <data name="Factions_PartyMany" xml:space="preserve"><value>الأحزاب</value></data>
+  <data name="Factions_SeatOne" xml:space="preserve"><value>مقعد</value></data>
+  <data name="Factions_SeatFew" xml:space="preserve"><value>مقاعد</value></data>
+  <data name="Factions_SeatMany" xml:space="preserve"><value>مقعدًا</value></data>
+  <data name="Factions_Source" xml:space="preserve"><value>التشكيلة والمقاعد من واجهة الكنيست البرمجية، بحسب منصب «عضو كتلة». طبقة الأحزاب تُدار يدويًا.</value></data>
+  <data name="Factions_Verified" xml:space="preserve"><value>جرى التحقق</value></data>
+  <data name="FactionGroup_List2022" xml:space="preserve"><value>قائمة واحدة، ثلاث كتل</value></data>
+  <data name="FactionGroup_Split2024" xml:space="preserve"><value>انشقاق الكتلة</value></data>
+  <data name="FactionNote_1108" xml:space="preserve"><value>الكتلة جديدة والحزب قائم — لم ينشأ حزب جديد</value></data>
 </root>

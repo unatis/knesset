@@ -1,0 +1,408 @@
+/* Карта политического расклада.
+
+   Цвет здесь говорит о СОСТАВЕ фракции, а не о том, кто где стоит:
+   раскрашивать фракции «по личности» значило бы предложить читателю
+   искать в палитре лагеря. Три состояния — одна партия, несколько
+   партий одним списком, общее происхождение, — и все три взяты
+   из тёплой палитры проекта, где красного и синего в значении
+   лагерей нет.
+
+   Отступы логическими свойствами: страница живёт на четырёх языках,
+   два из них справа налево. */
+
+.kt-fmap {
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+}
+
+/* --- шапка --- */
+
+.kt-fmap-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.kt-fmap-head h1 {
+    margin: 0;
+}
+
+.kt-fmap-counts {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    color: var(--kt-char-500);
+}
+
+.kt-fmap-counts b {
+    font-family: var(--kt-font-mono);
+    color: var(--kt-char-900);
+    font-weight: 500;
+}
+
+.kt-fmap-dot {
+    color: var(--kt-char-200);
+}
+
+.kt-fmap-lead {
+    margin: 0.25rem 0 0;
+    max-width: 74ch;
+    color: var(--kt-char-500);
+    text-wrap: pretty;
+}
+
+/* --- пропорциональная полоса --- */
+
+.kt-fmap-strip-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.kt-fmap-strip-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.kt-fmap-hint {
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+}
+
+.kt-fmap-strip {
+    display: flex;
+    gap: 3px;
+    height: 3.5rem;
+    border-radius: var(--kt-r-md);
+    overflow: hidden;
+    box-shadow: var(--kt-shadow-sm);
+}
+
+.kt-fmap-seg {
+    flex-basis: 0;
+    min-width: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 0.35rem;
+    overflow: hidden;
+    background: var(--kt-kind-bg);
+    border-bottom: 4px solid var(--kt-kind-line);
+}
+
+.kt-fmap-seg span {
+    font-family: var(--kt-font-mono);
+    font-size: 0.8125rem;
+    color: var(--kt-char-700);
+    white-space: nowrap;
+}
+
+/* Штриховка — фракция из нескольких партий. Долей по партиям
+   в данных нет, поэтому сегмент нарочно не делится: делить его
+   было бы выдумкой. */
+.kt-hatch {
+    background-image: repeating-linear-gradient(
+        135deg, transparent 0 6px, rgba(255, 253, 250, 0.55) 6px 8px);
+}
+
+/* --- карточки и связи --- */
+
+.kt-fmap-units {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.kt-fmap-unit {
+    /* Ширина по числу карточек в группе: связанные фракции стоят рядом,
+       иначе скобу между ними не провести. */
+    width: calc(var(--kt-slots) * 17.5rem + (var(--kt-slots) - 1) * 1rem);
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.kt-fmap-grouphead {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    padding: 0 0.15rem 0.5rem;
+}
+
+.kt-fmap-grouptitle {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--kt-terra-600);
+}
+
+.kt-fmap-date {
+    font-family: var(--kt-font-mono);
+    font-size: 0.75rem;
+    color: var(--kt-char-400);
+}
+
+/* Скоба над группой и вилка внутри карточки устроены одинаково:
+   ряд ячеек, у каждой вертикальный отвод по центру, а горизонталь
+   у крайних начинается от центра и у всех перекрывает зазор. */
+.kt-fmap-rail,
+.kt-fmap-fork {
+    display: flex;
+}
+
+.kt-fmap-rail {
+    gap: 1rem;
+    height: 1.6rem;
+}
+
+.kt-fmap-fork {
+    gap: 0.5rem;
+    height: 1rem;
+}
+
+.kt-fmap-railcell {
+    flex: 1 1 0;
+    position: relative;
+}
+
+.kt-fmap-railcell::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    inset-inline: -0.5rem;
+    border-top: 2px solid var(--kt-kind-line);
+}
+
+.kt-fmap-railcell.is-first::before {
+    inset-inline-start: 50%;
+}
+
+.kt-fmap-railcell.is-last::before {
+    inset-inline-end: 50%;
+}
+
+.kt-fmap-railcell::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    inset-inline-start: calc(50% - 1px);
+    width: 2px;
+    background: var(--kt-kind-line);
+}
+
+.kt-fmap-fork .kt-fmap-railcell::before,
+.kt-fmap-fork .kt-fmap-railcell::after {
+    --kt-kind-line: var(--kt-amber-400);
+}
+
+.kt-fmap-cards {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.kt-fmap-card {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1.1rem;
+    background: var(--kt-char-0);
+    border: 1px solid var(--kt-char-100);
+    border-top: 3px solid var(--kt-kind-line);
+    border-radius: var(--kt-r-md);
+    box-shadow: var(--kt-shadow-sm);
+}
+
+.kt-fmap-seats {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.kt-fmap-seats b {
+    font-family: var(--kt-font-mono);
+    font-size: 1.6rem;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--kt-char-900);
+}
+
+.kt-fmap-seats span {
+    font-size: 0.75rem;
+    color: var(--kt-char-400);
+}
+
+.kt-fmap-name {
+    margin: 0;
+    font-family: var(--kt-font-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--kt-char-900);
+    text-wrap: pretty;
+}
+
+.kt-fmap-parties {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--kt-char-50);
+}
+
+.kt-fmap-parties .kt-eyebrow {
+    padding-bottom: 0.5rem;
+}
+
+.kt-fmap-chips {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.kt-fmap-chip {
+    flex: 1 1 0;
+    min-width: 0;
+    text-align: center;
+    font-size: 0.8125rem;
+    padding: 0.3rem 0.55rem;
+    border-radius: var(--kt-r-sm);
+    background: var(--kt-char-50);
+    color: var(--kt-char-600);
+}
+
+.kt-kind-joint .kt-fmap-chip {
+    background: var(--kt-amber-50);
+    color: var(--kt-amber-600);
+}
+
+.kt-fmap-note {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: var(--kt-terra-600);
+    background: var(--kt-terra-50);
+    border-radius: var(--kt-r-sm);
+    padding: 0.5rem 0.6rem;
+}
+
+/* --- состояния состава --- */
+
+.kt-kind-single {
+    --kt-kind-line: var(--kt-char-200);
+    --kt-kind-bg: var(--kt-char-50);
+}
+
+.kt-kind-joint {
+    --kt-kind-line: var(--kt-amber-400);
+    --kt-kind-bg: var(--kt-amber-100);
+}
+
+.kt-kind-split {
+    --kt-kind-line: var(--kt-terra-400);
+    --kt-kind-bg: var(--kt-terra-100);
+}
+
+/* --- легенда и источник --- */
+
+.kt-fmap-legend {
+    display: flex;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 1.1rem 1.25rem;
+    background: var(--kt-char-0);
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-md);
+}
+
+.kt-fmap-legend-items {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    flex-grow: 1;
+}
+
+.kt-fmap-legend-item {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    max-width: 34ch;
+}
+
+.kt-fmap-legend-item > span:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.kt-fmap-legend-item b {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--kt-char-700);
+}
+
+.kt-fmap-legend-item small {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--kt-char-400);
+}
+
+.kt-fmap-swatch {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    border-radius: 4px;
+    background: var(--kt-kind-bg);
+    border-bottom: 3px solid var(--kt-kind-line);
+}
+
+.kt-fmap-corner {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-top: 5px;
+    border-top: 2px solid var(--kt-char-400);
+    border-inline-start: 2px solid var(--kt-char-400);
+}
+
+.kt-fmap-source {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--kt-char-100);
+    font-size: 0.8125rem;
+    color: var(--kt-char-400);
+}
+
+/* На узком экране группы разворачиваются в столбец: скоба поперёк
+   экрана там не помещается, и связь показывает общая рамка группы. */
+@media (max-width: 767.98px) {
+    .kt-fmap-unit {
+        width: 100%;
+    }
+
+    .kt-fmap-rail {
+        display: none;
+    }
+
+    .kt-fmap-cards {
+        flex-direction: column;
+    }
+
+    .kt-fmap-grouphead {
+        padding-bottom: 0.35rem;
+    }
+
+    .kt-fmap-unit:has(.kt-fmap-grouphead) .kt-fmap-cards {
+        padding-inline-start: 0.75rem;
+        border-inline-start: 2px solid var(--kt-kind-line, var(--kt-terra-400));
+    }
+}

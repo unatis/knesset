@@ -643,4 +643,31 @@
   <data name="Bill_Committee" xml:space="preserve"><value>Ведущая комиссия</value></data>
   <data name="Bill_WriteToCommittee" xml:space="preserve"><value>Написать в комиссию</value></data>
   <data name="Bill_WriteHint" xml:space="preserve"><value>Кнопка откроет вашу почтовую программу с адресом секретариата и темой письма. Если она не откроется, скопируйте адрес рядом. Текст позиции пишете и отправляете вы сами — мы ничего не отправляем за вас.</value></data>
+  <data name="Nav_Factions" xml:space="preserve"><value>Партии и фракции</value></data>
+  <data name="Factions_Title" xml:space="preserve"><value>Политический расклад</value></data>
+  <data name="Factions_Lead" xml:space="preserve"><value>Фракция — группа депутатов в Кнессете, партия — организация вне его. Совпадают они не всегда: где расходятся, связь нарисована линией.</value></data>
+  <data name="Factions_Mandates" xml:space="preserve"><value>мандатов</value></data>
+  <data name="Factions_FactionCount" xml:space="preserve"><value>фракций</value></data>
+  <data name="Factions_PartyCount" xml:space="preserve"><value>партий</value></data>
+  <data name="Factions_StripTitle" xml:space="preserve"><value>Весь состав</value></data>
+  <data name="Factions_StripHint" xml:space="preserve"><value>ширина — доля мандатов, штриховка — фракция из нескольких партий</value></data>
+  <data name="Factions_HowToRead" xml:space="preserve"><value>Как читать</value></data>
+  <data name="Factions_KindSingle" xml:space="preserve"><value>Одна партия</value></data>
+  <data name="Factions_KindSingleNote" xml:space="preserve"><value>Фракция и партия совпадают</value></data>
+  <data name="Factions_KindJoint" xml:space="preserve"><value>Несколько партий</value></data>
+  <data name="Factions_KindJointNote" xml:space="preserve"><value>Отдельные партии идут одним списком — ветвление внутри карточки</value></data>
+  <data name="Factions_KindSplit" xml:space="preserve"><value>Общее происхождение</value></data>
+  <data name="Factions_KindSplitNote" xml:space="preserve"><value>Фракции вышли из одного списка или из одной фракции</value></data>
+  <data name="Factions_LineTitle" xml:space="preserve"><value>Линия</value></data>
+  <data name="Factions_LineNote" xml:space="preserve"><value>Общее происхождение. Каждый бокс — ссылка: фракция, партия, депутат.</value></data>
+  <data name="Factions_PartyOne" xml:space="preserve"><value>Партия</value></data>
+  <data name="Factions_PartyMany" xml:space="preserve"><value>Партии</value></data>
+  <data name="Factions_SeatOne" xml:space="preserve"><value>мандат</value></data>
+  <data name="Factions_SeatFew" xml:space="preserve"><value>мандата</value></data>
+  <data name="Factions_SeatMany" xml:space="preserve"><value>мандатов</value></data>
+  <data name="Factions_Source" xml:space="preserve"><value>Состав и мандаты — API Кнессета, должность «член фракции». Партийный слой ведётся вручную.</value></data>
+  <data name="Factions_Verified" xml:space="preserve"><value>сверен</value></data>
+  <data name="FactionGroup_List2022" xml:space="preserve"><value>Один список на три фракции</value></data>
+  <data name="FactionGroup_Split2024" xml:space="preserve"><value>Раскол фракции</value></data>
+  <data name="FactionNote_1108" xml:space="preserve"><value>Фракция новая, партия прежняя — новой партии не появилось</value></data>
 </root>

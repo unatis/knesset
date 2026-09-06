@@ -22,6 +22,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<BillAnalysis> BillAnalyses => Set<BillAnalysis>();
     public DbSet<BillSession> BillSessions => Set<BillSession>();
     public DbSet<AnalysisJob> AnalysisJobs => Set<AnalysisJob>();
+    public DbSet<Faction> Factions => Set<Faction>();
+    public DbSet<FactionParty> FactionParties => Set<FactionParty>();
     public DbSet<BillDocument> BillDocuments => Set<BillDocument>();
     public DbSet<BillDocumentText> BillDocumentTexts => Set<BillDocumentText>();
     public DbSet<Committee> Committees => Set<Committee>();
@@ -85,6 +87,28 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             s.HasIndex(x => x.StartDate);
             s.HasOne(x => x.Bill).WithMany(b => b.Sessions)
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Faction>(f =>
+        {
+            // Ключ — FactionID Кнессета: он стабилен, и свой суррогат
+            // только добавил бы лишний переход при связке с депутатами.
+            f.Property(x => x.Id).ValueGeneratedNever();
+            f.Property(x => x.NameHe).HasMaxLength(300);
+            f.Property(x => x.OriginKind).HasMaxLength(16);
+            f.Property(x => x.GroupKey).HasMaxLength(32);
+            f.Property(x => x.Source).HasMaxLength(300);
+            f.HasIndex(x => x.GroupKey);
+        });
+
+        modelBuilder.Entity<FactionParty>(p =>
+        {
+            // Одна партия не повторяется внутри фракции.
+            p.HasIndex(x => new { x.FactionId, x.NameHe }).IsUnique();
+            p.Property(x => x.NameHe).HasMaxLength(300);
+            p.Property(x => x.NameRu).HasMaxLength(300);
+            p.HasOne(x => x.Faction).WithMany(f => f.Parties)
+             .HasForeignKey(x => x.FactionId).OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<AnalysisJob>(j =>

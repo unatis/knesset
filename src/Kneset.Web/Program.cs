@@ -226,6 +226,8 @@ builder.Services.AddHostedService<ContextSeedService>();
 // Переводы названий законопроектов: настоящего переводчика пока нет,
 // названия подготовлены заранее и лежат файлом рядом с кодом.
 builder.Services.AddHostedService<BillTitleSeedService>();
+// Партийный состав фракций: в API Кнессета партий нет, слой ведётся вручную.
+builder.Services.AddHostedService<FactionPartySeedService>();
 
 // Готовые AI-анализы на выборке законопроектов — витрина, пока провайдер
 // не подключён. Убрать вместе с файлом Seed/bill-analyses.json, когда
@@ -510,6 +512,26 @@ if (app.Environment.IsDevelopment())
         await using var db = await factory.CreateDbContextAsync(ct);
         var deleted = await db.BillAnalyses.Where(a => a.Id == id).ExecuteDeleteAsync(ct);
         return Results.Json(new { id, deleted });
+    });
+
+    // Действующие фракции с числом депутатов — основа для файла-семени
+    // с партийным составом. Берём из своей базы, а не по памяти:
+    // состав меняется расколами, и вспоминать его нельзя.
+    app.MapGet("/dev/factions", async (
+        IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        await using var db = await factory.CreateDbContextAsync(ct);
+        return Results.Json(await db.Persons.AsNoTracking()
+            .Where(p => p.IsCurrent && p.FactionName != null)
+            .GroupBy(p => new { p.FactionId, p.FactionName })
+            .Select(g => new
+            {
+                factionId = g.Key.FactionId,
+                name = g.Key.FactionName,
+                members = g.Count(),
+            })
+            .OrderByDescending(x => x.members)
+            .ToListAsync(ct));
     });
 
     // Захваты шагов разбора: кто что держит и чем кончилось.
