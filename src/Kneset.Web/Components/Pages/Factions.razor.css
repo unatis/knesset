@@ -148,6 +148,41 @@
     color: var(--kt-char-400);
 }
 
+/* Узел, из которого вышли фракции группы. Без него скоба висит
+   над карточками и читается наоборот. Ножка идёт от центра узла
+   к середине горизонтали: карточки в группе равной ширины, поэтому
+   середина скобы всегда совпадает с центром группы. */
+.kt-fmap-parent {
+    align-self: center;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.6rem 1rem;
+    background: var(--kt-kind-bg);
+    border: 2px solid var(--kt-kind-line);
+    border-radius: var(--kt-r-md);
+    text-align: center;
+}
+
+.kt-fmap-parent b {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--kt-terra-600);
+}
+
+.kt-fmap-parent small {
+    font-size: 0.75rem;
+    color: var(--kt-terra-600);
+    opacity: 0.75;
+}
+
+.kt-fmap-stem {
+    height: 0.9rem;
+    align-self: center;
+    border-inline-start: 2px solid var(--kt-kind-line);
+}
+
 /* Скоба над группой и вилка внутри карточки устроены одинаково:
    ряд ячеек, у каждой вертикальный отвод по центру, а горизонталь
    у крайних начинается от центра и у всех перекрывает зазор. */

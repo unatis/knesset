@@ -670,4 +670,8 @@
   <data name="FactionGroup_List2022" xml:space="preserve"><value>Один список на три фракции</value></data>
   <data name="FactionGroup_Split2024" xml:space="preserve"><value>Раскол фракции</value></data>
   <data name="FactionNote_1108" xml:space="preserve"><value>Фракция новая, партия прежняя — новой партии не появилось</value></data>
+  <data name="FactionGroupParent_Split2024" xml:space="preserve"><value>Ха-Махане ха-мамлахти</value></data>
+  <data name="FactionGroupParentNote_Split2024" xml:space="preserve"><value>фракция до раскола</value></data>
+  <data name="FactionGroupParent_List2022" xml:space="preserve"><value>Совместный список</value></data>
+  <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 мандатов на выборах 2022 года</value></data>
 </root>

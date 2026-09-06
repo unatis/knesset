@@ -670,4 +670,8 @@
   <data name="FactionGroup_List2022" xml:space="preserve"><value>רשימה אחת, שלוש סיעות</value></data>
   <data name="FactionGroup_Split2024" xml:space="preserve"><value>התפלגות הסיעה</value></data>
   <data name="FactionNote_1108" xml:space="preserve"><value>הסיעה חדשה, המפלגה קיימת — מפלגה חדשה לא נוצרה</value></data>
+  <data name="FactionGroupParent_Split2024" xml:space="preserve"><value>המחנה הממלכתי</value></data>
+  <data name="FactionGroupParentNote_Split2024" xml:space="preserve"><value>הסיעה לפני ההתפלגות</value></data>
+  <data name="FactionGroupParent_List2022" xml:space="preserve"><value>רשימה משותפת</value></data>
+  <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 מנדטים בבחירות 2022</value></data>
 </root>
