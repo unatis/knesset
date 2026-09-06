@@ -645,7 +645,7 @@
   <data name="Bill_WriteHint" xml:space="preserve"><value>يفتح الزر برنامج بريدك مع عنوان أمانة اللجنة وموضوع الرسالة. إن لم يُفتح، انسخ العنوان المجاور. تكتب الموقف وترسله بنفسك — نحن لا نرسل شيئًا نيابة عنك.</value></data>
   <data name="Nav_Factions" xml:space="preserve"><value>الأحزاب والكتل</value></data>
   <data name="Factions_Title" xml:space="preserve"><value>الخارطة السياسية</value></data>
-  <data name="Factions_Lead" xml:space="preserve"><value>الكتلة مجموعة من أعضاء الكنيست، والحزب تنظيم خارجه. لا يتطابقان دائمًا — وحيث يفترقان، تُرسم الصلة بخط.</value></data>
+  <data name="Factions_Lead" xml:space="preserve"><value>الحزب هو الأساس: فهو قائم خارج الكنيست ويبقى بعد الانتخابات. أمّا الكتلة فهي شكل عمل مؤقّت داخل كنيست واحد، وتتكوّن من أحزاب. وحيث لا تتطابق الكتلة مع الحزب، تُرسم الصلة بخط.</value></data>
   <data name="Factions_Mandates" xml:space="preserve"><value>مقعدًا</value></data>
   <data name="Factions_FactionCount" xml:space="preserve"><value>كتلة</value></data>
   <data name="Factions_PartyCount" xml:space="preserve"><value>حزبًا</value></data>
@@ -674,4 +674,6 @@
   <data name="FactionGroupParentNote_Split2024" xml:space="preserve"><value>الكتلة قبل الانشقاق</value></data>
   <data name="FactionGroupParent_List2022" xml:space="preserve"><value>قائمة مشتركة</value></data>
   <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 مقعدًا في انتخابات 2022</value></data>
+  <data name="Factions_FormedFromOne" xml:space="preserve"><value>مكوَّنة من حزب</value></data>
+  <data name="Factions_FormedFromMany" xml:space="preserve"><value>مكوَّنة من أحزاب</value></data>
 </root>

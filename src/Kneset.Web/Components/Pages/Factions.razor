@@ -122,20 +122,22 @@ else
 
                                 <div class="kt-fmap-parties">
                                     <div class="kt-eyebrow">
-                                        @(f.Parties.Count > 1 ? L["Factions_PartyMany"] : L["Factions_PartyOne"])
+                                        @(f.Parties.Count > 1 ? L["Factions_FormedFromMany"] : L["Factions_FormedFromOne"])
                                     </div>
 
-                                    @if (f.Parties.Count > 1)
-                                    {
-                                        <div class="kt-fmap-fork">
-                                            @for (var i = 0; i < f.Parties.Count; i++)
-                                            {
-                                                <div class="kt-fmap-railcell
-                                                            @(i == 0 ? "is-first" : "")
-                                                            @(i == f.Parties.Count - 1 ? "is-last" : "")"></div>
-                                            }
-                                        </div>
-                                    }
+                                    @* Связь рисуется у всех, а не только у составных:
+                                       партия первична, она существует вне Кнессета
+                                       и переживает выборы, а фракция — временная форма
+                                       работы внутри созыва. У одной партии выходит
+                                       одна ножка, у нескольких — вилка. *@
+                                    <div class="kt-fmap-fork">
+                                        @for (var i = 0; i < f.Parties.Count; i++)
+                                        {
+                                            <div class="kt-fmap-railcell
+                                                        @(i == 0 ? "is-first" : "")
+                                                        @(i == f.Parties.Count - 1 ? "is-last" : "")"></div>
+                                        }
+                                    </div>
 
                                     <div class="kt-fmap-chips">
                                         @foreach (var p in f.Parties)

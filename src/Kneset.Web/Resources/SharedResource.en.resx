@@ -645,7 +645,7 @@
   <data name="Bill_WriteHint" xml:space="preserve"><value>The button opens your mail app with the committee secretariat address and a subject line. If it does not open, copy the address next to it. You write and send the letter yourself — we send nothing on your behalf.</value></data>
   <data name="Nav_Factions" xml:space="preserve"><value>Parties and factions</value></data>
   <data name="Factions_Title" xml:space="preserve"><value>Political map</value></data>
-  <data name="Factions_Lead" xml:space="preserve"><value>A faction is a group of members inside the Knesset; a party is an organisation outside it. They do not always coincide — where they diverge, the link is drawn.</value></data>
+  <data name="Factions_Lead" xml:space="preserve"><value>The party comes first: it exists outside the Knesset and outlives elections. A faction is a temporary working form inside one Knesset, assembled from parties. Where faction and party do not coincide, the link is drawn.</value></data>
   <data name="Factions_Mandates" xml:space="preserve"><value>seats</value></data>
   <data name="Factions_FactionCount" xml:space="preserve"><value>factions</value></data>
   <data name="Factions_PartyCount" xml:space="preserve"><value>parties</value></data>
@@ -674,4 +674,6 @@
   <data name="FactionGroupParentNote_Split2024" xml:space="preserve"><value>the faction before the split</value></data>
   <data name="FactionGroupParent_List2022" xml:space="preserve"><value>Joint list</value></data>
   <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 seats at the 2022 election</value></data>
+  <data name="Factions_FormedFromOne" xml:space="preserve"><value>Formed from the party</value></data>
+  <data name="Factions_FormedFromMany" xml:space="preserve"><value>Formed from the parties</value></data>
 </root>

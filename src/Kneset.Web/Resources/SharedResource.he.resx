@@ -645,7 +645,7 @@
   <data name="Bill_WriteHint" xml:space="preserve"><value>הכפתור יפתח את תוכנת הדואר שלכם עם כתובת מזכירות הוועדה ונושא ההודעה. אם היא לא נפתחת, העתיקו את הכתובת שלידו. את העמדה אתם כותבים ושולחים בעצמכם — איננו שולחים דבר בשמכם.</value></data>
   <data name="Nav_Factions" xml:space="preserve"><value>מפלגות וסיעות</value></data>
   <data name="Factions_Title" xml:space="preserve"><value>ההרכב הפוליטי</value></data>
-  <data name="Factions_Lead" xml:space="preserve"><value>סיעה היא קבוצת חברי כנסת, מפלגה היא ארגון מחוץ לכנסת. הן אינן חופפות תמיד — במקומות שבהם הן נפרדות, הקשר מסומן בקו.</value></data>
+  <data name="Factions_Lead" xml:space="preserve"><value>המפלגה היא הראשונית: היא קיימת מחוץ לכנסת ושורדת את הבחירות. הסיעה היא צורת עבודה זמנית בתוך כנסת אחת, והיא מורכבת ממפלגות. במקומות שבהם הסיעה והמפלגה אינן חופפות, הקשר מסומן בקו.</value></data>
   <data name="Factions_Mandates" xml:space="preserve"><value>מנדטים</value></data>
   <data name="Factions_FactionCount" xml:space="preserve"><value>סיעות</value></data>
   <data name="Factions_PartyCount" xml:space="preserve"><value>מפלגות</value></data>
@@ -674,4 +674,6 @@
   <data name="FactionGroupParentNote_Split2024" xml:space="preserve"><value>הסיעה לפני ההתפלגות</value></data>
   <data name="FactionGroupParent_List2022" xml:space="preserve"><value>רשימה משותפת</value></data>
   <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 מנדטים בבחירות 2022</value></data>
+  <data name="Factions_FormedFromOne" xml:space="preserve"><value>מורכבת ממפלגה</value></data>
+  <data name="Factions_FormedFromMany" xml:space="preserve"><value>מורכבת ממפלגות</value></data>
 </root>

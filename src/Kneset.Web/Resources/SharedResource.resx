@@ -645,7 +645,7 @@
   <data name="Bill_WriteHint" xml:space="preserve"><value>Кнопка откроет вашу почтовую программу с адресом секретариата и темой письма. Если она не откроется, скопируйте адрес рядом. Текст позиции пишете и отправляете вы сами — мы ничего не отправляем за вас.</value></data>
   <data name="Nav_Factions" xml:space="preserve"><value>Партии и фракции</value></data>
   <data name="Factions_Title" xml:space="preserve"><value>Политический расклад</value></data>
-  <data name="Factions_Lead" xml:space="preserve"><value>Фракция — группа депутатов в Кнессете, партия — организация вне его. Совпадают они не всегда: где расходятся, связь нарисована линией.</value></data>
+  <data name="Factions_Lead" xml:space="preserve"><value>Партия первична: она существует вне Кнессета и переживает выборы. Фракция — временная форма работы внутри созыва, и она составляется из партий. Там, где фракция и партия не совпадают, связь нарисована линией.</value></data>
   <data name="Factions_Mandates" xml:space="preserve"><value>мандатов</value></data>
   <data name="Factions_FactionCount" xml:space="preserve"><value>фракций</value></data>
   <data name="Factions_PartyCount" xml:space="preserve"><value>партий</value></data>
@@ -674,4 +674,6 @@
   <data name="FactionGroupParentNote_Split2024" xml:space="preserve"><value>фракция до раскола</value></data>
   <data name="FactionGroupParent_List2022" xml:space="preserve"><value>Совместный список</value></data>
   <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 мандатов на выборах 2022 года</value></data>
+  <data name="Factions_FormedFromOne" xml:space="preserve"><value>Сформирована из партии</value></data>
+  <data name="Factions_FormedFromMany" xml:space="preserve"><value>Сформирована из партий</value></data>
 </root>

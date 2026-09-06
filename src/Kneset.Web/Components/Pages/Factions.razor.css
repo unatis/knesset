@@ -232,8 +232,11 @@
     background: var(--kt-kind-line);
 }
 
-.kt-fmap-fork .kt-fmap-railcell::before,
-.kt-fmap-fork .kt-fmap-railcell::after {
+/* Вилка внутри карточки берёт цвет состава: у составной фракции
+   он янтарный, у обычной — нейтральный. Раньше здесь стоял янтарный
+   для всех, но тогда одиночная ножка обещала бы несколько партий. */
+.kt-kind-joint .kt-fmap-fork .kt-fmap-railcell::before,
+.kt-kind-joint .kt-fmap-fork .kt-fmap-railcell::after {
     --kt-kind-line: var(--kt-amber-400);
 }
 
