@@ -75,6 +75,22 @@ else
                             }
                         </div>
 
+                        @* Узел, из которого всё вышло. Без него скоба висела
+                           над двумя карточками и читалась наоборот — будто
+                           фракция раскололась на партии. Направление задаёт
+                           именно верхний бокс. *@
+                        @if (u.ParentName is { Length: > 0 })
+                        {
+                            <div class="kt-fmap-parent kt-kind-@u.Kind">
+                                <b>@u.ParentName</b>
+                                @if (u.ParentNote is { Length: > 0 })
+                                {
+                                    <small>@u.ParentNote</small>
+                                }
+                            </div>
+                            <div class="kt-fmap-stem kt-kind-@u.Kind"></div>
+                        }
+
                         @* Скоба: горизонталь через группу, отводы точно
                            по центрам карточек. Крайние сегменты идут
                            от центра, средние перекрывают зазор. *@
@@ -98,6 +114,11 @@ else
                                 </div>
 
                                 <h2 class="kt-fmap-name">@f.Name</h2>
+
+                                @if (f.Note is { Length: > 0 })
+                                {
+                                    <p class="kt-fmap-note">@f.Note</p>
+                                }
 
                                 <div class="kt-fmap-parties">
                                     <div class="kt-eyebrow">
@@ -125,10 +146,6 @@ else
                                     </div>
                                 </div>
 
-                                @if (f.Note is { Length: > 0 })
-                                {
-                                    <p class="kt-fmap-note">@f.Note</p>
-                                }
                             </article>
                         }
                     </div>
@@ -181,7 +198,8 @@ else
     private record Card(int Id, string Name, int Seats, string Kind,
                         List<Party> Parties, string? Note);
 
-    private record Unit(string? GroupKey, DateOnly? GroupDate, string Kind, List<Card> Factions);
+    private record Unit(string? GroupKey, DateOnly? GroupDate, string Kind, List<Card> Factions,
+                        string? ParentName = null, string? ParentNote = null);
 
     protected override async Task OnInitializedAsync()
     {
@@ -248,12 +266,14 @@ else
             .ToList();
     }
 
-    private static Unit BuildGroup(string key, List<Card> members,
-                                   Dictionary<int, Faction> curated) =>
+    private Unit BuildGroup(string key, List<Card> members,
+                           Dictionary<int, Faction> curated) =>
         new(key,
             members.Select(c => curated[c.Id].GroupDate).FirstOrDefault(d => d is not null),
             members[0].Kind,
-            members.OrderBy(c => curated[c.Id].GroupOrdinal).ToList());
+            members.OrderBy(c => curated[c.Id].GroupOrdinal).ToList(),
+            Localized($"FactionGroupParent_{key}"),
+            Localized($"FactionGroupParentNote_{key}"));
 
     private string? Localized(string key)
     {

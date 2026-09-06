@@ -670,4 +670,8 @@
   <data name="FactionGroup_List2022" xml:space="preserve"><value>قائمة واحدة، ثلاث كتل</value></data>
   <data name="FactionGroup_Split2024" xml:space="preserve"><value>انشقاق الكتلة</value></data>
   <data name="FactionNote_1108" xml:space="preserve"><value>الكتلة جديدة والحزب قائم — لم ينشأ حزب جديد</value></data>
+  <data name="FactionGroupParent_Split2024" xml:space="preserve"><value>المعسكر الرسمي</value></data>
+  <data name="FactionGroupParentNote_Split2024" xml:space="preserve"><value>الكتلة قبل الانشقاق</value></data>
+  <data name="FactionGroupParent_List2022" xml:space="preserve"><value>قائمة مشتركة</value></data>
+  <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 مقعدًا في انتخابات 2022</value></data>
 </root>
