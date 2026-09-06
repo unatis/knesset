@@ -12,3 +12,7 @@ artifacts/
 
 # Снимки и слепки страниц от Playwright MCP
 .playwright-mcp/
+
+# Собранный холст макета — выход сборщика, а не исходник: 2.5 МБ
+# редактора внутри одного файла. Пересобирается из design/*.dc.html.
+design/political-map.html
