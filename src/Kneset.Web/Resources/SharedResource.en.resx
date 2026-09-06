@@ -672,8 +672,10 @@
   <data name="FactionNote_1108" xml:space="preserve"><value>The faction is new, the party is not — no new party was created</value></data>
   <data name="FactionGroupParent_Split2024" xml:space="preserve"><value>HaMachane HaMamlachti</value></data>
   <data name="FactionGroupParentNote_Split2024" xml:space="preserve"><value>the faction before the split</value></data>
-  <data name="FactionGroupParent_List2022" xml:space="preserve"><value>Joint list</value></data>
-  <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 seats at the 2022 election</value></data>
+  <data name="FactionGroupParent_List2022" xml:space="preserve"><value>Religious Zionism</value></data>
+  <data name="FactionGroupParentNote_List2022" xml:space="preserve"><value>14 seats, November 2022. The list carried the name of its largest party.</value></data>
   <data name="Factions_FormedFromOne" xml:space="preserve"><value>Formed from the party</value></data>
   <data name="Factions_FormedFromMany" xml:space="preserve"><value>Formed from the parties</value></data>
+  <data name="FactionGroupKind_List2022" xml:space="preserve"><value>Election list</value></data>
+  <data name="FactionGroupKind_Split2024" xml:space="preserve"><value>The faction before the split</value></data>
 </root>
