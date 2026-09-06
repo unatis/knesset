@@ -226,6 +226,8 @@ builder.Services.AddHostedService<ContextSeedService>();
 // Переводы названий законопроектов: настоящего переводчика пока нет,
 // названия подготовлены заранее и лежат файлом рядом с кодом.
 builder.Services.AddHostedService<BillTitleSeedService>();
+// Партийный состав фракций: в API Кнессета партий нет, слой ведётся вручную.
+builder.Services.AddHostedService<FactionPartySeedService>();
 
 // Готовые AI-анализы на выборке законопроектов — витрина, пока провайдер
 // не подключён. Убрать вместе с файлом Seed/bill-analyses.json, когда

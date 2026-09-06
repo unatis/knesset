@@ -1,0 +1,278 @@
+@page "/factions"
+@using System.Globalization
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IStringLocalizer<SharedResource> L
+@inject Kneset.Web.Services.CurrentKnessetService CurrentKnesset
+
+<PageTitle>@L["Factions_Title"]</PageTitle>
+
+@* Карта политического расклада.
+   Страница нарочно без InteractiveServer: она только читает и должна
+   попадать в поисковую выдачу целиком, а не пререндером с последующей
+   догрузкой.
+
+   Смысл страницы — расхождения между фракцией и партией. Фракция это
+   группа депутатов в Кнессете, партия — организация вне его, и там,
+   где они не совпадают, связь рисуется линией: скобой над связанными
+   фракциями и вилкой внутри карточки, если фракция составлена
+   из нескольких партий. *@
+
+@if (_units is null)
+{
+    <div class="text-center p-5"><div class="spinner-border" role="status"></div></div>
+}
+else
+{
+    <div class="kt-fmap">
+        <header class="kt-fmap-head">
+            @if (_knessetNum is { } num)
+            {
+                <div class="kt-eyebrow">@L["Knesset"] @num</div>
+            }
+            <h1>@L["Factions_Title"]</h1>
+            <div class="kt-fmap-counts">
+                <span><b>@_totalSeats</b> @L["Factions_Mandates"]</span>
+                <span class="kt-fmap-dot">·</span>
+                <span><b>@_units.Sum(u => u.Factions.Count)</b> @L["Factions_FactionCount"]</span>
+                <span class="kt-fmap-dot">·</span>
+                <span><b>@_totalParties</b> @L["Factions_PartyCount"]</span>
+            </div>
+            <p class="kt-fmap-lead">@L["Factions_Lead"]</p>
+        </header>
+
+        @* Полоса: доля мандатов честно шириной, без выдуманных долей
+           по партиям — их в данных нет. *@
+        <section class="kt-fmap-strip-wrap">
+            <div class="kt-fmap-strip-head">
+                <span class="kt-eyebrow">@L["Factions_StripTitle"]</span>
+                <span class="kt-fmap-hint">@L["Factions_StripHint"]</span>
+            </div>
+            <div class="kt-fmap-strip">
+                @foreach (var f in _strip!)
+                {
+                    <div class="kt-fmap-seg @(f.Parties.Count > 1 ? "kt-hatch" : "") kt-kind-@f.Kind"
+                         style="flex-grow: @f.Seats" title="@f.Name">
+                        @if (f.Seats >= 4)
+                        {
+                            <span>@f.Seats</span>
+                        }
+                    </div>
+                }
+            </div>
+        </section>
+
+        <section class="kt-fmap-units">
+            @foreach (var u in _units)
+            {
+                <div class="kt-fmap-unit" style="--kt-slots: @u.Factions.Count">
+                    @if (u.Factions.Count > 1)
+                    {
+                        <div class="kt-fmap-grouphead kt-kind-@u.Kind">
+                            <span class="kt-fmap-grouptitle">@L[$"FactionGroup_{u.GroupKey}"]</span>
+                            @if (u.GroupDate is { } date)
+                            {
+                                <span class="kt-fmap-date">@date.ToString("d MMMM yyyy", CultureInfo.CurrentUICulture)</span>
+                            }
+                        </div>
+
+                        @* Скоба: горизонталь через группу, отводы точно
+                           по центрам карточек. Крайние сегменты идут
+                           от центра, средние перекрывают зазор. *@
+                        <div class="kt-fmap-rail kt-kind-@u.Kind">
+                            @for (var i = 0; i < u.Factions.Count; i++)
+                            {
+                                <div class="kt-fmap-railcell
+                                            @(i == 0 ? "is-first" : "")
+                                            @(i == u.Factions.Count - 1 ? "is-last" : "")"></div>
+                            }
+                        </div>
+                    }
+
+                    <div class="kt-fmap-cards">
+                        @foreach (var f in u.Factions)
+                        {
+                            <article class="kt-fmap-card kt-kind-@f.Kind">
+                                <div class="kt-fmap-seats">
+                                    <b>@f.Seats</b>
+                                    <span>@SeatWord(f.Seats)</span>
+                                </div>
+
+                                <h2 class="kt-fmap-name">@f.Name</h2>
+
+                                <div class="kt-fmap-parties">
+                                    <div class="kt-eyebrow">
+                                        @(f.Parties.Count > 1 ? L["Factions_PartyMany"] : L["Factions_PartyOne"])
+                                    </div>
+
+                                    @if (f.Parties.Count > 1)
+                                    {
+                                        <div class="kt-fmap-fork">
+                                            @for (var i = 0; i < f.Parties.Count; i++)
+                                            {
+                                                <div class="kt-fmap-railcell
+                                                            @(i == 0 ? "is-first" : "")
+                                                            @(i == f.Parties.Count - 1 ? "is-last" : "")"></div>
+                                            }
+                                        </div>
+                                    }
+
+                                    <div class="kt-fmap-chips">
+                                        @foreach (var p in f.Parties)
+                                        {
+                                            <span class="kt-fmap-chip" dir="@(p.IsHebrew ? "rtl" : null)"
+                                                  lang="@(p.IsHebrew ? "he" : null)">@p.Name</span>
+                                        }
+                                    </div>
+                                </div>
+
+                                @if (f.Note is { Length: > 0 })
+                                {
+                                    <p class="kt-fmap-note">@f.Note</p>
+                                }
+                            </article>
+                        }
+                    </div>
+                </div>
+            }
+        </section>
+
+        <section class="kt-fmap-legend">
+            <span class="kt-eyebrow">@L["Factions_HowToRead"]</span>
+            <div class="kt-fmap-legend-items">
+                <div class="kt-fmap-legend-item">
+                    <span class="kt-fmap-swatch kt-kind-single"></span>
+                    <span><b>@L["Factions_KindSingle"]</b><small>@L["Factions_KindSingleNote"]</small></span>
+                </div>
+                <div class="kt-fmap-legend-item">
+                    <span class="kt-fmap-swatch kt-kind-joint"></span>
+                    <span><b>@L["Factions_KindJoint"]</b><small>@L["Factions_KindJointNote"]</small></span>
+                </div>
+                <div class="kt-fmap-legend-item">
+                    <span class="kt-fmap-swatch kt-kind-split"></span>
+                    <span><b>@L["Factions_KindSplit"]</b><small>@L["Factions_KindSplitNote"]</small></span>
+                </div>
+                <div class="kt-fmap-legend-item">
+                    <span class="kt-fmap-corner"></span>
+                    <span><b>@L["Factions_LineTitle"]</b><small>@L["Factions_LineNote"]</small></span>
+                </div>
+            </div>
+        </section>
+
+        <footer class="kt-fmap-source">
+            @L["Factions_Source"]
+            @if (_verifiedAt is { } v)
+            {
+                <text> @L["Factions_Verified"] @v.ToString("d MMMM yyyy", CultureInfo.CurrentUICulture).</text>
+            }
+        </footer>
+    </div>
+}
+
+@code {
+    private List<Unit>? _units;
+    private List<Card>? _strip;
+    private int _totalSeats;
+    private int _totalParties;
+    private DateOnly? _verifiedAt;
+    private int? _knessetNum;
+
+    private record Party(string Name, bool IsHebrew);
+
+    private record Card(int Id, string Name, int Seats, string Kind,
+                        List<Party> Parties, string? Note);
+
+    private record Unit(string? GroupKey, DateOnly? GroupDate, string Kind, List<Card> Factions);
+
+    protected override async Task OnInitializedAsync()
+    {
+        _knessetNum = await CurrentKnesset.GetAsync();
+
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        // Мандаты считаются из состава: фиксировать их в курируемом слое
+        // нельзя — они меняются при каждом расколе.
+        var seats = await db.Persons.AsNoTracking()
+            .Where(p => p.IsCurrent && p.FactionId != null)
+            .GroupBy(p => p.FactionId!.Value)
+            .Select(g => new { FactionId = g.Key, Seats = g.Count() })
+            .ToDictionaryAsync(x => x.FactionId, x => x.Seats);
+
+        var curated = await db.Factions.AsNoTracking()
+            .Include(f => f.Parties)
+            .ToDictionaryAsync(f => f.Id);
+
+        _verifiedAt = curated.Values.Max(f => f.VerifiedAt);
+        _totalSeats = seats.Values.Sum();
+
+        var ru = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ru";
+
+        var cards = seats.Keys.Select(id =>
+        {
+            curated.TryGetValue(id, out var c);
+
+            var parties = (c?.Parties ?? [])
+                .OrderBy(p => p.Ordinal)
+                .Select(p => ru && p.NameRu is { Length: > 0 }
+                    ? new Party(p.NameRu, false)
+                    : new Party(p.NameHe, true))
+                .ToList();
+
+            var note = L[$"FactionNote_{id}"];
+
+            return new Card(
+                id,
+                // Название фракции уже переведено ключом Faction_<id>;
+                // если ключа нет, локализатор вернёт его сам — тогда
+                // показываем иврит из курируемого слоя.
+                Name: Localized($"Faction_{id}") ?? c?.NameHe ?? id.ToString(),
+                Seats: seats[id],
+                Kind: c?.OriginKind ?? "single",
+                Parties: parties,
+                Note: note.ResourceNotFound ? null : note.Value);
+        }).ToList();
+
+        _totalParties = cards.Sum(c => Math.Max(c.Parties.Count, 1));
+        _strip = cards.OrderByDescending(c => c.Seats).ToList();
+
+        // Порядок: по мандатам, но связанные фракции стоят рядом — иначе
+        // скобу между ними не провести. Группа занимает место своей
+        // крупнейшей фракции.
+        var byGroup = cards
+            .GroupBy(c => curated.TryGetValue(c.Id, out var f) ? f.GroupKey : null);
+
+        _units = byGroup
+            .SelectMany(g => g.Key is null
+                ? g.Select(c => new Unit(null, null, c.Kind, [c]))
+                : [BuildGroup(g.Key, [.. g], curated)])
+            .OrderByDescending(u => u.Factions.Max(c => c.Seats))
+            .ToList();
+    }
+
+    private static Unit BuildGroup(string key, List<Card> members,
+                                   Dictionary<int, Faction> curated) =>
+        new(key,
+            members.Select(c => curated[c.Id].GroupDate).FirstOrDefault(d => d is not null),
+            members[0].Kind,
+            members.OrderBy(c => curated[c.Id].GroupOrdinal).ToList());
+
+    private string? Localized(string key)
+    {
+        var value = L[key];
+        return value.ResourceNotFound ? null : value.Value;
+    }
+
+    /// <summary>
+    /// Форма слова «мандат» при числе. Правило славянское, но работает
+    /// и для остальных языков: в английском, иврите и арабском все три
+    /// ключа заполнены подходящими формами, и выбор между ними для этих
+    /// языков сводится к «один или много».
+    /// </summary>
+    private string SeatWord(int n)
+    {
+        var t = n % 10;
+        var h = n % 100;
+        if (t == 1 && h != 11) return L["Factions_SeatOne"];
+        if (t is >= 2 and <= 4 && h is < 12 or > 14) return L["Factions_SeatFew"];
+        return L["Factions_SeatMany"];
+    }
+}

@@ -643,4 +643,31 @@
   <data name="Bill_Committee" xml:space="preserve"><value>הוועדה המטפלת</value></data>
   <data name="Bill_WriteToCommittee" xml:space="preserve"><value>כתיבה לוועדה</value></data>
   <data name="Bill_WriteHint" xml:space="preserve"><value>הכפתור יפתח את תוכנת הדואר שלכם עם כתובת מזכירות הוועדה ונושא ההודעה. אם היא לא נפתחת, העתיקו את הכתובת שלידו. את העמדה אתם כותבים ושולחים בעצמכם — איננו שולחים דבר בשמכם.</value></data>
+  <data name="Nav_Factions" xml:space="preserve"><value>מפלגות וסיעות</value></data>
+  <data name="Factions_Title" xml:space="preserve"><value>ההרכב הפוליטי</value></data>
+  <data name="Factions_Lead" xml:space="preserve"><value>סיעה היא קבוצת חברי כנסת, מפלגה היא ארגון מחוץ לכנסת. הן אינן חופפות תמיד — במקומות שבהם הן נפרדות, הקשר מסומן בקו.</value></data>
+  <data name="Factions_Mandates" xml:space="preserve"><value>מנדטים</value></data>
+  <data name="Factions_FactionCount" xml:space="preserve"><value>סיעות</value></data>
+  <data name="Factions_PartyCount" xml:space="preserve"><value>מפלגות</value></data>
+  <data name="Factions_StripTitle" xml:space="preserve"><value>ההרכב כולו</value></data>
+  <data name="Factions_StripHint" xml:space="preserve"><value>הרוחב — חלק המנדטים, הקווקוו — סיעה המורכבת מכמה מפלגות</value></data>
+  <data name="Factions_HowToRead" xml:space="preserve"><value>איך קוראים את זה</value></data>
+  <data name="Factions_KindSingle" xml:space="preserve"><value>מפלגה אחת</value></data>
+  <data name="Factions_KindSingleNote" xml:space="preserve"><value>הסיעה והמפלגה חופפות</value></data>
+  <data name="Factions_KindJoint" xml:space="preserve"><value>כמה מפלגות</value></data>
+  <data name="Factions_KindJointNote" xml:space="preserve"><value>מפלגות נפרדות ברשימה אחת — ההסתעפות מצוירת בתוך הכרטיס</value></data>
+  <data name="Factions_KindSplit" xml:space="preserve"><value>מוצא משותף</value></data>
+  <data name="Factions_KindSplitNote" xml:space="preserve"><value>סיעות שיצאו מרשימה אחת או מסיעה אחת</value></data>
+  <data name="Factions_LineTitle" xml:space="preserve"><value>קו</value></data>
+  <data name="Factions_LineNote" xml:space="preserve"><value>מוצא משותף. כל תיבה היא קישור: סיעה, מפלגה, חבר כנסת.</value></data>
+  <data name="Factions_PartyOne" xml:space="preserve"><value>מפלגה</value></data>
+  <data name="Factions_PartyMany" xml:space="preserve"><value>מפלגות</value></data>
+  <data name="Factions_SeatOne" xml:space="preserve"><value>מנדט</value></data>
+  <data name="Factions_SeatFew" xml:space="preserve"><value>מנדטים</value></data>
+  <data name="Factions_SeatMany" xml:space="preserve"><value>מנדטים</value></data>
+  <data name="Factions_Source" xml:space="preserve"><value>הרכב ומנדטים — ה-API של הכנסת, לפי התפקיד «חבר/ת סיעה». שכבת המפלגות מתוחזקת ידנית.</value></data>
+  <data name="Factions_Verified" xml:space="preserve"><value>אומת</value></data>
+  <data name="FactionGroup_List2022" xml:space="preserve"><value>רשימה אחת, שלוש סיעות</value></data>
+  <data name="FactionGroup_Split2024" xml:space="preserve"><value>התפלגות הסיעה</value></data>
+  <data name="FactionNote_1108" xml:space="preserve"><value>הסיעה חדשה, המפלגה קיימת — מפלגה חדשה לא נוצרה</value></data>
 </root>

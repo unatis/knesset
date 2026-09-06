@@ -643,4 +643,31 @@
   <data name="Bill_Committee" xml:space="preserve"><value>Lead committee</value></data>
   <data name="Bill_WriteToCommittee" xml:space="preserve"><value>Write to the committee</value></data>
   <data name="Bill_WriteHint" xml:space="preserve"><value>The button opens your mail app with the committee secretariat address and a subject line. If it does not open, copy the address next to it. You write and send the letter yourself — we send nothing on your behalf.</value></data>
+  <data name="Nav_Factions" xml:space="preserve"><value>Parties and factions</value></data>
+  <data name="Factions_Title" xml:space="preserve"><value>Political map</value></data>
+  <data name="Factions_Lead" xml:space="preserve"><value>A faction is a group of members inside the Knesset; a party is an organisation outside it. They do not always coincide — where they diverge, the link is drawn.</value></data>
+  <data name="Factions_Mandates" xml:space="preserve"><value>seats</value></data>
+  <data name="Factions_FactionCount" xml:space="preserve"><value>factions</value></data>
+  <data name="Factions_PartyCount" xml:space="preserve"><value>parties</value></data>
+  <data name="Factions_StripTitle" xml:space="preserve"><value>The whole house</value></data>
+  <data name="Factions_StripHint" xml:space="preserve"><value>width is the share of seats; hatching marks a faction made of several parties</value></data>
+  <data name="Factions_HowToRead" xml:space="preserve"><value>How to read this</value></data>
+  <data name="Factions_KindSingle" xml:space="preserve"><value>One party</value></data>
+  <data name="Factions_KindSingleNote" xml:space="preserve"><value>Faction and party coincide</value></data>
+  <data name="Factions_KindJoint" xml:space="preserve"><value>Several parties</value></data>
+  <data name="Factions_KindJointNote" xml:space="preserve"><value>Separate parties running on one list — the branch is drawn inside the card</value></data>
+  <data name="Factions_KindSplit" xml:space="preserve"><value>Shared origin</value></data>
+  <data name="Factions_KindSplitNote" xml:space="preserve"><value>Factions that came out of one list or one faction</value></data>
+  <data name="Factions_LineTitle" xml:space="preserve"><value>Line</value></data>
+  <data name="Factions_LineNote" xml:space="preserve"><value>Shared origin. Every box is a link: faction, party, member.</value></data>
+  <data name="Factions_PartyOne" xml:space="preserve"><value>Party</value></data>
+  <data name="Factions_PartyMany" xml:space="preserve"><value>Parties</value></data>
+  <data name="Factions_SeatOne" xml:space="preserve"><value>seat</value></data>
+  <data name="Factions_SeatFew" xml:space="preserve"><value>seats</value></data>
+  <data name="Factions_SeatMany" xml:space="preserve"><value>seats</value></data>
+  <data name="Factions_Source" xml:space="preserve"><value>Composition and seats come from the Knesset API, position “faction member”. The party layer is maintained by hand.</value></data>
+  <data name="Factions_Verified" xml:space="preserve"><value>verified</value></data>
+  <data name="FactionGroup_List2022" xml:space="preserve"><value>One list, three factions</value></data>
+  <data name="FactionGroup_Split2024" xml:space="preserve"><value>Faction split</value></data>
+  <data name="FactionNote_1108" xml:space="preserve"><value>The faction is new, the party is not — no new party was created</value></data>
 </root>
