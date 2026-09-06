@@ -7,15 +7,19 @@
 <PageTitle>@L["Factions_Title"]</PageTitle>
 
 @* Карта политического расклада.
-   Страница нарочно без InteractiveServer: она только читает и должна
-   попадать в поисковую выдачу целиком, а не пререндером с последующей
-   догрузкой.
 
-   Смысл страницы — расхождения между фракцией и партией. Фракция это
-   группа депутатов в Кнессете, партия — организация вне его, и там,
-   где они не совпадают, связь рисуется линией: скобой над связанными
-   фракциями и вилкой внутри карточки, если фракция составлена
-   из нескольких партий. *@
+   Страница нарочно без InteractiveServer: она только читает и должна
+   попадать в поисковую выдачу целиком, а не пререндером с догрузкой.
+
+   Схема читается сверху вниз: сначала кубики партий, потом то, во что
+   они сложились. Порядок не косметический — партия существует вне
+   Кнессета и переживает выборы, а фракция живёт только внутри созыва
+   и составляется из партий.
+
+   Форм две, и они разные по смыслу:
+   объединение — несколько партий сходятся в одну фракцию;
+   раскол — общий список или фракция расходится на несколько.
+   Направление показывают стрелки на концах линий. *@
 
 @if (_units is null)
 {
@@ -33,7 +37,7 @@ else
             <div class="kt-fmap-counts">
                 <span><b>@_totalSeats</b> @L["Factions_Mandates"]</span>
                 <span class="kt-fmap-dot">·</span>
-                <span><b>@_units.Sum(u => u.Factions.Count)</b> @L["Factions_FactionCount"]</span>
+                <span><b>@_factionCount</b> @L["Factions_FactionCount"]</span>
                 <span class="kt-fmap-dot">·</span>
                 <span><b>@_totalParties</b> @L["Factions_PartyCount"]</span>
             </div>
@@ -64,90 +68,80 @@ else
         <section class="kt-fmap-units">
             @foreach (var u in _units)
             {
-                <div class="kt-fmap-unit" style="--kt-slots: @u.Factions.Count">
-                    @if (u.Factions.Count > 1)
+                <div class="kt-fmap-unit kt-kind-@u.Kind" style="--kt-slots: @u.Slots">
+                    @if (u.GroupKey is { Length: > 0 })
                     {
-                        <div class="kt-fmap-grouphead kt-kind-@u.Kind">
+                        <div class="kt-fmap-grouphead">
                             <span class="kt-fmap-grouptitle">@L[$"FactionGroup_{u.GroupKey}"]</span>
                             @if (u.GroupDate is { } date)
                             {
                                 <span class="kt-fmap-date">@date.ToString("d MMMM yyyy", CultureInfo.CurrentUICulture)</span>
                             }
                         </div>
+                    }
 
-                        @* Узел, из которого всё вышло. Без него скоба висела
-                           над двумя карточками и читалась наоборот — будто
-                           фракция раскололась на партии. Направление задаёт
-                           именно верхний бокс. *@
-                        @if (u.ParentName is { Length: > 0 })
+                    @* Уровень 1 — партии *@
+                    <div class="kt-fmap-level">
+                        @foreach (var party in u.Parties)
                         {
-                            <div class="kt-fmap-parent kt-kind-@u.Kind">
-                                <b>@u.ParentName</b>
-                                @if (u.ParentNote is { Length: > 0 })
+                            <div class="kt-fmap-party">
+                                <span class="kt-eyebrow">@L["Factions_PartyOne"]</span>
+                                <b dir="@(party.IsHebrew ? "rtl" : null)"
+                                   lang="@(party.IsHebrew ? "he" : null)">@party.Name</b>
+                            </div>
+                        }
+                    </div>
+
+                    @* Объединение: линии от партий сходятся в одно *@
+                    <div class="kt-fmap-join">
+                        <div class="kt-fmap-legs is-up">
+                            @for (var i = 0; i < u.Parties.Count; i++)
+                            {
+                                <div class="kt-fmap-leg @(i == 0 ? "is-first" : "") @(i == u.Parties.Count - 1 ? "is-last" : "")"></div>
+                            }
+                        </div>
+                        <div class="kt-fmap-stem"><span class="kt-fmap-arrow"></span></div>
+                    </div>
+
+                    @if (u.OriginName is { Length: > 0 })
+                    {
+                        @* Уровень 2 — чем эти партии были вместе до раскола *@
+                        <div class="kt-fmap-origin">
+                            <b>@u.OriginName</b>
+                            @if (u.OriginNote is { Length: > 0 })
+                            {
+                                <small>@u.OriginNote</small>
+                            }
+                        </div>
+
+                        @* Раскол: одна линия расходится на несколько *@
+                        <div class="kt-fmap-split">
+                            <div class="kt-fmap-stem"></div>
+                            <div class="kt-fmap-legs is-down">
+                                @for (var i = 0; i < u.Factions.Count; i++)
                                 {
-                                    <small>@u.ParentNote</small>
+                                    <div class="kt-fmap-leg @(i == 0 ? "is-first" : "") @(i == u.Factions.Count - 1 ? "is-last" : "")">
+                                        <span class="kt-fmap-arrow"></span>
+                                    </div>
                                 }
                             </div>
-                            <div class="kt-fmap-stem kt-kind-@u.Kind"></div>
-                        }
-
-                        @* Скоба: горизонталь через группу, отводы точно
-                           по центрам карточек. Крайние сегменты идут
-                           от центра, средние перекрывают зазор. *@
-                        <div class="kt-fmap-rail kt-kind-@u.Kind">
-                            @for (var i = 0; i < u.Factions.Count; i++)
-                            {
-                                <div class="kt-fmap-railcell
-                                            @(i == 0 ? "is-first" : "")
-                                            @(i == u.Factions.Count - 1 ? "is-last" : "")"></div>
-                            }
                         </div>
                     }
 
-                    <div class="kt-fmap-cards">
+                    @* Уровень 3 — фракции *@
+                    <div class="kt-fmap-level">
                         @foreach (var f in u.Factions)
                         {
-                            <article class="kt-fmap-card kt-kind-@f.Kind">
+                            <article class="kt-fmap-card">
                                 <div class="kt-fmap-seats">
                                     <b>@f.Seats</b>
                                     <span>@SeatWord(f.Seats)</span>
                                 </div>
-
                                 <h2 class="kt-fmap-name">@f.Name</h2>
-
                                 @if (f.Note is { Length: > 0 })
                                 {
                                     <p class="kt-fmap-note">@f.Note</p>
                                 }
-
-                                <div class="kt-fmap-parties">
-                                    <div class="kt-eyebrow">
-                                        @(f.Parties.Count > 1 ? L["Factions_FormedFromMany"] : L["Factions_FormedFromOne"])
-                                    </div>
-
-                                    @* Связь рисуется у всех, а не только у составных:
-                                       партия первична, она существует вне Кнессета
-                                       и переживает выборы, а фракция — временная форма
-                                       работы внутри созыва. У одной партии выходит
-                                       одна ножка, у нескольких — вилка. *@
-                                    <div class="kt-fmap-fork">
-                                        @for (var i = 0; i < f.Parties.Count; i++)
-                                        {
-                                            <div class="kt-fmap-railcell
-                                                        @(i == 0 ? "is-first" : "")
-                                                        @(i == f.Parties.Count - 1 ? "is-last" : "")"></div>
-                                        }
-                                    </div>
-
-                                    <div class="kt-fmap-chips">
-                                        @foreach (var p in f.Parties)
-                                        {
-                                            <span class="kt-fmap-chip" dir="@(p.IsHebrew ? "rtl" : null)"
-                                                  lang="@(p.IsHebrew ? "he" : null)">@p.Name</span>
-                                        }
-                                    </div>
-                                </div>
-
                             </article>
                         }
                     </div>
@@ -192,6 +186,7 @@ else
     private List<Card>? _strip;
     private int _totalSeats;
     private int _totalParties;
+    private int _factionCount;
     private DateOnly? _verifiedAt;
     private int? _knessetNum;
 
@@ -200,8 +195,17 @@ else
     private record Card(int Id, string Name, int Seats, string Kind,
                         List<Party> Parties, string? Note);
 
-    private record Unit(string? GroupKey, DateOnly? GroupDate, string Kind, List<Card> Factions,
-                        string? ParentName = null, string? ParentNote = null);
+    /// <summary>
+    /// Единица схемы: партии сверху, фракции снизу, а между ними — либо
+    /// прямое объединение, либо ещё и то общее, что потом раскололось.
+    /// </summary>
+    private record Unit(string Kind, List<Party> Parties, List<Card> Factions,
+                        string? GroupKey = null, DateOnly? GroupDate = null,
+                        string? OriginName = null, string? OriginNote = null)
+    {
+        /// <summary>Ширина в колонках — по самому широкому уровню.</summary>
+        public int Slots => Math.Max(Parties.Count, Factions.Count);
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -242,8 +246,7 @@ else
             return new Card(
                 id,
                 // Название фракции уже переведено ключом Faction_<id>;
-                // если ключа нет, локализатор вернёт его сам — тогда
-                // показываем иврит из курируемого слоя.
+                // если ключа нет, показываем иврит из курируемого слоя.
                 Name: Localized($"Faction_{id}") ?? c?.NameHe ?? id.ToString(),
                 Seats: seats[id],
                 Kind: c?.OriginKind ?? "single",
@@ -251,31 +254,36 @@ else
                 Note: note.ResourceNotFound ? null : note.Value);
         }).ToList();
 
+        _factionCount = cards.Count;
         _totalParties = cards.Sum(c => Math.Max(c.Parties.Count, 1));
         _strip = cards.OrderByDescending(c => c.Seats).ToList();
 
-        // Порядок: по мандатам, но связанные фракции стоят рядом — иначе
-        // скобу между ними не провести. Группа занимает место своей
-        // крупнейшей фракции.
-        var byGroup = cards
-            .GroupBy(c => curated.TryGetValue(c.Id, out var f) ? f.GroupKey : null);
-
-        _units = byGroup
+        // Связанные фракции идут одной единицей: только так между ними
+        // можно провести линию. Единица занимает место своей крупнейшей
+        // фракции, поэтому порядок остаётся примерно по величине.
+        _units = cards
+            .GroupBy(c => curated.TryGetValue(c.Id, out var f) ? f.GroupKey : null)
             .SelectMany(g => g.Key is null
-                ? g.Select(c => new Unit(null, null, c.Kind, [c]))
+                ? g.Select(c => new Unit(c.Kind, c.Parties, [c]))
                 : [BuildGroup(g.Key, [.. g], curated)])
             .OrderByDescending(u => u.Factions.Max(c => c.Seats))
             .ToList();
     }
 
-    private Unit BuildGroup(string key, List<Card> members,
-                           Dictionary<int, Faction> curated) =>
-        new(key,
-            members.Select(c => curated[c.Id].GroupDate).FirstOrDefault(d => d is not null),
-            members[0].Kind,
-            members.OrderBy(c => curated[c.Id].GroupOrdinal).ToList(),
+    private Unit BuildGroup(string key, List<Card> members, Dictionary<int, Faction> curated)
+    {
+        var ordered = members.OrderBy(c => curated[c.Id].GroupOrdinal).ToList();
+        return new Unit(
+            ordered[0].Kind,
+            // Партии всех фракций группы в том же порядке: партия слева
+            // соответствует фракции слева.
+            [.. ordered.SelectMany(c => c.Parties)],
+            ordered,
+            key,
+            ordered.Select(c => curated[c.Id].GroupDate).FirstOrDefault(d => d is not null),
             Localized($"FactionGroupParent_{key}"),
             Localized($"FactionGroupParentNote_{key}"));
+    }
 
     private string? Localized(string key)
     {
