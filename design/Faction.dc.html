@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Geist:wght@400;500;600&family=Noto+Sans+Hebrew:wght@400;500&family=JetBrains+Mono:wght@500&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #C94A0D; text-decoration: none; }
+    a:hover { color: #A33B0B; text-decoration: underline; }
+  </style>
+</helmet>
+
+<div style="font-family: 'Geist', system-ui, sans-serif; background: #FAF6EF; color: #3F3A2E; padding: 40px 56px 48px; display: flex; flex-direction: column; gap: 28px; min-height: 100%; box-sizing: border-box;">
+
+  <!-- Хлебные крошки — как на странице законопроекта -->
+  <div style="display: flex; gap: 8px; align-items: center; font-size: 14px; color: #857962;">
+    <a href="#" style="color: #C94A0D;">Фракции</a>
+    <span style="color: #CFC3A8;">/</span>
+    <span>Ха-Ямин ха-мамлахти</span>
+  </div>
+
+  <!-- Шапка -->
+  <div style="display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap;">
+    <div style="display: flex; flex-direction: column; gap: 8px; flex-grow: 1; min-width: 320px;">
+      <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 44px; line-height: 1.08; font-weight: 400; color: #110F0B; margin: 0;">Ха-Ямин ха-мамлахти</h1>
+      <div dir="rtl" lang="he" style="font-family: 'Noto Sans Hebrew', system-ui, sans-serif; font-size: 18px; color: #857962;">הימין הממלכתי</div>
+    </div>
+    <div style="display: flex; gap: 10px; align-items: stretch;">
+      <div style="display: flex; flex-direction: column; gap: 4px; padding: 14px 20px; background: #FFFDFA; border: 1px solid #E6DDC9; border-radius: 10px; min-width: 108px;">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 30px; line-height: 1; color: #110F0B;">4</span>
+        <span style="font-size: 12px; color: #857962;">мандата</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px; padding: 14px 20px; background: #FFFDFA; border: 1px solid #E6DDC9; border-radius: 10px; min-width: 108px;">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 30px; line-height: 1; color: #110F0B;">1</span>
+        <span style="font-size: 12px; color: #857962;">партия</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ключевая мысль страницы -->
+  <div style="display: flex; gap: 12px; align-items: flex-start; padding: 18px 20px; background: #FBEEE9; border: 1px solid #F3D1C4; border-left: 3px solid #B95A3C; border-radius: 10px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B95A3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+      <path d="M6 3v12"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path>
+    </svg>
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <div style="font-size: 15px; font-weight: 500; color: #77321E;">Фракция новая, партия прежняя</div>
+      <div style="font-size: 14px; line-height: 1.6; color: #77321E; max-width: 74ch; text-wrap: pretty;">
+        Эта фракция появилась расколом, а не выборами: партия «Тиква Хадаша» вышла из общего списка и образовала собственную фракцию. Новой партии при этом не возникло — в реестре партий ничего не изменилось.
+      </div>
+    </div>
+  </div>
+
+  <!-- Две колонки: состав слева, происхождение справа -->
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start;">
+
+    <!-- Состав -->
+    <div style="display: flex; flex-direction: column; gap: 16px; padding: 22px; background: #FFFDFA; border: 1px solid #E6DDC9; border-radius: 10px;">
+      <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #857962; font-weight: 500;">Состав</div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="font-size: 13px; color: #AEA084;">Партия</div>
+        <div style="display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap;">
+          <span style="font-size: 17px; font-weight: 500; color: #110F0B;">Тиква Хадаша</span>
+          <span dir="rtl" lang="he" style="font-family: 'Noto Sans Hebrew', system-ui, sans-serif; font-size: 15px; color: #857962;">תקווה חדשה</span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 16px; border-top: 1px solid #F2ECDF;">
+        <div style="font-size: 13px; color: #AEA084;">Депутаты</div>
+        <sc-for list="{{members}}" as="m" hint-placeholder-count="4">
+          <a href="#" style="display: flex; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 8px; background: #FAF6EF; color: #3F3A2E;">
+            <span style="width: 34px; height: 34px; border-radius: 999px; background: #F2ECDF; border: 1px solid #E6DDC9; flex-shrink: 0;"></span>
+            <span style="display: flex; flex-direction: column; gap: 1px;">
+              <span dir="rtl" lang="he" style="font-family: 'Noto Sans Hebrew', system-ui, sans-serif; font-size: 15px; font-weight: 500; color: #110F0B;">{{m.he}}</span>
+              <span style="font-size: 13px; color: #857962;">{{m.ru}}</span>
+            </span>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- Происхождение -->
+    <div style="display: flex; flex-direction: column; gap: 16px; padding: 22px; background: #FFFDFA; border: 1px solid #E6DDC9; border-radius: 10px;">
+      <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #857962; font-weight: 500;">Происхождение</div>
+
+      <div style="display: flex; flex-direction: column; gap: 0;">
+        <sc-for list="{{origin}}" as="o" hint-placeholder-count="3">
+          <div style="display: flex; gap: 14px; align-items: stretch;">
+            <div style="display: flex; flex-direction: column; align-items: center; width: 12px; flex-shrink: 0;">
+              <span style="width: 9px; height: 9px; border-radius: 999px; background: {{o.dot}}; margin-top: 6px; flex-shrink: 0;"></span>
+              <span style="width: 1px; flex-grow: 1; background: #E6DDC9;"></span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 3px; padding-bottom: 18px;">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #857962;">{{o.date}}</div>
+              <div style="font-size: 14px; line-height: 1.55; color: #3F3A2E; text-wrap: pretty;">{{o.text}}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="font-size: 12px; line-height: 1.5; color: #857962; padding-top: 4px; border-top: 1px solid #F2ECDF;">
+        Даты и состав списков сверены по открытым источникам 5 сентября 2026; в API Кнессета партийного слоя нет.
+      </div>
+    </div>
+  </div>
+
+  <!-- Законопроекты: связь с основным продуктом -->
+  <div style="display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 20px 22px; background: #FFFDFA; border: 1px solid #E6DDC9; border-radius: 10px;">
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <div style="font-size: 16px; font-weight: 500; color: #110F0B;">Законопроекты депутатов фракции</div>
+      <div style="font-size: 14px; color: #857962;">[N] инициатив, из них [N] в окне влияния</div>
+    </div>
+    <a href="#" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: #E85D16; color: #FFFDFA; font-size: 14px; font-weight: 500; box-shadow: 0 8px 20px -4px rgba(232, 93, 22, 0.35);">
+      Смотреть
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+      </svg>
+    </a>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1000,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      // Депутаты — из реестра Кнессета, фракция 1108, должность «член фракции».
+      members: [
+        { he: 'זאב אלקין', ru: 'Зеэв Элькин' },
+        { he: 'שרן מרים השכל', ru: 'Шарен Мирьям Хаскель' },
+        { he: 'אכרם חסון', ru: 'Акрам Хасон' },
+        { he: 'מישל בוסקילה', ru: 'Мишель Бускила' },
+      ],
+      origin: [
+        { date: '10 июля 2022', dot: '#CFC3A8',
+          text: '«Кахоль-Лаван» Бени Ганца и «Тиква Хадаша» Гидеона Саара объединились в один список.' },
+        { date: '12 марта 2024', dot: '#B95A3C',
+          text: '«Тиква Хадаша» вышла из фракции и образовала «Ха-Ямин ха-мамлахти». Партия осталась той же.' },
+        { date: 'июль 2025', dot: '#CFC3A8',
+          text: 'В прежней фракции остались только депутаты «Кахоль-Лаван», и название вернулось к исходному.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

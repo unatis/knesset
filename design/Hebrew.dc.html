@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500&family=Noto+Sans+Hebrew:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #C94A0D; text-decoration: none; }
+    a:hover { color: #A33B0B; text-decoration: underline; }
+    .kt-hatch {
+      background-image: repeating-linear-gradient(
+        45deg, transparent 0 6px, rgba(255, 253, 250, 0.55) 6px 8px);
+    }
+  </style>
+</helmet>
+
+<div dir="rtl" lang="he" style="font-family: 'Noto Sans Hebrew', system-ui, sans-serif; background: #FAF6EF; color: #3F3A2E; padding: 56px 64px; display: flex; flex-direction: column; gap: 40px; min-height: 100%; box-sizing: border-box;">
+
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="font-size: 12px; letter-spacing: 0.06em; color: #857962; font-weight: 500;">הכנסת ה-25</div>
+    <h1 style="font-family: 'Frank Ruhl Libre', Georgia, serif; font-size: 52px; line-height: 1.15; font-weight: 400; color: #110F0B; margin: 0;">ההרכב הפוליטי</h1>
+    <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; color: #5C5443; font-size: 15px;">
+      <span><b style="font-family: 'JetBrains Mono', monospace; color: #110F0B;">120</b> מנדטים</span>
+      <span style="color: #CFC3A8;">·</span>
+      <span><b style="font-family: 'JetBrains Mono', monospace; color: #110F0B;">13</b> סיעות</span>
+      <span style="color: #CFC3A8;">·</span>
+      <span><b style="font-family: 'JetBrains Mono', monospace; color: #110F0B;">15</b> מפלגות</span>
+    </div>
+    <p style="margin: 6px 0 0; max-width: 62ch; font-size: 15px; line-height: 1.7; color: #5C5443; text-wrap: pretty;">
+      סיעה היא קבוצת חברי כנסת, מפלגה היא ארגון מחוץ לכנסת. הן אינן חופפות תמיד, והעמוד הזה עוסק במקומות שבהם הן נפרדות.
+    </p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+      <div style="font-size: 12px; letter-spacing: 0.06em; color: #857962; font-weight: 500;">כל 120 המנדטים</div>
+      <div style="font-size: 13px; color: #857962;">הרוחב — חלק המנדטים</div>
+    </div>
+    <div style="display: flex; gap: 3px; height: 64px; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 2px rgba(70,40,10,0.06), 0 1px 3px rgba(70,40,10,0.08);">
+      <sc-for list="{{factions}}" as="f" hint-placeholder-count="13">
+        <div class="{{f.hatch}}" style="flex-grow: {{f.seats}}; flex-basis: 0; min-width: 8px; background: {{f.stripBg}}; border-bottom: 4px solid {{f.accent}}; display: flex; align-items: center; justify-content: center; padding: 0 6px; box-sizing: border-box; overflow: hidden;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: {{f.stripInk}}; white-space: nowrap;">{{f.stripLabel}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; padding: 18px 20px; background: #FFFDFA; border: 1px solid #E6DDC9; border-radius: 10px;">
+    <div style="font-size: 12px; letter-spacing: 0.06em; color: #857962; font-weight: 500; padding-top: 2px;">איך קוראים את זה</div>
+    <div style="display: flex; gap: 24px; flex-wrap: wrap; flex-grow: 1;">
+      <sc-for list="{{legend}}" as="l" hint-placeholder-count="3">
+        <div style="display: flex; gap: 10px; align-items: flex-start; max-width: 32ch;">
+          <span style="width: 14px; height: 14px; border-radius: 4px; background: {{l.bg}}; border-bottom: 3px solid {{l.accent}}; flex-shrink: 0; margin-top: 3px;"></span>
+          <span style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 14px; font-weight: 500; color: #2B271F;">{{l.title}}</span>
+            <span style="font-size: 13px; line-height: 1.5; color: #857962;">{{l.note}}</span>
+          </span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px;">
+    <sc-for list="{{factions}}" as="f" hint-placeholder-count="13">
+      <div style="display: flex; flex-direction: column; gap: 12px; padding: 18px; background: #FFFDFA; border: 1px solid #E6DDC9; border-top: 3px solid {{f.accent}}; border-radius: 10px; box-shadow: 0 1px 2px rgba(70,40,10,0.06);">
+
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 26px; line-height: 1; color: #110F0B;">{{f.seats}}</span>
+          <span style="font-size: 12px; color: #857962;">{{f.seatWord}}</span>
+        </div>
+
+        <div style="font-size: 16px; font-weight: 500; line-height: 1.4; color: #110F0B; text-wrap: pretty;">{{f.name}}</div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid #F2ECDF;">
+          <div style="font-size: 11px; letter-spacing: 0.04em; color: #AEA084;">{{f.partyWord}}</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            <sc-for list="{{f.parties}}" as="p" hint-placeholder-count="2">
+              <span style="font-size: 13px; padding: 3px 9px; border-radius: 999px; background: #F2ECDF; color: #3F3A2E;">{{p}}</span>
+            </sc-for>
+          </div>
+        </div>
+
+        <sc-if value="{{f.note}}" hint-placeholder-val="{{true}}">
+          <div style="display: flex; gap: 8px; align-items: flex-start; font-size: 12px; line-height: 1.5; color: #77321E; background: #FBEEE9; border-radius: 6px; padding: 8px 10px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B95A3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;">
+              <path d="M6 3v12"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path>
+            </svg>
+            <span>{{f.note}}</span>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #E6DDC9; display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px; color: #857962;">
+    <span>הרכב ומנדטים — ה-API של הכנסת, לפי התפקיד «חבר/ת סיעה».</span>
+    <span style="color: #CFC3A8;">·</span>
+    <span>שכבת המפלגות מתוחזקת ידנית, אומתה ב-5 בספטמבר 2026.</span>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const KIND = {
+      single:    { accent: '#CFC3A8', bg: '#F2ECDF', title: 'מפלגה אחת',   note: 'הסיעה והמפלגה חופפות' },
+      joint:     { accent: '#D48327', bg: '#F7E0C0', title: 'כמה מפלגות',  note: 'מפלגות נפרדות רצות ברשימה אחת' },
+      split:     { accent: '#B95A3C', bg: '#F3D1C4', title: 'התפלגות',     note: 'נוצרה בפרישה מרשימה או מסיעה אחרת' },
+      remainder: { accent: '#B95A3C', bg: '#F3D1C4', title: 'התפלגות',     note: 'נוצרה בפרישה מרשימה או מסיעה אחרת' },
+    };
+
+    const raw = [
+      { id: 1096, name: 'הליכוד', seats: 32, parties: ['הליכוד'], kind: 'single' },
+      { id: 1102, name: 'יש עתיד', seats: 24, parties: ['יש עתיד'], kind: 'single' },
+      { id: 1095, name: 'ש"ס', seats: 11, parties: ['ש"ס'], kind: 'single' },
+      { id: 1110, name: 'כחול לבן — המחנה הממלכתי', seats: 8, parties: ['כחול לבן'], kind: 'remainder',
+        note: 'ב-12 במרץ 2024 «תקווה חדשה» פרשה והקימה את הימין הממלכתי' },
+      { id: 1101, name: 'יהדות התורה', seats: 7, parties: ['דגל התורה', 'אגודת ישראל'], kind: 'joint',
+        note: 'שתי מפלגות נפרדות ברשימה אחת' },
+      { id: 1105, name: 'הציונות הדתית', seats: 7, parties: ['הציונות הדתית'], kind: 'split',
+        note: 'ב-20 בנובמבר 2022 רשימה משותפת של 14 מנדטים נחלקה לשלוש סיעות' },
+      { id: 1104, name: 'ישראל ביתנו', seats: 6, parties: ['ישראל ביתנו'], kind: 'single' },
+      { id: 1106, name: 'עוצמה יהודית', seats: 6, parties: ['עוצמה יהודית'], kind: 'split',
+        note: 'מאותה רשימה, 20 בנובמבר 2022' },
+      { id: 1099, name: 'רע"ם', seats: 5, parties: ['הרשימה הערבית המאוחדת'], kind: 'single' },
+      { id: 1103, name: 'חד"ש-תע"ל', seats: 5, parties: ['חד"ש', 'תע"ל'], kind: 'joint',
+        note: 'שתי מפלגות נפרדות ברשימה אחת' },
+      { id: 1100, name: 'העבודה', seats: 4, parties: ['העבודה'], kind: 'single' },
+      { id: 1108, name: 'הימין הממלכתי', seats: 4, parties: ['תקווה חדשה'], kind: 'split',
+        note: 'הסיעה חדשה, המפלגה קיימת — מפלגה חדשה לא נוצרה' },
+      { id: 1107, name: 'נעם', seats: 1, parties: ['נעם'], kind: 'split',
+        note: 'מאותה רשימה, 20 בנובמבר 2022' },
+    ];
+
+    return {
+      factions: raw.map((f) => {
+        const k = KIND[f.kind];
+        return {
+          ...f,
+          accent: k.accent,
+          stripBg: k.bg,
+          stripInk: f.seats >= 4 ? '#2B271F' : 'transparent',
+          stripLabel: f.seats >= 4 ? String(f.seats) : '',
+          hatch: f.parties.length > 1 ? 'kt-hatch' : '',
+          seatWord: f.seats === 1 ? 'מנדט' : 'מנדטים',
+          partyWord: f.parties.length > 1 ? 'מפלגות' : 'מפלגה',
+        };
+      }),
+      legend: [{ ...KIND.single }, { ...KIND.joint }, { ...KIND.split }],
+    };
+  }
+}
+</script>
+</body>
+</html>
