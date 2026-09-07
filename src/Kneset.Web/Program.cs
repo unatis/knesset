@@ -5,6 +5,7 @@ using Kneset.Core.Entities;
 using Kneset.Web;
 using Kneset.Infrastructure.Ai;
 using Kneset.Infrastructure.Data;
+using Kneset.Infrastructure.Documents;
 using Kneset.Infrastructure.Knesset;
 using Kneset.Infrastructure.Notifications;
 using Kneset.Web.Components;
@@ -1133,6 +1134,31 @@ if (app.Environment.IsDevelopment())
                 .Where(d => influenceDescs.Contains(d.Bill.StatusDesc))
                 .Select(d => new { d.BillId, d.GroupTypeDesc })
                 .Distinct().CountAsync(ct),
+        });
+    });
+
+    // Проба текстового слоя в произвольном PDF по адресу. Нужна была, чтобы
+    // выяснить, извлекается ли текст из тех PDF законов, которые Кнессет
+    // выкладывает на сайте (в API их нет).
+    app.MapGet("/dev/pdftext", async (
+        string url, IHttpClientFactory httpFactory, CancellationToken ct) =>
+    {
+        var http = httpFactory.CreateClient();
+        http.Timeout = TimeSpan.FromSeconds(60);
+
+        using var resp = await http.GetAsync(url, ct);
+        if (!resp.IsSuccessStatusCode) return Results.Json(new { status = (int)resp.StatusCode });
+
+        var bytes = await resp.Content.ReadAsByteArrayAsync(ct);
+        var result = DocumentTextExtractor.Extract(bytes);
+
+        return Results.Json(new
+        {
+            length = bytes.Length,
+            kind = result.Kind.ToString(),
+            chars = result.CharCount,
+            error = result.Error,
+            head = result.Text.Length > 600 ? result.Text[..600] : result.Text,
         });
     });
 

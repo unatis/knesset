@@ -25,7 +25,7 @@ namespace Kneset.Core.Legislation;
 public static class BillLawMatcher
 {
     /// <summary>Версия правил. Меняется вместе с ними — тогда видно, что пора пересчитать.</summary>
-    public const string Version = "name-v1";
+    public const string Version = "name-v2";
 
     private static readonly Regex Nikkud = new(@"[֑-ׇ]", RegexOptions.Compiled);
     private static readonly Regex Spaces = new(@"\s+", RegexOptions.Compiled);
@@ -43,11 +43,23 @@ public static class BillLawMatcher
 
     private static readonly Regex BillPrefix = new(@"^הצעת\s+", RegexOptions.Compiled);
 
+    /// <summary>
+    /// Квалификатор редакции в квадратных скобках: «[נוסח משולב]» (сводная
+    /// редакция), «[התשס"א]» (год редакции). Убирается из ключа сопоставления,
+    /// потому что законопроект его не пишет: правку сводного «חוק הביטוח
+    /// הלאומי [נוסח משולב], התשנ"ה-1995» вносят как «הצעת חוק הביטוח הלאומי
+    /// (תיקון מס' N)». Без этого ключ сходился с отменённой редакцией 1953
+    /// года, и 57 законопроектов окна влияния указывали на недействующий
+    /// закон. Какую из редакций выбрать, решает вызывающий: действующая
+    /// вперёд, при равенстве — более поздняя.
+    /// </summary>
+    private static readonly Regex EditionQualifier = new(@"\s*\[[^\]]*\]\s*", RegexOptions.Compiled);
+
     /// <summary>«חוק לתיקון פקודת מס הכנסה» — законопроект правит ордонанс.</summary>
     private static readonly Regex AmendingLaw = new(@"^חוק לתיקון\s+(?<target>.+)$", RegexOptions.Compiled);
 
     /// <summary>Ключ сопоставления для названия закона.</summary>
-    public static string LawKey(string lawName) => StripYear(Normalize(lawName));
+    public static string LawKey(string lawName) => StripEdition(StripYear(Normalize(lawName)));
 
     /// <summary>
     /// Ключи-кандидаты для названия законопроекта, от самого длинного
@@ -61,13 +73,13 @@ public static class BillLawMatcher
     /// </summary>
     public static IReadOnlyList<string> BillKeys(string billName)
     {
-        var s = BillPrefix.Replace(StripYear(Normalize(billName)), "");
+        var s = StripEdition(BillPrefix.Replace(StripYear(Normalize(billName)), ""));
         var keys = new List<string>();
         if (s.Length > 0) keys.Add(s);
 
         while (true)
         {
-            var next = StripYear(TrailingParens.Replace(s, "").Trim().TrimEnd(',').Trim());
+            var next = StripEdition(StripYear(TrailingParens.Replace(s, "").Trim().TrimEnd(',').Trim()));
             if (next.Length == 0 || next == s) break;
             keys.Add(next);
             s = next;
@@ -93,6 +105,9 @@ public static class BillLawMatcher
         s = Nikkud.Replace(s, "");
         return Spaces.Replace(s, " ").Trim();
     }
+
+    private static string StripEdition(string value) =>
+        Spaces.Replace(EditionQualifier.Replace(value, " "), " ").Trim().TrimEnd(',').Trim();
 
     private static string StripYear(string value)
     {

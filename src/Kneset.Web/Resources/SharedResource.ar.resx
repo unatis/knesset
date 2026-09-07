@@ -751,4 +751,9 @@
   <data name="Notif_AddTopic" xml:space="preserve"><value>إضافة</value></data>
   <data name="Notif_TopicHint" xml:space="preserve"><value>الموضوع يأتي من القانون الذي يعدّله مشروع القانون. مشاريع القوانين التي لا تعدّل قانوناً قائماً لا تشملها الاشتراك بالموضوع.</value></data>
   <data name="Feed_BecauseTopic" xml:space="preserve"><value>في موضوع «{0}»</value></data>
+  <data name="Laws_FullText" xml:space="preserve"><value>النص الكامل للقانون</value></data>
+  <data name="Laws_FullTextSource" xml:space="preserve"><value>«كتاب القوانين المفتوح» — النسخة الموحّدة السارية. الكنيست لا ينشر نصوص القوانين في بياناته المفتوحة، لذا نحيل إلى المصدر الذي يشير إليه هو نفسه.</value></data>
+  <data name="Laws_PlainLanguage" xml:space="preserve"><value>بكلمات بسيطة</value></data>
+  <data name="Laws_AtKnesset" xml:space="preserve"><value>صفحة القانون في الكنيست</value></data>
+  <data name="Laws_Ministries" xml:space="preserve"><value>الوزارات المسؤولة</value></data>
 </root>

@@ -4678,5 +4678,311 @@
     "language_code": "ar",
     "text": "قانون سلة الاستيعاب، 1994",
     "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000198,
+    "language_code": "ru",
+    "text": "Закон о национальном страховании [сводная редакция], 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000198,
+    "language_code": "en",
+    "text": "National Insurance Law [Consolidated Version], 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000198,
+    "language_code": "ar",
+    "text": "قانون التأمين الوطني [صيغة موحّدة]، 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000140,
+    "language_code": "ru",
+    "text": "Закон о судах [сводная редакция], 1984",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000140,
+    "language_code": "en",
+    "text": "Courts Law [Consolidated Version], 1984",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000140,
+    "language_code": "ar",
+    "text": "قانون المحاكم [صيغة موحّدة]، 1984",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000191,
+    "language_code": "ru",
+    "text": "Закон о выборах в Кнессет [сводная редакция], 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000191,
+    "language_code": "en",
+    "text": "Knesset Elections Law [Consolidated Version], 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000191,
+    "language_code": "ar",
+    "text": "قانون انتخابات الكنيست [صيغة موحّدة]، 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001122,
+    "language_code": "ru",
+    "text": "Закон об уголовном судопроизводстве [сводная редакция], 1982",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001122,
+    "language_code": "en",
+    "text": "Criminal Procedure Law [Consolidated Version], 1982",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001122,
+    "language_code": "ar",
+    "text": "قانون الإجراءات الجنائية [صيغة موحّدة]، 1982",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000845,
+    "language_code": "ru",
+    "text": "Ордонанс о тюрьмах [новая редакция], 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000845,
+    "language_code": "en",
+    "text": "Prisons Ordinance [New Version], 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000845,
+    "language_code": "ar",
+    "text": "مرسوم السجون [صيغة جديدة]، 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001386,
+    "language_code": "ru",
+    "text": "Закон о воинской службе [сводная редакция], 1986",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001386,
+    "language_code": "en",
+    "text": "Defence Service Law [Consolidated Version], 1986",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001386,
+    "language_code": "ar",
+    "text": "قانون الخدمة الأمنية [صيغة موحّدة]، 1986",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000952,
+    "language_code": "ru",
+    "text": "Ордонанс об уголовном судопроизводстве (задержание и обыск) [новая редакция], 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000952,
+    "language_code": "en",
+    "text": "Criminal Procedure (Arrest and Search) Ordinance [New Version], 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000952,
+    "language_code": "ar",
+    "text": "مرسوم الإجراءات الجنائية (التوقيف والتفتيش) [صيغة جديدة]، 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001411,
+    "language_code": "ru",
+    "text": "Закон об иудейских религиозных службах [сводная редакция], 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001411,
+    "language_code": "en",
+    "text": "Jewish Religious Services Law [Consolidated Version], 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001411,
+    "language_code": "ar",
+    "text": "قانون الخدمات الدينية اليهودية [صيغة موحّدة]، 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000922,
+    "language_code": "ru",
+    "text": "Ордонанс о врачах [новая редакция], 1976",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000922,
+    "language_code": "en",
+    "text": "Physicians Ordinance [New Version], 1976",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000922,
+    "language_code": "ar",
+    "text": "مرسوم الأطباء [صيغة جديدة]، 1976",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000889,
+    "language_code": "ru",
+    "text": "Ордонанс о полиции [новая редакция], 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000889,
+    "language_code": "en",
+    "text": "Police Ordinance [New Version], 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000889,
+    "language_code": "ar",
+    "text": "مرسوم الشرطة [صيغة جديدة]، 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000929,
+    "language_code": "ru",
+    "text": "Ордонанс о товариществах [новая редакция], 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000929,
+    "language_code": "en",
+    "text": "Partnerships Ordinance [New Version], 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000929,
+    "language_code": "ar",
+    "text": "مرسوم الشركات التضامنية [صيغة جديدة]، 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000924,
+    "language_code": "ru",
+    "text": "Ордонанс о фармацевтах [новая редакция], 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000924,
+    "language_code": "en",
+    "text": "Pharmacists Ordinance [New Version], 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000924,
+    "language_code": "ar",
+    "text": "مرسوم الصيادلة [صيغة جديدة]، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000901,
+    "language_code": "ru",
+    "text": "Ордонанс об опасных наркотиках [новая редакция], 1973",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000901,
+    "language_code": "en",
+    "text": "Dangerous Drugs Ordinance [New Version], 1973",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000901,
+    "language_code": "ar",
+    "text": "مرسوم المخدرات الخطيرة [صيغة جديدة]، 1973",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000899,
+    "language_code": "ru",
+    "text": "Ордонанс о статистике [новая редакция], 1972",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000899,
+    "language_code": "en",
+    "text": "Statistics Ordinance [New Version], 1972",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000899,
+    "language_code": "ar",
+    "text": "مرسوم الإحصاء [صيغة جديدة]، 1972",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001400,
+    "language_code": "ru",
+    "text": "Закон о постоянной службе в Армии обороны Израиля (пенсии) [сводная редакция], 1985",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001400,
+    "language_code": "en",
+    "text": "Permanent Service in the Israel Defense Forces (Pensions) Law [Consolidated Version], 1985",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001400,
+    "language_code": "ar",
+    "text": "قانون الخدمة الدائمة في جيش الدفاع الإسرائيلي (المعاشات) [صيغة موحّدة]، 1985",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000920,
+    "language_code": "ru",
+    "text": "Ордонанс о доказательствах [новая редакция], 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000920,
+    "language_code": "en",
+    "text": "Evidence Ordinance [New Version], 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000920,
+    "language_code": "ar",
+    "text": "مرسوم الإثبات [صيغة جديدة]، 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000896,
+    "language_code": "ru",
+    "text": "Ордонанс о портах [новая редакция], 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000896,
+    "language_code": "en",
+    "text": "Ports Ordinance [New Version], 1971",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000896,
+    "language_code": "ar",
+    "text": "مرسوم الموانئ [صيغة جديدة]، 1971",
+    "model_version": "manual-v1"
   }
 ]

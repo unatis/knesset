@@ -751,4 +751,9 @@
   <data name="Notif_AddTopic" xml:space="preserve"><value>Add</value></data>
   <data name="Notif_TopicHint" xml:space="preserve"><value>The topic comes from the law a bill amends. Bills that do not amend an existing law are not covered by a topic subscription.</value></data>
   <data name="Feed_BecauseTopic" xml:space="preserve"><value>On the topic “{0}”</value></data>
+  <data name="Laws_FullText" xml:space="preserve"><value>Full text of the law</value></data>
+  <data name="Laws_FullTextSource" xml:space="preserve"><value>The Open Law Book — the consolidated version in force. The Knesset does not publish law texts in its open data, so we link to the source it points to itself.</value></data>
+  <data name="Laws_PlainLanguage" xml:space="preserve"><value>In plain language</value></data>
+  <data name="Laws_AtKnesset" xml:space="preserve"><value>The law's page at the Knesset</value></data>
+  <data name="Laws_Ministries" xml:space="preserve"><value>Responsible ministries</value></data>
 </root>
