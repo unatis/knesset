@@ -1,5 +1,4 @@
 @page "/bills/{Id:int}"
-@rendermode InteractiveServer
 @using Kneset.Web.Services
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
@@ -52,10 +51,12 @@ else
     <div class="d-flex flex-wrap align-items-start gap-3">
         <ShareMenu Path="@($"/bills/{_bill.Id}")"
                    Title="@(_bill.NameRu ?? _bill.Name)"
-                   Text="@string.Format(L["Share_BillText"], _bill.NameRu ?? _bill.Name)" />
+                   Text="@string.Format(L["Share_BillText"], _bill.NameRu ?? _bill.Name)"
+                   @rendermode="InteractiveServer" />
         <div>
             <FollowButton Kind="SubscriptionKind.Bill" TargetId="@_bill.Id"
-                          ReturnUrl="@($"/bills/{_bill.Id}")" />
+                          ReturnUrl="@($"/bills/{_bill.Id}")"
+                          @rendermode="InteractiveServer" />
         </div>
     </div>
 
@@ -230,17 +231,17 @@ else
                 </ul>
             }
 
-            <AiAnalysisCard BillId="@_bill.Id" />
+            <AiAnalysisCard BillId="@_bill.Id" @rendermode="InteractiveServer" />
 
-            <AnalysisHistoryCard BillId="@_bill.Id" />
+            <AnalysisHistoryCard BillId="@_bill.Id" @rendermode="InteractiveServer" />
 
             <ContextAnalysisCard BillId="@_bill.Id" />
 
-            <CommentsSection BillId="@_bill.Id" />
+            <CommentsSection BillId="@_bill.Id" @rendermode="InteractiveServer" />
         </div>
 
         <div class="col-lg-4">
-            <ReactionWidget BillId="@_bill.Id" />
+            <ReactionWidget BillId="@_bill.Id" @rendermode="InteractiveServer" />
 
             <div class="card">
                 <div class="card-header">@L["Initiators"] (@_bill.Initiators.Count)</div>
