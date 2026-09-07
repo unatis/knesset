@@ -689,4 +689,6 @@
   <data name="Party_SharedWith" xml:space="preserve"><value>יחד עם</value></data>
   <data name="Party_MembersUnknown" xml:space="preserve"><value>הכנסת מפרסמת לאיזו סיעה משתייך כל חבר כנסת, אך לא לאיזו מפלגה. לכן מוצגים כאן כל חברי הסיעה — חלוקה שלהם לפי מפלגות הייתה ניחוש.</value></data>
   <data name="Party_Source" xml:space="preserve"><value>שכבת המפלגות אינה מתפרסמת על ידי הכנסת ומתוחזקת ידנית. חברי הכנסת והמנדטים — מה-API של הכנסת.</value></data>
+  <data name="Inf_Dissolved" xml:space="preserve"><value>הכנסת התפזרה</value></data>
+  <data name="Inf_Dissolved_Hint" xml:space="preserve"><value>השלב מבטיח אפשרות להשפיע, אך כרגע אין תנועה: הכנסת התפזרה, ועד כינונה של כנסת חדשה הוועדות אינן מתכנסות ואין קריאות. כנסת חדשה יכולה להחזיר את הצעת החוק באמצעות דין הרציפות.</value></data>
 </root>

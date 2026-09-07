@@ -689,4 +689,6 @@
   <data name="Party_SharedWith" xml:space="preserve"><value>вместе с</value></data>
   <data name="Party_MembersUnknown" xml:space="preserve"><value>Кнессет публикует, кто из депутатов в какой фракции, но не публикует, кто из них от какой партии. Поэтому здесь показаны все депутаты фракции — разделить их по партиям было бы догадкой.</value></data>
   <data name="Party_Source" xml:space="preserve"><value>Партийный слой не публикуется Кнессетом и ведётся вручную. Депутаты и мандаты — из API Кнессета.</value></data>
+  <data name="Inf_Dissolved" xml:space="preserve"><value>Кнессет распущен</value></data>
+  <data name="Inf_Dissolved_Hint" xml:space="preserve"><value>Стадия обещает влияние, но движения сейчас нет: Кнессет распущен, и до созыва нового комиссии не заседают и чтений не проводится. Вернуть законопроект к работе новый созыв может через преемственность.</value></data>
 </root>

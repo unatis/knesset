@@ -74,7 +74,9 @@ public class OgImageService
         var undecided = await db.BillReactions.CountAsync(r => r.BillId == billId && r.Kind == ReactionKind.Undecided, ct);
 
         var currentKnesset = await _currentKnesset.GetAsync(ct);
-        var influence = InfluenceWindowBadge.Classify(bill.StatusDesc, bill.KnessetNum, currentKnesset);
+        var termEndedOn = await _currentKnesset.GetEndedOnAsync(ct);
+        var influence = InfluenceWindowBadge.Classify(
+            bill.StatusDesc, bill.KnessetNum, currentKnesset, termEndedOn);
         var (influenceColor, influenceText) = influence?.LabelKey switch
         {
             "Inf_Open" => (Green, "Influence window OPEN — committee stage"),

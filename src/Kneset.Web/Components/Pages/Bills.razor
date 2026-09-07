@@ -160,7 +160,8 @@ else
                     <div class="d-flex flex-wrap align-items-center gap-2">
                         <InfluenceWindowBadge StatusDesc="@bill.Bill.StatusDesc"
                                               KnessetNum="@bill.Bill.KnessetNum"
-                                              CurrentKnesset="@_currentKnesset" />
+                                              CurrentKnesset="@_currentKnesset"
+                                              TermEndedOn="@_termEndedOn" />
                         <span class="kt-num">
                             @L["Knesset"] @bill.Bill.KnessetNum
                             @if (bill.Bill.SubTypeDesc is not null)
@@ -219,6 +220,9 @@ else
 
     /// <summary>Текущий созыв — по нему видно, не прекратился ли законопроект.</summary>
     private int? _currentKnesset;
+
+    /// <summary>Дата роспуска текущего созыва, если он закончился.</summary>
+    private DateOnly? _termEndedOn;
     private int _page;
     private string _search = "";
     /// <summary>Отмеченные стадии. Пустое множество означало бы «ничего не показывать».</summary>
@@ -326,6 +330,7 @@ else
         _knessetNums = await db.Bills.Select(b => b.KnessetNum).Distinct()
             .OrderByDescending(n => n).ToListAsync();
         _currentKnesset = await CurrentKnesset.GetAsync();
+        _termEndedOn = await CurrentKnesset.GetEndedOnAsync();
         await LoadAsync();
     }
 

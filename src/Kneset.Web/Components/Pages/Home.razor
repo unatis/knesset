@@ -135,7 +135,8 @@
                         <div class="feed-meta">
                             <InfluenceWindowBadge StatusDesc="@item.StatusDesc"
                                                   KnessetNum="@item.KnessetNum"
-                                                  CurrentKnesset="@_currentKnesset" />
+                                                  CurrentKnesset="@_currentKnesset"
+                                                  TermEndedOn="@_termEndedOn" />
                         </div>
 
                         var counts = _reactions.GetValueOrDefault(billId);
@@ -252,6 +253,9 @@
     /// <summary>Текущий созыв — по нему бейдж отличает живой закон от прекратившегося.</summary>
     private int? _currentKnesset;
 
+    /// <summary>Дата роспуска текущего созыва, если он закончился.</summary>
+    private DateOnly? _termEndedOn;
+
     private sealed record Counts(int Support, int Oppose, int Undecided)
     {
         public int Total => Support + Oppose + Undecided;
@@ -308,6 +312,7 @@
     protected override async Task OnInitializedAsync()
     {
         _currentKnesset = await CurrentKnesset.GetAsync();
+        _termEndedOn = await CurrentKnesset.GetEndedOnAsync();
 
         if (AuthState is not null)
         {

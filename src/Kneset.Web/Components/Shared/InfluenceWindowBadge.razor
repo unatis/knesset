@@ -26,8 +26,14 @@
 
     [Parameter] public int? CurrentKnesset { get; set; }
 
+    /// <summary>
+    /// Дата роспуска текущего созыва, если он уже закончился. Без неё
+    /// законопроекты распущенного созыва обещают открытое окно влияния.
+    /// </summary>
+    [Parameter] public DateOnly? TermEndedOn { get; set; }
+
     private (string Css, string LabelKey, string HintKey)? Window
-        => Classify(StatusDesc, KnessetNum, CurrentKnesset);
+        => Classify(StatusDesc, KnessetNum, CurrentKnesset, TermEndedOn);
 
     /// <summary>
     /// Группы влияния по этапам: заморожен → поздно → комиссия (окно открыто) → зал (ограничено).
@@ -36,37 +42,61 @@
     /// Созыв, если он известен, проверяется после текста статуса — см. Expired ниже.
     /// </summary>
     public static (string Css, string LabelKey, string HintKey)? Classify(
-        string? status, int? knessetNum = null, int? currentKnesset = null)
+        string? status, int? knessetNum = null, int? currentKnesset = null,
+        DateOnly? termEndedOn = null)
     {
         var byStatus = ClassifyByStatus(status);
-        return Expired(status, knessetNum, currentKnesset) ? ExpiredWindow(byStatus) : byStatus;
+
+        // Два разных случая, и путать их нельзя.
+        //
+        // Прошлый созыв — законопроект уже история: в новом Кнессете его
+        // вносят заново, и читателю это понятно по номеру созыва.
+        //
+        // Текущий, но распущенный — читатель как раз ждёт движения,
+        // а движения не будет: до созыва нового Кнессета комиссии
+        // не заседают и чтений не проводится. Поэтому отдельная подпись,
+        // а не «созыв завершён».
+        if (Continuity(status)) return byStatus;
+        if (PreviousKnesset(knessetNum, currentKnesset)) return Replace(byStatus, Expired);
+        if (CurrentDissolved(knessetNum, currentKnesset, termEndedOn)) return Replace(byStatus, Dissolved);
+
+        return byStatus;
     }
 
-    /// <summary>
-    /// Законопроект прекратился вместе со своим созывом.
-    ///
-    /// С концом созыва незавершённые законодательные процедуры прекращаются:
-    /// в новом Кнессете законопроект вносят заново. Статус при этом не меняется —
-    /// Кнессет не помечает такие записи, они просто перестают двигаться. Поэтому
-    /// по одному тексту статуса законопроект 24-го созыва, замерший в ноябре 2022
-    /// на подготовке ко второму чтению, до сих пор обещал открытое окно влияния.
-    ///
-    /// Исключение — статусы о применении преемственности (רציפות): там как раз
-    /// решается возвращение законопроекта к жизни, и окно там настоящее.
-    /// </summary>
-    private static bool Expired(string? status, int? knessetNum, int? currentKnesset) =>
-        knessetNum is { } num && currentKnesset is { } current
-        && num < current
-        && status?.Contains("רציפות") != true;
+    private static readonly (string Css, string LabelKey, string HintKey) Expired =
+        ("kt-win-expired", "Inf_Expired", "Inf_Expired_Hint");
+
+    private static readonly (string Css, string LabelKey, string HintKey) Dissolved =
+        ("kt-win-expired", "Inf_Dissolved", "Inf_Dissolved_Hint");
 
     /// <summary>
-    /// Подменяет группу на «созыв завершён» — но только там, где статус обещал
-    /// продолжение. Принятый закон остаётся принятым, а снятый — снятым:
-    /// они завершились сами, а не вместе с созывом.
+    /// Статусы о применении преемственности (רציפות): там как раз решается
+    /// возвращение законопроекта к жизни, и окно там настоящее — даже
+    /// у прошлого созыва.
     /// </summary>
-    private static (string, string, string)? ExpiredWindow((string Css, string, string)? byStatus) =>
+    private static bool Continuity(string? status) => status?.Contains("רציפות") == true;
+
+    private static bool PreviousKnesset(int? knessetNum, int? currentKnesset) =>
+        knessetNum is { } num && currentKnesset is { } current && num < current;
+
+    private static bool CurrentDissolved(int? knessetNum, int? currentKnesset, DateOnly? endedOn) =>
+        endedOn is not null
+        && knessetNum is { } num && currentKnesset is { } current && num >= current;
+
+    /// <summary>
+    /// Подменяет группу — но только там, где статус обещал продолжение.
+    /// Принятый закон остаётся принятым, а снятый — снятым: они завершились
+    /// сами, а не вместе с созывом.
+    ///
+    /// Статус при роспуске не меняется: Кнессет не помечает такие записи,
+    /// они просто перестают двигаться. Поэтому по одному тексту статуса
+    /// законопроект обещал открытое окно влияния и после конца созыва.
+    /// </summary>
+    private static (string Css, string LabelKey, string HintKey)? Replace(
+        (string Css, string LabelKey, string HintKey)? byStatus,
+        (string Css, string LabelKey, string HintKey) replacement) =>
         byStatus?.Css is "kt-win-open" or "kt-win-limited" or "kt-win-pending"
-            ? ("kt-win-expired", "Inf_Expired", "Inf_Expired_Hint")
+            ? replacement
             : byStatus;
 
     private static (string Css, string LabelKey, string HintKey)? ClassifyByStatus(string? status)
@@ -103,6 +133,8 @@
     }
 
     /// <summary>Открыто ли окно — нужно карточке закона, чтобы выбрать оформление полосы.</summary>
-    public static bool IsOpen(string? status, int? knessetNum = null, int? currentKnesset = null)
-        => Classify(status, knessetNum, currentKnesset)?.Css is "kt-win-open" or "kt-win-limited";
+    public static bool IsOpen(string? status, int? knessetNum = null, int? currentKnesset = null,
+                              DateOnly? termEndedOn = null)
+        => Classify(status, knessetNum, currentKnesset, termEndedOn)?.Css
+            is "kt-win-open" or "kt-win-limited";
 }

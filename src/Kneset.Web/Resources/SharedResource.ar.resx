@@ -689,4 +689,6 @@
   <data name="Party_SharedWith" xml:space="preserve"><value>مع</value></data>
   <data name="Party_MembersUnknown" xml:space="preserve"><value>ينشر الكنيست انتماء كل عضو إلى كتلة، لكنه لا ينشر انتماءه الحزبي. لذلك يظهر هنا جميع أعضاء الكتلة — وتوزيعهم على الأحزاب سيكون تخمينًا.</value></data>
   <data name="Party_Source" xml:space="preserve"><value>طبقة الأحزاب لا ينشرها الكنيست وتُدار يدويًا. الأعضاء والمقاعد من واجهة الكنيست البرمجية.</value></data>
+  <data name="Inf_Dissolved" xml:space="preserve"><value>الكنيست منحلّ</value></data>
+  <data name="Inf_Dissolved_Hint" xml:space="preserve"><value>المرحلة توحي بإمكان التأثير، لكن لا حركة الآن: الكنيست منحلّ، وحتى انعقاد كنيست جديد لا تجتمع اللجان ولا تُعقد القراءات. يمكن لكنيست جديد إعادة مشروع القانون عبر إجراء الاستمرارية.</value></data>
 </root>
