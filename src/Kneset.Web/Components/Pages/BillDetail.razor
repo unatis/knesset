@@ -60,11 +60,12 @@ else
         </div>
     </div>
 
-    <div class="kt-window-band @(InfluenceWindowBadge.IsOpen(_bill.StatusDesc, _bill.KnessetNum, _currentKnesset) ? null : "kt-window-band-late")">
+    <div class="kt-window-band @(InfluenceWindowBadge.IsOpen(_bill.StatusDesc, _bill.KnessetNum, _currentKnesset, _termEndedOn) ? null : "kt-window-band-late")">
         <div class="d-flex flex-wrap align-items-center gap-3">
             <InfluenceWindowBadge StatusDesc="@_bill.StatusDesc"
                                   KnessetNum="@_bill.KnessetNum"
-                                  CurrentKnesset="@_currentKnesset" />
+                                  CurrentKnesset="@_currentKnesset"
+                                  TermEndedOn="@_termEndedOn" />
             <BillStatusBadge StatusDesc="@_bill.StatusDesc" />
         </div>
         <div class="kt-win-hint">@InfluenceHint</div>
@@ -74,7 +75,7 @@ else
            платформа, рассылающая сотни одинаковых писем, оборачивается стопкой
            копипасты в секретариате, а одно живое письмо весит больше. *@
         @if (_bill.Committee?.Email is { } email
-             && InfluenceWindowBadge.IsOpen(_bill.StatusDesc, _bill.KnessetNum, _currentKnesset))
+             && InfluenceWindowBadge.IsOpen(_bill.StatusDesc, _bill.KnessetNum, _currentKnesset, _termEndedOn))
         {
             <div class="kt-write">
                 <a class="btn btn-sm btn-outline-primary" href="@MailTo(email)">@L["Bill_WriteToCommittee"]</a>
@@ -353,6 +354,9 @@ else
     /// <summary>Текущий созыв — по нему бейдж отличает живой закон от прекратившегося.</summary>
     private int? _currentKnesset;
 
+    /// <summary>Дата роспуска текущего созыва, если он закончился.</summary>
+    private DateOnly? _termEndedOn;
+
     /// <summary>
     /// Сколько заседаний показываем. У долгоживущих законов их десятки,
     /// и полный список превращает карточку в протокол.
@@ -387,7 +391,7 @@ else
     {
         get
         {
-            var window = InfluenceWindowBadge.Classify(_bill?.StatusDesc, _bill?.KnessetNum, _currentKnesset);
+            var window = InfluenceWindowBadge.Classify(_bill?.StatusDesc, _bill?.KnessetNum, _currentKnesset, _termEndedOn);
             return window is null ? "" : L[window.Value.HintKey];
         }
     }
@@ -406,6 +410,7 @@ else
     {
         await using var db = await DbFactory.CreateDbContextAsync();
         _currentKnesset = await CurrentKnesset.GetAsync();
+        _termEndedOn = await CurrentKnesset.GetEndedOnAsync();
 
         _bill = await db.Bills.AsNoTracking()
             .Include(b => b.Initiators).ThenInclude(i => i.Person)

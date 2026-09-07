@@ -23,6 +23,8 @@ public sealed class CurrentKnessetService(
 {
     private const string CacheKey = "current-knesset-num";
 
+    private const string EndedKey = "current-knesset-ended-on";
+
     public async Task<int?> GetAsync(CancellationToken ct = default) =>
         await cache.GetOrCreateAsync(CacheKey, async entry =>
         {
@@ -31,4 +33,38 @@ public sealed class CurrentKnessetService(
             await using var db = await factory.CreateDbContextAsync(ct);
             return await db.Bills.MaxAsync(b => (int?)b.KnessetNum, ct);
         });
+
+    /// <summary>
+    /// Дата окончания текущего созыва, если он уже закончился, иначе null.
+    ///
+    /// Зачем это нужно отдельно от номера: с концом созыва законодательная
+    /// работа останавливается — комиссии не заседают, чтений не проводится, —
+    /// но статусы законопроектов при этом не меняются. Без этой даты сайт
+    /// продолжает обещать открытое окно влияния у законопроектов созыва,
+    /// который распущен. Так и вышло с 25-м: он закончился 17 июля 2026,
+    /// а плашки на живом сайте по-прежнему говорили «окно влияния открыто».
+    ///
+    /// Берётся из `KnessetTerms`, которую наполняет синхронизация
+    /// по `KNS_KnessetDates`, то есть из данных самого Кнессета.
+    /// </summary>
+    public async Task<DateOnly?> GetEndedOnAsync(CancellationToken ct = default)
+    {
+        var num = await GetAsync(ct);
+        if (num is null) return null;
+
+        return await cache.GetOrCreateAsync<DateOnly?>($"{EndedKey}:{num}", async entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6);
+
+            await using var db = await factory.CreateDbContextAsync(ct);
+            var finish = await db.KnessetTerms
+                .Where(t => t.Id == num)
+                .Select(t => t.FinishDate)
+                .FirstOrDefaultAsync(ct);
+
+            // Только уже наступившая дата: у идущего созыва конец последней
+            // сессии стоит в будущем, и это не роспуск.
+            return finish is { } f && f < DateOnly.FromDateTime(DateTime.UtcNow) ? f : null;
+        });
+    }
 }

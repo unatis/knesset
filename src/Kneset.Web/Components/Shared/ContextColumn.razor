@@ -322,9 +322,10 @@
         // сколько бы ни обещал текст статуса. Без этого в «закрывающиеся окна»
         // затекала треть списка из позапрошлого Кнессета.
         var currentKnesset = await CurrentKnesset.GetAsync();
+        var termEndedOn = await CurrentKnesset.GetEndedOnAsync();
 
         return candidates
-            .Where(b => InfluenceWindowBadge.IsOpen(b.StatusDesc, b.KnessetNum, currentKnesset))
+            .Where(b => InfluenceWindowBadge.IsOpen(b.StatusDesc, b.KnessetNum, currentKnesset, termEndedOn))
             .Take(BlockSize)
             .Select(b => new ClosingItem(
                 b.Id,

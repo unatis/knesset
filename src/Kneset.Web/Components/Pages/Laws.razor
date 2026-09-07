@@ -1,6 +1,7 @@
 @page "/laws"
 @rendermode InteractiveServer
 @using Kneset.Core.Entities
+@using System.Globalization
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
 
@@ -36,7 +37,15 @@ else
         {
             <li class="list-group-item">
                 <div class="d-flex justify-content-between align-items-start gap-2">
-                    <a href="/laws/@row.Law.Id" dir="rtl" lang="he">@row.Law.Name</a>
+                    <div>
+                        <a href="/laws/@row.Law.Id" dir="rtl" lang="he">@row.Law.Name</a>
+                        @if (row.Translated is { } translated)
+                        {
+                            @* Оригинал первой строкой: название закона — формула,
+                               на которую ссылаются другие законы и суды. *@
+                            <div class="kt-row-orig">@translated</div>
+                        }
+                    </div>
                     <div class="text-end flex-shrink-0">
                         @if (row.Law.IsBasicLaw)
                         {
@@ -83,7 +92,7 @@ else
 @code {
     private const int PageSize = 25;
 
-    private sealed record LawRow(IsraelLaw Law, int IndirectCount);
+    private sealed record LawRow(IsraelLaw Law, int IndirectCount, string? Translated);
 
     private List<LawRow>? _laws;
     private int _total;
@@ -99,8 +108,20 @@ else
         await using var db = await DbFactory.CreateDbContextAsync();
         var query = db.IsraelLaws.AsNoTracking();
 
+        // Иврит — оригинал в Name, переводить его некуда и незачем.
+        var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        var translate = lang != "he";
+
         if (!string.IsNullOrWhiteSpace(_search))
-            query = query.Where(l => EF.Functions.ILike(l.Name, $"%{_search.Trim()}%"));
+        {
+            var pattern = $"%{_search.Trim()}%";
+            // Искать только по ивритскому оригиналу значило бы, что читатель
+            // не может найти закон теми же словами, которыми его видит.
+            query = query.Where(l =>
+                EF.Functions.ILike(l.Name, pattern) ||
+                (translate && l.Titles.Any(t => t.LanguageCode == lang
+                                                && EF.Functions.ILike(t.Text, pattern))));
+        }
 
         if (_basicOnly) query = query.Where(l => l.IsBasicLaw);
 
@@ -120,7 +141,17 @@ else
             .Select(g => new { IsraelLawId = g.Key, Count = g.Count() })
             .ToDictionaryAsync(x => x.IsraelLawId, x => x.Count);
 
-        _laws = laws.Select(l => new LawRow(l, indirect.GetValueOrDefault(l.Id))).ToList();
+        // Переводы названий — одним запросом по показанной странице.
+        var titles = translate
+            ? await db.IsraelLawTitles.AsNoTracking()
+                .Where(t => ids.Contains(t.IsraelLawId) && t.LanguageCode == lang)
+                .ToDictionaryAsync(t => t.IsraelLawId, t => t.Text)
+            : [];
+
+        _laws = laws
+            .Select(l => new LawRow(l, indirect.GetValueOrDefault(l.Id),
+                                    titles.GetValueOrDefault(l.Id)))
+            .ToList();
     }
 
     private void OnSearchChanged(ChangeEventArgs e)

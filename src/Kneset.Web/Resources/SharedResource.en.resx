@@ -689,4 +689,6 @@
   <data name="Party_SharedWith" xml:space="preserve"><value>together with</value></data>
   <data name="Party_MembersUnknown" xml:space="preserve"><value>The Knesset publishes which faction each member belongs to, but not which party. So all members of the faction are listed here — splitting them by party would be guesswork.</value></data>
   <data name="Party_Source" xml:space="preserve"><value>The party layer is not published by the Knesset and is maintained by hand. Members and seats come from the Knesset API.</value></data>
+  <data name="Inf_Dissolved" xml:space="preserve"><value>The Knesset is dissolved</value></data>
+  <data name="Inf_Dissolved_Hint" xml:space="preserve"><value>The stage suggests you could still act, but nothing is moving: the Knesset is dissolved, and until a new one convenes no committee sits and no reading is held. A new Knesset can resume the bill through the continuity procedure.</value></data>
 </root>

@@ -1,0 +1,344 @@
+[
+  {
+    "knesset_israel_law_id": 2000037,
+    "language_code": "ru",
+    "text": "Основной закон: Кнессет",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000037,
+    "language_code": "en",
+    "text": "Basic Law: The Knesset",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000037,
+    "language_code": "ar",
+    "text": "قانون أساس: الكنيست",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000038,
+    "language_code": "ru",
+    "text": "Основной закон: Правительство [1968]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000038,
+    "language_code": "en",
+    "text": "Basic Law: The Government [1968]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000038,
+    "language_code": "ar",
+    "text": "قانون أساس: الحكومة [1968]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000039,
+    "language_code": "ru",
+    "text": "Основной закон: Правительство [1992]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000039,
+    "language_code": "en",
+    "text": "Basic Law: The Government [1992]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000039,
+    "language_code": "ar",
+    "text": "قانون أساس: الحكومة [1992]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000040,
+    "language_code": "ru",
+    "text": "Основной закон: Правительство [2001]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000040,
+    "language_code": "en",
+    "text": "Basic Law: The Government [2001]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000040,
+    "language_code": "ar",
+    "text": "قانون أساس: الحكومة [2001]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000041,
+    "language_code": "ru",
+    "text": "Основной закон: Армия",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000041,
+    "language_code": "en",
+    "text": "Basic Law: The Military",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000041,
+    "language_code": "ar",
+    "text": "قانون أساس: الجيش",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000042,
+    "language_code": "ru",
+    "text": "Основной закон: Судебная власть",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000042,
+    "language_code": "en",
+    "text": "Basic Law: The Judiciary",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000042,
+    "language_code": "ar",
+    "text": "قانون أساس: القضاء",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000043,
+    "language_code": "ru",
+    "text": "Основной закон: Свобода занятия профессией [1992]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000043,
+    "language_code": "en",
+    "text": "Basic Law: Freedom of Occupation [1992]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000043,
+    "language_code": "ar",
+    "text": "قانون أساس: حرية العمل [1992]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000044,
+    "language_code": "ru",
+    "text": "Основной закон: Свобода занятия профессией [1994]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000044,
+    "language_code": "en",
+    "text": "Basic Law: Freedom of Occupation [1994]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000044,
+    "language_code": "ar",
+    "text": "قانون أساس: حرية العمل [1994]",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000045,
+    "language_code": "ru",
+    "text": "Основной закон: Иерусалим — столица Израиля",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000045,
+    "language_code": "en",
+    "text": "Basic Law: Jerusalem, the Capital of Israel",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000045,
+    "language_code": "ar",
+    "text": "قانون أساس: القدس عاصمة إسرائيل",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000046,
+    "language_code": "ru",
+    "text": "Основной закон: Достоинство человека и его свобода",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000046,
+    "language_code": "en",
+    "text": "Basic Law: Human Dignity and Liberty",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000046,
+    "language_code": "ar",
+    "text": "قانون أساس: كرامة الإنسان وحريته",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000047,
+    "language_code": "ru",
+    "text": "Основной закон: Государственный контролёр",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000047,
+    "language_code": "en",
+    "text": "Basic Law: The State Comptroller",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000047,
+    "language_code": "ar",
+    "text": "قانون أساس: مراقب الدولة",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000048,
+    "language_code": "ru",
+    "text": "Основной закон: Земли Израиля",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000048,
+    "language_code": "en",
+    "text": "Basic Law: Israel Lands",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000048,
+    "language_code": "ar",
+    "text": "قانون أساس: أراضي إسرائيل",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000049,
+    "language_code": "ru",
+    "text": "Основной закон: Государственное хозяйство",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000049,
+    "language_code": "en",
+    "text": "Basic Law: The State Economy",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000049,
+    "language_code": "ar",
+    "text": "قانون أساس: اقتصاد الدولة",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000050,
+    "language_code": "ru",
+    "text": "Основной закон: Президент государства",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000050,
+    "language_code": "en",
+    "text": "Basic Law: The President of the State",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000050,
+    "language_code": "ar",
+    "text": "قانون أساس: رئيس الدولة",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000051,
+    "language_code": "ru",
+    "text": "Основной закон: Референдум",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000051,
+    "language_code": "en",
+    "text": "Basic Law: Referendum",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000051,
+    "language_code": "ar",
+    "text": "قانون أساس: الاستفتاء الشعبي",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002342,
+    "language_code": "ru",
+    "text": "Основной закон: Государственный бюджет на 2009–2016 годы (особые положения) (временное постановление)",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002342,
+    "language_code": "en",
+    "text": "Basic Law: The State Budget for the Years 2009 to 2016 (Special Provisions) (Temporary Provision)",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002342,
+    "language_code": "ar",
+    "text": "قانون أساس: ميزانية الدولة للأعوام 2009 حتى 2016 (أحكام خاصة) (حكم مؤقت)",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007162,
+    "language_code": "ru",
+    "text": "Основной закон: Государственный бюджет на 2017 и 2018 годы (особые положения) (временное постановление)",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007162,
+    "language_code": "en",
+    "text": "Basic Law: The State Budget for the Years 2017 and 2018 (Special Provisions) (Temporary Provision)",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007162,
+    "language_code": "ar",
+    "text": "قانون أساس: ميزانية الدولة لعامَي 2017 و2018 (أحكام خاصة) (حكم مؤقت)",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2073986,
+    "language_code": "ru",
+    "text": "Основной закон: Израиль — национальное государство еврейского народа",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2073986,
+    "language_code": "en",
+    "text": "Basic Law: Israel – the Nation-State of the Jewish People",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2073986,
+    "language_code": "ar",
+    "text": "قانون أساس: إسرائيل – الدولة القومية للشعب اليهودي",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2245265,
+    "language_code": "ru",
+    "text": "Основной закон: Изучение Торы",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2245265,
+    "language_code": "en",
+    "text": "Basic Law: Torah Study",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2245265,
+    "language_code": "ar",
+    "text": "قانون أساس: تعلّم التوراة",
+    "model_version": "manual-v1"
+  }
+]

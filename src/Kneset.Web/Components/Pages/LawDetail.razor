@@ -1,9 +1,10 @@
 @page "/laws/{Id:int}"
 @using Kneset.Core.Entities
+@using System.Globalization
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
 
-<PageTitle>@(_law?.Name ?? L["Laws_Title"].Value)</PageTitle>
+<PageTitle>@(_translated ?? _law?.Name ?? L["Laws_Title"].Value)</PageTitle>
 
 @if (_loading)
 {
@@ -21,7 +22,13 @@ else
         </ol>
     </nav>
 
+    @* Оригинал первой строкой: название закона — формула, на которую
+       ссылаются другие законы и суды. Перевод под ним. *@
     <h2 dir="rtl" lang="he">@_law.Name</h2>
+    @if (_translated is { } translated)
+    {
+        <p class="kt-row-orig fs-5 mb-2">@translated</p>
+    }
 
     <div class="mb-3">
         @if (_law.IsBasicLaw)
@@ -148,6 +155,7 @@ else
     private List<LawAmendment> _named = [];
     private int _directCount;
     private int _unnamedCount;
+    private string? _translated;
     private bool _loading = true;
 
     protected override async Task OnParametersSetAsync()
@@ -157,6 +165,16 @@ else
 
         if (_law is not null)
         {
+            // Иврит — оригинал в Name, переводить его некуда и незачем.
+            var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            if (lang != "he")
+            {
+                _translated = await db.IsraelLawTitles.AsNoTracking()
+                    .Where(t => t.IsraelLawId == Id && t.LanguageCode == lang)
+                    .Select(t => t.Text)
+                    .FirstOrDefaultAsync();
+            }
+
             _amendments = await db.LawAmendments.AsNoTracking()
                 .Where(a => a.IsraelLawId == Id)
                 // Косвенные наверх: ради них раздел и делался.
