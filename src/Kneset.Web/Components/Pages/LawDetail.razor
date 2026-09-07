@@ -23,11 +23,16 @@ else
     </nav>
 
     @* Оригинал первой строкой: название закона — формула, на которую
-       ссылаются другие законы и суды. Перевод под ним. *@
-    <h2 dir="rtl" lang="he">@_law.Name</h2>
+       ссылаются другие законы и суды. Перевод под ним, помельче.
+
+       Оформление то же, что у законопроекта (kt-bill-title): у заголовка
+       unicode-bidi: plaintext и выравнивание по интерфейсу. Прежний
+       dir="rtl" уводил иврит к правому краю, и за название страницы
+       принимался перевод. *@
+    <h1 class="kt-bill-title" lang="he">@_law.Name</h1>
     @if (_translated is { } translated)
     {
-        <p class="kt-row-orig fs-5 mb-2">@translated</p>
+        <div class="kt-bill-translated">@translated</div>
     }
 
     <div class="mb-3">

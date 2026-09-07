@@ -46,7 +46,13 @@ else
             <li class="list-group-item">
                 <div class="d-flex justify-content-between align-items-start gap-2">
                     <div>
-                        <a href="/laws/@row.Law.Id" dir="rtl" lang="he">@row.Law.Name</a>
+                        @* Оформление как в списке законопроектов: заголовок
+                           блочный, с unicode-bidi: plaintext. С dir="rtl"
+                           иврит прижимался к правому краю и отрывался
+                           от колонки. *@
+                        <div class="kt-row-title" lang="he">
+                            <a href="/laws/@row.Law.Id">@row.Law.Name</a>
+                        </div>
                         @if (row.Translated is { } translated)
                         {
                             @* Оригинал первой строкой: название закона — формула,
