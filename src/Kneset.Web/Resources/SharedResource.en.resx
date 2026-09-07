@@ -745,4 +745,10 @@
   <data name="Laws_Topic" xml:space="preserve"><value>Topic</value></data>
   <data name="Laws_AllTopics" xml:space="preserve"><value>All topics</value></data>
   <data name="Laws_TopicSource" xml:space="preserve"><value>Topics follow the Knesset's own classification.</value></data>
+  <data name="Bill_AmendsLaw" xml:space="preserve"><value>Amends the law</value></data>
+  <data name="Bill_AmendsLawHint" xml:space="preserve"><value>Derived from the bill's title — the Knesset does not publish this link.</value></data>
+  <data name="Notif_SubTopics" xml:space="preserve"><value>Topics</value></data>
+  <data name="Notif_AddTopic" xml:space="preserve"><value>Add</value></data>
+  <data name="Notif_TopicHint" xml:space="preserve"><value>The topic comes from the law a bill amends. Bills that do not amend an existing law are not covered by a topic subscription.</value></data>
+  <data name="Feed_BecauseTopic" xml:space="preserve"><value>On the topic “{0}”</value></data>
 </root>

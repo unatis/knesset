@@ -86,6 +86,48 @@ else
             </div>
 
             <div class="card mb-3">
+                <div class="card-header">@L["Notif_SubTopics"]</div>
+                <div class="card-body">
+                    <div class="input-group mb-2">
+                        <select class="form-select" @bind="_newTopic">
+                            <option value="">@L["Laws_AllTopics"]</option>
+                            @foreach (var t in _allTopics)
+                            {
+                                <option value="@t.Id">@t.Name</option>
+                            }
+                        </select>
+                        <button class="btn btn-outline-primary" @onclick="AddTopicAsync"
+                                disabled="@(string.IsNullOrEmpty(_newTopic) || _busy)">
+                            @L["Notif_AddTopic"]
+                        </button>
+                    </div>
+                    @* Честно про охват: тема берётся у закона, который правит
+                       законопроект, и у части законопроектов её нет вовсе. *@
+                    <small class="text-muted d-block mb-3">@L["Notif_TopicHint"]</small>
+
+                    @if (_topics.Count == 0)
+                    {
+                        <p class="text-muted mb-0">@L["Notif_NothingYet"]</p>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in _topics)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <span>@item.Title</span>
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            @onclick="() => RemoveAsync(item.Id)" disabled="@_busy">
+                                        @L["Notif_Remove"]
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+
+            <div class="card mb-3">
                 <div class="card-header">@L["Notif_SubPersons"]</div>
                 <div class="card-body">
                     @if (_persons.Count == 0)
@@ -192,6 +234,11 @@ else
     private record ChannelState(bool Enabled, string? Address);
 
     private readonly List<SubItem> _keywords = [];
+    private readonly List<SubItem> _topics = [];
+    private List<TopicOption> _allTopics = [];
+    private string _newTopic = "";
+
+    private sealed record TopicOption(int Id, string Name);
     private readonly List<SubItem> _persons = [];
     private readonly List<SubItem> _bills = [];
     private Dictionary<NotificationChannelKind, ChannelState> _channelState = [];
@@ -251,7 +298,7 @@ else
             .Where(s => s.UserId == _userId)
             .Select(s => new
             {
-                s.Id, s.Kind, s.Keyword, s.PersonId, s.BillId,
+                s.Id, s.Kind, s.Keyword, s.PersonId, s.BillId, s.TopicId,
                 PersonName = s.Person != null ? s.Person.FirstName + " " + s.Person.LastName : null,
                 BillName = s.Bill != null ? (s.Bill.NameRu ?? s.Bill.Name) : null
             })
@@ -262,6 +309,28 @@ else
         _keywords.Clear();
         _keywords.AddRange(subs.Where(s => s.Kind == SubscriptionKind.Keyword)
             .Select(s => new SubItem(s.Id, s.Keyword ?? "", s.Keyword, null, null)));
+
+        // Справочник тем и подписки на них. Название темы — из ресурсов,
+        // поэтому имя подписки собираем здесь, а не в запросе.
+        var topicNames = (await db.LawTopics.AsNoTracking()
+                .Select(t => new { t.TopicId, t.NameHe })
+                .Distinct()
+                .ToListAsync())
+            .GroupBy(t => t.TopicId)
+            .ToDictionary(g => g.Key, g => TopicNaming.Localized(L, g.Key, g.First().NameHe));
+
+        _allTopics = topicNames
+            .Select(kv => new TopicOption(kv.Key, kv.Value))
+            .OrderBy(t => t.Name, StringComparer.CurrentCulture)
+            .ToList();
+
+        _topics.Clear();
+        _topics.AddRange(subs.Where(s => s.Kind == SubscriptionKind.Topic && s.TopicId != null)
+            .Select(s => new SubItem(
+                s.Id,
+                topicNames.GetValueOrDefault(s.TopicId!.Value, s.TopicId.Value.ToString()),
+                null, null, null))
+            .OrderBy(x => x.Title, StringComparer.CurrentCulture));
 
         _persons.Clear();
         _persons.AddRange(subs.Where(s => s.Kind == SubscriptionKind.Person)
@@ -333,6 +402,32 @@ else
         try { await db.SaveChangesAsync(); } catch (DbUpdateException) { /* такое слово уже есть */ }
 
         _newKeyword = "";
+        await LoadAsync();
+        _busy = false;
+        Flash();
+    }
+
+    private async Task AddTopicAsync()
+    {
+        if (_userId is null || _busy) return;
+        if (!int.TryParse(_newTopic, out var topicId)) return;
+
+        _busy = true;
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        db.NotificationSubscriptions.Add(new NotificationSubscription
+        {
+            UserId = _userId,
+            Kind = SubscriptionKind.Topic,
+            TopicId = topicId,
+            TargetKey = NotificationSubscription.BuildTargetKey(
+                SubscriptionKind.Topic, null, null, null, topicId),
+            CreatedAt = DateTime.UtcNow
+        });
+
+        try { await db.SaveChangesAsync(); } catch (DbUpdateException) { /* такая тема уже есть */ }
+
+        _newTopic = "";
         await LoadAsync();
         _busy = false;
         Flash();

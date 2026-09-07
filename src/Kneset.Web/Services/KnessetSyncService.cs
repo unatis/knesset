@@ -1,4 +1,5 @@
 using Kneset.Core.Entities;
+using Kneset.Core.Legislation;
 using Kneset.Infrastructure.Data;
 using Kneset.Infrastructure.Knesset;
 using Microsoft.EntityFrameworkCore;
@@ -74,6 +75,7 @@ public class KnessetSyncService(
         await RunStepAsync("LawActs", SyncLawActsAsync, ct);
         await RunStepAsync("LawAmendments", SyncLawAmendmentsAsync, ct);
         await RunStepAsync("LawTopics", SyncLawTopicsAsync, ct);
+        await RunStepAsync("BillLawLinks", LinkBillsToLawsAsync, ct);
 
         // Строго последним: подписка на депутата опирается на BillInitiators,
         // которые заполняются шагом выше. RunStepAsync передаёт сюда время
@@ -902,6 +904,84 @@ public class KnessetSyncService(
             await db.SaveChangesAsync(ct);
             total += chunk.Length;
         }
+
+        return total;
+    }
+
+    /// <summary>
+    /// Связывает законопроекты с законами, которые они правят.
+    ///
+    /// Это единственный шаг, который ничего не тянет из API: связи там нет
+    /// (см. <see cref="BillLawMatcher"/>), и она выводится из названия.
+    /// Поэтому и `since` здесь работает иначе: пересчитываем законопроекты,
+    /// изменившиеся с прошлого прогона, **и** все несопоставленные. Второе
+    /// делает шаг самоисправляющимся: если закон появится в базе позже
+    /// законопроекта, связь найдётся на следующем прогоне.
+    /// </summary>
+    private async Task<int> LinkBillsToLawsAsync(DateTime? since, CancellationToken ct)
+    {
+        await using var readDb = await dbFactory.CreateDbContextAsync(ct);
+
+        var laws = await readDb.IsraelLaws.AsNoTracking()
+            .Select(l => new { l.Id, l.Name, l.ValidityDesc, l.ValidityStartDate })
+            .ToListAsync(ct);
+
+        // Одинаковое ядро названия у нескольких законов бывает: старая
+        // и новая редакция живут отдельными записями. Выбираем действующую,
+        // при равенстве — более позднюю.
+        var byKey = laws
+            .GroupBy(l => BillLawMatcher.LawKey(l.Name))
+            .ToDictionary(
+                g => g.Key,
+                g => g.OrderByDescending(l => l.ValidityDesc != null && l.ValidityDesc.Contains("תקף"))
+                      .ThenByDescending(l => l.ValidityStartDate ?? DateTime.MinValue)
+                      .First().Id);
+
+        var bills = await readDb.Bills.AsNoTracking()
+            .Where(b => b.LawMatch == null
+                        || b.LawMatch != BillLawMatcher.Version
+                        || since == null
+                        || b.LastUpdatedDate > since)
+            .Select(b => new { b.Id, b.Name, b.IsraelLawId, b.LawMatch })
+            .ToListAsync(ct);
+
+        var changed = new List<(int BillId, int? LawId)>();
+        foreach (var bill in bills)
+        {
+            int? lawId = null;
+            foreach (var key in BillLawMatcher.BillKeys(bill.Name))
+            {
+                if (byKey.TryGetValue(key, out var id)) { lawId = id; break; }
+            }
+
+            // Метку версии ставим и промахам: иначе каждый прогон разбирал бы
+            // одни и те же названия заново.
+            if (lawId != bill.IsraelLawId || bill.LawMatch != BillLawMatcher.Version)
+                changed.Add((bill.Id, lawId));
+        }
+
+        var total = 0;
+        foreach (var chunk in changed.Chunk(500))
+        {
+            await using var db = await dbFactory.CreateDbContextAsync(ct);
+            foreach (var (billId, lawId) in chunk)
+            {
+                var bill = new Bill { Id = billId };
+                db.Bills.Attach(bill);
+                bill.IsraelLawId = lawId;
+                bill.LawMatch = BillLawMatcher.Version;
+                db.Entry(bill).Property(x => x.IsraelLawId).IsModified = true;
+                db.Entry(bill).Property(x => x.LawMatch).IsModified = true;
+            }
+
+            await db.SaveChangesAsync(ct);
+            total += chunk.Length;
+        }
+
+        var matched = changed.Count(c => c.LawId is not null);
+        logger.LogInformation(
+            "Связь законопроект-закон: пересчитано {Total}, найден закон у {Matched}",
+            total, matched);
 
         return total;
     }

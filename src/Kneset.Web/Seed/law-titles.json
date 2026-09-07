@@ -340,5 +340,4343 @@
     "language_code": "ar",
     "text": "قانون أساس: تعلّم التوراة",
     "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000196,
+    "language_code": "ru",
+    "text": "Закон о национальном страховании, 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000196,
+    "language_code": "en",
+    "text": "National Insurance Law, 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000196,
+    "language_code": "ar",
+    "text": "قانون التأمين الوطني، 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000479,
+    "language_code": "ru",
+    "text": "Закон о наказаниях, 1977",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000479,
+    "language_code": "en",
+    "text": "Penal Law, 1977",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000479,
+    "language_code": "ar",
+    "text": "قانون العقوبات، 1977",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000933,
+    "language_code": "ru",
+    "text": "Ордонанс о дорожном движении",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000933,
+    "language_code": "en",
+    "text": "Traffic Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000933,
+    "language_code": "ar",
+    "text": "مرسوم المرور",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000111,
+    "language_code": "ru",
+    "text": "Закон о государственном медицинском страховании, 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000111,
+    "language_code": "en",
+    "text": "National Health Insurance Law, 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000111,
+    "language_code": "ar",
+    "text": "قانون التأمين الصحي الرسمي، 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000944,
+    "language_code": "ru",
+    "text": "Ордонанс о налоге на доходы",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000944,
+    "language_code": "en",
+    "text": "Income Tax Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000944,
+    "language_code": "ar",
+    "text": "مرسوم ضريبة الدخل",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000237,
+    "language_code": "ru",
+    "text": "Закон о защите потребителя, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000237,
+    "language_code": "en",
+    "text": "Consumer Protection Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000237,
+    "language_code": "ar",
+    "text": "قانون حماية المستهلك، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000139,
+    "language_code": "ru",
+    "text": "Закон о судах, 1957",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000139,
+    "language_code": "en",
+    "text": "Courts Law, 1957",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000139,
+    "language_code": "ar",
+    "text": "قانون المحاكم، 1957",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000249,
+    "language_code": "ru",
+    "text": "Закон об исполнительном производстве, 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000249,
+    "language_code": "en",
+    "text": "Execution Law, 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000249,
+    "language_code": "ar",
+    "text": "قانون التنفيذ، 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000205,
+    "language_code": "ru",
+    "text": "Закон о банковской деятельности (обслуживание клиента), 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000205,
+    "language_code": "en",
+    "text": "Banking (Service to Customer) Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000205,
+    "language_code": "ar",
+    "text": "قانون المصارف (خدمة العميل)، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000453,
+    "language_code": "ru",
+    "text": "Закон о регулировании деятельности в медицинских профессиях, 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000453,
+    "language_code": "en",
+    "text": "Regulation of Health Professions Law, 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000453,
+    "language_code": "ar",
+    "text": "قانون تنظيم العمل في المهن الصحية، 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2004623,
+    "language_code": "ru",
+    "text": "Закон о борьбе с терроризмом, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2004623,
+    "language_code": "en",
+    "text": "Counter-Terrorism Law, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2004623,
+    "language_code": "ar",
+    "text": "قانون مكافحة الإرهاب، 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000635,
+    "language_code": "ru",
+    "text": "Закон о правах студента, 2007",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000635,
+    "language_code": "en",
+    "text": "Student Rights Law, 2007",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000635,
+    "language_code": "ar",
+    "text": "قانون حقوق الطالب، 2007",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001098,
+    "language_code": "ru",
+    "text": "Закон о семьях павших военнослужащих (выплаты и реабилитация), 1950",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001098,
+    "language_code": "en",
+    "text": "Families of Soldiers Who Fell in Battle (Pensions and Rehabilitation) Law, 1950",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001098,
+    "language_code": "ar",
+    "text": "قانون أُسر الجنود الذين سقطوا في المعارك (التعويضات وإعادة التأهيل)، 1950",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001072,
+    "language_code": "ru",
+    "text": "Закон о налогообложении недвижимости (прирост стоимости и приобретение), 1963",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001072,
+    "language_code": "en",
+    "text": "Land Taxation (Appreciation and Acquisition) Law, 1963",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001072,
+    "language_code": "ar",
+    "text": "قانون ضريبة العقارات (الأرباح والاقتناء)، 1963",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000416,
+    "language_code": "ru",
+    "text": "Закон о недвижимости, 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000416,
+    "language_code": "en",
+    "text": "Land Law, 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000416,
+    "language_code": "ar",
+    "text": "قانون الأراضي، 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001138,
+    "language_code": "ru",
+    "text": "Закон об иностранных работниках, 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001138,
+    "language_code": "en",
+    "text": "Foreign Workers Law, 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001138,
+    "language_code": "ar",
+    "text": "قانون العمال الأجانب، 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000613,
+    "language_code": "ru",
+    "text": "Закон о планировании и строительстве, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000613,
+    "language_code": "en",
+    "text": "Planning and Building Law, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000613,
+    "language_code": "ar",
+    "text": "قانون التخطيط والبناء، 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000752,
+    "language_code": "ru",
+    "text": "Закон об обязательном обучении, 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000752,
+    "language_code": "en",
+    "text": "Compulsory Education Law, 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000752,
+    "language_code": "ar",
+    "text": "قانون التعليم الإلزامي، 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000756,
+    "language_code": "ru",
+    "text": "Закон о предотвращении насилия в семье, 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000756,
+    "language_code": "en",
+    "text": "Prevention of Domestic Violence Law, 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000756,
+    "language_code": "ar",
+    "text": "قانون منع العنف في الأسرة، 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001393,
+    "language_code": "ru",
+    "text": "Закон о государственной службе (назначения), 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001393,
+    "language_code": "en",
+    "text": "Civil Service (Appointments) Law, 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001393,
+    "language_code": "ar",
+    "text": "قانون خدمة الدولة (التعيينات)، 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000084,
+    "language_code": "ru",
+    "text": "Закон о запрете отмывания денег, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000084,
+    "language_code": "en",
+    "text": "Prohibition on Money Laundering Law, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000084,
+    "language_code": "ar",
+    "text": "قانون منع تبييض الأموال، 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000595,
+    "language_code": "ru",
+    "text": "Закон о военном судопроизводстве, 1955",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000595,
+    "language_code": "en",
+    "text": "Military Justice Law, 1955",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000595,
+    "language_code": "ar",
+    "text": "قانون القضاء العسكري، 1955",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000034,
+    "language_code": "ru",
+    "text": "Закон о выплатах освобождённым из плена и освобождённым похищенным, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000034,
+    "language_code": "en",
+    "text": "Payments to Released Prisoners of War and Released Abductees Law, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000034,
+    "language_code": "ar",
+    "text": "قانون مدفوعات للمفتدين من الأسر وللمختطفين المحررين، 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000639,
+    "language_code": "ru",
+    "text": "Закон о правах потерпевших от преступления, 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000639,
+    "language_code": "en",
+    "text": "Rights of Victims of Crime Law, 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000639,
+    "language_code": "ar",
+    "text": "قانون حقوق ضحايا الجريمة، 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001121,
+    "language_code": "ru",
+    "text": "Закон об уголовном судопроизводстве, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001121,
+    "language_code": "en",
+    "text": "Criminal Procedure Law, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001121,
+    "language_code": "ar",
+    "text": "قانون الإجراءات الجنائية، 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000291,
+    "language_code": "ru",
+    "text": "Закон о государственных компаниях, 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000291,
+    "language_code": "en",
+    "text": "Government Companies Law, 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000291,
+    "language_code": "ar",
+    "text": "قانون الشركات الحكومية، 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000907,
+    "language_code": "ru",
+    "text": "Ордонанс о муниципалитетах",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000907,
+    "language_code": "en",
+    "text": "Municipalities Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000907,
+    "language_code": "ar",
+    "text": "مرسوم البلديات",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001035,
+    "language_code": "ru",
+    "text": "Закон об Управлении земель Израиля, 1960",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001035,
+    "language_code": "en",
+    "text": "Israel Land Authority Law, 1960",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001035,
+    "language_code": "ar",
+    "text": "قانون سلطة أراضي إسرائيل، 1960",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000324,
+    "language_code": "ru",
+    "text": "Закон о въезде в Израиль, 1952",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000324,
+    "language_code": "en",
+    "text": "Entry into Israel Law, 1952",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000324,
+    "language_code": "ar",
+    "text": "قانون الدخول إلى إسرائيل، 1952",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000085,
+    "language_code": "ru",
+    "text": "Закон о запрете дискриминации в товарах, услугах и при входе в места развлечений и общественные места, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000085,
+    "language_code": "en",
+    "text": "Prohibition of Discrimination in Products, Services and Entry into Places of Entertainment and Public Places Law, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000085,
+    "language_code": "ar",
+    "text": "قانون منع التمييز في المنتجات والخدمات وفي الدخول إلى أماكن الترفيه والأماكن العامة، 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2069872,
+    "language_code": "ru",
+    "text": "Ордонанс о тюрьмах",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2069872,
+    "language_code": "en",
+    "text": "Prisons Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2069872,
+    "language_code": "ar",
+    "text": "مرسوم السجون",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000289,
+    "language_code": "ru",
+    "text": "Закон о компаниях, 1999",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000289,
+    "language_code": "en",
+    "text": "Companies Law, 1999",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000289,
+    "language_code": "ar",
+    "text": "قانون الشركات، 1999",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000026,
+    "language_code": "ru",
+    "text": "Закон о коллективных исках, 2006",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000026,
+    "language_code": "en",
+    "text": "Class Actions Law, 2006",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000026,
+    "language_code": "ar",
+    "text": "قانون الدعاوى الجماعية، 2006",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2068072,
+    "language_code": "ru",
+    "text": "Закон о несостоятельности и экономическом восстановлении, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2068072,
+    "language_code": "en",
+    "text": "Insolvency and Economic Rehabilitation Law, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2068072,
+    "language_code": "ar",
+    "text": "قانون الإعسار والتأهيل الاقتصادي، 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000607,
+    "language_code": "ru",
+    "text": "Закон о выплатах пострадавшим от враждебных действий, 1970",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000607,
+    "language_code": "en",
+    "text": "Benefits for Victims of Hostilities Law, 1970",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000607,
+    "language_code": "ar",
+    "text": "قانون تعويضات ضحايا الأعمال العدائية، 1970",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000665,
+    "language_code": "ru",
+    "text": "Закон о государственном образовании, 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000665,
+    "language_code": "en",
+    "text": "State Education Law, 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000665,
+    "language_code": "ar",
+    "text": "قانون التعليم الرسمي، 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000456,
+    "language_code": "ru",
+    "text": "Закон о юридической помощи, 1972",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000456,
+    "language_code": "en",
+    "text": "Legal Aid Law, 1972",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000456,
+    "language_code": "ar",
+    "text": "قانون المساعدة القانونية، 1972",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000652,
+    "language_code": "ru",
+    "text": "Закон об обязательности тендеров, 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000652,
+    "language_code": "en",
+    "text": "Mandatory Tenders Law, 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000652,
+    "language_code": "ar",
+    "text": "قانون إلزامية المناقصات، 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001166,
+    "language_code": "ru",
+    "text": "Закон о контроле над ценами на товары и услуги, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001166,
+    "language_code": "en",
+    "text": "Supervision of Prices of Commodities and Services Law, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001166,
+    "language_code": "ar",
+    "text": "قانون الإشراف على أسعار السلع والخدمات، 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000798,
+    "language_code": "ru",
+    "text": "Закон об Адвокатской палате, 1961",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000798,
+    "language_code": "en",
+    "text": "Bar Association Law, 1961",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000798,
+    "language_code": "ar",
+    "text": "قانون نقابة المحامين، 1961",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000193,
+    "language_code": "ru",
+    "text": "Закон о гарантии прожиточного минимума, 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000193,
+    "language_code": "en",
+    "text": "Income Support Law, 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000193,
+    "language_code": "ar",
+    "text": "قانون ضمان الدخل، 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000568,
+    "language_code": "ru",
+    "text": "Закон о Национальном управлении пожарной охраны и спасения, 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000568,
+    "language_code": "en",
+    "text": "National Fire and Rescue Authority Law, 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000568,
+    "language_code": "ar",
+    "text": "قانون السلطة القطرية للإطفاء والإنقاذ، 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000234,
+    "language_code": "ru",
+    "text": "Закон о защите частной жизни, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000234,
+    "language_code": "en",
+    "text": "Protection of Privacy Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000234,
+    "language_code": "ar",
+    "text": "قانون حماية الخصوصية، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001384,
+    "language_code": "ru",
+    "text": "Закон о воинской службе, 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001384,
+    "language_code": "en",
+    "text": "Defence Service Law, 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001384,
+    "language_code": "ar",
+    "text": "قانون الخدمة الأمنية، 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001118,
+    "language_code": "ru",
+    "text": "Закон об уголовном судопроизводстве (полномочия правоприменения — задержания), 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001118,
+    "language_code": "en",
+    "text": "Criminal Procedure (Enforcement Powers - Arrests) Law, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001118,
+    "language_code": "ar",
+    "text": "قانون الإجراءات الجنائية (صلاحيات الإنفاذ - التوقيفات)، 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002322,
+    "language_code": "ru",
+    "text": "Закон об израильском общественном вещании, 2014",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002322,
+    "language_code": "en",
+    "text": "Israeli Public Broadcasting Law, 2014",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002322,
+    "language_code": "ar",
+    "text": "قانون البث العام الإسرائيلي، 2014",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000438,
+    "language_code": "ru",
+    "text": "Закон об инвалидах (выплаты и реабилитация), 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000438,
+    "language_code": "en",
+    "text": "Invalids (Pensions and Rehabilitation) Law, 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000438,
+    "language_code": "ar",
+    "text": "قانون المعوقين (التعويضات وإعادة التأهيل)، 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001068,
+    "language_code": "ru",
+    "text": "Закон о налоге на добавленную стоимость, 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001068,
+    "language_code": "en",
+    "text": "Value Added Tax Law, 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001068,
+    "language_code": "ar",
+    "text": "قانون ضريبة القيمة المضافة، 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000089,
+    "language_code": "ru",
+    "text": "Закон о запрете клеветы, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000089,
+    "language_code": "en",
+    "text": "Prohibition of Defamation Law, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000089,
+    "language_code": "ar",
+    "text": "قانون منع التشهير، 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002355,
+    "language_code": "ru",
+    "text": "Закон о приёмных семьях для детей, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002355,
+    "language_code": "en",
+    "text": "Foster Care for Children Law, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002355,
+    "language_code": "ar",
+    "text": "قانون الحضانة البديلة للأطفال، 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000634,
+    "language_code": "ru",
+    "text": "Закон о правах пациента, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000634,
+    "language_code": "en",
+    "text": "Patient Rights Law, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000634,
+    "language_code": "ar",
+    "text": "قانون حقوق المريض، 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001415,
+    "language_code": "ru",
+    "text": "Закон о социальных услугах (права женщин, находившихся в приюте для женщин, подвергшихся побоям), 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001415,
+    "language_code": "en",
+    "text": "Welfare Services (Rights of Women Who Stayed in a Shelter for Battered Women) Law, 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001415,
+    "language_code": "ar",
+    "text": "قانون خدمات الرفاه (حقوق النساء اللواتي أقمن في مأوى للنساء المعرضات للعنف)، 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000747,
+    "language_code": "ru",
+    "text": "Закон о лечении психически больных, 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000747,
+    "language_code": "en",
+    "text": "Treatment of Mentally Ill Patients Law, 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000747,
+    "language_code": "ar",
+    "text": "قانون معالجة المرضى النفسيين، 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001102,
+    "language_code": "ru",
+    "text": "Закон об электроэнергетике, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001102,
+    "language_code": "en",
+    "text": "Electricity Sector Law, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001102,
+    "language_code": "ar",
+    "text": "قانون قطاع الكهرباء، 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001218,
+    "language_code": "ru",
+    "text": "Закон о равноправии людей с инвалидностью, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001218,
+    "language_code": "en",
+    "text": "Equal Rights for Persons with Disabilities Law, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001218,
+    "language_code": "ar",
+    "text": "قانون مساواة حقوق الأشخاص ذوي الإعاقة، 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000781,
+    "language_code": "ru",
+    "text": "Закон о поощрении капиталовложений в сельское хозяйство, 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000781,
+    "language_code": "en",
+    "text": "Encouragement of Capital Investment in Agriculture Law, 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000781,
+    "language_code": "ar",
+    "text": "قانون تشجيع استثمار رأس المال في الزراعة، 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000530,
+    "language_code": "ru",
+    "text": "Закон о местных властях (выборы главы органа власти, его заместителей и срок их полномочий), 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000530,
+    "language_code": "en",
+    "text": "Local Authorities (Election of Head of Authority and Deputies and Their Term) Law, 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000530,
+    "language_code": "ar",
+    "text": "قانون السلطات المحلية (انتخاب رئيس السلطة ونوابه وولايتهم)، 1975",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2078360,
+    "language_code": "ru",
+    "text": "Закон об информации о судимости и реабилитации, 2019",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2078360,
+    "language_code": "en",
+    "text": "Criminal Records and Rehabilitation of Offenders Law, 2019",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2078360,
+    "language_code": "ar",
+    "text": "قانون المعلومات الجنائية وتأهيل التائبين، 2019",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000670,
+    "language_code": "ru",
+    "text": "Закон о неприкосновенности депутатов Кнессета, их правах и обязанностях, 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000670,
+    "language_code": "en",
+    "text": "Immunity, Rights and Duties of Knesset Members Law, 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000670,
+    "language_code": "ar",
+    "text": "قانون حصانة أعضاء الكنيست وحقوقهم وواجباتهم، 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000116,
+    "language_code": "ru",
+    "text": "Закон о застройке и расселении районов реновации, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000116,
+    "language_code": "en",
+    "text": "Building and Evacuation of Rehabilitation Areas Law, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000116,
+    "language_code": "ar",
+    "text": "قانون بناء وإخلاء مناطق التأهيل، 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000666,
+    "language_code": "ru",
+    "text": "Закон о парковке для инвалидов, 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000666,
+    "language_code": "en",
+    "text": "Parking for Persons with Disabilities Law, 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000666,
+    "language_code": "ar",
+    "text": "قانون مواقف السيارات للمعوقين، 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000553,
+    "language_code": "ru",
+    "text": "Закон о местных властях (финансирование выборов), 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000553,
+    "language_code": "en",
+    "text": "Local Authorities (Financing of Elections) Law, 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000553,
+    "language_code": "ar",
+    "text": "قانون السلطات المحلية (تمويل الانتخابات)، 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000326,
+    "language_code": "ru",
+    "text": "Закон о дееспособности и опекунстве, 1962",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000326,
+    "language_code": "en",
+    "text": "Legal Capacity and Guardianship Law, 1962",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000326,
+    "language_code": "ar",
+    "text": "قانون الأهلية القانونية والوصاية، 1962",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001237,
+    "language_code": "ru",
+    "text": "Закон о чеках без покрытия, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001237,
+    "language_code": "en",
+    "text": "Cheques without Cover Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001237,
+    "language_code": "ar",
+    "text": "قانون الشيكات بدون رصيد، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000135,
+    "language_code": "ru",
+    "text": "Закон о раввинских судах (исполнение решений о разводе), 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000135,
+    "language_code": "en",
+    "text": "Rabbinical Courts (Enforcement of Divorce Judgments) Law, 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000135,
+    "language_code": "ar",
+    "text": "قانون المحاكم الحاخامية (تنفيذ أحكام الطلاق)، 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000207,
+    "language_code": "ru",
+    "text": "Закон о запрете рекламы и ограничении сбыта табачных изделий и курения, 1983",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000207,
+    "language_code": "en",
+    "text": "Restriction of Advertising and Marketing of Tobacco and Smoking Products Law, 1983",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000207,
+    "language_code": "ar",
+    "text": "قانون منع الإعلان وتقييد تسويق منتجات التبغ والتدخين، 1983",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000883,
+    "language_code": "ru",
+    "text": "Ордонанс о таможне",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000883,
+    "language_code": "en",
+    "text": "Customs Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000883,
+    "language_code": "ar",
+    "text": "مرسوم الجمارك",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001135,
+    "language_code": "ru",
+    "text": "Закон о труде женщин, 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001135,
+    "language_code": "en",
+    "text": "Women's Employment Law, 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001135,
+    "language_code": "ar",
+    "text": "قانون عمل النساء، 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000386,
+    "language_code": "ru",
+    "text": "Закон о купле-продаже (квартиры), 1973",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000386,
+    "language_code": "en",
+    "text": "Sale (Apartments) Law, 1973",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000386,
+    "language_code": "ar",
+    "text": "قانون البيع (الشقق)، 1973",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000974,
+    "language_code": "ru",
+    "text": "Закон о борьбе с преступными организациями, 2003",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000974,
+    "language_code": "en",
+    "text": "Combating Criminal Organizations Law, 2003",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000974,
+    "language_code": "ar",
+    "text": "قانون مكافحة المنظمات الإجرامية، 2003",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001079,
+    "language_code": "ru",
+    "text": "Закон о реабилитационных детских садах дневного пребывания, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001079,
+    "language_code": "en",
+    "text": "Rehabilitative Day Care Centres Law, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001079,
+    "language_code": "ar",
+    "text": "قانون الحضانات النهارية التأهيلية، 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001132,
+    "language_code": "ru",
+    "text": "Закон о полномочиях в чрезвычайное время (задержания), 1979",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001132,
+    "language_code": "en",
+    "text": "Emergency Powers (Detention) Law, 1979",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001132,
+    "language_code": "ar",
+    "text": "قانون صلاحيات وقت الطوارئ (التوقيفات)، 1979",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2073979,
+    "language_code": "ru",
+    "text": "Закон о наличии препарата эпинефрина в учебных заведениях и общественных местах, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2073979,
+    "language_code": "en",
+    "text": "Keeping an Epinephrine Device in Educational Institutions and Public Places Law, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2073979,
+    "language_code": "ar",
+    "text": "قانون توفير مستحضر الإبينفرين في المؤسسات التعليمية والأماكن العامة، 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000975,
+    "language_code": "ru",
+    "text": "Закон о государственном контролёре, 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000975,
+    "language_code": "en",
+    "text": "State Comptroller Law, 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000975,
+    "language_code": "ar",
+    "text": "قانون مراقب الدولة، 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000238,
+    "language_code": "ru",
+    "text": "Закон об охране заработной платы, 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000238,
+    "language_code": "en",
+    "text": "Protection of Wages Law, 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000238,
+    "language_code": "ar",
+    "text": "قانون حماية الأجور، 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000265,
+    "language_code": "ru",
+    "text": "Закон об урегулировании в государственном хозяйстве (поправки к законодательству для достижения бюджетных целей), 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000265,
+    "language_code": "en",
+    "text": "Arrangements in the State Economy (Legislative Amendments for Achieving Budget Targets) Law, 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000265,
+    "language_code": "ar",
+    "text": "قانون ترتيبات في اقتصاد الدولة (تعديلات تشريعية لتحقيق أهداف الميزانية)، 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000136,
+    "language_code": "ru",
+    "text": "Закон о друзских религиозных судах, 1962",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000136,
+    "language_code": "en",
+    "text": "Druze Religious Courts Law, 1962",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000136,
+    "language_code": "ar",
+    "text": "قانون المحاكم الدينية الدرزية، 1962",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000504,
+    "language_code": "ru",
+    "text": "Закон о надзоре за финансовыми услугами (пенсионное консультирование, сбыт и клиринговая система), 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000504,
+    "language_code": "en",
+    "text": "Supervision of Financial Services (Pension Advice, Marketing and Clearing System) Law, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000504,
+    "language_code": "ar",
+    "text": "قانون الإشراف على الخدمات المالية (الاستشارة والتسويق ونظام المقاصة التقاعدية)، 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000162,
+    "language_code": "ru",
+    "text": "Закон об оплате больничных дней (отсутствие по болезни ребёнка), 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000162,
+    "language_code": "en",
+    "text": "Sick Pay (Absence Due to Child's Illness) Law, 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000162,
+    "language_code": "ar",
+    "text": "قانون بدل المرض (التغيّب بسبب مرض الطفل)، 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001170,
+    "language_code": "ru",
+    "text": "Закон о медицинском оборудовании, 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001170,
+    "language_code": "en",
+    "text": "Medical Equipment Law, 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001170,
+    "language_code": "ar",
+    "text": "قانون التجهيزات الطبية، 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002320,
+    "language_code": "ru",
+    "text": "Закон о содействии строительству в приоритетных комплексах (временное постановление), 2014",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002320,
+    "language_code": "en",
+    "text": "Promotion of Construction in Preferred Housing Complexes (Temporary Provision) Law, 2014",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002320,
+    "language_code": "ar",
+    "text": "قانون تعزيز البناء في المجمّعات المفضّلة (حكم مؤقت)، 2014",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000510,
+    "language_code": "ru",
+    "text": "Закон о толковании, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000510,
+    "language_code": "en",
+    "text": "Interpretation Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000510,
+    "language_code": "ar",
+    "text": "قانون التفسير، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000172,
+    "language_code": "ru",
+    "text": "Закон о пожилых гражданах, 1989",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000172,
+    "language_code": "en",
+    "text": "Senior Citizens Law, 1989",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000172,
+    "language_code": "ar",
+    "text": "قانون المواطنين المسنين، 1989",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000458,
+    "language_code": "ru",
+    "text": "Закон о договорах о вынашивании плода (утверждение договора и статус новорождённого), 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000458,
+    "language_code": "en",
+    "text": "Agreements for the Carriage of Embryos (Approval of Agreement and Status of the Newborn) Law, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000458,
+    "language_code": "ar",
+    "text": "قانون اتفاقيات حمل الأجنة (إقرار الاتفاق ومكانة المولود)، 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000055,
+    "language_code": "ru",
+    "text": "Закон о чистом воздухе, 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000055,
+    "language_code": "en",
+    "text": "Clean Air Law, 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000055,
+    "language_code": "ar",
+    "text": "قانون الهواء النقي، 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2069958,
+    "language_code": "ru",
+    "text": "Ордонанс о религиозной общине (переход)",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2069958,
+    "language_code": "en",
+    "text": "Religious Community (Change) Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2069958,
+    "language_code": "ar",
+    "text": "مرسوم الطائفة الدينية (تغيير الطائفة)",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001177,
+    "language_code": "ru",
+    "text": "Закон об интеграции демобилизованных солдат, 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001177,
+    "language_code": "en",
+    "text": "Absorption of Discharged Soldiers Law, 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001177,
+    "language_code": "ar",
+    "text": "قانون استيعاب الجنود المسرّحين، 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000633,
+    "language_code": "ru",
+    "text": "Закон о правах жильца в общественном жилье, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000633,
+    "language_code": "en",
+    "text": "Rights of Tenants in Public Housing Law, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000633,
+    "language_code": "ar",
+    "text": "قانون حقوق المستأجر في الإسكان العام، 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000923,
+    "language_code": "ru",
+    "text": "Ордонанс о фармацевтах",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000923,
+    "language_code": "en",
+    "text": "Pharmacists Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000923,
+    "language_code": "ar",
+    "text": "مرسوم الصيادلة",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000725,
+    "language_code": "ru",
+    "text": "Закон об увеличении доли участия в рабочей силе и сокращении социальных разрывов (пособие за труд), 2007",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000725,
+    "language_code": "en",
+    "text": "Increasing the Rate of Participation in the Labour Force and Reducing Social Gaps (Earned Income Tax Credit) Law, 2007",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000725,
+    "language_code": "ar",
+    "text": "قانون زيادة نسبة المشاركة في قوة العمل وتقليص الفوارق الاجتماعية (منحة عمل)، 2007",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000514,
+    "language_code": "ru",
+    "text": "Закон о кадиях, 1961",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000514,
+    "language_code": "en",
+    "text": "Qadis Law, 1961",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000514,
+    "language_code": "ar",
+    "text": "قانون القضاة الشرعيين، 1961",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000418,
+    "language_code": "ru",
+    "text": "Закон о Центре взыскания штрафов, сборов и издержек, 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000418,
+    "language_code": "en",
+    "text": "Centre for the Collection of Fines, Fees and Expenses Law, 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000418,
+    "language_code": "ar",
+    "text": "قانون مركز تحصيل الغرامات والرسوم والنفقات، 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000002,
+    "language_code": "ru",
+    "text": "Закон о связи (телекоммуникации и вещание), 1982",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000002,
+    "language_code": "en",
+    "text": "Communications (Telecommunications and Broadcasting) Law, 1982",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000002,
+    "language_code": "ar",
+    "text": "قانون الاتصالات (البث والاتصالات السلكية واللاسلكية)، 1982",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001226,
+    "language_code": "ru",
+    "text": "Закон о телевизионном вещании (субтитры и язык жестов), 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001226,
+    "language_code": "en",
+    "text": "Television Broadcasts (Subtitles and Sign Language) Law, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001226,
+    "language_code": "ar",
+    "text": "قانون البث التلفزيوني (الترجمة المكتوبة ولغة الإشارة)، 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000737,
+    "language_code": "ru",
+    "text": "Закон о регулировании ставок в спорте, 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000737,
+    "language_code": "en",
+    "text": "Regulation of Sports Betting Law, 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000737,
+    "language_code": "ar",
+    "text": "قانون تنظيم المقامرة في الرياضة، 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000346,
+    "language_code": "ru",
+    "text": "Закон о Совете по высшему образованию, 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000346,
+    "language_code": "en",
+    "text": "Council for Higher Education Law, 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000346,
+    "language_code": "ar",
+    "text": "قانون مجلس التعليم العالي، 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000742,
+    "language_code": "ru",
+    "text": "Закон о регулировании надзора за собаками, 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000742,
+    "language_code": "en",
+    "text": "Regulation of Supervision of Dogs Law, 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000742,
+    "language_code": "ar",
+    "text": "قانون تنظيم الإشراف على الكلاب، 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000653,
+    "language_code": "ru",
+    "text": "Закон о договоре страхования, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000653,
+    "language_code": "en",
+    "text": "Insurance Contract Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000653,
+    "language_code": "ar",
+    "text": "قانون عقد التأمين، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000505,
+    "language_code": "ru",
+    "text": "Закон о надзоре за финансовыми услугами (кассы взаимопомощи), 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000505,
+    "language_code": "en",
+    "text": "Supervision of Financial Services (Provident Funds) Law, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000505,
+    "language_code": "ar",
+    "text": "قانون الإشراف على الخدمات المالية (صناديق التوفير)، 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2078364,
+    "language_code": "ru",
+    "text": "Закон о запрете потребления проституции (временное постановление и поправки к законодательству), 2019",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2078364,
+    "language_code": "en",
+    "text": "Prohibition of Consumption of Prostitution (Temporary Provision and Legislative Amendment) Law, 2019",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2078364,
+    "language_code": "ar",
+    "text": "قانون منع استهلاك البغاء (حكم مؤقت وتعديل تشريعي)، 2019",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000021,
+    "language_code": "ru",
+    "text": "Закон о корпорациях водоснабжения и канализации, 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000021,
+    "language_code": "en",
+    "text": "Water and Sewage Corporations Law, 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000021,
+    "language_code": "ar",
+    "text": "قانون شركات المياه والمجاري، 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001403,
+    "language_code": "ru",
+    "text": "Закон о службе занятости, 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001403,
+    "language_code": "en",
+    "text": "Employment Service Law, 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001403,
+    "language_code": "ar",
+    "text": "قانون دائرة التشغيل، 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000729,
+    "language_code": "ru",
+    "text": "Закон об охране диких животных, 1955",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000729,
+    "language_code": "en",
+    "text": "Protection of Wildlife Law, 1955",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000729,
+    "language_code": "ar",
+    "text": "قانون حماية الحياة البرية، 1955",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000587,
+    "language_code": "ru",
+    "text": "Закон о возвращении, 1950",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000587,
+    "language_code": "en",
+    "text": "Law of Return, 1950",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000587,
+    "language_code": "ar",
+    "text": "قانون العودة، 1950",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000487,
+    "language_code": "ru",
+    "text": "Закон о найме работников через кадровые агентства, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000487,
+    "language_code": "en",
+    "text": "Employment of Employees by Manpower Contractors Law, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000487,
+    "language_code": "ar",
+    "text": "قانون تشغيل العمال عن طريق متعهدي القوى البشرية، 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001096,
+    "language_code": "ru",
+    "text": "Закон о здании Кнессета, его площади и охране Кнессета, 1968",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001096,
+    "language_code": "en",
+    "text": "Knesset Building, its Precinct and the Knesset Guard Law, 1968",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001096,
+    "language_code": "ar",
+    "text": "قانون مبنى الكنيست وساحته وحرس الكنيست، 1968",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000485,
+    "language_code": "ru",
+    "text": "Закон об общественных организациях, 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000485,
+    "language_code": "en",
+    "text": "Associations Law, 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000485,
+    "language_code": "ar",
+    "text": "قانون الجمعيات، 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001099,
+    "language_code": "ru",
+    "text": "Закон о хозяйстве природного газа, 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001099,
+    "language_code": "en",
+    "text": "Natural Gas Sector Law, 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001099,
+    "language_code": "ar",
+    "text": "قانون قطاع الغاز الطبيعي، 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2069962,
+    "language_code": "ru",
+    "text": "Ордонанс о врачах",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2069962,
+    "language_code": "en",
+    "text": "Physicians Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2069962,
+    "language_code": "ar",
+    "text": "مرسوم الأطباء",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000278,
+    "language_code": "ru",
+    "text": "Закон о гражданской обороне, 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000278,
+    "language_code": "en",
+    "text": "Civil Defence Law, 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000278,
+    "language_code": "ar",
+    "text": "قانون الدفاع المدني، 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000325,
+    "language_code": "ru",
+    "text": "Закон о Кнессете, 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000325,
+    "language_code": "en",
+    "text": "The Knesset Law, 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000325,
+    "language_code": "ar",
+    "text": "قانون الكنيست، 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000381,
+    "language_code": "ru",
+    "text": "Закон о воде, 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000381,
+    "language_code": "en",
+    "text": "Water Law, 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000381,
+    "language_code": "ar",
+    "text": "قانون المياه، 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000322,
+    "language_code": "ru",
+    "text": "Закон о наследовании, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000322,
+    "language_code": "en",
+    "text": "Succession Law, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000322,
+    "language_code": "ar",
+    "text": "قانون الوراثة، 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2242222,
+    "language_code": "ru",
+    "text": "Закон о судопроизводстве религиозных судов (арбитраж), 2026",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2242222,
+    "language_code": "en",
+    "text": "Jurisdiction of Religious Courts (Arbitration) Law, 2026",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2242222,
+    "language_code": "ar",
+    "text": "قانون قضاء المحاكم الدينية (التحكيم)، 2026",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001171,
+    "language_code": "ru",
+    "text": "Закон о жестоком обращении с животными (защита животных), 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001171,
+    "language_code": "en",
+    "text": "Cruelty to Animals (Protection of Animals) Law, 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001171,
+    "language_code": "ar",
+    "text": "قانون قسوة الحيوانات (حماية الحيوانات)، 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000492,
+    "language_code": "ru",
+    "text": "Закон о патентах, 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000492,
+    "language_code": "en",
+    "text": "Patents Law, 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000492,
+    "language_code": "ar",
+    "text": "قانون البراءات، 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000661,
+    "language_code": "ru",
+    "text": "Закон о демобилизованных солдатах, 1984",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000661,
+    "language_code": "en",
+    "text": "Discharged Soldiers Law, 1984",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000661,
+    "language_code": "ar",
+    "text": "قانون الجنود المسرّحين، 1984",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000900,
+    "language_code": "ru",
+    "text": "Ордонанс об опасных наркотиках, 1936",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000900,
+    "language_code": "en",
+    "text": "Dangerous Drugs Ordinance, 1936",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000900,
+    "language_code": "ar",
+    "text": "مرسوم المخدرات الخطيرة، 1936",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000078,
+    "language_code": "ru",
+    "text": "Закон о запрете насилия в спорте, 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000078,
+    "language_code": "en",
+    "text": "Prohibition of Violence in Sport Law, 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000078,
+    "language_code": "ar",
+    "text": "قانون منع العنف في الرياضة، 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000312,
+    "language_code": "ru",
+    "text": "Закон об авиации, 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000312,
+    "language_code": "en",
+    "text": "Aviation Law, 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000312,
+    "language_code": "ar",
+    "text": "قانون الطيران، 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000075,
+    "language_code": "ru",
+    "text": "Закон об усыновлении детей, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000075,
+    "language_code": "en",
+    "text": "Adoption of Children Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000075,
+    "language_code": "ar",
+    "text": "قانون تبنّي الأطفال، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001233,
+    "language_code": "ru",
+    "text": "Закон о подсудности раввинских судов (брак и разводы), 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001233,
+    "language_code": "en",
+    "text": "Rabbinical Courts Jurisdiction (Marriage and Divorce) Law, 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001233,
+    "language_code": "ar",
+    "text": "قانون قضاء المحاكم الحاخامية (الزواج والطلاق)، 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001131,
+    "language_code": "ru",
+    "text": "Закон о полномочиях по охране общественной безопасности, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001131,
+    "language_code": "en",
+    "text": "Powers for Safeguarding Public Security Law, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001131,
+    "language_code": "ar",
+    "text": "قانون صلاحيات للحفاظ على الأمن العام، 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000851,
+    "language_code": "ru",
+    "text": "Ордонанс о банковской деятельности, 1941",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000851,
+    "language_code": "en",
+    "text": "Banking Ordinance, 1941",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000851,
+    "language_code": "ar",
+    "text": "مرسوم المصارف، 1941",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001189,
+    "language_code": "ru",
+    "text": "Закон о лицензировании предприятий, 1968",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001189,
+    "language_code": "en",
+    "text": "Licensing of Businesses Law, 1968",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001189,
+    "language_code": "ar",
+    "text": "قانون ترخيص الأعمال، 1968",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000471,
+    "language_code": "ru",
+    "text": "Закон об электроснабжении (временное постановление), 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000471,
+    "language_code": "en",
+    "text": "Supply of Electricity (Temporary Provision) Law, 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000471,
+    "language_code": "ar",
+    "text": "قانون تزويد الكهرباء (حكم مؤقت)، 1996",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007081,
+    "language_code": "ru",
+    "text": "Закон о надзоре за финансовыми услугами (регулируемые финансовые услуги), 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007081,
+    "language_code": "en",
+    "text": "Supervision of Financial Services (Regulated Financial Services) Law, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007081,
+    "language_code": "ar",
+    "text": "قانون الإشراف على الخدمات المالية (الخدمات المالية المنظّمة)، 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000706,
+    "language_code": "ru",
+    "text": "Закон об огнестрельном оружии, 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000706,
+    "language_code": "en",
+    "text": "Firearms Law, 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000706,
+    "language_code": "ar",
+    "text": "قانون الأسلحة النارية، 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000928,
+    "language_code": "ru",
+    "text": "Ордонанс о товариществах",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000928,
+    "language_code": "en",
+    "text": "Partnerships Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000928,
+    "language_code": "ar",
+    "text": "مرسوم الشركات التضامنية",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000658,
+    "language_code": "ru",
+    "text": "Закон о ежегодном отпуске, 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000658,
+    "language_code": "en",
+    "text": "Annual Leave Law, 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000658,
+    "language_code": "ar",
+    "text": "قانون الإجازة السنوية، 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000828,
+    "language_code": "ru",
+    "text": "Закон о внесении изменений в процессуальный порядок (допрос свидетелей), 1957",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000828,
+    "language_code": "en",
+    "text": "Amendment of Procedure (Examination of Witnesses) Law, 1957",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000828,
+    "language_code": "ar",
+    "text": "قانون تعديل إجراءات التقاضي (استجواب الشهود)، 1957",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000888,
+    "language_code": "ru",
+    "text": "Ордонанс о полиции",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000888,
+    "language_code": "en",
+    "text": "Police Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000888,
+    "language_code": "ar",
+    "text": "مرسوم الشرطة",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000522,
+    "language_code": "ru",
+    "text": "Закон о Главном раввинате Израиля, 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000522,
+    "language_code": "en",
+    "text": "Chief Rabbinate of Israel Law, 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000522,
+    "language_code": "ar",
+    "text": "قانون الحاخامية الرئيسية لإسرائيل، 1980",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2016313,
+    "language_code": "ru",
+    "text": "Закон о гражданской службе, 2017",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2016313,
+    "language_code": "en",
+    "text": "Civic Service Law, 2017",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2016313,
+    "language_code": "ar",
+    "text": "قانون الخدمة المدنية، 2017",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001149,
+    "language_code": "ru",
+    "text": "Закон о сделках с публичными органами, 1976",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001149,
+    "language_code": "en",
+    "text": "Transactions with Public Bodies Law, 1976",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001149,
+    "language_code": "ar",
+    "text": "قانون معاملات الأجسام العامة، 1976",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000767,
+    "language_code": "ru",
+    "text": "Закон о предотвращении ущерба Государству Израиль путём бойкота, 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000767,
+    "language_code": "en",
+    "text": "Prevention of Harm to the State of Israel by Means of Boycott Law, 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000767,
+    "language_code": "ar",
+    "text": "قانون منع المسّ بدولة إسرائيل بواسطة المقاطعة، 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2194899,
+    "language_code": "ru",
+    "text": "Закон о социальных услугах для людей с инвалидностью, 2022",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2194899,
+    "language_code": "en",
+    "text": "Welfare Services for Persons with Disabilities Law, 2022",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2194899,
+    "language_code": "ar",
+    "text": "قانون خدمات الرفاه للأشخاص ذوي الإعاقة، 2022",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000870,
+    "language_code": "ru",
+    "text": "Ордонанс о лесах",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000870,
+    "language_code": "en",
+    "text": "Forests Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000870,
+    "language_code": "ar",
+    "text": "مرسوم الأحراج",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000760,
+    "language_code": "ru",
+    "text": "Закон о предотвращении незаконного проникновения (правонарушения и подсудность), 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000760,
+    "language_code": "en",
+    "text": "Prevention of Infiltration (Offences and Jurisdiction) Law, 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000760,
+    "language_code": "ar",
+    "text": "قانون منع التسلل (الجرائم والقضاء)، 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2165295,
+    "language_code": "ru",
+    "text": "Закон о службе финансовой информации, 2021",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2165295,
+    "language_code": "en",
+    "text": "Financial Information Service Law, 2021",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2165295,
+    "language_code": "ar",
+    "text": "قانون خدمة المعلومات المالية، 2021",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000464,
+    "language_code": "ru",
+    "text": "Закон о спорте, 1988",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000464,
+    "language_code": "en",
+    "text": "Sports Law, 1988",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000464,
+    "language_code": "ar",
+    "text": "قانون الرياضة، 1988",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2078321,
+    "language_code": "ru",
+    "text": "Закон об установке камер для защиты малолетних в детских садах дневного пребывания, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2078321,
+    "language_code": "en",
+    "text": "Installation of Cameras for the Protection of Toddlers in Day Care Centres Law, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2078321,
+    "language_code": "ar",
+    "text": "قانون تركيب كاميرات لحماية الأطفال في الحضانات النهارية، 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001375,
+    "language_code": "ru",
+    "text": "Закон о борьбе с явлением употребления опасных веществ, 2013",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001375,
+    "language_code": "en",
+    "text": "Combating the Phenomenon of Use of Hazardous Substances Law, 2013",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001375,
+    "language_code": "ar",
+    "text": "قانون مكافحة ظاهرة استخدام المواد الخطيرة، 2013",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000023,
+    "language_code": "ru",
+    "text": "Закон о выплатах узникам Сиона и их семьям, 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000023,
+    "language_code": "en",
+    "text": "Benefits for Prisoners of Zion and Their Families Law, 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000023,
+    "language_code": "ar",
+    "text": "قانون تعويضات لأسرى صهيون وعائلاتهم، 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000157,
+    "language_code": "ru",
+    "text": "Закон о Давиде Бен-Гурионе, 1976",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000157,
+    "language_code": "en",
+    "text": "David Ben-Gurion Law, 1976",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000157,
+    "language_code": "ar",
+    "text": "قانون دافيد بن غوريون، 1976",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000839,
+    "language_code": "ru",
+    "text": "Закон об охране здоровья населения (продовольствие), 2015",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000839,
+    "language_code": "en",
+    "text": "Protection of Public Health (Food) Law, 2015",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000839,
+    "language_code": "ar",
+    "text": "قانون حماية الصحة العامة (الغذاء)، 2015",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001417,
+    "language_code": "ru",
+    "text": "Закон об авиационных услугах (компенсация и помощь при отмене рейса или изменении его условий), 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001417,
+    "language_code": "en",
+    "text": "Aviation Services (Compensation and Assistance for Flight Cancellation or Change of Conditions) Law, 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001417,
+    "language_code": "ar",
+    "text": "قانون خدمات الطيران (التعويض والمساعدة عند إلغاء رحلة أو تغيير شروطها)، 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000495,
+    "language_code": "ru",
+    "text": "Закон о контроле над оборонным экспортом, 2007",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000495,
+    "language_code": "en",
+    "text": "Defence Export Control Law, 2007",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000495,
+    "language_code": "ar",
+    "text": "قانون الإشراف على التصدير الأمني، 2007",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002362,
+    "language_code": "ru",
+    "text": "Закон о сокращении использования одноразовых пакетов, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002362,
+    "language_code": "en",
+    "text": "Reduction of the Use of Disposable Carrier Bags Law, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2002362,
+    "language_code": "ar",
+    "text": "قانون تقليص استخدام أكياس النقل ذات الاستخدام الواحد، 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001208,
+    "language_code": "ru",
+    "text": "Закон об Управлении гражданской авиации, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001208,
+    "language_code": "en",
+    "text": "Civil Aviation Authority Law, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001208,
+    "language_code": "ar",
+    "text": "قانون سلطة الطيران المدني، 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000735,
+    "language_code": "ru",
+    "text": "Закон об увековечении памяти Менахема Бегина, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000735,
+    "language_code": "en",
+    "text": "Commemoration of Menachem Begin Law, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000735,
+    "language_code": "ar",
+    "text": "قانون إحياء ذكرى مناحيم بيغن، 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000104,
+    "language_code": "ru",
+    "text": "Закон об организации надзора за трудом, 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000104,
+    "language_code": "en",
+    "text": "Organization of Labour Inspection Law, 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000104,
+    "language_code": "ar",
+    "text": "قانون تنظيم الإشراف على العمل، 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000878,
+    "language_code": "ru",
+    "text": "Ордонанс о местных советах",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000878,
+    "language_code": "en",
+    "text": "Local Councils Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000878,
+    "language_code": "ar",
+    "text": "مرسوم المجالس المحلية",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000242,
+    "language_code": "ru",
+    "text": "Закон об общественном жилье (права на приобретение), 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000242,
+    "language_code": "en",
+    "text": "Public Housing (Purchase Rights) Law, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000242,
+    "language_code": "ar",
+    "text": "قانون الإسكان العام (حقوق الشراء)، 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000636,
+    "language_code": "ru",
+    "text": "Закон о правах учащегося, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000636,
+    "language_code": "en",
+    "text": "Student Rights (Pupils) Law, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000636,
+    "language_code": "ar",
+    "text": "قانون حقوق التلميذ، 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000580,
+    "language_code": "ru",
+    "text": "Закон об Управлении развития Негева, 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000580,
+    "language_code": "en",
+    "text": "Negev Development Authority Law, 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000580,
+    "language_code": "ar",
+    "text": "قانون سلطة تطوير النقب، 1991",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000697,
+    "language_code": "ru",
+    "text": "Закон об основах бюджета, 1985",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000697,
+    "language_code": "en",
+    "text": "Budget Foundations Law, 1985",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000697,
+    "language_code": "ar",
+    "text": "قانون أساسات الميزانية، 1985",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001165,
+    "language_code": "ru",
+    "text": "Закон о надзоре за школами, 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001165,
+    "language_code": "en",
+    "text": "Supervision of Schools Law, 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001165,
+    "language_code": "ar",
+    "text": "قانون الإشراف على المدارس، 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000188,
+    "language_code": "ru",
+    "text": "Закон о выборах (способы агитации), 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000188,
+    "language_code": "en",
+    "text": "Elections (Modes of Propaganda) Law, 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000188,
+    "language_code": "ar",
+    "text": "قانون الانتخابات (طرق الدعاية)، 1959",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000082,
+    "language_code": "ru",
+    "text": "Закон о запрете обмана в вопросах кашрута, 1983",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000082,
+    "language_code": "en",
+    "text": "Prohibition of Kashrut Fraud Law, 1983",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000082,
+    "language_code": "ar",
+    "text": "قانون منع الخداع في الكشروت، 1983",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000161,
+    "language_code": "ru",
+    "text": "Закон об оплате больничных дней (отсутствие по болезни родителя), 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000161,
+    "language_code": "en",
+    "text": "Sick Pay (Absence Due to Parent's Illness) Law, 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000161,
+    "language_code": "ar",
+    "text": "قانون بدل المرض (التغيّب بسبب مرض أحد الوالدين)، 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001092,
+    "language_code": "ru",
+    "text": "Закон о публичных землях (освобождение земли), 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001092,
+    "language_code": "en",
+    "text": "Public Land (Eviction of Squatters) Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001092,
+    "language_code": "ar",
+    "text": "قانون الأراضي العامة (إخلاء الأرض)، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001128,
+    "language_code": "ru",
+    "text": "Закон об ограничении использования и регистрации операций с подержанными автозапчастями (предотвращение краж), 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001128,
+    "language_code": "en",
+    "text": "Restriction of Use and Registration of Transactions in Used Vehicle Parts (Prevention of Theft) Law, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001128,
+    "language_code": "ar",
+    "text": "قانون تقييد استخدام وتسجيل العمليات في قطع السيارات المستعملة (منع السرقات)، 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001104,
+    "language_code": "ru",
+    "text": "Закон о ценных бумагах, 1968",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001104,
+    "language_code": "en",
+    "text": "Securities Law, 1968",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001104,
+    "language_code": "ar",
+    "text": "قانون الأوراق المالية، 1968",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000707,
+    "language_code": "ru",
+    "text": "Закон о содержании под стражей незаконных комбатантов, 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000707,
+    "language_code": "en",
+    "text": "Incarceration of Unlawful Combatants Law, 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000707,
+    "language_code": "ar",
+    "text": "قانون حبس المقاتلين غير الشرعيين، 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000105,
+    "language_code": "ru",
+    "text": "Закон о ежедневном питании для учащегося, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000105,
+    "language_code": "en",
+    "text": "Daily Meal for Pupils Law, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000105,
+    "language_code": "ar",
+    "text": "قانون وجبة يومية للتلميذ، 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2016312,
+    "language_code": "ru",
+    "text": "Закон о городском обновлении (договоры об организации сделок), 2017",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2016312,
+    "language_code": "en",
+    "text": "Urban Renewal (Agreements for Organizing Transactions) Law, 2017",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2016312,
+    "language_code": "ar",
+    "text": "قانون التجديد الحضري (اتفاقيات تنظيم المعاملات)، 2017",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000399,
+    "language_code": "ru",
+    "text": "Закон о партиях, 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000399,
+    "language_code": "en",
+    "text": "Parties Law, 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000399,
+    "language_code": "ar",
+    "text": "قانون الأحزاب، 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001396,
+    "language_code": "ru",
+    "text": "Закон о резервистской службе, 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001396,
+    "language_code": "en",
+    "text": "Reserve Service Law, 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001396,
+    "language_code": "ar",
+    "text": "قانون خدمة الاحتياط، 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000474,
+    "language_code": "ru",
+    "text": "Закон о книгах (обязанность передачи и указания сведений), 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000474,
+    "language_code": "en",
+    "text": "Books (Obligation to Deposit and State Particulars) Law, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000474,
+    "language_code": "ar",
+    "text": "قانون الكتب (واجب التسليم وذكر التفاصيل)، 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001379,
+    "language_code": "ru",
+    "text": "Закон о национально-гражданской службе, 2014",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001379,
+    "language_code": "en",
+    "text": "National-Civic Service Law, 2014",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001379,
+    "language_code": "ar",
+    "text": "قانون الخدمة الوطنية المدنية، 2014",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000221,
+    "language_code": "ru",
+    "text": "Закон о защите работников в чрезвычайное время, 2006",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000221,
+    "language_code": "en",
+    "text": "Protection of Employees in Time of Emergency Law, 2006",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000221,
+    "language_code": "ar",
+    "text": "قانون حماية العمال في وقت الطوارئ، 2006",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2072516,
+    "language_code": "ru",
+    "text": "Закон о национальном дне памяти вклада и деятельности друзской общины, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2072516,
+    "language_code": "en",
+    "text": "National Day Marking the Contribution and Work of the Druze Community Law, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2072516,
+    "language_code": "ar",
+    "text": "قانون يوم وطني لإحياء إسهام الطائفة الدرزية وعملها، 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000583,
+    "language_code": "ru",
+    "text": "Закон об Управлении по улучшению положения женщин, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000583,
+    "language_code": "en",
+    "text": "Authority for the Advancement of the Status of Women Law, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000583,
+    "language_code": "ar",
+    "text": "قانون سلطة النهوض بمكانة المرأة، 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000156,
+    "language_code": "ru",
+    "text": "Закон о национальных парках, природных заповедниках, национальных объектах и памятных местах, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000156,
+    "language_code": "en",
+    "text": "National Parks, Nature Reserves, National Sites and Memorial Sites Law, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000156,
+    "language_code": "ar",
+    "text": "قانون الحدائق القومية والمحميات الطبيعية والمواقع القومية ومواقع الذكرى، 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2211288,
+    "language_code": "ru",
+    "text": "Закон о выплатах членам семей похищенных и пропавших без вести в результате враждебных действий, 2023",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2211288,
+    "language_code": "en",
+    "text": "Benefits for Family Members of Abductees and Missing Persons in Hostile Actions Law, 2023",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2211288,
+    "language_code": "ar",
+    "text": "قانون تعويضات لأفراد عائلات المختطفين والمفقودين في عمل عدائي، 2023",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000460,
+    "language_code": "ru",
+    "text": "Закон о государственной защите (публичной адвокатуре), 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000460,
+    "language_code": "en",
+    "text": "Public Defence Law, 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000460,
+    "language_code": "ar",
+    "text": "قانون الدفاع العام، 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000701,
+    "language_code": "ru",
+    "text": "Закон о платной дороге (Трансизраильское шоссе), 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000701,
+    "language_code": "en",
+    "text": "Toll Road (Cross-Israel Highway) Law, 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000701,
+    "language_code": "ar",
+    "text": "قانون الطريق برسوم (الطريق العابر لإسرائيل)، 1995",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001057,
+    "language_code": "ru",
+    "text": "Закон о налоге на доходы (освобождение от налога на доход от сдачи жилой квартиры), 1990",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001057,
+    "language_code": "en",
+    "text": "Income Tax (Exemption from Tax on Income from Renting a Residential Apartment) Law, 1990",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001057,
+    "language_code": "ar",
+    "text": "قانون ضريبة الدخل (إعفاء من الضريبة على مدخول تأجير شقة سكنية)، 1990",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000602,
+    "language_code": "ru",
+    "text": "Закон о трансплантации органов, 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000602,
+    "language_code": "en",
+    "text": "Organ Transplant Law, 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000602,
+    "language_code": "ar",
+    "text": "قانون زرع الأعضاء، 2008",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000895,
+    "language_code": "ru",
+    "text": "Ордонанс о портах",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000895,
+    "language_code": "en",
+    "text": "Ports Ordinance",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000895,
+    "language_code": "ar",
+    "text": "مرسوم الموانئ",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000599,
+    "language_code": "ru",
+    "text": "Закон об охране святых мест, 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000599,
+    "language_code": "en",
+    "text": "Protection of Holy Places Law, 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000599,
+    "language_code": "ar",
+    "text": "قانون حماية الأماكن المقدسة، 1967",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2009637,
+    "language_code": "ru",
+    "text": "Закон о снижении надбавок за просрочку, начисленных на штрафы, взыскиваемые Центром взыскания штрафов, сборов и издержек (временное постановление), 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2009637,
+    "language_code": "en",
+    "text": "Reduction of Arrears Surcharges Added to Fines Collected by the Centre for the Collection of Fines, Fees and Expenses (Temporary Provision) Law, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2009637,
+    "language_code": "ar",
+    "text": "قانون تقليص إضافات التأخير على الغرامات التي يحصّلها مركز تحصيل الغرامات والرسوم والنفقات (حكم مؤقت)، 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001216,
+    "language_code": "ru",
+    "text": "Закон о равноправии женщин, 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001216,
+    "language_code": "en",
+    "text": "Equal Rights for Women Law, 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001216,
+    "language_code": "ar",
+    "text": "قانون مساواة حقوق المرأة، 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000434,
+    "language_code": "ru",
+    "text": "Закон о молодёжи (попечение и надзор), 1960",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000434,
+    "language_code": "en",
+    "text": "Youth (Care and Supervision) Law, 1960",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000434,
+    "language_code": "ar",
+    "text": "قانون الأحداث (الرعاية والإشراف)، 1960",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000503,
+    "language_code": "ru",
+    "text": "Закон о надзоре за финансовыми услугами (страхование), 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000503,
+    "language_code": "en",
+    "text": "Supervision of Financial Services (Insurance) Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000503,
+    "language_code": "ar",
+    "text": "قانون الإشراف على الخدمات المالية (التأمين)، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001109,
+    "language_code": "ru",
+    "text": "Закон о государственном имуществе, 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001109,
+    "language_code": "en",
+    "text": "State Property Law, 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001109,
+    "language_code": "ar",
+    "text": "قانون أملاك الدولة، 1951",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2219234,
+    "language_code": "ru",
+    "text": "Закон о Дне единства, 2024",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2219234,
+    "language_code": "en",
+    "text": "Unity Day Law, 2024",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2219234,
+    "language_code": "ar",
+    "text": "قانون يوم الوحدة، 2024",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000204,
+    "language_code": "ru",
+    "text": "Закон о банковской деятельности (лицензирование), 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000204,
+    "language_code": "en",
+    "text": "Banking (Licensing) Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000204,
+    "language_code": "ar",
+    "text": "قانون المصارف (الترخيص)، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001397,
+    "language_code": "ru",
+    "text": "Закон о государственной службе (ограничения после выхода на пенсию), 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001397,
+    "language_code": "en",
+    "text": "Public Service (Restrictions after Retirement) Law, 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001397,
+    "language_code": "ar",
+    "text": "قانون الخدمة العامة (قيود بعد التقاعد)، 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2165203,
+    "language_code": "ru",
+    "text": "Закон о принципах регулирования, 2021",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2165203,
+    "language_code": "en",
+    "text": "Principles of Regulation Law, 2021",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2165203,
+    "language_code": "ar",
+    "text": "قانون مبادئ التنظيم، 2021",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000513,
+    "language_code": "ru",
+    "text": "Закон о спортивном погружении, 1979",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000513,
+    "language_code": "en",
+    "text": "Sport Diving Law, 1979",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000513,
+    "language_code": "ar",
+    "text": "قانون الغطس الرياضي، 1979",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001199,
+    "language_code": "ru",
+    "text": "Закон о Голанских высотах, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001199,
+    "language_code": "en",
+    "text": "Golan Heights Law, 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001199,
+    "language_code": "ar",
+    "text": "قانون هضبة الجولان، 1981",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000391,
+    "language_code": "ru",
+    "text": "Закон о правительстве, 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000391,
+    "language_code": "en",
+    "text": "The Government Law, 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000391,
+    "language_code": "ar",
+    "text": "قانون الحكومة، 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2220348,
+    "language_code": "ru",
+    "text": "Закон о дне памяти событий Фархуда, 2024",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2220348,
+    "language_code": "en",
+    "text": "Day Marking the Events of the Farhud Law, 2024",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2220348,
+    "language_code": "ar",
+    "text": "قانون يوم لإحياء أحداث الفرهود، 2024",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000506,
+    "language_code": "ru",
+    "text": "Закон о психологах, 1977",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000506,
+    "language_code": "en",
+    "text": "Psychologists Law, 1977",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000506,
+    "language_code": "ar",
+    "text": "قانون الأخصائيين النفسيين، 1977",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001206,
+    "language_code": "ru",
+    "text": "Закон об Управлении древностей, 1989",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001206,
+    "language_code": "en",
+    "text": "Antiquities Authority Law, 1989",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001206,
+    "language_code": "ar",
+    "text": "قانون سلطة الآثار، 1989",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000676,
+    "language_code": "ru",
+    "text": "Закон об институте «Яд Ицхак Бен-Цви», 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000676,
+    "language_code": "en",
+    "text": "Yad Yitzhak Ben-Zvi Law, 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000676,
+    "language_code": "ar",
+    "text": "قانون ياد يتسحاق بن تسفي، 1969",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2068071,
+    "language_code": "ru",
+    "text": "Закон об экономической программе (поправки к законодательству для реализации экономической политики на бюджетный год 2019), 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2068071,
+    "language_code": "en",
+    "text": "Economic Programme (Legislative Amendments for Implementing the Economic Policy for the 2019 Budget Year) Law, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2068071,
+    "language_code": "ar",
+    "text": "قانون البرنامج الاقتصادي (تعديلات تشريعية لتطبيق السياسة الاقتصادية لسنة الميزانية 2019)، 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000632,
+    "language_code": "ru",
+    "text": "Закон о Зеэве Жаботинском (увековечение памяти и деятельности), 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000632,
+    "language_code": "en",
+    "text": "Ze'ev Jabotinsky (Commemoration of His Memory and Work) Law, 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000632,
+    "language_code": "ar",
+    "text": "قانون زئيف جابوتينسكي (إحياء ذكراه وعمله)، 2005",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000529,
+    "language_code": "ru",
+    "text": "Закон о местных властях (выборы), 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000529,
+    "language_code": "en",
+    "text": "Local Authorities (Elections) Law, 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000529,
+    "language_code": "ar",
+    "text": "قانون السلطات المحلية (الانتخابات)، 1965",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000281,
+    "language_code": "ru",
+    "text": "Закон об исковой давности, 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000281,
+    "language_code": "en",
+    "text": "Prescription Law, 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000281,
+    "language_code": "ar",
+    "text": "قانون التقادم، 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000340,
+    "language_code": "ru",
+    "text": "Закон о Высшем институте языка иврит, 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000340,
+    "language_code": "en",
+    "text": "Supreme Institute for the Hebrew Language Law, 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000340,
+    "language_code": "ar",
+    "text": "قانون المجمع الأعلى للغة العبرية، 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000977,
+    "language_code": "ru",
+    "text": "Закон об ограничениях на возвращение лица, совершившего половое преступление, в окружение потерпевшего, 2004",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000977,
+    "language_code": "en",
+    "text": "Restrictions on the Return of a Sex Offender to the Environment of the Victim Law, 2004",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000977,
+    "language_code": "ar",
+    "text": "قانون قيود على عودة مرتكب جريمة جنسية إلى محيط الضحية، 2004",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000948,
+    "language_code": "ru",
+    "text": "Ордонанс о муниципальных и государственных налогах (освобождения), 1938",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000948,
+    "language_code": "en",
+    "text": "Municipal and Government Taxes (Exemptions) Ordinance, 1938",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000948,
+    "language_code": "ar",
+    "text": "مرسوم الضرائب البلدية والحكومية (الإعفاءات)، 1938",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2206321,
+    "language_code": "ru",
+    "text": "Закон об экономической эффективности (поправки к законодательству для достижения бюджетных целей на бюджетные годы 2023 и 2024), 2023",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2206321,
+    "language_code": "en",
+    "text": "Economic Efficiency (Legislative Amendments for Achieving the Budget Targets for the 2023 and 2024 Budget Years) Law, 2023",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2206321,
+    "language_code": "ar",
+    "text": "قانون النجاعة الاقتصادية (تعديلات تشريعية لتحقيق أهداف الميزانية لسنتي 2023 و2024)، 2023",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001399,
+    "language_code": "ru",
+    "text": "Закон о постоянной службе в Армии обороны Израиля (пенсии), 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001399,
+    "language_code": "en",
+    "text": "Permanent Service in the Israel Defense Forces (Pensions) Law, 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001399,
+    "language_code": "ar",
+    "text": "قانون الخدمة الدائمة في جيش الدفاع الإسرائيلي (المعاشات)، 1954",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2223847,
+    "language_code": "ru",
+    "text": "Закон о выселении семей террористов, 2024",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2223847,
+    "language_code": "en",
+    "text": "Deportation of Terrorists' Families Law, 2024",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2223847,
+    "language_code": "ar",
+    "text": "قانون إبعاد عائلات المخربين، 2024",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2143516,
+    "language_code": "ru",
+    "text": "Закон об особых полномочиях для противодействия новому коронавирусу (временное постановление), 2020",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2143516,
+    "language_code": "en",
+    "text": "Special Powers for Dealing with the Novel Coronavirus (Temporary Provision) Law, 2020",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2143516,
+    "language_code": "ar",
+    "text": "قانون صلاحيات خاصة لمواجهة فيروس كورونا الجديد (حكم مؤقت)، 2020",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001389,
+    "language_code": "ru",
+    "text": "Закон об Общей службе безопасности, 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001389,
+    "language_code": "en",
+    "text": "General Security Service Law, 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001389,
+    "language_code": "ar",
+    "text": "قانون جهاز الأمن العام، 2002",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000985,
+    "language_code": "ru",
+    "text": "Закон о Совете по растениеводству (производство и сбыт), 1973",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000985,
+    "language_code": "en",
+    "text": "Plants Production and Marketing Board Law, 1973",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000985,
+    "language_code": "ar",
+    "text": "قانون مجلس النباتات (الإنتاج والتسويق)، 1973",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000722,
+    "language_code": "ru",
+    "text": "Закон об усилении правоприменения в трудовом праве, 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000722,
+    "language_code": "en",
+    "text": "Increased Enforcement of Labour Laws Law, 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000722,
+    "language_code": "ar",
+    "text": "قانون تعزيز إنفاذ قوانين العمل، 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2020878,
+    "language_code": "ru",
+    "text": "Закон о полномочиях по предотвращению совершения правонарушений посредством интернет-сайта, 2017",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2020878,
+    "language_code": "en",
+    "text": "Powers for the Prevention of Commission of Offences by Means of an Internet Site Law, 2017",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2020878,
+    "language_code": "ar",
+    "text": "قانون صلاحيات لمنع ارتكاب الجرائم بواسطة موقع إنترنت، 2017",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000491,
+    "language_code": "ru",
+    "text": "Закон о сокращении дефицита и ограничении бюджетных расходов, 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000491,
+    "language_code": "en",
+    "text": "Reduction of the Deficit and Limitation of Budgetary Expenditure Law, 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000491,
+    "language_code": "ar",
+    "text": "قانون تقليص العجز وتحديد النفقات الميزانية، 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000837,
+    "language_code": "ru",
+    "text": "Ордонанс о здоровье населения, 1940",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000837,
+    "language_code": "en",
+    "text": "Public Health Ordinance, 1940",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000837,
+    "language_code": "ar",
+    "text": "مرسوم صحة الشعب، 1940",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2144696,
+    "language_code": "ru",
+    "text": "Закон о продлении сроков и проведении обсуждений посредством видеосвязи в вопросах планирования и строительства (новый коронавирус — временное постановление), 2020",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2144696,
+    "language_code": "en",
+    "text": "Extension of Periods and Holding Hearings by Videoconference in Planning and Building Matters (Novel Coronavirus - Temporary Provision) Law, 2020",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2144696,
+    "language_code": "ar",
+    "text": "قانون تمديد المدد وعقد الجلسات بالاتصال المرئي في شؤون التخطيط والبناء (فيروس كورونا الجديد - حكم مؤقت)، 2020",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007161,
+    "language_code": "ru",
+    "text": "Закон об Управлении по жалобам населения на представителей государства в судебных инстанциях, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007161,
+    "language_code": "en",
+    "text": "Commissioner for Public Complaints against State Representatives in Courts Law, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007161,
+    "language_code": "ar",
+    "text": "قانون مفوضية شكاوى الجمهور على ممثلي الدولة في المحاكم، 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2073356,
+    "language_code": "ru",
+    "text": "Закон о заморозке и вычете средств, выплаченных Палестинской администрацией в связи с терроризмом, из средств, перечисляемых ей правительством Израиля, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2073356,
+    "language_code": "en",
+    "text": "Freezing and Deduction of Funds Paid by the Palestinian Authority in Connection with Terrorism from the Funds Transferred to It by the Government of Israel Law, 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2073356,
+    "language_code": "ar",
+    "text": "قانون تجميد وخصم الأموال التي دفعتها السلطة الفلسطينية بصلة بالإرهاب من الأموال المحوّلة إليها من حكومة إسرائيل، 2018",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000763,
+    "language_code": "ru",
+    "text": "Закон о предотвращении вреда от асбеста и вредной пыли, 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000763,
+    "language_code": "en",
+    "text": "Prevention of Asbestos and Harmful Dust Hazards Law, 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000763,
+    "language_code": "ar",
+    "text": "قانون منع أضرار الأسبستوس والغبار الضار، 2011",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000898,
+    "language_code": "ru",
+    "text": "Ордонанс о статистике, 1947",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000898,
+    "language_code": "en",
+    "text": "Statistics Ordinance, 1947",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000898,
+    "language_code": "ar",
+    "text": "مرسوم الإحصاء، 1947",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000217,
+    "language_code": "ru",
+    "text": "Закон о защите населения от совершения половых преступлений, 2006",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000217,
+    "language_code": "en",
+    "text": "Protection of the Public from Sex Offenders Law, 2006",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000217,
+    "language_code": "ar",
+    "text": "قانون حماية الجمهور من ارتكاب الجرائم الجنسية، 2006",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000175,
+    "language_code": "ru",
+    "text": "Закон об анатомии и патологии, 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000175,
+    "language_code": "en",
+    "text": "Anatomy and Pathology Law, 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000175,
+    "language_code": "ar",
+    "text": "قانون التشريح وعلم الأمراض، 1953",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007219,
+    "language_code": "ru",
+    "text": "Закон о повышении эффективности муниципального надзора и правоприменения в местных властях (дорожное движение), 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007219,
+    "language_code": "en",
+    "text": "Streamlining Municipal Supervision and Enforcement in Local Authorities (Traffic) Law, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2007219,
+    "language_code": "ar",
+    "text": "قانون تنجيع الإشراف والإنفاذ البلديين في السلطات المحلية (المرور)، 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000297,
+    "language_code": "ru",
+    "text": "Закон об опасных веществах, 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000297,
+    "language_code": "en",
+    "text": "Hazardous Substances Law, 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000297,
+    "language_code": "ar",
+    "text": "قانون المواد الخطيرة، 1993",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000979,
+    "language_code": "ru",
+    "text": "Закон о «Маген Давид Адом», 1950",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000979,
+    "language_code": "en",
+    "text": "Magen David Adom Law, 1950",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000979,
+    "language_code": "ar",
+    "text": "قانون نجمة داود الحمراء، 1950",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000302,
+    "language_code": "ru",
+    "text": "Закон о демобилизованных солдатах (возвращение на работу), 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000302,
+    "language_code": "en",
+    "text": "Discharged Soldiers (Reinstatement in Employment) Law, 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000302,
+    "language_code": "ar",
+    "text": "قانون الجنود المسرّحين (العودة إلى العمل)، 1949",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000664,
+    "language_code": "ru",
+    "text": "Закон о специальном образовании, 1988",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000664,
+    "language_code": "en",
+    "text": "Special Education Law, 1988",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000664,
+    "language_code": "ar",
+    "text": "قانون التربية الخاصة، 1988",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001097,
+    "language_code": "ru",
+    "text": "Закон о помощи семьям, во главе которых стоит одинокий родитель, 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001097,
+    "language_code": "en",
+    "text": "Assistance to Single-Parent Families Law, 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001097,
+    "language_code": "ar",
+    "text": "قانون مساعدة الأسر التي يرأسها والد مستقل، 1992",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000972,
+    "language_code": "ru",
+    "text": "Ордонанс о таможенном тарифе и освобождениях, 1937",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000972,
+    "language_code": "en",
+    "text": "Customs Tariff and Exemptions Ordinance, 1937",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000972,
+    "language_code": "ar",
+    "text": "مرسوم تعريفة الجمارك والإعفاءات، 1937",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000208,
+    "language_code": "ru",
+    "text": "Закон об ограничении рекламы и сбыта алкогольных напитков, 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000208,
+    "language_code": "en",
+    "text": "Restriction of Advertising and Marketing of Alcoholic Beverages Law, 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000208,
+    "language_code": "ar",
+    "text": "قانون تقييد الإعلان وتسويق المشروبات الكحولية، 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2006522,
+    "language_code": "ru",
+    "text": "Закон о лицензировании услуг и профессий в автомобильной отрасли, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2006522,
+    "language_code": "en",
+    "text": "Licensing of Services and Professions in the Vehicle Sector Law, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2006522,
+    "language_code": "ar",
+    "text": "قانون ترخيص الخدمات والمهن في قطاع المركبات، 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001219,
+    "language_code": "ru",
+    "text": "Закон об условно-досрочном освобождении из заключения, 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001219,
+    "language_code": "en",
+    "text": "Release on Parole Law, 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001219,
+    "language_code": "ar",
+    "text": "قانون الإفراج المشروط من الحبس، 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001398,
+    "language_code": "ru",
+    "text": "Закон о государственной службе (подарки), 1979",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001398,
+    "language_code": "en",
+    "text": "Public Service (Gifts) Law, 1979",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001398,
+    "language_code": "ar",
+    "text": "قانون الخدمة العامة (الهدايا)، 1979",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000758,
+    "language_code": "ru",
+    "text": "Закон о предотвращении сексуальных домогательств, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000758,
+    "language_code": "en",
+    "text": "Prevention of Sexual Harassment Law, 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000758,
+    "language_code": "ar",
+    "text": "قانون منع التحرش الجنسي، 1998",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000141,
+    "language_code": "ru",
+    "text": "Закон о судах по административным делам, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000141,
+    "language_code": "en",
+    "text": "Administrative Affairs Courts Law, 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000141,
+    "language_code": "ar",
+    "text": "قانون محاكم الشؤون الإدارية، 2000",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000209,
+    "language_code": "ru",
+    "text": "Закон об ограничении веса в модельной индустрии, 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000209,
+    "language_code": "en",
+    "text": "Restriction of Weight in the Modelling Industry Law, 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000209,
+    "language_code": "ar",
+    "text": "قانون تقييد الوزن في صناعة عرض الأزياء، 2012",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000394,
+    "language_code": "ru",
+    "text": "Закон о лицах, участвовавших в нейтрализации последствий чернобыльской катастрофы, 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000394,
+    "language_code": "en",
+    "text": "Persons Who Assisted in Neutralizing the Consequences of the Chernobyl Disaster Law, 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000394,
+    "language_code": "ar",
+    "text": "قانون المساعدين في تحييد نتائج كارثة تشيرنوبيل، 2001",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000095,
+    "language_code": "ru",
+    "text": "Закон об исполнении иностранных судебных решений, 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000095,
+    "language_code": "en",
+    "text": "Enforcement of Foreign Judgments Law, 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000095,
+    "language_code": "ar",
+    "text": "قانون تنفيذ الأحكام الأجنبية، 1958",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000436,
+    "language_code": "ru",
+    "text": "Закон о гражданских правонарушениях (ответственность государства), 1952",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000436,
+    "language_code": "en",
+    "text": "Civil Wrongs (Liability of the State) Law, 1952",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2000436,
+    "language_code": "ar",
+    "text": "قانون الأضرار المدنية (مسؤولية الدولة)، 1952",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2012974,
+    "language_code": "ru",
+    "text": "Закон об экономической эффективности (поправки к законодательству для достижения бюджетных целей на бюджетные годы 2017 и 2018), 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2012974,
+    "language_code": "en",
+    "text": "Economic Efficiency (Legislative Amendments for Achieving the Budget Targets for the 2017 and 2018 Budget Years) Law, 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2012974,
+    "language_code": "ar",
+    "text": "قانون النجاعة الاقتصادية (تعديلات تشريعية لتحقيق أهداف الميزانية لسنتي 2017 و2018)، 2016",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001129,
+    "language_code": "ru",
+    "text": "Закон о корзине абсорбции, 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001129,
+    "language_code": "en",
+    "text": "Absorption Basket Law, 1994",
+    "model_version": "manual-v1"
+  },
+  {
+    "knesset_israel_law_id": 2001129,
+    "language_code": "ar",
+    "text": "قانون سلة الاستيعاب، 1994",
+    "model_version": "manual-v1"
   }
 ]

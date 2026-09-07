@@ -745,4 +745,10 @@
   <data name="Laws_Topic" xml:space="preserve"><value>Тема</value></data>
   <data name="Laws_AllTopics" xml:space="preserve"><value>Все темы</value></data>
   <data name="Laws_TopicSource" xml:space="preserve"><value>Темы — по рубрикатору Кнессета.</value></data>
+  <data name="Bill_AmendsLaw" xml:space="preserve"><value>Правит закон</value></data>
+  <data name="Bill_AmendsLawHint" xml:space="preserve"><value>Определено по названию законопроекта — Кнессет такой связи не публикует.</value></data>
+  <data name="Notif_SubTopics" xml:space="preserve"><value>Темы</value></data>
+  <data name="Notif_AddTopic" xml:space="preserve"><value>Добавить</value></data>
+  <data name="Notif_TopicHint" xml:space="preserve"><value>Тема берётся у закона, который правит законопроект. Законопроекты, которые не правят действующий закон, под тематическую подписку не попадают.</value></data>
+  <data name="Feed_BecauseTopic" xml:space="preserve"><value>По теме «{0}»</value></data>
 </root>

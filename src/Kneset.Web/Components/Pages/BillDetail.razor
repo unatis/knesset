@@ -168,12 +168,34 @@ else
                         <span>@CommitteeName(_bill.Committee)</span>
                     </div>
                 }
+                @if (_law is not null)
+                {
+                    @* Связь выведена из названия, не пришла из Кнессета —
+                       об этом прямо сказано в подсказке. *@
+                    <div class="kt-meta-item">
+                        <span title="@L["Bill_AmendsLawHint"]">@L["Bill_AmendsLaw"]</span>
+                        <a href="/laws/@_law.Id" dir="@(_lawTitle is null ? "rtl" : null)"
+                           lang="@(_lawTitle is null ? "he" : null)">@(_lawTitle ?? _law.Name)</a>
+                    </div>
+                }
                 <div class="kt-meta-item">
                     <span>@L["Source"]</span>
                     <a href="https://main.knesset.gov.il/Activity/Legislation/Laws/Pages/LawBill.aspx?t=lawsuggestionssearch&lawitemid=@_bill.KnessetBillId"
                        target="_blank" rel="noopener">@L["OpenAtKnesset"]</a>
                 </div>
             </div>
+
+            @if (_topics.Count > 0)
+            {
+                @* Темы у законопроекта не свои: они у закона, который он правит.
+                   Поэтому и ведут в отбор законопроектов по этой теме. *@
+                <div class="kt-law-topics mb-3">
+                    @foreach (var t in _topics)
+                    {
+                        <a class="kt-law-topic" href="/bills?topic=@t.Id">@t.Name</a>
+                    }
+                </div>
+            }
 
             @if (!string.IsNullOrWhiteSpace(_bill.SummaryLaw))
             {
@@ -350,6 +372,11 @@ else
     }
 
     private Bill? _bill;
+    private IsraelLaw? _law;
+    private string? _lawTitle;
+    private List<TopicLink> _topics = [];
+
+    private sealed record TopicLink(int Id, string Name);
 
     /// <summary>Текущий созыв — по нему бейдж отличает живой закон от прекратившегося.</summary>
     private int? _currentKnesset;
@@ -418,6 +445,32 @@ else
             .Include(b => b.Committee)
             .Include(b => b.Titles)
             .FirstOrDefaultAsync(b => b.Id == Id);
+
+        if (_bill is { IsraelLawId: { } lawId })
+        {
+            // Закон, который правит законопроект, и его темы — отдельными
+            // запросами: связь выведена нами, и путать её с данными Кнессета
+            // не стоит даже в структуре кода.
+            _law = await db.IsraelLaws.AsNoTracking()
+                .FirstOrDefaultAsync(l => l.Id == lawId);
+
+            var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            if (lang != "he")
+            {
+                _lawTitle = await db.IsraelLawTitles.AsNoTracking()
+                    .Where(t => t.IsraelLawId == lawId && t.LanguageCode == lang)
+                    .Select(t => t.Text)
+                    .FirstOrDefaultAsync();
+            }
+
+            _topics = (await db.LawTopics.AsNoTracking()
+                    .Where(t => t.IsraelLawId == lawId)
+                    .Select(t => new { t.TopicId, t.NameHe })
+                    .ToListAsync())
+                .Select(t => new TopicLink(t.TopicId, TopicNaming.Localized(L, t.TopicId, t.NameHe)))
+                .OrderBy(t => t.Name, StringComparer.CurrentCulture)
+                .ToList();
+        }
 
         if (_bill is not null)
         {

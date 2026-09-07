@@ -745,4 +745,10 @@
   <data name="Laws_Topic" xml:space="preserve"><value>נושא</value></data>
   <data name="Laws_AllTopics" xml:space="preserve"><value>כל הנושאים</value></data>
   <data name="Laws_TopicSource" xml:space="preserve"><value>הנושאים לפי סיווג הכנסת.</value></data>
+  <data name="Bill_AmendsLaw" xml:space="preserve"><value>מתקן את החוק</value></data>
+  <data name="Bill_AmendsLawHint" xml:space="preserve"><value>נגזר משם הצעת החוק — הכנסת אינה מפרסמת קישור כזה.</value></data>
+  <data name="Notif_SubTopics" xml:space="preserve"><value>נושאים</value></data>
+  <data name="Notif_AddTopic" xml:space="preserve"><value>הוסף</value></data>
+  <data name="Notif_TopicHint" xml:space="preserve"><value>הנושא נלקח מהחוק שהצעת החוק מתקנת. הצעות חוק שאינן מתקנות חוק קיים אינן נכללות במעקב לפי נושא.</value></data>
+  <data name="Feed_BecauseTopic" xml:space="preserve"><value>בנושא «{0}»</value></data>
 </root>

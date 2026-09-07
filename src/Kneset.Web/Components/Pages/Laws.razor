@@ -199,7 +199,7 @@ else
         var byLaw = topics
             .GroupBy(t => t.IsraelLawId)
             .ToDictionary(g => g.Key,
-                          g => g.Select(t => TopicName(t.TopicId, t.NameHe))
+                          g => g.Select(t => TopicNaming.Localized(L, t.TopicId, t.NameHe))
                                 .OrderBy(x => x, StringComparer.CurrentCulture)
                                 .ToList());
 
@@ -224,15 +224,6 @@ else
         _debounce.Start();
     }
 
-    /// <summary>
-    /// Название темы: перевод из ресурсов по идентификатору рубрикатора,
-    /// иврит из источника — если темы в ресурсах ещё нет.
-    /// </summary>
-    private string TopicName(int topicId, string nameHe)
-    {
-        var value = L[$"LawTopic_{topicId}"];
-        return value.ResourceNotFound ? nameHe : value.Value;
-    }
 
     /// <summary>
     /// Справочник для селекта — только темы, которые действительно есть
@@ -247,7 +238,7 @@ else
 
         _topics = raw
             .GroupBy(t => t.TopicId)
-            .Select(g => new TopicOption(g.Key, TopicName(g.Key, g.First().NameHe)))
+            .Select(g => new TopicOption(g.Key, TopicNaming.Localized(L, g.Key, g.First().NameHe)))
             .OrderBy(t => t.Name, StringComparer.CurrentCulture)
             .ToList();
     }

@@ -52,6 +52,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Bill>(b =>
         {
+            // Связь с действующим законом выведена нами, не пришла из Кнессета:
+            // при удалении закона гасим ссылку, а не законопроект.
+            b.HasOne(x => x.IsraelLaw).WithMany()
+             .HasForeignKey(x => x.IsraelLawId).OnDelete(DeleteBehavior.SetNull);
+            b.Property(x => x.LawMatch).HasMaxLength(16);
             b.HasIndex(x => x.KnessetBillId).IsUnique();
             b.HasIndex(x => x.KnessetNum);
             b.HasIndex(x => x.LastUpdatedDate);

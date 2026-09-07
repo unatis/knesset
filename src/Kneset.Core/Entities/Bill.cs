@@ -60,6 +60,20 @@ public class Bill
     /// <summary>Краткое описание закона (если есть в источнике).</summary>
     public string? SummaryLaw { get; set; }
 
+    /// <summary>
+    /// Действующий закон, который правит законопроект, — если его удалось
+    /// определить. Кнессет такой связи не публикует: LawBinding связывает
+    /// закон с уже принятым актом, а законопроект в работе актом ещё не стал.
+    /// Поэтому связь выведена из названия (см. BillLawMatcher) и помечена
+    /// в <see cref="LawMatch"/>, чтобы её нигде не выдавали за данные Кнессета.
+    /// </summary>
+    public int? IsraelLawId { get; set; }
+
+    public IsraelLaw? IsraelLaw { get; set; }
+
+    /// <summary>Как определён закон: null — не определён, "name-v1" — по названию.</summary>
+    public string? LawMatch { get; set; }
+
     public List<BillInitiator> Initiators { get; set; } = [];
 
     public List<BillSession> Sessions { get; set; } = [];

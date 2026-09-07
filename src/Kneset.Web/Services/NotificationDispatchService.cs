@@ -89,6 +89,26 @@ public class NotificationDispatchService(
             .Select(s => new { s.UserId, s.Keyword })
             .ToListAsync(ct);
 
+        // Подписки на тему. Тема у законопроекта не своя: она берётся у закона,
+        // который он правит, и потому есть не у всех — законопроект, который
+        // ничего не правит, под тематическую подписку не попадёт вовсе.
+        var topicSubs = await db.NotificationSubscriptions.AsNoTracking()
+            .Where(s => s.Kind == SubscriptionKind.Topic && s.TopicId != null)
+            .Select(s => new { s.UserId, TopicId = s.TopicId!.Value })
+            .ToListAsync(ct);
+
+        var billTopics = topicSubs.Count == 0
+            ? []
+            : await db.Bills.AsNoTracking()
+                .Where(b => billIds.Contains(b.Id) && b.IsraelLawId != null)
+                .SelectMany(b => b.IsraelLaw!.Topics.Select(t => new
+                {
+                    BillId = b.Id,
+                    t.TopicId,
+                    t.NameHe,
+                }))
+                .ToListAsync(ct);
+
         var candidates = new List<Notification>();
 
         foreach (var bill in bills)
@@ -105,6 +125,16 @@ public class NotificationDispatchService(
                 if (byUser.ContainsKey(sub.UserId)) continue;
                 if (NotificationSubscription.MatchesKeyword(bill.Name, bill.NameRu, sub.Keyword!))
                     byUser[sub.UserId] = (SubscriptionKind.Keyword, sub.Keyword);
+            }
+
+            // Тема шире слова, но уже, чем «все новые», — и место в этой
+            // очереди у неё соответственное.
+            var topics = billTopics.Where(t => t.BillId == bill.Id).ToList();
+            foreach (var sub in topicSubs)
+            {
+                if (byUser.ContainsKey(sub.UserId)) continue;
+                var hit = topics.FirstOrDefault(t => t.TopicId == sub.TopicId);
+                if (hit is not null) byUser[sub.UserId] = (SubscriptionKind.Topic, hit.NameHe);
             }
 
             foreach (var userId in allNewUsers)

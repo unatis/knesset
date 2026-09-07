@@ -196,7 +196,7 @@ else
                 .ToListAsync();
 
             _topics = topics
-                .Select(t => new TopicLink(t.TopicId, TopicName(t.TopicId, t.NameHe)))
+                .Select(t => new TopicLink(t.TopicId, TopicNaming.Localized(L, t.TopicId, t.NameHe)))
                 .OrderBy(t => t.Name, StringComparer.CurrentCulture)
                 .ToList();
 
@@ -219,13 +219,4 @@ else
         _loading = false;
     }
 
-    /// <summary>
-    /// Название темы: перевод из ресурсов по идентификатору рубрикатора,
-    /// иврит из источника — если темы в ресурсах ещё нет.
-    /// </summary>
-    private string TopicName(int topicId, string nameHe)
-    {
-        var value = L[$"LawTopic_{topicId}"];
-        return value.ResourceNotFound ? nameHe : value.Value;
-    }
 }
