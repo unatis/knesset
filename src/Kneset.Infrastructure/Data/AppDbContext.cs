@@ -38,6 +38,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<UiTranslation> UiTranslations => Set<UiTranslation>();
     public DbSet<IsraelLaw> IsraelLaws => Set<IsraelLaw>();
+    public DbSet<IsraelLawTitle> IsraelLawTitles => Set<IsraelLawTitle>();
     public DbSet<LawAct> LawActs => Set<LawAct>();
     public DbSet<LawAmendment> LawAmendments => Set<LawAmendment>();
     public DbSet<NotificationSubscription> NotificationSubscriptions => Set<NotificationSubscription>();
@@ -144,6 +145,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             t.Property(x => x.SourceName).HasMaxLength(2000);
             t.HasOne(x => x.Bill).WithMany(b => b.Titles)
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<IsraelLawTitle>(t =>
+        {
+            // Один перевод на язык. Иврит здесь не хранится — он в IsraelLaw.Name.
+            t.HasIndex(x => new { x.IsraelLawId, x.LanguageCode }).IsUnique();
+            t.Property(x => x.LanguageCode).HasMaxLength(8);
+            t.Property(x => x.Text).HasMaxLength(2000);
+            t.Property(x => x.SourceName).HasMaxLength(2000);
+            t.HasOne(x => x.IsraelLaw).WithMany(l => l.Titles)
+             .HasForeignKey(x => x.IsraelLawId).OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Committee>(c =>

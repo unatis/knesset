@@ -32,4 +32,7 @@ public class IsraelLaw
 
     /// <summary>Акты, которые этот закон меняли или которыми он был создан.</summary>
     public List<LawAmendment> Amendments { get; set; } = [];
+
+    /// <summary>Переводы названия. Оригинал — в Name.</summary>
+    public List<IsraelLawTitle> Titles { get; set; } = [];
 }
