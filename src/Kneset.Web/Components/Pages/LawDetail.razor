@@ -58,6 +58,31 @@ else
         </div>
     }
 
+    @* Текст закона. Единственное место, где он у нас есть, — ссылка:
+       в открытых данных Кнессета сводного текста нет вовсе, а собирать его
+       самим из оригинала и всех поправок значит делать правовую
+       консолидацию, то есть другой продукт. Ведём туда, куда ведёт
+       сам Кнессет. *@
+    <div class="kt-law-links mb-3">
+        @if (_law.OpenBookUrl is { Length: > 0 } book)
+        {
+            <a class="btn btn-outline-primary btn-sm" href="@book"
+               target="_blank" rel="noopener">@L["Laws_FullText"]</a>
+        }
+        @if (_law.KolZchutUrl is { Length: > 0 } zchut)
+        {
+            <a class="btn btn-outline-secondary btn-sm" href="@zchut"
+               target="_blank" rel="noopener">@L["Laws_PlainLanguage"]</a>
+        }
+        <a class="btn btn-outline-secondary btn-sm"
+           href="https://main.knesset.gov.il/apps/legislation/main/laws/@_law.KnessetIsraelLawId"
+           target="_blank" rel="noopener">@L["Laws_AtKnesset"]</a>
+    </div>
+    @if (_law.OpenBookUrl is { Length: > 0 })
+    {
+        <p class="text-muted small" style="max-width:60ch">@L["Laws_FullTextSource"]</p>
+    }
+
     <table class="table" style="max-width:640px">
         <tbody>
             @if (_law.ValidityDesc is not null)
@@ -72,6 +97,13 @@ else
                 <tr>
                     <th>@L["Laws_InForceSince"]</th>
                     <td>@_law.ValidityStartDate.Value.ToString("dd.MM.yyyy")</td>
+                </tr>
+            }
+            @if (_law.Ministries is { Length: > 0 })
+            {
+                <tr>
+                    <th>@L["Laws_Ministries"]</th>
+                    <td dir="rtl" lang="he" style="text-align:start">@_law.Ministries</td>
                 </tr>
             }
             @if (_law.PublicationDate is not null)

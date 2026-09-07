@@ -751,4 +751,9 @@
   <data name="Notif_AddTopic" xml:space="preserve"><value>Добавить</value></data>
   <data name="Notif_TopicHint" xml:space="preserve"><value>Тема берётся у закона, который правит законопроект. Законопроекты, которые не правят действующий закон, под тематическую подписку не попадают.</value></data>
   <data name="Feed_BecauseTopic" xml:space="preserve"><value>По теме «{0}»</value></data>
+  <data name="Laws_FullText" xml:space="preserve"><value>Полный текст закона</value></data>
+  <data name="Laws_FullTextSource" xml:space="preserve"><value>«Открытая книга законов» — сводная действующая редакция. Кнессет не публикует текст законов в открытых данных, поэтому ведём на источник, который он указывает сам.</value></data>
+  <data name="Laws_PlainLanguage" xml:space="preserve"><value>Простыми словами</value></data>
+  <data name="Laws_AtKnesset" xml:space="preserve"><value>Страница закона в Кнессете</value></data>
+  <data name="Laws_Ministries" xml:space="preserve"><value>Ответственные министерства</value></data>
 </root>

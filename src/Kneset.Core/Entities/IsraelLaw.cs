@@ -33,6 +33,21 @@ public class IsraelLaw
     /// <summary>Акты, которые этот закон меняли или которыми он был создан.</summary>
     public List<LawAmendment> Amendments { get; set; } = [];
 
+    /// <summary>
+    /// Сводный действующий текст закона — «ספר החוקים הפתוח» в Викитеке.
+    /// Ссылку даёт сайт Кнессета; в открытых данных текста нет вовсе.
+    /// </summary>
+    public string? OpenBookUrl { get; set; }
+
+    /// <summary>Объяснение простыми словами на «כל זכות», если оно есть.</summary>
+    public string? KolZchutUrl { get; set; }
+
+    /// <summary>Ответственные министерства — строкой, как отдаёт сайт.</summary>
+    public string? Ministries { get; set; }
+
+    /// <summary>Когда последний раз спрашивали сайт Кнессета об этом законе.</summary>
+    public DateTime? SiteFetchedAt { get; set; }
+
     /// <summary>Темы по рубрикатору Кнессета. Своих не придумываем.</summary>
     public List<LawTopic> Topics { get; set; } = [];
 

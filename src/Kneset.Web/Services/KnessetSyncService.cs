@@ -76,6 +76,7 @@ public class KnessetSyncService(
         await RunStepAsync("LawAmendments", SyncLawAmendmentsAsync, ct);
         await RunStepAsync("LawTopics", SyncLawTopicsAsync, ct);
         await RunStepAsync("BillLawLinks", LinkBillsToLawsAsync, ct);
+        await RunStepAsync("LawSiteLinks", SyncLawSiteLinksAsync, ct);
 
         // Строго последним: подписка на депутата опирается на BillInitiators,
         // которые заполняются шагом выше. RunStepAsync передаёт сюда время
@@ -906,6 +907,73 @@ public class KnessetSyncService(
         }
 
         return total;
+    }
+
+    /// <summary>
+    /// Ссылки со страницы закона на сайте Кнессета: сводный текст
+    /// («ספר החוקים הפתוח») и объяснение простыми словами («כל זכות»).
+    ///
+    /// Единственное место, где мы берём текст закона, — и берём его ссылкой,
+    /// а не текстом: в открытых данных Кнессета сводного текста нет вовсе,
+    /// а собирать его самим из оригинала и всех поправок значит делать
+    /// правовую консолидацию, то есть другой продукт.
+    ///
+    /// Это апи сайта, а не выгрузка: частые запросы обрываются соединением.
+    /// Поэтому порция за прогон и пауза между запросами, а порядок —
+    /// сначала законы, которые правят живые законопроекты: их страницы
+    /// читатель откроет первыми.
+    /// </summary>
+    private async Task<int> SyncLawSiteLinksAsync(DateTime? since, CancellationToken ct)
+    {
+        const int PerRun = 150;
+        var stale = DateTime.UtcNow.AddDays(-90);
+
+        await using var readDb = await dbFactory.CreateDbContextAsync(ct);
+        var due = await readDb.IsraelLaws.AsNoTracking()
+            .Where(l => l.SiteFetchedAt == null || l.SiteFetchedAt < stale)
+            // Законы, на которые ссылаются законопроекты, — вперёд.
+            .OrderByDescending(l => readDb.Bills.Any(b => b.IsraelLawId == l.Id))
+            .ThenByDescending(l => l.ValidityStartDate)
+            .Take(PerRun)
+            .Select(l => new { l.Id, l.KnessetIsraelLawId })
+            .ToListAsync(ct);
+
+        if (due.Count == 0) return 0;
+
+        var found = 0;
+        foreach (var chunk in due.Chunk(25))
+        {
+            await using var db = await dbFactory.CreateDbContextAsync(ct);
+            var ids = chunk.Select(x => x.Id).ToList();
+            var laws = await db.IsraelLaws.Where(l => ids.Contains(l.Id)).ToListAsync(ct);
+
+            foreach (var row in chunk)
+            {
+                var info = await websiteClient.GetLawInfoAsync(row.KnessetIsraelLawId, ct);
+                var law = laws.First(l => l.Id == row.Id);
+
+                // Отметку ставим и на пустой ответ: иначе каждый прогон
+                // спрашивал бы сайт об одних и тех же законах.
+                law.SiteFetchedAt = DateTime.UtcNow;
+                if (info is not null)
+                {
+                    law.OpenBookUrl = info.OpenBookUrl;
+                    law.KolZchutUrl = info.KolZchutUrl;
+                    law.Ministries = info.Ministries;
+                    if (info.OpenBookUrl is not null) found++;
+                }
+
+                await Task.Delay(TimeSpan.FromMilliseconds(700), ct);
+            }
+
+            await db.SaveChangesAsync(ct);
+        }
+
+        logger.LogInformation(
+            "Ссылки на текст закона: спрошено {Asked}, текст нашёлся у {Found}",
+            due.Count, found);
+
+        return due.Count;
     }
 
     /// <summary>
