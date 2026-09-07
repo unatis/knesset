@@ -691,4 +691,64 @@
   <data name="Party_Source" xml:space="preserve"><value>Партийный слой не публикуется Кнессетом и ведётся вручную. Депутаты и мандаты — из API Кнессета.</value></data>
   <data name="Inf_Dissolved" xml:space="preserve"><value>Кнессет распущен</value></data>
   <data name="Inf_Dissolved_Hint" xml:space="preserve"><value>Стадия обещает влияние, но движения сейчас нет: Кнессет распущен, и до созыва нового комиссии не заседают и чтений не проводится. Вернуть законопроект к работе новый созыв может через преемственность.</value></data>
+  <data name="LawTopic_1" xml:space="preserve"><value>Гражданство, статус жителя и въезд в Израиль</value></data>
+  <data name="LawTopic_2" xml:space="preserve"><value>Выборы</value></data>
+  <data name="LawTopic_3" xml:space="preserve"><value>Оборона</value></data>
+  <data name="LawTopic_4" xml:space="preserve"><value>Внутренняя безопасность</value></data>
+  <data name="LawTopic_5" xml:space="preserve"><value>Строительство и жильё</value></data>
+  <data name="LawTopic_6" xml:space="preserve"><value>Банки и финансы</value></data>
+  <data name="LawTopic_7" xml:space="preserve"><value>Здравоохранение</value></data>
+  <data name="LawTopic_9" xml:space="preserve"><value>Религии</value></data>
+  <data name="LawTopic_10" xml:space="preserve"><value>Охрана окружающей среды</value></data>
+  <data name="LawTopic_11" xml:space="preserve"><value>Внешняя политика</value></data>
+  <data name="LawTopic_12" xml:space="preserve"><value>Законы об урегулировании</value></data>
+  <data name="LawTopic_13" xml:space="preserve"><value>Основные законы</value></data>
+  <data name="LawTopic_14" xml:space="preserve"><value>Образование</value></data>
+  <data name="LawTopic_15" xml:space="preserve"><value>Сельское хозяйство</value></data>
+  <data name="LawTopic_16" xml:space="preserve"><value>Кнессет</value></data>
+  <data name="LawTopic_17" xml:space="preserve"><value>Наука</value></data>
+  <data name="LawTopic_18" xml:space="preserve"><value>Праздники и памятные дни</value></data>
+  <data name="LawTopic_19" xml:space="preserve"><value>Налогообложение</value></data>
+  <data name="LawTopic_20" xml:space="preserve"><value>Торговля и промышленность</value></data>
+  <data name="LawTopic_21" xml:space="preserve"><value>Личный статус</value></data>
+  <data name="LawTopic_22" xml:space="preserve"><value>Медицинские профессии</value></data>
+  <data name="LawTopic_23" xml:space="preserve"><value>Земля и недвижимость</value></data>
+  <data name="LawTopic_24" xml:space="preserve"><value>Гражданское право</value></data>
+  <data name="LawTopic_25" xml:space="preserve"><value>Административное право</value></data>
+  <data name="LawTopic_26" xml:space="preserve"><value>Уголовное право</value></data>
+  <data name="LawTopic_27" xml:space="preserve"><value>Управление имуществом</value></data>
+  <data name="LawTopic_28" xml:space="preserve"><value>Спорт</value></data>
+  <data name="LawTopic_29" xml:space="preserve"><value>Судоходство</value></data>
+  <data name="LawTopic_30" xml:space="preserve"><value>Судебные инстанции</value></data>
+  <data name="LawTopic_31" xml:space="preserve"><value>Развитие и инвестиции</value></data>
+  <data name="LawTopic_32" xml:space="preserve"><value>Пенсии, страхование и рынок капитала</value></data>
+  <data name="LawTopic_33" xml:space="preserve"><value>Защита потребителя</value></data>
+  <data name="LawTopic_34" xml:space="preserve"><value>Приём иммигрантов</value></data>
+  <data name="LawTopic_35" xml:space="preserve"><value>Доказательства и процессуальный порядок</value></data>
+  <data name="LawTopic_36" xml:space="preserve"><value>Главы государства</value></data>
+  <data name="LawTopic_37" xml:space="preserve"><value>Социальное обеспечение</value></data>
+  <data name="LawTopic_38" xml:space="preserve"><value>Местные власти</value></data>
+  <data name="LawTopic_39" xml:space="preserve"><value>Государственная служба</value></data>
+  <data name="LawTopic_40" xml:space="preserve"><value>Корпорации</value></data>
+  <data name="LawTopic_41" xml:space="preserve"><value>Транспорт и безопасность на дорогах</value></data>
+  <data name="LawTopic_42" xml:space="preserve"><value>Туризм</value></data>
+  <data name="LawTopic_43" xml:space="preserve"><value>Планирование и застройка</value></data>
+  <data name="LawTopic_44" xml:space="preserve"><value>Авиация</value></data>
+  <data name="LawTopic_45" xml:space="preserve"><value>Занятость и труд</value></data>
+  <data name="LawTopic_46" xml:space="preserve"><value>Бюджет</value></data>
+  <data name="LawTopic_48" xml:space="preserve"><value>Связь</value></data>
+  <data name="LawTopic_49" xml:space="preserve"><value>Культура</value></data>
+  <data name="LawTopic_50" xml:space="preserve"><value>Инфраструктура</value></data>
+  <data name="LawTopic_51" xml:space="preserve"><value>Государственные займы</value></data>
+  <data name="LawTopic_52" xml:space="preserve"><value>Технологии и кибербезопасность</value></data>
+  <data name="LawTopic_53" xml:space="preserve"><value>Чрезвычайное положение</value></data>
+  <data name="Laws_Topic" xml:space="preserve"><value>Тема</value></data>
+  <data name="Laws_AllTopics" xml:space="preserve"><value>Все темы</value></data>
+  <data name="Laws_TopicSource" xml:space="preserve"><value>Темы — по рубрикатору Кнессета.</value></data>
+  <data name="Bill_AmendsLaw" xml:space="preserve"><value>Правит закон</value></data>
+  <data name="Bill_AmendsLawHint" xml:space="preserve"><value>Определено по названию законопроекта — Кнессет такой связи не публикует.</value></data>
+  <data name="Notif_SubTopics" xml:space="preserve"><value>Темы</value></data>
+  <data name="Notif_AddTopic" xml:space="preserve"><value>Добавить</value></data>
+  <data name="Notif_TopicHint" xml:space="preserve"><value>Тема берётся у закона, который правит законопроект. Законопроекты, которые не правят действующий закон, под тематическую подписку не попадают.</value></data>
+  <data name="Feed_BecauseTopic" xml:space="preserve"><value>По теме «{0}»</value></data>
 </root>

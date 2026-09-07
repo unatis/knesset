@@ -691,4 +691,64 @@
   <data name="Party_Source" xml:space="preserve"><value>שכבת המפלגות אינה מתפרסמת על ידי הכנסת ומתוחזקת ידנית. חברי הכנסת והמנדטים — מה-API של הכנסת.</value></data>
   <data name="Inf_Dissolved" xml:space="preserve"><value>הכנסת התפזרה</value></data>
   <data name="Inf_Dissolved_Hint" xml:space="preserve"><value>השלב מבטיח אפשרות להשפיע, אך כרגע אין תנועה: הכנסת התפזרה, ועד כינונה של כנסת חדשה הוועדות אינן מתכנסות ואין קריאות. כנסת חדשה יכולה להחזיר את הצעת החוק באמצעות דין הרציפות.</value></data>
+  <data name="LawTopic_1" xml:space="preserve"><value>אזרחות, תושבות וכניסה לישראל</value></data>
+  <data name="LawTopic_2" xml:space="preserve"><value>בחירות</value></data>
+  <data name="LawTopic_3" xml:space="preserve"><value>ביטחון</value></data>
+  <data name="LawTopic_4" xml:space="preserve"><value>ביטחון הפנים</value></data>
+  <data name="LawTopic_5" xml:space="preserve"><value>בינוי ושיכון</value></data>
+  <data name="LawTopic_6" xml:space="preserve"><value>בנקאות וכספים</value></data>
+  <data name="LawTopic_7" xml:space="preserve"><value>בריאות</value></data>
+  <data name="LawTopic_9" xml:space="preserve"><value>דתות</value></data>
+  <data name="LawTopic_10" xml:space="preserve"><value>הגנת הסביבה</value></data>
+  <data name="LawTopic_11" xml:space="preserve"><value>חוץ</value></data>
+  <data name="LawTopic_12" xml:space="preserve"><value>חוקי הסדרים</value></data>
+  <data name="LawTopic_13" xml:space="preserve"><value>חוק-יסוד</value></data>
+  <data name="LawTopic_14" xml:space="preserve"><value>חינוך</value></data>
+  <data name="LawTopic_15" xml:space="preserve"><value>חקלאות</value></data>
+  <data name="LawTopic_16" xml:space="preserve"><value>כנסת</value></data>
+  <data name="LawTopic_17" xml:space="preserve"><value>מדע</value></data>
+  <data name="LawTopic_18" xml:space="preserve"><value>מועדים</value></data>
+  <data name="LawTopic_19" xml:space="preserve"><value>מיסוי</value></data>
+  <data name="LawTopic_20" xml:space="preserve"><value>מסחר ותעשייה</value></data>
+  <data name="LawTopic_21" xml:space="preserve"><value>מעמד אישי</value></data>
+  <data name="LawTopic_22" xml:space="preserve"><value>מקצועות הבריאות</value></data>
+  <data name="LawTopic_23" xml:space="preserve"><value>מקרקעין</value></data>
+  <data name="LawTopic_24" xml:space="preserve"><value>משפט אזרחי</value></data>
+  <data name="LawTopic_25" xml:space="preserve"><value>משפט מינהלי</value></data>
+  <data name="LawTopic_26" xml:space="preserve"><value>משפט פלילי</value></data>
+  <data name="LawTopic_27" xml:space="preserve"><value>ניהול נכסים</value></data>
+  <data name="LawTopic_28" xml:space="preserve"><value>ספורט</value></data>
+  <data name="LawTopic_29" xml:space="preserve"><value>ספנות</value></data>
+  <data name="LawTopic_30" xml:space="preserve"><value>ערכאות שיפוטיות</value></data>
+  <data name="LawTopic_31" xml:space="preserve"><value>פיתוח והשקעות</value></data>
+  <data name="LawTopic_32" xml:space="preserve"><value>פנסיה, ביטוח ושוק ההון</value></data>
+  <data name="LawTopic_33" xml:space="preserve"><value>צרכנות</value></data>
+  <data name="LawTopic_34" xml:space="preserve"><value>קליטת עלייה</value></data>
+  <data name="LawTopic_35" xml:space="preserve"><value>ראיות וסדרי דין</value></data>
+  <data name="LawTopic_36" xml:space="preserve"><value>ראשי המדינה</value></data>
+  <data name="LawTopic_37" xml:space="preserve"><value>רווחה</value></data>
+  <data name="LawTopic_38" xml:space="preserve"><value>רשויות מקומיות</value></data>
+  <data name="LawTopic_39" xml:space="preserve"><value>שירות הציבור</value></data>
+  <data name="LawTopic_40" xml:space="preserve"><value>תאגידים</value></data>
+  <data name="LawTopic_41" xml:space="preserve"><value>תחבורה ובטיחות בדרכים</value></data>
+  <data name="LawTopic_42" xml:space="preserve"><value>תיירות</value></data>
+  <data name="LawTopic_43" xml:space="preserve"><value>תכנון ובנייה</value></data>
+  <data name="LawTopic_44" xml:space="preserve"><value>תעופה</value></data>
+  <data name="LawTopic_45" xml:space="preserve"><value>תעסוקה</value></data>
+  <data name="LawTopic_46" xml:space="preserve"><value>תקציב</value></data>
+  <data name="LawTopic_48" xml:space="preserve"><value>תקשורת</value></data>
+  <data name="LawTopic_49" xml:space="preserve"><value>תרבות</value></data>
+  <data name="LawTopic_50" xml:space="preserve"><value>תשתיות</value></data>
+  <data name="LawTopic_51" xml:space="preserve"><value>מילווה למדינה</value></data>
+  <data name="LawTopic_52" xml:space="preserve"><value>טכנולוגיה וסייבר</value></data>
+  <data name="LawTopic_53" xml:space="preserve"><value>מצב חירום</value></data>
+  <data name="Laws_Topic" xml:space="preserve"><value>נושא</value></data>
+  <data name="Laws_AllTopics" xml:space="preserve"><value>כל הנושאים</value></data>
+  <data name="Laws_TopicSource" xml:space="preserve"><value>הנושאים לפי סיווג הכנסת.</value></data>
+  <data name="Bill_AmendsLaw" xml:space="preserve"><value>מתקן את החוק</value></data>
+  <data name="Bill_AmendsLawHint" xml:space="preserve"><value>נגזר משם הצעת החוק — הכנסת אינה מפרסמת קישור כזה.</value></data>
+  <data name="Notif_SubTopics" xml:space="preserve"><value>נושאים</value></data>
+  <data name="Notif_AddTopic" xml:space="preserve"><value>הוסף</value></data>
+  <data name="Notif_TopicHint" xml:space="preserve"><value>הנושא נלקח מהחוק שהצעת החוק מתקנת. הצעות חוק שאינן מתקנות חוק קיים אינן נכללות במעקב לפי נושא.</value></data>
+  <data name="Feed_BecauseTopic" xml:space="preserve"><value>בנושא «{0}»</value></data>
 </root>

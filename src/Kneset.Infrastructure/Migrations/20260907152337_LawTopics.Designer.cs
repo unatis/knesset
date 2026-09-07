@@ -3,6 +3,7 @@ using System;
 using Kneset.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kneset.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260907152337_LawTopics")]
+    partial class LawTopics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,9 +167,6 @@ namespace Kneset.Infrastructure.Migrations
                     b.Property<DateTime?>("FirstSessionAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("IsraelLawId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("KnessetBillId")
                         .HasColumnType("integer");
 
@@ -175,10 +175,6 @@ namespace Kneset.Infrastructure.Migrations
 
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LawMatch")
-                        .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -215,8 +211,6 @@ namespace Kneset.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CommitteeId");
-
-                    b.HasIndex("IsraelLawId");
 
                     b.HasIndex("KnessetBillId")
                         .IsUnique();
@@ -1142,9 +1136,6 @@ namespace Kneset.Infrastructure.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.Property<int?>("TopicId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -1508,14 +1499,7 @@ namespace Kneset.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("CommitteeId");
 
-                    b.HasOne("Kneset.Core.Entities.IsraelLaw", "IsraelLaw")
-                        .WithMany()
-                        .HasForeignKey("IsraelLawId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("Committee");
-
-                    b.Navigation("IsraelLaw");
                 });
 
             modelBuilder.Entity("Kneset.Core.Entities.BillAnalysis", b =>

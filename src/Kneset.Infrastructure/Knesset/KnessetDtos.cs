@@ -62,6 +62,20 @@ public class KnsLawBinding
     public DateTime LastUpdatedDate { get; set; }
 }
 
+/// <summary>
+/// Тематическая рубрика закона (KNS_IsraelLawClassificiation — опечатка
+/// в самом наборе Кнессета). Рубрикатор ведёт Кнессет, у закона обычно
+/// две-три темы.
+/// </summary>
+public class KnsIsraelLawClassification
+{
+    public int LawClassificiationID { get; set; }
+    public int IsraelLawID { get; set; }
+    public int ClassificiationID { get; set; }
+    public string? ClassificiationDesc { get; set; }
+    public DateTime LastUpdatedDate { get; set; }
+}
+
 public class KnsPerson
 {
     public int PersonID { get; set; }

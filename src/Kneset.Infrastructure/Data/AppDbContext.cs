@@ -39,6 +39,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<UiTranslation> UiTranslations => Set<UiTranslation>();
     public DbSet<IsraelLaw> IsraelLaws => Set<IsraelLaw>();
     public DbSet<IsraelLawTitle> IsraelLawTitles => Set<IsraelLawTitle>();
+    public DbSet<LawTopic> LawTopics => Set<LawTopic>();
     public DbSet<LawAct> LawActs => Set<LawAct>();
     public DbSet<LawAmendment> LawAmendments => Set<LawAmendment>();
     public DbSet<NotificationSubscription> NotificationSubscriptions => Set<NotificationSubscription>();
@@ -51,6 +52,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Bill>(b =>
         {
+            // Связь с действующим законом выведена нами, не пришла из Кнессета:
+            // при удалении закона гасим ссылку, а не законопроект.
+            b.HasOne(x => x.IsraelLaw).WithMany()
+             .HasForeignKey(x => x.IsraelLawId).OnDelete(DeleteBehavior.SetNull);
+            b.Property(x => x.LawMatch).HasMaxLength(16);
             b.HasIndex(x => x.KnessetBillId).IsUnique();
             b.HasIndex(x => x.KnessetNum);
             b.HasIndex(x => x.LastUpdatedDate);
@@ -145,6 +151,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             t.Property(x => x.SourceName).HasMaxLength(2000);
             t.HasOne(x => x.Bill).WithMany(b => b.Titles)
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<LawTopic>(t =>
+        {
+            // Связка приходит из источника со своим ключом — по нему и upsert.
+            t.HasIndex(x => x.KnessetClassificationId).IsUnique();
+            t.HasIndex(x => x.TopicId);
+            t.Property(x => x.NameHe).HasMaxLength(200);
+            t.HasOne(x => x.IsraelLaw).WithMany(l => l.Topics)
+             .HasForeignKey(x => x.IsraelLawId).OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<IsraelLawTitle>(t =>

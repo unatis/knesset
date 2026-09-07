@@ -1136,6 +1136,54 @@ if (app.Environment.IsDevelopment())
         });
     });
 
+    // Рабочий список для переводов названий законов: сначала те законы,
+    // которые правят законопроекты из окна влияния.
+    app.MapGet("/dev/laws-to-translate", async (
+        string lang, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
+    {
+        int[] influenceStages = [108, 113, 150, 111, 114, 130, 141];
+        await using var db = await factory.CreateDbContextAsync(ct);
+
+        var descs = await db.Bills
+            .Where(b => b.StatusId != null && influenceStages.Contains(b.StatusId.Value))
+            .Select(b => b.StatusDesc)
+            .Distinct()
+            .ToListAsync(ct);
+
+        var rows = await db.Bills
+            .Where(b => descs.Contains(b.StatusDesc) && b.IsraelLawId != null)
+            .GroupBy(b => b.IsraelLawId!.Value)
+            .Select(g => new { lawId = g.Key, bills = g.Count() })
+            .ToListAsync(ct);
+
+        var ids = rows.Select(r => r.lawId).ToList();
+        var laws = await db.IsraelLaws.AsNoTracking()
+            .Where(l => ids.Contains(l.Id))
+            .Select(l => new
+            {
+                l.Id,
+                l.KnessetIsraelLawId,
+                l.Name,
+                translated = l.Titles.Any(t => t.LanguageCode == lang && t.SourceName == l.Name),
+            })
+            .ToListAsync(ct);
+
+        var byId = laws.ToDictionary(l => l.Id);
+        var result = rows
+            .Where(r => byId.ContainsKey(r.lawId))
+            .Select(r => new
+            {
+                id = byId[r.lawId].KnessetIsraelLawId,
+                name = byId[r.lawId].Name,
+                bills = r.bills,
+                translated = byId[r.lawId].translated,
+            })
+            .OrderByDescending(r => r.bills)
+            .ToList();
+
+        return Results.Json(new { laws = result.Count, missing = result.Count(r => !r.translated), rows = result });
+    });
+
     app.MapGet("/dev/untranslated", async (
         string lang, int take, IDbContextFactory<AppDbContext> factory, CancellationToken ct) =>
     {

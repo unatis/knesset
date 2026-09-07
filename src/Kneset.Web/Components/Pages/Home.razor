@@ -638,6 +638,7 @@
         return reason.Kind switch
         {
             SubscriptionKind.Keyword => string.Format(L["Feed_BecauseTheme"], reason.Detail),
+            SubscriptionKind.Topic => string.Format(L["Feed_BecauseTopic"], reason.Detail),
             SubscriptionKind.Person => string.Format(L["Feed_BecausePerson"], reason.Detail),
             SubscriptionKind.Bill => L["Feed_BecauseBill"],
             _ => null

@@ -56,6 +56,18 @@
             </div>
         </details>
     </div>
+    <div class="col-md-3">
+        @* Тема у законопроекта не своя — она у закона, который он правит.
+           Поэтому список тем берём из рубрикатора Кнессета. *@
+        <select class="form-select" value="@_topic" @onchange="OnTopicChanged"
+                aria-label="@L["Laws_Topic"]">
+            <option value="">@L["Laws_AllTopics"]</option>
+            @foreach (var t in _topics)
+            {
+                <option value="@t.Id">@t.Name</option>
+            }
+        </select>
+    </div>
     <div class="col-md-2">
         <select class="form-select" value="@_knessetFilter" @onchange="OnKnessetChanged">
             <option value="">@L["Bills_AllKnessets"]</option>
@@ -231,6 +243,11 @@ else
     /// <summary>Сколько законопроектов отсечено именно фильтром стадий.</summary>
     private int _hiddenByStages;
     private string _knessetFilter = "";
+    private string _topic = "";
+    private List<TopicOption> _topics = [];
+    private bool _topicsLoaded;
+
+    private sealed record TopicOption(int Id, string Name);
     /// <summary>Отмеченные фракции. По умолчанию отмечены все — отбора нет.</summary>
     private HashSet<int> _factionIds = [];
     private string _personFilter = "";
@@ -284,12 +301,16 @@ else
     [SupplyParameterFromQuery(Name = "personId")]
     private int? PersonQuery { get; set; }
 
+    [SupplyParameterFromQuery(Name = "topic")]
+    private int? TopicQuery { get; set; }
+
     [SupplyParameterFromQuery(Name = "q")]
     private string? Query { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         if (!string.IsNullOrWhiteSpace(Query)) _search = Query;
+        if (TopicQuery is { } topic) _topic = topic.ToString();
         if (PersonQuery is { } pid) _personFilter = pid.ToString();
 
         await using var db = await DbFactory.CreateDbContextAsync();
@@ -337,6 +358,12 @@ else
     private async Task LoadAsync()
     {
         await using var db = await DbFactory.CreateDbContextAsync();
+
+        if (!_topicsLoaded)
+        {
+            await LoadTopicsAsync(db);
+            _topicsLoaded = true;
+        }
         var query = db.Bills.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(_search))
@@ -374,6 +401,13 @@ else
 
         if (int.TryParse(_knessetFilter, out var knesset))
             query = query.Where(b => b.KnessetNum == knesset);
+
+        // Тема — через закон, который правит законопроект. Законопроекты,
+        // которые не правят действующий закон, под отбор по теме не попадают:
+        // темы у них нет, и делать вид, что есть, значило бы гадать.
+        if (int.TryParse(_topic, out var topicId))
+            query = query.Where(b => b.IsraelLaw != null
+                                     && b.IsraelLaw.Topics.Any(t => t.TopicId == topicId));
 
         // Язык интерфейса для подстановки перевода названия. Иврит — оригинал,
         // переводить нечего.
@@ -535,6 +569,31 @@ else
         "kt-win-late" => "Inf_Late",
         _ => "Inf_Frozen"
     };
+
+    private async Task OnTopicChanged(ChangeEventArgs e)
+    {
+        _topic = e.Value?.ToString() ?? "";
+        _page = 0;
+        await LoadAsync();
+    }
+
+    /// <summary>
+    /// Справочник тем — только те, что действительно есть у законов:
+    /// пустой пункт фильтра обещает результат, которого нет.
+    /// </summary>
+    private async Task LoadTopicsAsync(AppDbContext db)
+    {
+        var raw = await db.LawTopics.AsNoTracking()
+            .Select(t => new { t.TopicId, t.NameHe })
+            .Distinct()
+            .ToListAsync();
+
+        _topics = raw
+            .GroupBy(t => t.TopicId)
+            .Select(g => new TopicOption(g.Key, TopicNaming.Localized(L, g.Key, g.First().NameHe)))
+            .OrderBy(t => t.Name, StringComparer.CurrentCulture)
+            .ToList();
+    }
 
     private async Task OnKnessetChanged(ChangeEventArgs e)
     {

@@ -41,6 +41,18 @@ else
         }
     </div>
 
+    @if (_topics.Count > 0)
+    {
+        @* Рубрикатор Кнессета, а не наша классификация: у темы есть источник. *@
+        <div class="kt-law-topics mb-3">
+            @foreach (var t in _topics)
+            {
+                <a class="kt-law-topic" href="/laws?topic=@t.Id">@t.Name</a>
+            }
+            <small class="text-muted d-block mt-1">@L["Laws_TopicSource"]</small>
+        </div>
+    }
+
     <table class="table" style="max-width:640px">
         <tbody>
             @if (_law.ValidityDesc is not null)
@@ -156,6 +168,9 @@ else
     private int _directCount;
     private int _unnamedCount;
     private string? _translated;
+    private List<TopicLink> _topics = [];
+
+    private sealed record TopicLink(int Id, string Name);
     private bool _loading = true;
 
     protected override async Task OnParametersSetAsync()
@@ -175,6 +190,16 @@ else
                     .FirstOrDefaultAsync();
             }
 
+            var topics = await db.LawTopics.AsNoTracking()
+                .Where(t => t.IsraelLawId == Id)
+                .Select(t => new { t.TopicId, t.NameHe })
+                .ToListAsync();
+
+            _topics = topics
+                .Select(t => new TopicLink(t.TopicId, TopicNaming.Localized(L, t.TopicId, t.NameHe)))
+                .OrderBy(t => t.Name, StringComparer.CurrentCulture)
+                .ToList();
+
             _amendments = await db.LawAmendments.AsNoTracking()
                 .Where(a => a.IsraelLawId == Id)
                 // Косвенные наверх: ради них раздел и делался.
@@ -193,4 +218,5 @@ else
 
         _loading = false;
     }
+
 }

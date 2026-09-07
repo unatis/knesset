@@ -13,7 +13,17 @@ public enum SubscriptionKind
     Keyword = 3,
 
     /// <summary>Изменения стадии конкретного законопроекта.</summary>
-    Bill = 4
+    Bill = 4,
+
+    /// <summary>
+    /// Новые законопроекты по теме рубрикатора Кнессета.
+    ///
+    /// Тема у законопроекта не своя: она берётся у закона, который
+    /// законопроект правит, а сама связь выведена из названия
+    /// (см. BillLawMatcher). Значит, подписка на тему по определению
+    /// не покрывает законопроекты, которые ничего не правят.
+    /// </summary>
+    Topic = 5
 }
 
 /// <summary>
@@ -41,8 +51,11 @@ public class NotificationSubscription
     /// <summary>Слово для поиска по названию — для Kind = Keyword.</summary>
     public string? Keyword { get; set; }
 
+    /// <summary>Тема рубрикатора Кнессета — для Kind = Topic.</summary>
+    public int? TopicId { get; set; }
+
     /// <summary>
-    /// Нормализованная цель подписки: "", "person:123", "bill:45", "kw:חינוך".
+    /// Нормализованная цель подписки: "", "person:123", "bill:45", "kw:חינוך", "topic:19".
     /// Существует только ради уникального индекса (UserId, Kind, TargetKey).
     /// </summary>
     public string TargetKey { get; set; } = "";
@@ -65,13 +78,15 @@ public class NotificationSubscription
     }
 
     /// <summary>Собирает TargetKey — единственное место, где задаётся его формат.</summary>
-    public static string BuildTargetKey(SubscriptionKind kind, int? personId, int? billId, string? keyword) =>
+    public static string BuildTargetKey(SubscriptionKind kind, int? personId, int? billId,
+        string? keyword, int? topicId = null) =>
         kind switch
         {
             SubscriptionKind.AllNewBills => "",
             SubscriptionKind.Person => $"person:{personId}",
             SubscriptionKind.Bill => $"bill:{billId}",
             SubscriptionKind.Keyword => $"kw:{keyword?.Trim().ToLowerInvariant()}",
+            SubscriptionKind.Topic => $"topic:{topicId}",
             _ => throw new ArgumentOutOfRangeException(nameof(kind))
         };
 }
