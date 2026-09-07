@@ -1264,6 +1264,32 @@ h1:focus {
         text-decoration: none;
     }
 
+/* Темы закона по рубрикатору Кнессета. Плашка, а не ссылка на вкус:
+   тема — это факт из источника, и выглядит как остальные факты. */
+.kt-law-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin: 0.375rem 0 0;
+}
+
+.kt-law-topic {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--kt-r-pill);
+    background: var(--kt-char-50);
+    border: 1px solid var(--kt-char-100);
+    font-size: 0.75rem;
+    color: var(--kt-char-600);
+}
+
+a.kt-law-topic:hover {
+    background: var(--kt-ember-50);
+    border-color: var(--kt-ember-200);
+    color: var(--kt-ember-700);
+    text-decoration: none;
+}
+
 .kt-chip-num {
     font-family: var(--kt-font-mono);
     font-variant-numeric: tabular-nums;

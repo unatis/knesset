@@ -13,6 +13,14 @@
 <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
     <input class="form-control" style="max-width:360px" placeholder="@L["Laws_Search"]"
            value="@_search" @oninput="OnSearchChanged" />
+    <select class="form-select" style="max-width:280px" value="@_topic"
+            @onchange="OnTopicChanged" aria-label="@L["Laws_Topic"]">
+        <option value="">@L["Laws_AllTopics"]</option>
+        @foreach (var t in _topics)
+        {
+            <option value="@t.Id">@t.Name</option>
+        }
+    </select>
     <div class="form-check">
         <input class="form-check-input" type="checkbox" id="basicOnly"
                checked="@_basicOnly" @onchange="OnBasicChanged" />
@@ -60,6 +68,17 @@ else
                         }
                     </div>
                 </div>
+                @if (row.Topics.Count > 0)
+                {
+                    @* Рубрикатор Кнессета, а не наша классификация. *@
+                    <div class="kt-law-topics">
+                        @foreach (var t in row.Topics)
+                        {
+                            <span class="kt-law-topic">@t</span>
+                        }
+                    </div>
+                }
+
                 <small class="text-muted">
                     @row.Law.ValidityDesc
                     @if (row.Law.ValidityStartDate is not null)
@@ -92,16 +111,31 @@ else
 @code {
     private const int PageSize = 25;
 
-    private sealed record LawRow(IsraelLaw Law, int IndirectCount, string? Translated);
+    private sealed record LawRow(IsraelLaw Law, int IndirectCount, string? Translated,
+                                List<string> Topics);
+
+    private sealed record TopicOption(int Id, string Name);
 
     private List<LawRow>? _laws;
     private int _total;
     private int _page;
     private string _search = "";
     private bool _basicOnly;
+    private string _topic = "";
+    private List<TopicOption> _topics = [];
     private System.Timers.Timer? _debounce;
 
-    protected override Task OnInitializedAsync() => LoadAsync();
+    /// <summary>Тема из адреса: со страницы закона переходят прямо в отбор по теме.</summary>
+    [SupplyParameterFromQuery(Name = "topic")]
+    private int? TopicQuery { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if (TopicQuery is { } t) _topic = t.ToString();
+        return LoadAsync();
+    }
+
+    private bool _topicsLoaded;
 
     private async Task LoadAsync()
     {
@@ -124,6 +158,15 @@ else
         }
 
         if (_basicOnly) query = query.Where(l => l.IsBasicLaw);
+
+        if (int.TryParse(_topic, out var topicId))
+            query = query.Where(l => l.Topics.Any(t => t.TopicId == topicId));
+
+        if (!_topicsLoaded)
+        {
+            await LoadTopicsAsync(db);
+            _topicsLoaded = true;
+        }
 
         _total = await query.CountAsync();
 
@@ -148,9 +191,22 @@ else
                 .ToDictionaryAsync(t => t.IsraelLawId, t => t.Text)
             : [];
 
+        var topics = await db.LawTopics.AsNoTracking()
+            .Where(t => ids.Contains(t.IsraelLawId))
+            .Select(t => new { t.IsraelLawId, t.TopicId, t.NameHe })
+            .ToListAsync();
+
+        var byLaw = topics
+            .GroupBy(t => t.IsraelLawId)
+            .ToDictionary(g => g.Key,
+                          g => g.Select(t => TopicName(t.TopicId, t.NameHe))
+                                .OrderBy(x => x, StringComparer.CurrentCulture)
+                                .ToList());
+
         _laws = laws
             .Select(l => new LawRow(l, indirect.GetValueOrDefault(l.Id),
-                                    titles.GetValueOrDefault(l.Id)))
+                                    titles.GetValueOrDefault(l.Id),
+                                    byLaw.GetValueOrDefault(l.Id) ?? []))
             .ToList();
     }
 
@@ -166,6 +222,41 @@ else
             StateHasChanged();
         });
         _debounce.Start();
+    }
+
+    /// <summary>
+    /// Название темы: перевод из ресурсов по идентификатору рубрикатора,
+    /// иврит из источника — если темы в ресурсах ещё нет.
+    /// </summary>
+    private string TopicName(int topicId, string nameHe)
+    {
+        var value = L[$"LawTopic_{topicId}"];
+        return value.ResourceNotFound ? nameHe : value.Value;
+    }
+
+    /// <summary>
+    /// Справочник для селекта — только темы, которые действительно есть
+    /// у законов: пустой пункт фильтра обещает результат, которого нет.
+    /// </summary>
+    private async Task LoadTopicsAsync(AppDbContext db)
+    {
+        var raw = await db.LawTopics.AsNoTracking()
+            .Select(t => new { t.TopicId, t.NameHe })
+            .Distinct()
+            .ToListAsync();
+
+        _topics = raw
+            .GroupBy(t => t.TopicId)
+            .Select(g => new TopicOption(g.Key, TopicName(g.Key, g.First().NameHe)))
+            .OrderBy(t => t.Name, StringComparer.CurrentCulture)
+            .ToList();
+    }
+
+    private async Task OnTopicChanged(ChangeEventArgs e)
+    {
+        _topic = e.Value?.ToString() ?? "";
+        _page = 0;
+        await LoadAsync();
     }
 
     private async Task OnBasicChanged(ChangeEventArgs e)

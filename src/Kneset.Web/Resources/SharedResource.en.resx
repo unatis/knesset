@@ -691,4 +691,58 @@
   <data name="Party_Source" xml:space="preserve"><value>The party layer is not published by the Knesset and is maintained by hand. Members and seats come from the Knesset API.</value></data>
   <data name="Inf_Dissolved" xml:space="preserve"><value>The Knesset is dissolved</value></data>
   <data name="Inf_Dissolved_Hint" xml:space="preserve"><value>The stage suggests you could still act, but nothing is moving: the Knesset is dissolved, and until a new one convenes no committee sits and no reading is held. A new Knesset can resume the bill through the continuity procedure.</value></data>
+  <data name="LawTopic_1" xml:space="preserve"><value>Citizenship, residency and entry into Israel</value></data>
+  <data name="LawTopic_2" xml:space="preserve"><value>Elections</value></data>
+  <data name="LawTopic_3" xml:space="preserve"><value>Defence</value></data>
+  <data name="LawTopic_4" xml:space="preserve"><value>Internal security</value></data>
+  <data name="LawTopic_5" xml:space="preserve"><value>Construction and housing</value></data>
+  <data name="LawTopic_6" xml:space="preserve"><value>Banking and finance</value></data>
+  <data name="LawTopic_7" xml:space="preserve"><value>Health</value></data>
+  <data name="LawTopic_9" xml:space="preserve"><value>Religions</value></data>
+  <data name="LawTopic_10" xml:space="preserve"><value>Environmental protection</value></data>
+  <data name="LawTopic_11" xml:space="preserve"><value>Foreign affairs</value></data>
+  <data name="LawTopic_12" xml:space="preserve"><value>Arrangements laws</value></data>
+  <data name="LawTopic_13" xml:space="preserve"><value>Basic laws</value></data>
+  <data name="LawTopic_14" xml:space="preserve"><value>Education</value></data>
+  <data name="LawTopic_15" xml:space="preserve"><value>Agriculture</value></data>
+  <data name="LawTopic_16" xml:space="preserve"><value>The Knesset</value></data>
+  <data name="LawTopic_17" xml:space="preserve"><value>Science</value></data>
+  <data name="LawTopic_18" xml:space="preserve"><value>Holidays and memorial days</value></data>
+  <data name="LawTopic_19" xml:space="preserve"><value>Taxation</value></data>
+  <data name="LawTopic_20" xml:space="preserve"><value>Trade and industry</value></data>
+  <data name="LawTopic_21" xml:space="preserve"><value>Personal status</value></data>
+  <data name="LawTopic_22" xml:space="preserve"><value>Health professions</value></data>
+  <data name="LawTopic_23" xml:space="preserve"><value>Land and real estate</value></data>
+  <data name="LawTopic_24" xml:space="preserve"><value>Civil law</value></data>
+  <data name="LawTopic_25" xml:space="preserve"><value>Administrative law</value></data>
+  <data name="LawTopic_26" xml:space="preserve"><value>Criminal law</value></data>
+  <data name="LawTopic_27" xml:space="preserve"><value>Asset management</value></data>
+  <data name="LawTopic_28" xml:space="preserve"><value>Sport</value></data>
+  <data name="LawTopic_29" xml:space="preserve"><value>Shipping</value></data>
+  <data name="LawTopic_30" xml:space="preserve"><value>Courts and tribunals</value></data>
+  <data name="LawTopic_31" xml:space="preserve"><value>Development and investment</value></data>
+  <data name="LawTopic_32" xml:space="preserve"><value>Pensions, insurance and capital markets</value></data>
+  <data name="LawTopic_33" xml:space="preserve"><value>Consumer protection</value></data>
+  <data name="LawTopic_34" xml:space="preserve"><value>Immigrant absorption</value></data>
+  <data name="LawTopic_35" xml:space="preserve"><value>Evidence and procedure</value></data>
+  <data name="LawTopic_36" xml:space="preserve"><value>Heads of state</value></data>
+  <data name="LawTopic_37" xml:space="preserve"><value>Welfare</value></data>
+  <data name="LawTopic_38" xml:space="preserve"><value>Local government</value></data>
+  <data name="LawTopic_39" xml:space="preserve"><value>Public service</value></data>
+  <data name="LawTopic_40" xml:space="preserve"><value>Corporations</value></data>
+  <data name="LawTopic_41" xml:space="preserve"><value>Transport and road safety</value></data>
+  <data name="LawTopic_42" xml:space="preserve"><value>Tourism</value></data>
+  <data name="LawTopic_43" xml:space="preserve"><value>Planning and building</value></data>
+  <data name="LawTopic_44" xml:space="preserve"><value>Aviation</value></data>
+  <data name="LawTopic_45" xml:space="preserve"><value>Employment</value></data>
+  <data name="LawTopic_46" xml:space="preserve"><value>Budget</value></data>
+  <data name="LawTopic_48" xml:space="preserve"><value>Communications</value></data>
+  <data name="LawTopic_49" xml:space="preserve"><value>Culture</value></data>
+  <data name="LawTopic_50" xml:space="preserve"><value>Infrastructure</value></data>
+  <data name="LawTopic_51" xml:space="preserve"><value>State loans</value></data>
+  <data name="LawTopic_52" xml:space="preserve"><value>Technology and cyber</value></data>
+  <data name="LawTopic_53" xml:space="preserve"><value>State of emergency</value></data>
+  <data name="Laws_Topic" xml:space="preserve"><value>Topic</value></data>
+  <data name="Laws_AllTopics" xml:space="preserve"><value>All topics</value></data>
+  <data name="Laws_TopicSource" xml:space="preserve"><value>Topics follow the Knesset's own classification.</value></data>
 </root>

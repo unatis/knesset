@@ -691,4 +691,58 @@
   <data name="Party_Source" xml:space="preserve"><value>طبقة الأحزاب لا ينشرها الكنيست وتُدار يدويًا. الأعضاء والمقاعد من واجهة الكنيست البرمجية.</value></data>
   <data name="Inf_Dissolved" xml:space="preserve"><value>الكنيست منحلّ</value></data>
   <data name="Inf_Dissolved_Hint" xml:space="preserve"><value>المرحلة توحي بإمكان التأثير، لكن لا حركة الآن: الكنيست منحلّ، وحتى انعقاد كنيست جديد لا تجتمع اللجان ولا تُعقد القراءات. يمكن لكنيست جديد إعادة مشروع القانون عبر إجراء الاستمرارية.</value></data>
+  <data name="LawTopic_1" xml:space="preserve"><value>المواطنة والإقامة والدخول إلى إسرائيل</value></data>
+  <data name="LawTopic_2" xml:space="preserve"><value>الانتخابات</value></data>
+  <data name="LawTopic_3" xml:space="preserve"><value>الأمن</value></data>
+  <data name="LawTopic_4" xml:space="preserve"><value>الأمن الداخلي</value></data>
+  <data name="LawTopic_5" xml:space="preserve"><value>البناء والإسكان</value></data>
+  <data name="LawTopic_6" xml:space="preserve"><value>المصارف والمال</value></data>
+  <data name="LawTopic_7" xml:space="preserve"><value>الصحة</value></data>
+  <data name="LawTopic_9" xml:space="preserve"><value>الأديان</value></data>
+  <data name="LawTopic_10" xml:space="preserve"><value>حماية البيئة</value></data>
+  <data name="LawTopic_11" xml:space="preserve"><value>الشؤون الخارجية</value></data>
+  <data name="LawTopic_12" xml:space="preserve"><value>قوانين الترتيبات</value></data>
+  <data name="LawTopic_13" xml:space="preserve"><value>قوانين أساس</value></data>
+  <data name="LawTopic_14" xml:space="preserve"><value>التربية والتعليم</value></data>
+  <data name="LawTopic_15" xml:space="preserve"><value>الزراعة</value></data>
+  <data name="LawTopic_16" xml:space="preserve"><value>الكنيست</value></data>
+  <data name="LawTopic_17" xml:space="preserve"><value>العلوم</value></data>
+  <data name="LawTopic_18" xml:space="preserve"><value>الأعياد وأيام الذكرى</value></data>
+  <data name="LawTopic_19" xml:space="preserve"><value>الضرائب</value></data>
+  <data name="LawTopic_20" xml:space="preserve"><value>التجارة والصناعة</value></data>
+  <data name="LawTopic_21" xml:space="preserve"><value>الأحوال الشخصية</value></data>
+  <data name="LawTopic_22" xml:space="preserve"><value>المهن الصحية</value></data>
+  <data name="LawTopic_23" xml:space="preserve"><value>الأراضي والعقارات</value></data>
+  <data name="LawTopic_24" xml:space="preserve"><value>القانون المدني</value></data>
+  <data name="LawTopic_25" xml:space="preserve"><value>القانون الإداري</value></data>
+  <data name="LawTopic_26" xml:space="preserve"><value>القانون الجنائي</value></data>
+  <data name="LawTopic_27" xml:space="preserve"><value>إدارة الأصول</value></data>
+  <data name="LawTopic_28" xml:space="preserve"><value>الرياضة</value></data>
+  <data name="LawTopic_29" xml:space="preserve"><value>الملاحة البحرية</value></data>
+  <data name="LawTopic_30" xml:space="preserve"><value>الهيئات القضائية</value></data>
+  <data name="LawTopic_31" xml:space="preserve"><value>التطوير والاستثمار</value></data>
+  <data name="LawTopic_32" xml:space="preserve"><value>التقاعد والتأمين وسوق رأس المال</value></data>
+  <data name="LawTopic_33" xml:space="preserve"><value>حماية المستهلك</value></data>
+  <data name="LawTopic_34" xml:space="preserve"><value>استيعاب المهاجرين</value></data>
+  <data name="LawTopic_35" xml:space="preserve"><value>الإثبات وإجراءات التقاضي</value></data>
+  <data name="LawTopic_36" xml:space="preserve"><value>رؤساء الدولة</value></data>
+  <data name="LawTopic_37" xml:space="preserve"><value>الرفاه الاجتماعي</value></data>
+  <data name="LawTopic_38" xml:space="preserve"><value>السلطات المحلية</value></data>
+  <data name="LawTopic_39" xml:space="preserve"><value>الخدمة العامة</value></data>
+  <data name="LawTopic_40" xml:space="preserve"><value>الشركات</value></data>
+  <data name="LawTopic_41" xml:space="preserve"><value>المواصلات وسلامة الطرق</value></data>
+  <data name="LawTopic_42" xml:space="preserve"><value>السياحة</value></data>
+  <data name="LawTopic_43" xml:space="preserve"><value>التخطيط والبناء</value></data>
+  <data name="LawTopic_44" xml:space="preserve"><value>الطيران</value></data>
+  <data name="LawTopic_45" xml:space="preserve"><value>التشغيل والعمل</value></data>
+  <data name="LawTopic_46" xml:space="preserve"><value>الميزانية</value></data>
+  <data name="LawTopic_48" xml:space="preserve"><value>الاتصالات</value></data>
+  <data name="LawTopic_49" xml:space="preserve"><value>الثقافة</value></data>
+  <data name="LawTopic_50" xml:space="preserve"><value>البنى التحتية</value></data>
+  <data name="LawTopic_51" xml:space="preserve"><value>القروض للدولة</value></data>
+  <data name="LawTopic_52" xml:space="preserve"><value>التكنولوجيا والسيبر</value></data>
+  <data name="LawTopic_53" xml:space="preserve"><value>حالة الطوارئ</value></data>
+  <data name="Laws_Topic" xml:space="preserve"><value>الموضوع</value></data>
+  <data name="Laws_AllTopics" xml:space="preserve"><value>كل المواضيع</value></data>
+  <data name="Laws_TopicSource" xml:space="preserve"><value>المواضيع وفق تصنيف الكنيست.</value></data>
 </root>

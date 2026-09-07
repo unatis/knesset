@@ -73,6 +73,7 @@ public class KnessetSyncService(
         await RunStepAsync("IsraelLaws", SyncIsraelLawsAsync, ct);
         await RunStepAsync("LawActs", SyncLawActsAsync, ct);
         await RunStepAsync("LawAmendments", SyncLawAmendmentsAsync, ct);
+        await RunStepAsync("LawTopics", SyncLawTopicsAsync, ct);
 
         // Строго последним: подписка на депутата опирается на BillInitiators,
         // которые заполняются шагом выше. RunStepAsync передаёт сюда время
@@ -896,6 +897,55 @@ public class KnessetSyncService(
                     amendment.ActName = act.Name;
                     amendment.ActPublicationDate = act.PublicationDate;
                 }
+            }
+
+            await db.SaveChangesAsync(ct);
+            total += chunk.Length;
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// Темы законов по рубрикатору Кнессета.
+    ///
+    /// Своей классификации мы не строим: у Кнессета 51 тема, и за каждой
+    /// стоит источник, а не наша догадка. Тем на закон обычно две-три.
+    /// </summary>
+    private async Task<int> SyncLawTopicsAsync(DateTime? since, CancellationToken ct)
+    {
+        var rows = await client.GetLawClassificationsAsync(since, ct);
+        if (rows.Count == 0) return 0;
+
+        await using var mapDb = await dbFactory.CreateDbContextAsync(ct);
+        var lawIdMap = await mapDb.IsraelLaws
+            .ToDictionaryAsync(l => l.KnessetIsraelLawId, l => l.Id, ct);
+
+        var total = 0;
+        foreach (var chunk in rows.Chunk(1000))
+        {
+            await using var db = await dbFactory.CreateDbContextAsync(ct);
+            var ids = chunk.Select(r => r.LawClassificiationID).ToList();
+            var existing = await db.LawTopics
+                .Where(t => ids.Contains(t.KnessetClassificationId))
+                .ToDictionaryAsync(t => t.KnessetClassificationId, ct);
+
+            foreach (var src in chunk)
+            {
+                // Закона ещё нет в базе — тема без закона бессмысленна.
+                if (!lawIdMap.TryGetValue(src.IsraelLawID, out var israelLawId)) continue;
+
+                if (!existing.TryGetValue(src.LawClassificiationID, out var topic))
+                {
+                    topic = new LawTopic { KnessetClassificationId = src.LawClassificiationID };
+                    db.LawTopics.Add(topic);
+                    existing[src.LawClassificiationID] = topic;
+                }
+
+                topic.IsraelLawId = israelLawId;
+                topic.TopicId = src.ClassificiationID;
+                topic.NameHe = Clean(src.ClassificiationDesc) ?? "";
+                topic.LastUpdatedDate = AsUtc(src.LastUpdatedDate);
             }
 
             await db.SaveChangesAsync(ct);

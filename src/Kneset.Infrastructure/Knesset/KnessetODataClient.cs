@@ -160,6 +160,14 @@ public class KnessetODataClient(HttpClient http, ILogger<KnessetODataClient> log
     public Task<List<KnsLawBinding>> GetLawBindingsAsync(DateTime? since, CancellationToken ct) =>
         GetPagedAsync<KnsLawBinding>("KNS_LawBinding", SinceFilter(since), ct);
 
+    /// <summary>
+    /// Тематические рубрики законов. Имя набора с опечаткой — так у Кнессета.
+    /// </summary>
+    public Task<List<KnsIsraelLawClassification>> GetLawClassificationsAsync(
+        DateTime? since, CancellationToken ct) =>
+        GetPagedAsync<KnsIsraelLawClassification>(
+            "KNS_IsraelLawClassificiation", SinceFilter(since), ct);
+
     /// <summary>Максимальный номер созыва среди законопроектов (= текущий созыв).</summary>
     public async Task<int> GetLatestKnessetNumAsync(CancellationToken ct)
     {
