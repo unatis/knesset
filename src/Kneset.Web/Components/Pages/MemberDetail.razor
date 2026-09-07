@@ -1,5 +1,4 @@
 ﻿@page "/members/{Id:int}"
-@rendermode InteractiveServer
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
 
@@ -27,8 +26,21 @@ else
                 <span class="badge bg-success ms-2 align-middle">@L["Members_Current"]</span>
             }
             <div class="mt-2">
+                @* Интерактивна только кнопка, а не вся страница.
+                   Раньше страница целиком была InteractiveServer, и при
+                   переходе сюда со статической страницы (партии, фракции,
+                   карта расклада) человек видел двойную отрисовку: мягкая
+                   навигация подставляла пререндер, затем поднималась цепь
+                   (_blazor/negotiate) и интерактивные компоненты
+                   перерисовывались поверх. Локально это миллисекунды,
+                   на бесплатном Render — заметное мигание всей страницы.
+
+                   Из интерактива странице нужна ровно эта кнопка: у прочих
+                   её компонентов обработчиков нет. Теперь содержимое
+                   отрисовывается один раз, а «доживает» только кнопка. *@
                 <FollowButton Kind="SubscriptionKind.Person" TargetId="@_member.Id"
-                              ReturnUrl="@($"/members/{_member.Id}")" />
+                              ReturnUrl="@($"/members/{_member.Id}")"
+                              @rendermode="InteractiveServer" />
             </div>
         </div>
     </div>
