@@ -1264,6 +1264,17 @@ h1:focus {
         text-decoration: none;
     }
 
+.kt-law-cite {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+}
+
+.kt-law-cite-pdf {
+    font-size: 0.8125rem;
+}
+
 .kt-law-links {
     display: flex;
     flex-wrap: wrap;

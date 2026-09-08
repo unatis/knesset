@@ -756,4 +756,7 @@
   <data name="Laws_PlainLanguage" xml:space="preserve"><value>Простыми словами</value></data>
   <data name="Laws_AtKnesset" xml:space="preserve"><value>Страница закона в Кнессете</value></data>
   <data name="Laws_Ministries" xml:space="preserve"><value>Ответственные министерства</value></data>
+  <data name="Laws_Publication" xml:space="preserve"><value>Публикация</value></data>
+  <data name="Laws_PublicationPage" xml:space="preserve"><value>с. {0}</value></data>
+  <data name="Laws_ActPdf" xml:space="preserve"><value>Текст поправки</value></data>
 </root>

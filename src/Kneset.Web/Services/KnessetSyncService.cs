@@ -918,6 +918,14 @@ public class KnessetSyncService(
     /// а собирать его самим из оригинала и всех поправок значит делать
     /// правовую консолидацию, то есть другой продукт.
     ///
+    /// Тем же запросом приходит история изменений закона — по строке
+    /// на поправку, с публикацией в «Рэумот» и ссылкой на PDF. Этого нет
+    /// в открытых данных вовсе, а старых актов нет и в KNS_Law: именно
+    /// поэтому у части поправок у нас не было даже названия. Строки
+    /// привязываются к нашим LawAmendments по идентификатору акта —
+    /// сверено на «חוק-יסוד: הממשלה [התשכ"ח]», где двенадцать актов
+    /// из OData совпали со всеми двенадцатью с сайта.
+    ///
     /// Это апи сайта, а не выгрузка: частые запросы обрываются соединением.
     /// Поэтому порция за прогон и пауза между запросами, а порядок —
     /// сначала законы, которые правят живые законопроекты: их страницы
@@ -941,11 +949,18 @@ public class KnessetSyncService(
         if (due.Count == 0) return 0;
 
         var found = 0;
+        var docs = 0;
+        var names = 0;
+        var unmatched = 0;
+
         foreach (var chunk in due.Chunk(25))
         {
             await using var db = await dbFactory.CreateDbContextAsync(ct);
             var ids = chunk.Select(x => x.Id).ToList();
             var laws = await db.IsraelLaws.Where(l => ids.Contains(l.Id)).ToListAsync(ct);
+            var amendments = await db.LawAmendments
+                .Where(a => ids.Contains(a.IsraelLawId))
+                .ToListAsync(ct);
 
             foreach (var row in chunk)
             {
@@ -961,6 +976,38 @@ public class KnessetSyncService(
                     law.KolZchutUrl = info.KolZchutUrl;
                     law.Ministries = info.Ministries;
                     if (info.OpenBookUrl is not null) found++;
+
+                    var mine = amendments.Where(a => a.IsraelLawId == law.Id).ToList();
+                    foreach (var correction in info.Corrections)
+                    {
+                        var amendment = mine.FirstOrDefault(a => a.KnessetLawId == correction.ActId);
+                        if (amendment is null)
+                        {
+                            // Своей строки под неё нет: LawBinding о таком акте
+                            // не знает. Не выдумываем связку, а считаем — по этому
+                            // числу и будет видно, нужна ли вставка.
+                            unmatched++;
+                            continue;
+                        }
+
+                        amendment.PublicationSeries = correction.PublicationSeries;
+                        amendment.MagazineNumber = correction.MagazineNumber;
+                        amendment.PageNumber = correction.PageNumber;
+                        amendment.DocumentUrl = correction.DocumentUrl;
+                        if (correction.DocumentUrl is not null) docs++;
+
+                        // Название и дата акта из OData есть только у новых
+                        // актов: старых нет в KNS_Law вовсе. Своё не
+                        // перезаписываем — дополняем пробел.
+                        if (string.IsNullOrWhiteSpace(amendment.ActName)
+                            && correction.Name is { Length: > 0 } name)
+                        {
+                            amendment.ActName = name;
+                            names++;
+                        }
+
+                        amendment.ActPublicationDate ??= AsUtcNullable(correction.PublicationDate);
+                    }
                 }
 
                 await Task.Delay(TimeSpan.FromMilliseconds(700), ct);
@@ -970,8 +1017,9 @@ public class KnessetSyncService(
         }
 
         logger.LogInformation(
-            "Ссылки на текст закона: спрошено {Asked}, текст нашёлся у {Found}",
-            due.Count, found);
+            "Страницы законов: спрошено {Asked}, текст у {Found}, документов поправок {Docs}, "
+            + "названий восполнено {Names}, не привязалось {Unmatched}",
+            due.Count, found, docs, names, unmatched);
 
         return due.Count;
     }

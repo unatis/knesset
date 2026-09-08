@@ -51,10 +51,32 @@ public class KnessetWebsiteClient(HttpClient http, ILogger<KnessetWebsiteClient>
             var general = item?.General;
             if (general is null) return null;
 
+            // История изменений: по строке на поправку, с публикацией
+            // и PDF. Один и тот же акт встречается дважды (исправление
+            // опечатки идёт отдельной строкой без типа), поэтому берём
+            // на акт одну — ту, что с типом и документом.
+            var corrections = (item?.Corrections?.List ?? [])
+                .Where(c => c.ItemId > 0)
+                .GroupBy(c => c.ItemId)
+                .Select(g => g
+                    .OrderByDescending(c => !string.IsNullOrWhiteSpace(c.CorrectionType))
+                    .ThenByDescending(c => !string.IsNullOrWhiteSpace(c.FilePath))
+                    .First())
+                .Select(c => new LawCorrection(
+                    c.ItemId,
+                    Blank(c.Name),
+                    Blank(c.PublicationSeries),
+                    Blank(c.MagazineNumber),
+                    Blank(c.PageNumber),
+                    c.PublicationDate,
+                    FilePath(c.FilePath)))
+                .ToList();
+
             return new LawSiteInfo(
                 Blank(general.OpenBookUrl),
                 Blank(general.KolZchutUrl),
-                Blank(general.MinistriesName));
+                Blank(general.MinistriesName),
+                corrections);
         }
         catch (Exception ex) when (ex is not OperationCanceledException || !ct.IsCancellationRequested)
         {
@@ -67,11 +89,54 @@ public class KnessetWebsiteClient(HttpClient http, ILogger<KnessetWebsiteClient>
     private static string? Blank(string? value) =>
         string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 
-    public record LawSiteInfo(string? OpenBookUrl, string? KolZchutUrl, string? Ministries);
+    /// <summary>
+    /// Путь к файлу приходит с обратными слэшами Windows — в браузере
+    /// такая ссылка не работает, поэтому разворачиваем их в прямые.
+    /// </summary>
+    private static string? FilePath(string? value) =>
+        Blank(value)?.Replace('\\', '/');
+
+    public record LawSiteInfo(
+        string? OpenBookUrl,
+        string? KolZchutUrl,
+        string? Ministries,
+        List<LawCorrection> Corrections);
+
+    /// <summary>
+    /// Одна запись истории изменений закона. ActId — тот же LawID, что
+    /// в KNS_LawBinding: сверено на «חוק-יסוד: הממשלה [התשכ"ח]», где
+    /// двенадцать актов из OData совпали со всеми двенадцатью с сайта.
+    /// </summary>
+    public record LawCorrection(
+        int ActId,
+        string? Name,
+        string? PublicationSeries,
+        string? MagazineNumber,
+        string? PageNumber,
+        DateTime? PublicationDate,
+        string? DocumentUrl);
 
     private class LawItem
     {
         [JsonPropertyName("general")] public LawGeneral? General { get; set; }
+        [JsonPropertyName("corrections")] public LawCorrections? Corrections { get; set; }
+    }
+
+    private class LawCorrections
+    {
+        [JsonPropertyName("listCorrections")] public List<LawCorrectionRow>? List { get; set; }
+    }
+
+    private class LawCorrectionRow
+    {
+        [JsonPropertyName("itemId")] public int ItemId { get; set; }
+        [JsonPropertyName("name")] public string? Name { get; set; }
+        [JsonPropertyName("correctionType")] public string? CorrectionType { get; set; }
+        [JsonPropertyName("publicationSeries")] public string? PublicationSeries { get; set; }
+        [JsonPropertyName("magazineNumber")] public string? MagazineNumber { get; set; }
+        [JsonPropertyName("pageNumber")] public string? PageNumber { get; set; }
+        [JsonPropertyName("publicationDate")] public DateTime? PublicationDate { get; set; }
+        [JsonPropertyName("filePath")] public string? FilePath { get; set; }
     }
 
     private class LawGeneral
