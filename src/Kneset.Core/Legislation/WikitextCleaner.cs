@@ -17,7 +17,7 @@ namespace Kneset.Core.Legislation;
 public static class WikitextCleaner
 {
     /// <summary>Версия чистки. Меняется вместе с правилами — тогда видно, что пора перечитать.</summary>
-    public const string Version = "wiki-v1";
+    public const string Version = "wiki-v3";
 
     private static readonly Regex NoInclude = new(@"(?s)<noinclude>.*?</noinclude>", RegexOptions.Compiled);
     private static readonly Regex Ref = new(@"(?s)<ref[^>]*>.*?</ref>", RegexOptions.Compiled);
@@ -34,6 +34,13 @@ public static class WikitextCleaner
 
     /// <summary>Служебные аргументы шаблонов: идентификатор закона, номер ревизии.</summary>
     private static readonly Regex NumericOnly = new(@"^\d{4,}$", RegexOptions.Compiled);
+
+    /// <summary>
+    /// Голый адрес в аргументе шаблона — это ссылка на публикацию в «Рэумот».
+    /// В тексте закона она читается как мусор, а сами публикации уже показаны
+    /// списком поправок, каждая со своей подписью и ссылкой.
+    /// </summary>
+    private static readonly Regex BareUrl = new(@"^https?://\S+$", RegexOptions.Compiled);
 
     public static string Clean(string wikitext)
     {
@@ -79,8 +86,23 @@ public static class WikitextCleaner
         {
             var value = part.Contains('=') ? part[(part.IndexOf('=') + 1)..] : part;
             value = value.Trim();
-            if (value.Length == 0 || NumericOnly.IsMatch(value)) continue;
+            if (value.Length == 0 || NumericOnly.IsMatch(value) || BareUrl.IsMatch(value)) continue;
             kept.Add(value);
+        }
+
+        // Шаблон ссылки хранит и адрес, и подпись: «{{ח:חיצוני|הכרזה על
+        // הקמת מדינת ישראל|שבהכרזה על הקמת מדינת ישראל}}». После
+        // разворачивания текст читался бы дважды, причём во второй раз
+        // с предлогом, так что точное сравнение такое не поймает.
+        // Поэтому убираем аргумент, целиком входящий в другой.
+        if (kept.Count > 1)
+        {
+            kept = kept
+                .Where(one => !kept.Any(other =>
+                    other.Length > one.Length
+                    && one.Length >= 4
+                    && other.Contains(one, StringComparison.Ordinal)))
+                .ToList();
         }
 
         return kept.Count == 0 ? " " : " " + string.Join(" ", kept) + " ";
