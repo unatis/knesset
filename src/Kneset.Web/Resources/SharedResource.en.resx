@@ -756,4 +756,7 @@
   <data name="Laws_PlainLanguage" xml:space="preserve"><value>In plain language</value></data>
   <data name="Laws_AtKnesset" xml:space="preserve"><value>The law's page at the Knesset</value></data>
   <data name="Laws_Ministries" xml:space="preserve"><value>Responsible ministries</value></data>
+  <data name="Laws_Publication" xml:space="preserve"><value>Publication</value></data>
+  <data name="Laws_PublicationPage" xml:space="preserve"><value>p. {0}</value></data>
+  <data name="Laws_ActPdf" xml:space="preserve"><value>Text of the amendment</value></data>
 </root>

@@ -40,5 +40,24 @@ public class LawAmendment
     /// <summary>Связь описывает не поправку, а сам факт создания закона.</summary>
     public bool IsOriginal { get; set; }
 
+    /// <summary>
+    /// Публикация акта в «Рэумот» и ссылка на неё. Приходит не из OData,
+    /// а со страницы закона на сайте Кнессета: в открытых данных этого нет,
+    /// а старых актов (идентификаторы вида 159524) нет и в KNS_Law вообще —
+    /// именно поэтому у части поправок у нас не было даже названия.
+    ///
+    /// Серия, номер сборника и страница — официальная ссылка на закон:
+    /// «ספר החוקים 1559, עמ' 52». Своего номера у израильского закона нет,
+    /// ссылаются именно на публикацию.
+    /// </summary>
+    public string? PublicationSeries { get; set; }
+
+    public string? MagazineNumber { get; set; }
+
+    public string? PageNumber { get; set; }
+
+    /// <summary>PDF публикации на fs.knesset.gov.il, если он есть.</summary>
+    public string? DocumentUrl { get; set; }
+
     public DateTime LastUpdatedDate { get; set; }
 }

@@ -178,9 +178,36 @@ else
                                 }
                             </span>
                         </div>
-                        @if (amendment.ActPublicationDate is not null)
+                        @* Дата, официальная ссылка на публикацию и текст самой
+                           поправки. Ни того, ни другого нет в открытых данных —
+                           это со страницы закона на сайте Кнессета. Своего
+                           номера у израильского закона нет, ссылаются именно
+                           на публикацию: серия, сборник, страница. *@
+                        @* Пустой контейнер не рисуем: у старых актов бывает,
+                           что нет ни даты, ни публикации. *@
+                        @if (amendment.ActPublicationDate is not null
+                             || amendment.PublicationSeries is { Length: > 0 }
+                             || amendment.DocumentUrl is { Length: > 0 })
                         {
-                            <small class="text-muted">@amendment.ActPublicationDate.Value.ToString("dd.MM.yyyy")</small>
+                        <div class="kt-law-cite">
+                            @if (amendment.ActPublicationDate is not null)
+                            {
+                                <small class="text-muted">@amendment.ActPublicationDate.Value.ToString("dd.MM.yyyy")</small>
+                            }
+                            @if (amendment.PublicationSeries is { Length: > 0 } series)
+                            {
+                                <small class="text-muted" dir="rtl" lang="he">
+                                    @series@(amendment.MagazineNumber is { Length: > 0 } num ? $" {num}" : "")@(
+                                        amendment.PageNumber is { Length: > 0 } page
+                                            ? ", " + string.Format(L["Laws_PublicationPage"], page)
+                                            : "")
+                                </small>
+                            }
+                            @if (amendment.DocumentUrl is { Length: > 0 } doc)
+                            {
+                                <a class="kt-law-cite-pdf" href="@doc" target="_blank" rel="noopener">@L["Laws_ActPdf"]</a>
+                            }
+                        </div>
                         }
                     </li>
                 }

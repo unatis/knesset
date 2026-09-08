@@ -756,4 +756,7 @@
   <data name="Laws_PlainLanguage" xml:space="preserve"><value>בשפה פשוטה</value></data>
   <data name="Laws_AtKnesset" xml:space="preserve"><value>עמוד החוק באתר הכנסת</value></data>
   <data name="Laws_Ministries" xml:space="preserve"><value>משרדים אחראיים</value></data>
+  <data name="Laws_Publication" xml:space="preserve"><value>פרסום</value></data>
+  <data name="Laws_PublicationPage" xml:space="preserve"><value>עמ' {0}</value></data>
+  <data name="Laws_ActPdf" xml:space="preserve"><value>נוסח התיקון</value></data>
 </root>

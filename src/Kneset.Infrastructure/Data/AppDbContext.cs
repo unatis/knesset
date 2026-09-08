@@ -301,6 +301,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
 
         modelBuilder.Entity<LawAmendment>(a =>
         {
+            a.Property(x => x.PublicationSeries).HasMaxLength(100);
+            a.Property(x => x.MagazineNumber).HasMaxLength(50);
+            a.Property(x => x.PageNumber).HasMaxLength(50);
             a.HasIndex(x => x.KnessetBindingId).IsUnique();
             // Выборка поправок конкретного закона — основной запрос на карточке.
             a.HasIndex(x => new { x.IsraelLawId, x.IsIndirect });
