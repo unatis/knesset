@@ -759,4 +759,7 @@
   <data name="Laws_Publication" xml:space="preserve"><value>פרסום</value></data>
   <data name="Laws_PublicationPage" xml:space="preserve"><value>עמ' {0}</value></data>
   <data name="Laws_ActPdf" xml:space="preserve"><value>נוסח התיקון</value></data>
+  <data name="Laws_TextHeading" xml:space="preserve"><value>נוסח החוק</value></data>
+  <data name="Laws_TextSource" xml:space="preserve"><value>נוסח משולב מ«ספר החוקים הפתוח» (ויקיטקסט), גרסה מיום {0}. הכנסת אינה מפרסמת את נוסחי החוקים בנתונים הפתוחים ומפנה בעצמה למקור זה. התוקף המשפטי הוא לפרסום ברשומות.</value></data>
+  <data name="Laws_TextExpand" xml:space="preserve"><value>הצג את הנוסח המלא</value></data>
 </root>

@@ -759,4 +759,7 @@
   <data name="Laws_Publication" xml:space="preserve"><value>Publication</value></data>
   <data name="Laws_PublicationPage" xml:space="preserve"><value>p. {0}</value></data>
   <data name="Laws_ActPdf" xml:space="preserve"><value>Text of the amendment</value></data>
+  <data name="Laws_TextHeading" xml:space="preserve"><value>Text of the law</value></data>
+  <data name="Laws_TextSource" xml:space="preserve"><value>Consolidated version from the Open Law Book (Wikisource), revision of {0}. The Knesset does not publish law texts in its open data and points to this source itself. Only the publication in Reshumot is legally binding.</value></data>
+  <data name="Laws_TextExpand" xml:space="preserve"><value>Show the full text</value></data>
 </root>

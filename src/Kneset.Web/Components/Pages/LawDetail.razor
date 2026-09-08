@@ -154,6 +154,23 @@ else
             </div>
         }
 
+        @* Текст закона. Копия сводной редакции, а не наша сводка: поэтому
+           рядом стоит источник, номер ревизии и оговорка, что юридическую
+           силу имеет публикация в «Рэумот», а не эта страница. Разворот
+           через details — страница остаётся статической, а текст бывает
+           на сорок тысяч знаков. *@
+        @if (_text is not null)
+        {
+            <h5 class="mt-4">@L["Laws_TextHeading"]</h5>
+            <p class="text-muted small" style="max-width:60ch">
+                @string.Format(L["Laws_TextSource"], _text.RevisionAt.ToString("dd.MM.yyyy"))
+            </p>
+            <details class="kt-law-text">
+                <summary>@L["Laws_TextExpand"] · @_text.CharCount</summary>
+                <div class="kt-law-text-body" dir="rtl" lang="he">@_text.Text</div>
+            </details>
+        }
+
         @if (_named.Count > 0)
         {
             <h5>@L["Laws_NamedOnly"] (@_named.Count)</h5>
@@ -233,6 +250,7 @@ else
     private int _unnamedCount;
     private string? _translated;
     private List<TopicLink> _topics = [];
+    private IsraelLawText? _text;
 
     private sealed record TopicLink(int Id, string Name);
     private bool _loading = true;
@@ -253,6 +271,9 @@ else
                     .Select(t => t.Text)
                     .FirstOrDefaultAsync();
             }
+
+            _text = await db.IsraelLawTexts.AsNoTracking()
+                .FirstOrDefaultAsync(t => t.IsraelLawId == Id);
 
             var topics = await db.LawTopics.AsNoTracking()
                 .Where(t => t.IsraelLawId == Id)

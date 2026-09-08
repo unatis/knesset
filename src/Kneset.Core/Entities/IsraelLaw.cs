@@ -48,6 +48,9 @@ public class IsraelLaw
     /// <summary>Когда последний раз спрашивали сайт Кнессета об этом законе.</summary>
     public DateTime? SiteFetchedAt { get; set; }
 
+    /// <summary>Копия сводного текста, если он у нас есть.</summary>
+    public IsraelLawText? FullText { get; set; }
+
     /// <summary>Темы по рубрикатору Кнессета. Своих не придумываем.</summary>
     public List<LawTopic> Topics { get; set; } = [];
 
