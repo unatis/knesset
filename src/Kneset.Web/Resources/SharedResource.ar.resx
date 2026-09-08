@@ -762,4 +762,8 @@
   <data name="Laws_TextHeading" xml:space="preserve"><value>نص القانون</value></data>
   <data name="Laws_TextSource" xml:space="preserve"><value>النسخة الموحّدة من «كتاب القوانين المفتوح» (ويكي مصدر)، مراجعة بتاريخ {0}. الكنيست لا ينشر نصوص القوانين في بياناته المفتوحة ويحيل إلى هذا المصدر بنفسه. النشر في «رشوموت» وحده هو الملزم قانونياً.</value></data>
   <data name="Laws_TextExpand" xml:space="preserve"><value>عرض النص كاملاً</value></data>
+  <data name="Members_AllFactions" xml:space="preserve"><value>كل الكتل والأحزاب</value></data>
+  <data name="Members_GroupFactions" xml:space="preserve"><value>الكتل</value></data>
+  <data name="Members_GroupParties" xml:space="preserve"><value>الأحزاب</value></data>
+  <data name="Members_PartyIsFaction" xml:space="preserve"><value>معروض جميع أعضاء كتلة «{0}»: الكنيست ينشر من ينتمي إلى أي كتلة، لكنه لا ينشر عن أي حزب يمثّل كل منهم.</value></data>
 </root>

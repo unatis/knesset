@@ -17,7 +17,7 @@ namespace Kneset.Core.Legislation;
 public static class WikitextCleaner
 {
     /// <summary>Версия чистки. Меняется вместе с правилами — тогда видно, что пора перечитать.</summary>
-    public const string Version = "wiki-v3";
+    public const string Version = "wiki-v4";
 
     private static readonly Regex NoInclude = new(@"(?s)<noinclude>.*?</noinclude>", RegexOptions.Compiled);
     private static readonly Regex Ref = new(@"(?s)<ref[^>]*>.*?</ref>", RegexOptions.Compiled);
@@ -84,8 +84,16 @@ public static class WikitextCleaner
 
         foreach (var part in parts.Skip(1))
         {
-            var value = part.Contains('=') ? part[(part.IndexOf('=') + 1)..] : part;
-            value = value.Trim();
+            var value = part.Trim();
+
+            // Адрес проверяем до разбора именованных аргументов: в запросе
+            // ссылки есть свои «=», и деление по первому из них превращало
+            // адрес в обрывок, который проверку на адрес уже не проходил.
+            // Так в тексте закона оставалась ссылка на решение суда
+            // с пробелами вместо «=».
+            if (value.Length == 0 || BareUrl.IsMatch(value)) continue;
+
+            value = NamedArgument(value);
             if (value.Length == 0 || NumericOnly.IsMatch(value) || BareUrl.IsMatch(value)) continue;
             kept.Add(value);
         }
@@ -106,6 +114,22 @@ public static class WikitextCleaner
         }
 
         return kept.Count == 0 ? " " : " " + string.Join(" ", kept) + " ";
+    }
+
+    /// <summary>
+    /// «имя=значение» → значение. Именем считаем только то, что на имя
+    /// похоже: без пробелов и косых черт. Иначе первое же «=» внутри
+    /// значения разрезало бы его пополам.
+    /// </summary>
+    private static string NamedArgument(string value)
+    {
+        var eq = value.IndexOf('=');
+        if (eq <= 0) return value;
+
+        var name = value[..eq];
+        if (name.Contains(' ') || name.Contains('/') || name.Contains(':')) return value;
+
+        return value[(eq + 1)..].Trim();
     }
 
     /// <summary>
