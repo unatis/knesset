@@ -936,6 +936,9 @@ public class KnessetSyncService(
             .Select(l => new { l.Id, l.OpenBookUrl })
             .ToListAsync(ct);
 
+        // Пишем в лог и пустую очередь: иначе «шаг не дошёл» и «шагу нечего
+        // делать» выглядят одинаково — молчанием, и час уходит на догадки.
+        logger.LogInformation("Тексты законов: в очереди {Due}", due.Count);
         if (due.Count == 0) return 0;
 
         var saved = 0;

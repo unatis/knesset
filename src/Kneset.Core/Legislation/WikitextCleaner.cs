@@ -17,7 +17,7 @@ namespace Kneset.Core.Legislation;
 public static class WikitextCleaner
 {
     /// <summary>Версия чистки. Меняется вместе с правилами — тогда видно, что пора перечитать.</summary>
-    public const string Version = "wiki-v4";
+    public const string Version = "wiki-v5";
 
     private static readonly Regex NoInclude = new(@"(?s)<noinclude>.*?</noinclude>", RegexOptions.Compiled);
     private static readonly Regex Ref = new(@"(?s)<ref[^>]*>.*?</ref>", RegexOptions.Compiled);
@@ -47,6 +47,16 @@ public static class WikitextCleaner
         if (string.IsNullOrWhiteSpace(wikitext)) return "";
 
         var text = wikitext;
+
+        // Служебные шаблоны-символы. В MediaWiki «=» и «|» внутри аргумента
+        // шаблона приходится экранировать через {{=}} и {{!}}, и в адресах
+        // это встречается постоянно:
+        // «...Download?path{{=}}HebrewVerdicts/...&fileName{{=}}...».
+        // Разворачивать их как обычные шаблоны нельзя — аргументов у них нет,
+        // и от знака равенства оставался пробел, после чего адрес переставал
+        // быть адресом и уезжал в текст закона.
+        text = text.Replace("{{=}}", "=").Replace("{{!}}", "|");
+
         text = NoInclude.Replace(text, " ");
         text = Ref.Replace(text, " ");
         text = SelfClosingRef.Replace(text, " ");
@@ -64,6 +74,12 @@ public static class WikitextCleaner
         text = WikiLink.Replace(text, m => m.Groups[2].Value);
         text = ExternalLink.Replace(text, m => m.Groups[2].Value);
         text = Html.Replace(text, " ");
+        text = text
+            .Replace("&nbsp;", " ")
+            .Replace("&quot;", "\"")
+            .Replace("&lt;", "<")
+            .Replace("&gt;", ">")
+            .Replace("&amp;", "&");
         text = Emphasis.Replace(text, "");
         text = Heading.Replace(text, "$1");
         text = Spaces.Replace(text, " ");
