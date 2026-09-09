@@ -769,4 +769,10 @@
   <data name="Laws_Regulations" xml:space="preserve"><value>أنظمة حكومية</value></data>
   <data name="Laws_RegulationsNote" xml:space="preserve"><value>أوامر الوزراء تغيّر المبالغ وملاحق القانون دون المرور بالكنيست: قيمة المخصصات، والغرامات، والعتبات. الكنيست يعرضها في صفحة القانون، وهي غائبة عن بياناته المفتوحة. هذه ليست تعديلات ولا تدخل في العدّ أعلاه.</value></data>
   <data name="Laws_RegulationsShow" xml:space="preserve"><value>عرض الكل</value></data>
+  <data name="Laws_Analysis" xml:space="preserve"><value>تحليل القانون</value></data>
+  <data name="Laws_AnalysisSource" xml:space="preserve"><value>أُعدّ التحليل بواسطة {0} من النص الموحّد للقانون. هذا ليس استشارة قانونية: المنصة تفصل الحقيقة عن الاستنتاج وتعرض وجهتَي النظر، لكن القرار في شأنك يبقى لك.</value></data>
+  <data name="Laws_AnalysisStale" xml:space="preserve"><value>تغيّر نص القانون بعد إعداد التحليل — التحليل يصف النسخة السابقة.</value></data>
+  <data name="Ai_WhatLawSays" xml:space="preserve"><value>ما ينصّ عليه القانون</value></data>
+  <data name="Ai_LawGives" xml:space="preserve"><value>ما يمنحه</value></data>
+  <data name="Ai_LawLimits" xml:space="preserve"><value>ما يقيّده</value></data>
 </root>

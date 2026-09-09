@@ -769,4 +769,10 @@
   <data name="Laws_Regulations" xml:space="preserve"><value>Government regulations</value></data>
   <data name="Laws_RegulationsNote" xml:space="preserve"><value>Ministerial orders change the amounts and schedules of a law without passing through the Knesset: benefit rates, fines, thresholds. The Knesset lists them on the law's page; they are absent from its open data. These are not amendments and are not included in the counts above.</value></data>
   <data name="Laws_RegulationsShow" xml:space="preserve"><value>Show all</value></data>
+  <data name="Laws_Analysis" xml:space="preserve"><value>Analysis of the law</value></data>
+  <data name="Laws_AnalysisSource" xml:space="preserve"><value>Analysis produced by {0} from the consolidated text of the law. This is not legal advice: the platform separates fact from inference and presents both sides, but decisions about your own case are yours.</value></data>
+  <data name="Laws_AnalysisStale" xml:space="preserve"><value>The text of the law has changed since the analysis was produced — it describes the previous version.</value></data>
+  <data name="Ai_WhatLawSays" xml:space="preserve"><value>What the law provides</value></data>
+  <data name="Ai_LawGives" xml:space="preserve"><value>What it grants</value></data>
+  <data name="Ai_LawLimits" xml:space="preserve"><value>What it restricts</value></data>
 </root>

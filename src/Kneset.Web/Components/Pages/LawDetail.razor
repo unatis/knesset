@@ -1,5 +1,6 @@
 @page "/laws/{Id:int}"
 @using Kneset.Core.Entities
+@using Kneset.Core.Models
 @using System.Globalization
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
@@ -56,6 +57,23 @@ else
             }
             <small class="text-muted d-block mt-1">@L["Laws_TopicSource"]</small>
         </div>
+    }
+
+    @* Разбор закона — тем же конвейером и по той же политике, что разбор
+       законопроекта: симметрия доводов, факт отдельно от вывода, права
+       обязательно. Показываем перед текстом: человек приходит понять,
+       что закон значит, а не читать статьи. *@
+    @if (_analysis is not null)
+    {
+        <h5 class="mt-4">@L["Laws_Analysis"]</h5>
+        @if (_analysisStale)
+        {
+            <div class="alert alert-warning py-2 small">@L["Laws_AnalysisStale"]</div>
+        }
+        <AnalysisView Analysis="_analysis" ForLaw="true" />
+        <p class="text-muted small mt-2" style="max-width:70ch">
+            @string.Format(L["Laws_AnalysisSource"], _analysisModel)
+        </p>
     }
 
     @* Текст закона. Единственное место, где он у нас есть, — ссылка:
@@ -295,6 +313,9 @@ else
     private List<TopicLink> _topics = [];
     private IsraelLawText? _text;
     private List<LawRegulation> _regulations = [];
+    private BillAnalysisResult? _analysis;
+    private string _analysisModel = "";
+    private bool _analysisStale;
 
 
     private sealed record TopicLink(int Id, string Name);
@@ -315,6 +336,23 @@ else
                     .Where(t => t.IsraelLawId == Id && t.LanguageCode == lang)
                     .Select(t => t.Text)
                     .FirstOrDefaultAsync();
+            }
+
+            // Разбор берём на языке интерфейса; нет его — показываем мастер
+            // на английском, а не пустое место: содержание одно и то же,
+            // и англоязычный разбор полезнее отсутствия разбора.
+            var uiLang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            var stored = await db.IsraelLawAnalyses.AsNoTracking()
+                .Where(x => x.IsraelLawId == Id && (x.LanguageCode == uiLang || x.LanguageCode == "en"))
+                .OrderByDescending(x => x.LanguageCode == uiLang)
+                .FirstOrDefaultAsync();
+
+            if (stored is not null)
+            {
+                _analysis = System.Text.Json.JsonSerializer
+                    .Deserialize<BillAnalysisResult>(stored.AnalysisJson);
+                _analysisModel = stored.ModelVersion;
+                _analysisStale = stored.IsStale;
             }
 
             _regulations = await db.LawRegulations.AsNoTracking()

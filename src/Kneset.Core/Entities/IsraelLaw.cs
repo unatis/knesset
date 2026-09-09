@@ -58,6 +58,9 @@ public class IsraelLaw
     /// <summary>Подзаконные акты — отдельно от поправок, см. LawRegulation.</summary>
     public List<LawRegulation> Regulations { get; set; } = [];
 
+    /// <summary>Разборы по языкам — отдельно от разборов законопроектов.</summary>
+    public List<IsraelLawAnalysis> Analyses { get; set; } = [];
+
     /// <summary>Копия сводного текста, если он у нас есть.</summary>
     public IsraelLawText? FullText { get; set; }
 

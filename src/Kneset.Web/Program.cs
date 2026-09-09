@@ -2,6 +2,7 @@
 using Anthropic;
 using Kneset.Core.Abstractions;
 using Kneset.Core.Entities;
+using Kneset.Core.Models;
 using Kneset.Web;
 using Kneset.Infrastructure.Ai;
 using Kneset.Infrastructure.Data;
@@ -177,6 +178,16 @@ builder.Services.AddSingleton<IBillAnalyzer>(sp => aiProvider switch
         sp.GetRequiredService<AnthropicClient>(), analysisModel),
     _ => throw new InvalidOperationException(
         $"Неизвестный AI-провайдер '{aiProvider}'. Доступно: Stub, Claude.")
+});
+
+// Разбор действующих законов: та же политика и та же схема ответа,
+// своя подводка. Заглушки нет намеренно — законы разбираются не по запросу
+// читателя, а фоном, и молчание лучше выдуманного разбора.
+builder.Services.AddSingleton<ILawAnalyzer?>(sp => aiProvider switch
+{
+    "Claude" => new ClaudeLawAnalyzer(
+        sp.GetRequiredService<AnthropicClient>(), analysisModel),
+    _ => null,
 });
 
 // Перевод разбора. Если задан ключ Gemini, переводим бесплатно, пока
@@ -1169,6 +1180,74 @@ if (app.Environment.IsDevelopment())
             chars = result.CharCount,
             error = result.Error,
             head = result.Text.Length > 600 ? result.Text[..600] : result.Text,
+        });
+    });
+
+    // Разбор одного закона по требованию: посмотреть на результат прежде,
+    // чем запускать по всем. Стоит денег, поэтому руками и по одному.
+    app.MapGet("/dev/analyze-law", async (
+        int id, ILawAnalyzer? analyzer, IDbContextFactory<AppDbContext> factory,
+        CancellationToken ct) =>
+    {
+        if (analyzer is null)
+            return Results.Json(new { error = "Ai:Provider не Claude — разборщика законов нет" });
+
+        await using var db = await factory.CreateDbContextAsync(ct);
+        var law = await db.IsraelLaws.AsNoTracking()
+            .Include(l => l.FullText)
+            .FirstOrDefaultAsync(l => l.Id == id, ct);
+
+        if (law is null) return Results.NotFound();
+
+        var amendments = await db.LawAmendments.AsNoTracking()
+            .Where(x => x.IsraelLawId == id && !x.IsOriginal)
+            .Select(x => x.ActPublicationDate)
+            .ToListAsync(ct);
+        var regulations = await db.LawRegulations.AsNoTracking()
+            .CountAsync(x => x.IsraelLawId == id, ct);
+
+        var request = new LawAnalysisRequest
+        {
+            IsraelLawId = law.Id,
+            NameHebrew = law.Name,
+            IsBasicLaw = law.IsBasicLaw,
+            ValidityDesc = law.ValidityDesc,
+            PublicationDate = law.PublicationDate,
+            AmendmentCount = amendments.Count,
+            LastAmendedAt = amendments.Where(d => d != null).Max(),
+            RegulationCount = regulations,
+            FullText = law.FullText?.Text,
+            TextSource = law.FullText?.SourceUrl,
+            TextRevisionAt = law.FullText?.RevisionAt,
+            LanguageCode = "en",
+        };
+
+        var started = DateTime.UtcNow;
+        var result = await analyzer.AnalyzeAsync(request, ct);
+        var json = System.Text.Json.JsonSerializer.Serialize(result);
+
+        var row = await db.IsraelLawAnalyses
+            .FirstOrDefaultAsync(x => x.IsraelLawId == id && x.LanguageCode == "en", ct);
+        if (row is null)
+        {
+            row = new IsraelLawAnalysis { IsraelLawId = id, LanguageCode = "en" };
+            db.IsraelLawAnalyses.Add(row);
+        }
+
+        row.AnalysisJson = json;
+        row.ModelVersion = analyzer.ModelVersion;
+        row.SourceRevision = law.FullText?.Revision ?? 0;
+        row.GeneratedAt = DateTime.UtcNow;
+        row.IsStale = false;
+        await db.SaveChangesAsync(ct);
+
+        return Results.Json(new
+        {
+            law = law.Name,
+            textChars = law.FullText?.Text.Length ?? 0,
+            seconds = (int)(DateTime.UtcNow - started).TotalSeconds,
+            model = analyzer.ModelVersion,
+            analysis = result,
         });
     });
 

@@ -8,7 +8,7 @@
         <div class="alert alert-warning py-2">@Analysis.ProviderNote</div>
     }
 
-    <h6>@L["Ai_WhatProposes"]</h6>
+    <h6>@L[ForLaw ? "Ai_WhatLawSays" : "Ai_WhatProposes"]</h6>
     <p>@Analysis.Summary</p>
 
     @if (Analysis.AffectedGroups.Count > 0)
@@ -26,7 +26,7 @@
         @if (Analysis.PotentialBenefits.Count > 0)
         {
             <div class="col-md-6">
-                <h6 class="text-success">@L["Ai_Benefits"]</h6>
+                <h6 class="text-success">@L[ForLaw ? "Ai_LawGives" : "Ai_Benefits"]</h6>
                 <ul>
                     @foreach (var point in Analysis.PotentialBenefits)
                     {
@@ -38,7 +38,7 @@
         @if (Analysis.PotentialRisks.Count > 0)
         {
             <div class="col-md-6">
-                <h6 class="text-danger">@L["Ai_Risks"]</h6>
+                <h6 class="text-danger">@L[ForLaw ? "Ai_LawLimits" : "Ai_Risks"]</h6>
                 <ul>
                     @foreach (var point in Analysis.PotentialRisks)
                     {
@@ -146,6 +146,14 @@
 
 @code {
     [Parameter, EditorRequired] public BillAnalysisResult? Analysis { get; set; }
+
+    /// <summary>
+    /// Разбирается действующий закон, а не законопроект. Меняет три
+    /// заголовка: у проекта спрашивают, что он предлагает и чем это
+    /// обернётся, у действующего закона — что он устанавливает, что даёт
+    /// и чем ограничивает. Поля те же, читаются иначе.
+    /// </summary>
+    [Parameter] public bool ForLaw { get; set; }
 
     /// <summary>
     /// Цвет по эффекту для права. Ограничение — предупреждающий, защита
