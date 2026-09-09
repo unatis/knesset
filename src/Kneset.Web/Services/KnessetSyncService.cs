@@ -997,7 +997,9 @@ public class KnessetSyncService(
     /// правовую консолидацию, то есть другой продукт.
     ///
     /// Тем же запросом приходит история изменений закона — по строке
-    /// на поправку, с публикацией в «Рэумот» и ссылкой на PDF. Этого нет
+    /// на изменение, с публикацией и ссылкой на PDF. Изменения бывают двух
+    /// родов, и они расходятся по разным таблицам: акты Кнессета дополняют
+    /// наши LawAmendments, приказы министров ложатся в LawRegulations. Этого нет
     /// в открытых данных вовсе, а старых актов нет и в KNS_Law: именно
     /// поэтому у части поправок у нас не было даже названия. Строки
     /// привязываются к нашим LawAmendments по идентификатору акта —
@@ -1012,11 +1014,20 @@ public class KnessetSyncService(
     private async Task<int> SyncLawSiteLinksAsync(DateTime? since, CancellationToken ct)
     {
         const int PerRun = 150;
+
+        // Что мы забираем со страницы. Версию меняем, когда начинаем брать
+        // больше: тогда законы переспрашиваются сами, и не нужен разовый
+        // сброс отметки времени в миграции.
+        //  site-v1 — ссылки на текст и министерства;
+        //  site-v2 — плюс история изменений: поправки и подзаконные акты.
+        const string SiteDataVersion = "site-v2";
         var stale = DateTime.UtcNow.AddDays(-90);
 
         await using var readDb = await dbFactory.CreateDbContextAsync(ct);
         var due = await readDb.IsraelLaws.AsNoTracking()
-            .Where(l => l.SiteFetchedAt == null || l.SiteFetchedAt < stale)
+            .Where(l => l.SiteFetchedAt == null
+                        || l.SiteFetchedAt < stale
+                        || l.SiteDataVersion != SiteDataVersion)
             // Основные законы вперёд: их девятнадцать, они конституционное
             // ядро и самые читаемые страницы раздела. Следом — законы,
             // на которые ссылаются живые законопроекты.
@@ -1032,6 +1043,7 @@ public class KnessetSyncService(
         var found = 0;
         var docs = 0;
         var names = 0;
+        var secondary = 0;
         var unmatched = 0;
 
         foreach (var chunk in due.Chunk(25))
@@ -1042,6 +1054,9 @@ public class KnessetSyncService(
             var amendments = await db.LawAmendments
                 .Where(a => ids.Contains(a.IsraelLawId))
                 .ToListAsync(ct);
+            var regulations = await db.LawRegulations
+                .Where(r => ids.Contains(r.IsraelLawId))
+                .ToListAsync(ct);
 
             foreach (var row in chunk)
             {
@@ -1051,6 +1066,7 @@ public class KnessetSyncService(
                 // Отметку ставим и на пустой ответ: иначе каждый прогон
                 // спрашивал бы сайт об одних и тех же законах.
                 law.SiteFetchedAt = DateTime.UtcNow;
+                law.SiteDataVersion = SiteDataVersion;
                 if (info is not null)
                 {
                     law.OpenBookUrl = info.OpenBookUrl;
@@ -1059,8 +1075,42 @@ public class KnessetSyncService(
                     if (info.OpenBookUrl is not null) found++;
 
                     var mine = amendments.Where(a => a.IsraelLawId == law.Id).ToList();
+                    var mineRegulations = regulations.Where(r => r.IsraelLawId == law.Id).ToList();
+
                     foreach (var correction in info.Corrections)
                     {
+                        // Подзаконный акт — в свою таблицу. Смешивать нельзя:
+                        // на счётчике поправок держится весь раздел про
+                        // косвенные изменения, и приказы министров его
+                        // раздули бы втрое.
+                        if (correction.IsSecondary)
+                        {
+                            var regulation = mineRegulations
+                                .FirstOrDefault(r => r.KnessetActId == correction.ActId);
+
+                            if (regulation is null)
+                            {
+                                regulation = new LawRegulation
+                                {
+                                    IsraelLawId = law.Id,
+                                    KnessetActId = correction.ActId,
+                                };
+                                db.LawRegulations.Add(regulation);
+                                mineRegulations.Add(regulation);
+                            }
+
+                            regulation.Name = correction.Name ?? "";
+                            regulation.IsIndirect = correction.IsIndirect;
+                            regulation.PublicationSeries = correction.PublicationSeries;
+                            regulation.MagazineNumber = correction.MagazineNumber;
+                            regulation.PageNumber = correction.PageNumber;
+                            regulation.PublicationDate = AsUtcNullable(correction.PublicationDate);
+                            regulation.DocumentUrl = correction.DocumentUrl;
+                            regulation.FetchedAt = DateTime.UtcNow;
+                            secondary++;
+                            continue;
+                        }
+
                         var amendment = mine.FirstOrDefault(a => a.KnessetLawId == correction.ActId);
                         if (amendment is null)
                         {
@@ -1099,8 +1149,9 @@ public class KnessetSyncService(
 
         logger.LogInformation(
             "Страницы законов: спрошено {Asked}, текст у {Found}, документов поправок {Docs}, "
-            + "названий восполнено {Names}, не привязалось {Unmatched}",
-            due.Count, found, docs, names, unmatched);
+            + "названий восполнено {Names}, подзаконных актов {Secondary}, "
+            + "не привязалось {Unmatched}",
+            due.Count, found, docs, names, secondary, unmatched);
 
         return due.Count;
     }

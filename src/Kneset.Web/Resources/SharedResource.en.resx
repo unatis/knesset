@@ -766,4 +766,7 @@
   <data name="Members_GroupFactions" xml:space="preserve"><value>Factions</value></data>
   <data name="Members_GroupParties" xml:space="preserve"><value>Parties</value></data>
   <data name="Members_PartyIsFaction" xml:space="preserve"><value>Showing all members of the {0} faction: the Knesset publishes who belongs to which faction, but not which party each of them represents.</value></data>
+  <data name="Laws_Regulations" xml:space="preserve"><value>Government regulations</value></data>
+  <data name="Laws_RegulationsNote" xml:space="preserve"><value>Ministerial orders change the amounts and schedules of a law without passing through the Knesset: benefit rates, fines, thresholds. The Knesset lists them on the law's page; they are absent from its open data. These are not amendments and are not included in the counts above.</value></data>
+  <data name="Laws_RegulationsShow" xml:space="preserve"><value>Show all</value></data>
 </root>
