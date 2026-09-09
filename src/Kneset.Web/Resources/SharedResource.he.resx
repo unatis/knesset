@@ -769,4 +769,10 @@
   <data name="Laws_Regulations" xml:space="preserve"><value>תקנות הממשלה</value></data>
   <data name="Laws_RegulationsNote" xml:space="preserve"><value>צווי שרים משנים סכומים ותוספות לחוק בלי לעבור בכנסת: גובה קצבה, גובה קנס, ספים. הכנסת מציגה אותם בעמוד החוק, ובנתונים הפתוחים הם אינם. אלה אינם תיקונים ואינם נכללים בספירה שלמעלה.</value></data>
   <data name="Laws_RegulationsShow" xml:space="preserve"><value>הצג הכול</value></data>
+  <data name="Laws_Analysis" xml:space="preserve"><value>ניתוח החוק</value></data>
+  <data name="Laws_AnalysisSource" xml:space="preserve"><value>הניתוח הופק על ידי {0} מהנוסח המשולב של החוק. אין זה ייעוץ משפטי: הפלטפורמה מפרידה עובדה ממסקנה ומציגה את שני הצדדים, אך ההחלטה בעניינך היא שלך.</value></data>
+  <data name="Laws_AnalysisStale" xml:space="preserve"><value>נוסח החוק השתנה לאחר הפקת הניתוח — הניתוח מתאר את הגרסה הקודמת.</value></data>
+  <data name="Ai_WhatLawSays" xml:space="preserve"><value>מה החוק קובע</value></data>
+  <data name="Ai_LawGives" xml:space="preserve"><value>מה הוא מעניק</value></data>
+  <data name="Ai_LawLimits" xml:space="preserve"><value>במה הוא מגביל</value></data>
 </root>

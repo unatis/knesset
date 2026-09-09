@@ -36,14 +36,16 @@ public class AnalysisClaims(
     /// Пытается взять шаг себе. false означает «этим уже занят кто-то живой» —
     /// вызывающий обязан ничего не делать, а не «попробовать всё равно».
     /// </summary>
-    public async Task<bool> TryClaimAsync(int billId, string step, CancellationToken ct)
+    public async Task<bool> TryClaimAsync(
+        string subjectKind, int subjectId, string step, CancellationToken ct)
     {
         await using var db = await dbFactory.CreateDbContextAsync(ct);
 
         var now = DateTime.UtcNow;
         db.AnalysisJobs.Add(new AnalysisJob
         {
-            BillId = billId,
+            SubjectKind = subjectKind,
+            SubjectId = subjectId,
             Step = step,
             State = AnalysisJob.Running,
             ClaimedAt = now,
@@ -63,15 +65,15 @@ public class AnalysisClaims(
 
         await using var read = await dbFactory.CreateDbContextAsync(ct);
         var existing = await read.AnalysisJobs.AsNoTracking()
-            .FirstOrDefaultAsync(j => j.BillId == billId && j.Step == step, ct);
+            .FirstOrDefaultAsync(j => j.SubjectKind == subjectKind && j.SubjectId == subjectId && j.Step == step, ct);
 
         if (existing is null) return false;   // исчезла между двумя запросами
 
         if (existing.State == AnalysisJob.Running && existing.ClaimedAt > now - Lease)
         {
             logger.LogInformation(
-                "Шаг {Step} по {BillId} уже считает {Who} с {When} — не дублирую",
-                step, billId, existing.ClaimedBy, existing.ClaimedAt);
+                "Шаг {Step} по {SubjectId} уже считает {Who} с {When} — не дублирую",
+                step, subjectId, existing.ClaimedBy, existing.ClaimedAt);
             return false;
         }
 
@@ -90,15 +92,15 @@ public class AnalysisClaims(
         if (taken == 0)
         {
             logger.LogInformation(
-                "Шаг {Step} по {BillId} перехватил кто-то другой — не дублирую", step, billId);
+                "Шаг {Step} по {SubjectId} перехватил кто-то другой — не дублирую", step, subjectId);
             return false;
         }
 
         if (existing.State == AnalysisJob.Running)
         {
             logger.LogWarning(
-                "Шаг {Step} по {BillId} висел в работе у {Who} с {When} дольше срока — забираю",
-                step, billId, existing.ClaimedBy, existing.ClaimedAt);
+                "Шаг {Step} по {SubjectId} висел в работе у {Who} с {When} дольше срока — забираю",
+                step, subjectId, existing.ClaimedBy, existing.ClaimedAt);
         }
 
         return true;
@@ -107,11 +109,11 @@ public class AnalysisClaims(
     /// <summary>Отпускает шаг. Причина неудачи сохраняется: по ней потом
     /// можно объяснить человеку, что именно не вышло.</summary>
     public async Task ReleaseAsync(
-        int billId, string step, string? error, CancellationToken ct)
+        string subjectKind, int subjectId, string step, string? error, CancellationToken ct)
     {
         await using var db = await dbFactory.CreateDbContextAsync(ct);
         await db.AnalysisJobs
-            .Where(j => j.BillId == billId && j.Step == step)
+            .Where(j => j.SubjectKind == subjectKind && j.SubjectId == subjectId && j.Step == step)
             .ExecuteUpdateAsync(s => s
                 .SetProperty(j => j.State, error is null ? AnalysisJob.Done : AnalysisJob.Failed)
                 .SetProperty(j => j.FinishedAt, DateTime.UtcNow)

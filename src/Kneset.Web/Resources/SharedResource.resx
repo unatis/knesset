@@ -769,4 +769,10 @@
   <data name="Laws_Regulations" xml:space="preserve"><value>Постановления правительства</value></data>
   <data name="Laws_RegulationsNote" xml:space="preserve"><value>Приказы министров меняют суммы и приложения к закону, не проходя через Кнессет: размер пособия, размер штрафа, пороги. Кнессет показывает их на странице закона, в открытых данных их нет. Это не поправки — они не входят в счёт выше.</value></data>
   <data name="Laws_RegulationsShow" xml:space="preserve"><value>Показать все</value></data>
+  <data name="Laws_Analysis" xml:space="preserve"><value>Разбор закона</value></data>
+  <data name="Laws_AnalysisSource" xml:space="preserve"><value>Разбор сделан {0} по сводному тексту закона. Это не юридическая консультация: платформа отделяет факт от вывода и приводит доводы обеих сторон, но решение о своём деле принимает человек.</value></data>
+  <data name="Laws_AnalysisStale" xml:space="preserve"><value>Текст закона изменился после того, как сделан разбор — разбор описывает прежнюю редакцию.</value></data>
+  <data name="Ai_WhatLawSays" xml:space="preserve"><value>Что устанавливает закон</value></data>
+  <data name="Ai_LawGives" xml:space="preserve"><value>Что даёт</value></data>
+  <data name="Ai_LawLimits" xml:space="preserve"><value>Чем ограничивает</value></data>
 </root>

@@ -1,9 +1,5 @@
-using System.Text;
-using System.Text.Json;
 using Anthropic;
-using Anthropic.Models.Messages;
 using Kneset.Core.Abstractions;
-using Kneset.Core.Ai;
 using Kneset.Core.Models;
 
 namespace Kneset.Infrastructure.Ai;
@@ -28,80 +24,18 @@ public class ClaudeBillAnalyzer(
 {
     public string ModelVersion => model;
 
-    public async Task<BillAnalysisResult> AnalyzeAsync(
+    public Task<BillAnalysisResult> AnalyzeAsync(
         BillAnalysisRequest request, CancellationToken ct = default)
     {
-        var system = $"""
+        var system = ClaudeAnalysisRunner.SystemPrompt(
+            """
             Ты аналитик законодательной инициативы Кнессета. Ниже — обязательная
             политика анализа платформы. Она часть твоих инструкций, а не справочный
             материал: следуй ей буквально.
+            """,
+            request.LanguageCode);
 
-            {AiPolicy.AnalysisPolicy}
-
-            {AnalysisJsonSchema.FormatRules}
-            - Язык ответа: {request.LanguageCode}.
-            """;
-
-        var parameters = new MessageCreateParams
-        {
-            Model = model,
-            // Потолок вывода на 64 тысячи и стримингом — из-за законопроекта 42.
-            // Там документ на 126 504 символа, и с прежними 16 тысячами ответ
-            // обрывался на девятом праве в rights_impact: JSON приходил
-            // недописанным, десериализация падала, и разбора не оставалось
-            // вообще. Лимит общий на размышление и на ответ, а на усилии high
-            // размышление съедает основную часть. Такой потолок без стриминга
-            // упирается в таймаут HTTP, поэтому и то и другое сразу.
-            MaxTokens = 64000,
-            // Политика одинакова во всех запросах и занимает основную часть
-            // промпта — кэшируем, иначе платим за неё на каждом законопроекте.
-            System = new List<TextBlockParam>
-            {
-                new() { Text = system, CacheControl = new CacheControlEphemeral() },
-            },
-            OutputConfig = new OutputConfig
-            {
-                Effort = Effort.High,
-                Format = new JsonOutputFormat { Schema = AnalysisJsonSchema.ForClaude() },
-            },
-            Messages = [new() { Role = Role.User, Content = BuildInput(request) }],
-        };
-
-        var json = new StringBuilder();
-        string? stopReason = null;
-
-        await foreach (var streamEvent in client.Messages.CreateStreaming(parameters, ct))
-        {
-            if (streamEvent.TryPickContentBlockDelta(out var block) &&
-                block.Delta.TryPickText(out var text))
-            {
-                json.Append(text.Text);
-            }
-            else if (streamEvent.TryPickDelta(out var messageDelta))
-            {
-                stopReason = messageDelta.Delta.StopReason;
-            }
-        }
-
-        // Обрыв по лимиту проверяем до разбора JSON. Иначе причина приходит
-        // как «ожидалось начало имени свойства, но данные кончились» —
-        // сообщение про синтаксис там, где дело в лимите.
-        if (stopReason == "max_tokens")
-        {
-            throw new InvalidOperationException(
-                $"Разбор от {model} обрезан по лимиту вывода: пришло " +
-                $"{json.Length} символов JSON. Нужен потолок выше или текст короче.");
-        }
-
-        if (json.Length == 0)
-        {
-            throw new InvalidOperationException(
-                $"Модель {model} не вернула текст разбора (stop_reason: {stopReason ?? "—"})");
-        }
-
-        return JsonSerializer.Deserialize<BillAnalysisResult>(json.ToString())
-               ?? throw new InvalidOperationException(
-                   $"Разбор от {model} не разобрался по схеме BillAnalysisResult");
+        return ClaudeAnalysisRunner.RunAsync(client, model, system, BuildInput(request), ct);
     }
 
     /// <summary>

@@ -2,6 +2,7 @@
 using Anthropic;
 using Kneset.Core.Abstractions;
 using Kneset.Core.Entities;
+using Kneset.Core.Models;
 using Kneset.Web;
 using Kneset.Infrastructure.Ai;
 using Kneset.Infrastructure.Data;
@@ -177,6 +178,16 @@ builder.Services.AddSingleton<IBillAnalyzer>(sp => aiProvider switch
         sp.GetRequiredService<AnthropicClient>(), analysisModel),
     _ => throw new InvalidOperationException(
         $"Неизвестный AI-провайдер '{aiProvider}'. Доступно: Stub, Claude.")
+});
+
+// Разбор действующих законов: та же политика и та же схема ответа,
+// своя подводка. Заглушки нет намеренно — законы разбираются не по запросу
+// читателя, а фоном, и молчание лучше выдуманного разбора.
+builder.Services.AddSingleton<ILawAnalyzer?>(sp => aiProvider switch
+{
+    "Claude" => new ClaudeLawAnalyzer(
+        sp.GetRequiredService<AnthropicClient>(), analysisModel),
+    _ => null,
 });
 
 // Перевод разбора. Если задан ключ Gemini, переводим бесплатно, пока
@@ -552,7 +563,7 @@ if (app.Environment.IsDevelopment())
     {
         await using var db = await factory.CreateDbContextAsync(ct);
         return Results.Json(await db.AnalysisJobs.AsNoTracking()
-            .Where(j => billId == null || j.BillId == billId)
+            .Where(j => billId == null || j.SubjectId == billId)
             .OrderByDescending(j => j.ClaimedAt)
             .Take(50)
             .ToListAsync(ct));
@@ -563,12 +574,12 @@ if (app.Environment.IsDevelopment())
     // единственное, что отделяет нас от второй оплаты той же работы.
     app.MapGet("/dev/try-claim", async (
         int billId, string step, AnalysisClaims claims, CancellationToken ct) =>
-        Results.Json(new { billId, step, claimed = await claims.TryClaimAsync(billId, step, ct) }));
+        Results.Json(new { billId, step, claimed = await claims.TryClaimAsync(AnalysisJob.SubjectBill, billId, step, ct) }));
 
     app.MapGet("/dev/release-claim", async (
         int billId, string step, string? error, AnalysisClaims claims, CancellationToken ct) =>
     {
-        await claims.ReleaseAsync(billId, step, error, ct);
+        await claims.ReleaseAsync(AnalysisJob.SubjectBill, billId, step, error, ct);
         return Results.Json(new { billId, step, released = true });
     });
 

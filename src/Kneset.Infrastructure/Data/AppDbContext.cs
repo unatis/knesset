@@ -42,6 +42,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<LawTopic> LawTopics => Set<LawTopic>();
     public DbSet<IsraelLawText> IsraelLawTexts => Set<IsraelLawText>();
     public DbSet<LawRegulation> LawRegulations => Set<LawRegulation>();
+    public DbSet<IsraelLawAnalysis> IsraelLawAnalyses => Set<IsraelLawAnalysis>();
     public DbSet<LawAct> LawActs => Set<LawAct>();
     public DbSet<LawAmendment> LawAmendments => Set<LawAmendment>();
     public DbSet<NotificationSubscription> NotificationSubscriptions => Set<NotificationSubscription>();
@@ -135,13 +136,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             // Уникальность здесь и есть весь механизм: захват берётся вставкой,
             // и проигравший узнаёт об этом по нарушению ограничения, а не
             // по чтению, которое у двух процессов может совпасть.
-            j.HasIndex(x => new { x.BillId, x.Step }).IsUnique();
+            j.HasIndex(x => new { x.SubjectKind, x.SubjectId, x.Step }).IsUnique();
+            j.Property(x => x.SubjectKind).HasMaxLength(8);
             j.Property(x => x.Step).HasMaxLength(16);
             j.Property(x => x.State).HasMaxLength(16);
             j.Property(x => x.ClaimedBy).HasMaxLength(64);
             j.Property(x => x.Error).HasMaxLength(2000);
-            j.HasOne<Bill>().WithMany()
-             .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+            // Внешнего ключа нет: предметы захвата лежат в разных таблицах
+            // (законопроекты и законы), а строка захвата — служебная запись
+            // о работе. Ценой становится отсутствие каскадного удаления,
+            // и это правильная цена: записи временные.
         });
 
         modelBuilder.Entity<BillTitle>(t =>
@@ -153,6 +157,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             t.Property(x => x.SourceName).HasMaxLength(2000);
             t.HasOne(x => x.Bill).WithMany(b => b.Titles)
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<IsraelLawAnalysis>(a =>
+        {
+            // Один разбор на закон и язык.
+            a.HasIndex(x => new { x.IsraelLawId, x.LanguageCode }).IsUnique();
+            a.Property(x => x.LanguageCode).HasMaxLength(8);
+            a.Property(x => x.ModelVersion).HasMaxLength(64);
+            a.HasOne(x => x.IsraelLaw).WithMany(l => l.Analyses)
+             .HasForeignKey(x => x.IsraelLawId).OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<LawRegulation>(r =>

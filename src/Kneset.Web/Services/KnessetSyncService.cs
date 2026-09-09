@@ -1,3 +1,6 @@
+using System.Text.Json;
+using Kneset.Core.Abstractions;
+using Kneset.Core.Models;
 using Kneset.Core.Entities;
 using Kneset.Core.Legislation;
 using Kneset.Infrastructure.Data;
@@ -16,6 +19,9 @@ public class KnessetSyncService(
     KnessetODataClient client,
     KnessetWebsiteClient websiteClient,
     WikisourceClient wikisource,
+    AnalysisClaims claims,
+    IAnalysisTranslator translator,
+    ILawAnalyzer? lawAnalyzer,
     NotificationDispatchService notifications,
     IConfiguration configuration,
     ILogger<KnessetSyncService> logger) : BackgroundService
@@ -79,6 +85,7 @@ public class KnessetSyncService(
         await RunStepAsync("BillLawLinks", LinkBillsToLawsAsync, ct);
         await RunStepAsync("LawSiteLinks", SyncLawSiteLinksAsync, ct);
         await RunStepAsync("LawTexts", SyncLawTextsAsync, ct);
+        await RunStepAsync("LawAnalyses", SyncLawAnalysesAsync, ct);
 
         // Строго последним: подписка на депутата опирается на BillInitiators,
         // которые заполняются шагом выше. RunStepAsync передаёт сюда время
@@ -909,6 +916,196 @@ public class KnessetSyncService(
         }
 
         return total;
+    }
+
+    /// <summary>
+    /// Разбор действующих законов и переводы разбора.
+    ///
+    /// Мастер делается на английском, остальные языки получаются переводом —
+    /// тем же конвейером, что у законопроектов, и по той же причине:
+    /// содержание на всех языках должно быть одним. Для иврита переводчику
+    /// подаётся сам текст закона, чтобы термины восстанавливались
+    /// по источнику, а не переводились обратно с английского.
+    ///
+    /// Каждый шаг берётся под захват. Дев и прод сидят на одной базе,
+    /// и без захвата оба разобрали бы — и оплатили — один закон дважды;
+    /// на переводах законопроектов это уже случалось.
+    ///
+    /// Порция за прогон ограничена: разбор на крупном тексте идёт минуты,
+    /// и растягивать на них весь конвейер синхронизации незачем.
+    /// </summary>
+    private async Task<int> SyncLawAnalysesAsync(DateTime? since, CancellationToken ct)
+    {
+        if (lawAnalyzer is null) return 0;
+
+        // Пятнадцать за прогон — чтобы девятнадцать основных законов
+        // закрылись за один проход, а не за несколько суток по три.
+        // Прогон при этом растягивается почти на час; когда очередь опустеет,
+        // это перестанет иметь значение — шаг будет находить одиночные
+        // законы с изменившимся текстом.
+        const int PerRun = 15;
+        string[] languages = ["ru", "he", "ar"];
+
+        await using var readDb = await dbFactory.CreateDbContextAsync(ct);
+
+        // Разбор нужен там, где его нет или где текст с тех пор изменился:
+        // ревизия источника — единственный честный признак устаревания.
+        var due = await readDb.IsraelLaws.AsNoTracking()
+            .Where(l => l.IsBasicLaw && l.FullText != null)
+            .Where(l => !l.Analyses.Any(x => x.LanguageCode == "en"
+                                             && x.SourceRevision == l.FullText!.Revision))
+            .OrderBy(l => l.Id)
+            .Take(PerRun)
+            .Select(l => l.Id)
+            .ToListAsync(ct);
+
+        logger.LogInformation("Разборы законов: в очереди {Due}", due.Count);
+
+        var analysed = 0;
+        foreach (var lawId in due)
+        {
+            if (await AnalyseLawAsync(lawId, ct)) analysed++;
+        }
+
+        // Переводы отдельным проходом: мастер мог появиться на прошлом прогоне,
+        // и ждать нового разбора ради перевода незачем.
+        var pending = await readDb.IsraelLawAnalyses.AsNoTracking()
+            .Where(x => x.LanguageCode == "en")
+            .Where(x => x.IsraelLaw.Analyses.Count(y => y.SourceRevision == x.SourceRevision)
+                        < languages.Length + 1)
+            .OrderBy(x => x.IsraelLawId)
+            .Take(PerRun)
+            .Select(x => x.IsraelLawId)
+            .ToListAsync(ct);
+
+        var translated = 0;
+        foreach (var lawId in pending)
+        {
+            translated += await TranslateLawAnalysisAsync(lawId, languages, ct);
+        }
+
+        logger.LogInformation(
+            "Разборы законов: разобрано {Analysed}, переводов {Translated}", analysed, translated);
+
+        return analysed + translated;
+    }
+
+    private async Task<bool> AnalyseLawAsync(int lawId, CancellationToken ct)
+    {
+        if (!await claims.TryClaimAsync(AnalysisJob.SubjectLaw, lawId, AnalysisJob.MasterStep, ct))
+            return false;
+
+        try
+        {
+            await using var db = await dbFactory.CreateDbContextAsync(ct);
+            var law = await db.IsraelLaws.AsNoTracking()
+                .Include(l => l.FullText)
+                .FirstAsync(l => l.Id == lawId, ct);
+
+            var dates = await db.LawAmendments.AsNoTracking()
+                .Where(x => x.IsraelLawId == lawId && !x.IsOriginal)
+                .Select(x => x.ActPublicationDate)
+                .ToListAsync(ct);
+            var regulations = await db.LawRegulations.AsNoTracking()
+                .CountAsync(x => x.IsraelLawId == lawId, ct);
+
+            var result = await lawAnalyzer!.AnalyzeAsync(new LawAnalysisRequest
+            {
+                IsraelLawId = law.Id,
+                NameHebrew = law.Name,
+                IsBasicLaw = law.IsBasicLaw,
+                ValidityDesc = law.ValidityDesc,
+                PublicationDate = law.PublicationDate,
+                AmendmentCount = dates.Count,
+                LastAmendedAt = dates.Where(d => d != null).Max(),
+                RegulationCount = regulations,
+                FullText = law.FullText?.Text,
+                TextSource = law.FullText?.SourceUrl,
+                TextRevisionAt = law.FullText?.RevisionAt,
+                LanguageCode = "en",
+            }, ct);
+
+            await SaveLawAnalysisAsync(lawId, "en", result, lawAnalyzer.ModelVersion,
+                law.FullText?.Revision ?? 0, ct);
+
+            await claims.ReleaseAsync(AnalysisJob.SubjectLaw, lawId, AnalysisJob.MasterStep, null, ct);
+            return true;
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException || !ct.IsCancellationRequested)
+        {
+            logger.LogError(ex, "Разбор закона {LawId} не вышел", lawId);
+            await claims.ReleaseAsync(
+                AnalysisJob.SubjectLaw, lawId, AnalysisJob.MasterStep, ex.Message, ct);
+            return false;
+        }
+    }
+
+    private async Task<int> TranslateLawAnalysisAsync(
+        int lawId, string[] languages, CancellationToken ct)
+    {
+        await using var db = await dbFactory.CreateDbContextAsync(ct);
+        var law = await db.IsraelLaws.AsNoTracking()
+            .Include(l => l.FullText)
+            .Include(l => l.Analyses)
+            .FirstAsync(l => l.Id == lawId, ct);
+
+        var master = law.Analyses.FirstOrDefault(x => x.LanguageCode == "en");
+        if (master is null) return 0;
+
+        var source = JsonSerializer.Deserialize<BillAnalysisResult>(master.AnalysisJson);
+        if (source is null) return 0;
+
+        var done = 0;
+        foreach (var language in languages)
+        {
+            var existing = law.Analyses.FirstOrDefault(x => x.LanguageCode == language);
+            if (existing is not null && existing.SourceRevision == master.SourceRevision) continue;
+
+            if (!await claims.TryClaimAsync(AnalysisJob.SubjectLaw, lawId, language, ct)) continue;
+
+            try
+            {
+                // Иврит — язык самого закона: подаём текст, чтобы термины
+                // вернулись из источника, а не переводились обратно.
+                var document = language == "he" ? law.FullText?.Text : null;
+                var translation = await translator.TranslateAsync(source, language, document, ct);
+
+                await SaveLawAnalysisAsync(lawId, language, translation.Analysis,
+                    translation.ModelVersion, master.SourceRevision, ct);
+
+                await claims.ReleaseAsync(AnalysisJob.SubjectLaw, lawId, language, null, ct);
+                done++;
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException || !ct.IsCancellationRequested)
+            {
+                logger.LogError(ex, "Перевод разбора закона {LawId} на {Lang} не вышел", lawId, language);
+                await claims.ReleaseAsync(AnalysisJob.SubjectLaw, lawId, language, ex.Message, ct);
+            }
+        }
+
+        return done;
+    }
+
+    private async Task SaveLawAnalysisAsync(
+        int lawId, string language, BillAnalysisResult analysis, string model,
+        long revision, CancellationToken ct)
+    {
+        await using var db = await dbFactory.CreateDbContextAsync(ct);
+        var row = await db.IsraelLawAnalyses
+            .FirstOrDefaultAsync(x => x.IsraelLawId == lawId && x.LanguageCode == language, ct);
+
+        if (row is null)
+        {
+            row = new IsraelLawAnalysis { IsraelLawId = lawId, LanguageCode = language };
+            db.IsraelLawAnalyses.Add(row);
+        }
+
+        row.AnalysisJson = JsonSerializer.Serialize(analysis);
+        row.ModelVersion = model;
+        row.SourceRevision = revision;
+        row.GeneratedAt = DateTime.UtcNow;
+        row.IsStale = false;
+        await db.SaveChangesAsync(ct);
     }
 
     /// <summary>

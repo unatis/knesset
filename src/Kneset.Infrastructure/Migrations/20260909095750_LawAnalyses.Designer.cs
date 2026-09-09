@@ -3,6 +3,7 @@ using System;
 using Kneset.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kneset.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260909095750_LawAnalyses")]
+    partial class LawAnalyses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,6 +32,9 @@ namespace Kneset.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BillId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ClaimedAt")
                         .HasColumnType("timestamp with time zone");
@@ -55,17 +61,9 @@ namespace Kneset.Infrastructure.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("character varying(16)");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SubjectKind")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SubjectKind", "SubjectId", "Step")
+                    b.HasIndex("BillId", "Step")
                         .IsUnique();
 
                     b.ToTable("AnalysisJobs");
@@ -1670,6 +1668,15 @@ namespace Kneset.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Kneset.Core.Entities.AnalysisJob", b =>
+                {
+                    b.HasOne("Kneset.Core.Entities.Bill", null)
+                        .WithMany()
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Kneset.Core.Entities.Bill", b =>
