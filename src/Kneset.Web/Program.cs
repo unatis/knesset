@@ -100,6 +100,16 @@ builder.Services.AddHttpClient<KnessetWebsiteClient>(http =>
     http.Timeout = TimeSpan.FromSeconds(30);
 });
 
+// Сводные тексты законов. Викимедиа просит представляться — без внятного
+// User-Agent запросы отбиваются.
+builder.Services.AddHttpClient<WikisourceClient>(http =>
+{
+    http.BaseAddress = new Uri("https://he.wikisource.org/");
+    http.Timeout = TimeSpan.FromSeconds(60);
+    http.DefaultRequestHeaders.UserAgent.ParseAdd(
+        "KnessetTracker/1.0 (https://github.com/unatis/knesset)");
+});
+
 // Уведомления. По-настоящему доставляется только колокольчик на сайте; почта,
 // мессенджеры и SMS показываются в настройках с пометкой «в разработке» и пишут
 // сообщения в лог. Подключение реального канала — свой класс INotificationChannel

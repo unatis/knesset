@@ -45,8 +45,21 @@ public class IsraelLaw
     /// <summary>Ответственные министерства — строкой, как отдаёт сайт.</summary>
     public string? Ministries { get; set; }
 
+    /// <summary>
+    /// Что именно мы забрали со страницы в прошлый раз. Меняется, когда шаг
+    /// начинает собирать больше, — тогда законы переспрашиваются сами,
+    /// и не нужен разовый сброс отметки в миграции.
+    /// </summary>
+    public string? SiteDataVersion { get; set; }
+
     /// <summary>Когда последний раз спрашивали сайт Кнессета об этом законе.</summary>
     public DateTime? SiteFetchedAt { get; set; }
+
+    /// <summary>Подзаконные акты — отдельно от поправок, см. LawRegulation.</summary>
+    public List<LawRegulation> Regulations { get; set; } = [];
+
+    /// <summary>Копия сводного текста, если он у нас есть.</summary>
+    public IsraelLawText? FullText { get; set; }
 
     /// <summary>Темы по рубрикатору Кнессета. Своих не придумываем.</summary>
     public List<LawTopic> Topics { get; set; } = [];

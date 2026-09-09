@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IStringLocalizer<SharedResource> L
+@using System.Globalization
 
 <PageTitle>@L["Nav_Members"]</PageTitle>
 
@@ -12,6 +13,30 @@
         <input class="form-control" placeholder="@L["Members_Search"]"
                value="@_search" @oninput="OnSearchChanged" />
     </div>
+    <div class="col-md-4">
+        @* Партии в том же списке, что и фракции: читатель ищет «Ликуд»
+           или «Ноам», не думая, чем одно отличается от другого.
+           Что различие есть — видно по группам и по оговорке ниже. *@
+        <select class="form-select" value="@_group" @onchange="OnGroupChanged"
+                aria-label="@L["Nav_Factions"]">
+            <option value="">@L["Members_AllFactions"]</option>
+            <optgroup label="@L["Members_GroupFactions"]">
+                @foreach (var f in _factions)
+                {
+                    <option value="f:@f.Id">@f.Name</option>
+                }
+            </optgroup>
+            @if (_parties.Count > 0)
+            {
+                <optgroup label="@L["Members_GroupParties"]">
+                    @foreach (var party in _parties)
+                    {
+                        <option value="p:@party.Slug">@party.Name</option>
+                    }
+                </optgroup>
+            }
+        </select>
+    </div>
     <div class="col-md-3">
         <div class="form-check form-switch mt-2">
             <input class="form-check-input" type="checkbox" id="currentOnly"
@@ -20,6 +45,13 @@
         </div>
     </div>
 </div>
+
+@* Выбрана партия из составной фракции — говорим прямо, что показываем
+   фракцию целиком, а не делим депутатов наугад. *@
+@if (_partyCaveat is { Length: > 0 } caveat)
+{
+    <p class="text-muted small mb-3" style="max-width:70ch">@caveat</p>
+}
 
 @if (_members is null)
 {
@@ -62,15 +94,59 @@ else
     private bool _currentOnly = true;
     private System.Timers.Timer? _debounce;
 
-    protected override async Task OnInitializedAsync() => await LoadAsync();
+    private string _group = "";
+    private string? _partyCaveat;
+    private List<FactionOption> _factions = [];
+    private List<PartyOption> _parties = [];
+    private bool _optionsLoaded;
+
+    private sealed record FactionOption(int Id, string Name);
+    private sealed record PartyOption(string Slug, string Name, int FactionId, string FactionName, bool Shared);
+
+    /// <summary>Фракция или партия из адреса: со страниц фракции и партии ведут сюда.</summary>
+    [SupplyParameterFromQuery(Name = "group")]
+    private string? GroupQuery { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(GroupQuery)) _group = GroupQuery;
+        await LoadAsync();
+    }
 
     private async Task LoadAsync()
     {
         await using var db = await DbFactory.CreateDbContextAsync();
+
+        if (!_optionsLoaded)
+        {
+            await LoadOptionsAsync(db);
+            _optionsLoaded = true;
+        }
+
         var query = db.Persons.AsNoTracking();
 
         if (_currentOnly)
             query = query.Where(p => p.IsCurrent);
+
+        _partyCaveat = null;
+        if (_group.StartsWith("f:") && int.TryParse(_group[2..], out var factionId))
+        {
+            query = query.Where(p => p.FactionId == factionId);
+        }
+        else if (_group.StartsWith("p:"))
+        {
+            var slug = _group[2..];
+            var party = _parties.FirstOrDefault(x => x.Slug == slug);
+            if (party is not null)
+            {
+                query = query.Where(p => p.FactionId == party.FactionId);
+
+                // Депутата к партии внутри составной фракции приписать нельзя:
+                // таких данных Кнессет не публикует. Говорим об этом, а не делим.
+                if (party.Shared)
+                    _partyCaveat = string.Format(L["Members_PartyIsFaction"], party.FactionName);
+            }
+        }
         if (!string.IsNullOrWhiteSpace(_search))
         {
             var pattern = $"%{_search.Trim()}%";
@@ -83,6 +159,57 @@ else
             .OrderBy(p => p.LastName).ThenBy(p => p.FirstName)
             .Take(200)
             .ToListAsync();
+    }
+
+    /// <summary>
+    /// Справочник для отбора: фракции — те, у которых есть депутаты,
+    /// партии — из курируемого слоя. Пустых пунктов не предлагаем.
+    /// </summary>
+    private async Task LoadOptionsAsync(AppDbContext db)
+    {
+        var withMembers = await db.Persons.AsNoTracking()
+            .Where(p => p.IsCurrent && p.FactionId != null)
+            .Select(p => new { Id = p.FactionId!.Value, Name = p.FactionName })
+            .Distinct()
+            .ToListAsync();
+
+        _factions = withMembers
+            .GroupBy(f => f.Id)
+            .Select(g => new FactionOption(g.Key, LocalizedFaction(g.Key, g.First().Name)))
+            .OrderBy(f => f.Name, StringComparer.CurrentCulture)
+            .ToList();
+
+        var ru = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ru";
+        var factionIds = _factions.Select(f => f.Id).ToList();
+        var parties = await db.FactionParties.AsNoTracking()
+            .Where(x => factionIds.Contains(x.FactionId))
+            .Select(x => new { x.Slug, x.NameHe, x.NameRu, x.FactionId })
+            .ToListAsync();
+
+        var perFaction = parties.GroupBy(x => x.FactionId).ToDictionary(g => g.Key, g => g.Count());
+
+        _parties = parties
+            .Select(x => new PartyOption(
+                x.Slug,
+                ru && x.NameRu is { Length: > 0 } ? x.NameRu : x.NameHe,
+                x.FactionId,
+                _factions.First(f => f.Id == x.FactionId).Name,
+                perFaction[x.FactionId] > 1))
+            .OrderBy(x => x.Name, StringComparer.CurrentCulture)
+            .ToList();
+    }
+
+    /// <summary>Название фракции на языке интерфейса; нет перевода — оригинал из Кнессета.</summary>
+    private string LocalizedFaction(int id, string? nameHe)
+    {
+        var value = L[$"Faction_{id}"];
+        return value.ResourceNotFound ? nameHe ?? id.ToString() : value.Value;
+    }
+
+    private async Task OnGroupChanged(ChangeEventArgs e)
+    {
+        _group = e.Value?.ToString() ?? "";
+        await LoadAsync();
     }
 
     private void OnSearchChanged(ChangeEventArgs e)

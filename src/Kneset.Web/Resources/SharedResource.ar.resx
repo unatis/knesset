@@ -759,4 +759,14 @@
   <data name="Laws_Publication" xml:space="preserve"><value>النشر</value></data>
   <data name="Laws_PublicationPage" xml:space="preserve"><value>ص. {0}</value></data>
   <data name="Laws_ActPdf" xml:space="preserve"><value>نص التعديل</value></data>
+  <data name="Laws_TextHeading" xml:space="preserve"><value>نص القانون</value></data>
+  <data name="Laws_TextSource" xml:space="preserve"><value>النسخة الموحّدة من «كتاب القوانين المفتوح» (ويكي مصدر)، مراجعة بتاريخ {0}. الكنيست لا ينشر نصوص القوانين في بياناته المفتوحة ويحيل إلى هذا المصدر بنفسه. النشر في «رشوموت» وحده هو الملزم قانونياً.</value></data>
+  <data name="Laws_TextExpand" xml:space="preserve"><value>عرض النص كاملاً</value></data>
+  <data name="Members_AllFactions" xml:space="preserve"><value>كل الكتل والأحزاب</value></data>
+  <data name="Members_GroupFactions" xml:space="preserve"><value>الكتل</value></data>
+  <data name="Members_GroupParties" xml:space="preserve"><value>الأحزاب</value></data>
+  <data name="Members_PartyIsFaction" xml:space="preserve"><value>معروض جميع أعضاء كتلة «{0}»: الكنيست ينشر من ينتمي إلى أي كتلة، لكنه لا ينشر عن أي حزب يمثّل كل منهم.</value></data>
+  <data name="Laws_Regulations" xml:space="preserve"><value>أنظمة حكومية</value></data>
+  <data name="Laws_RegulationsNote" xml:space="preserve"><value>أوامر الوزراء تغيّر المبالغ وملاحق القانون دون المرور بالكنيست: قيمة المخصصات، والغرامات، والعتبات. الكنيست يعرضها في صفحة القانون، وهي غائبة عن بياناته المفتوحة. هذه ليست تعديلات ولا تدخل في العدّ أعلاه.</value></data>
+  <data name="Laws_RegulationsShow" xml:space="preserve"><value>عرض الكل</value></data>
 </root>

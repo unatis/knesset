@@ -3,6 +3,7 @@ using System;
 using Kneset.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kneset.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260908111444_LawTexts")]
+    partial class LawTexts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -840,10 +843,6 @@ namespace Kneset.Infrastructure.Migrations
                     b.Property<DateTime?>("PublicationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("SiteDataVersion")
-                        .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
-
                     b.Property<DateTime?>("SiteFetchedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -1075,57 +1074,6 @@ namespace Kneset.Infrastructure.Migrations
                     b.HasIndex("IsraelLawId", "IsIndirect");
 
                     b.ToTable("LawAmendments");
-                });
-
-            modelBuilder.Entity("Kneset.Core.Entities.LawRegulation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("DocumentUrl")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("FetchedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsIndirect")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("IsraelLawId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("KnessetActId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("MagazineNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("PageNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime?>("PublicationDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("PublicationSeries")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsraelLawId", "KnessetActId")
-                        .IsUnique();
-
-                    b.ToTable("LawRegulations");
                 });
 
             modelBuilder.Entity("Kneset.Core.Entities.LawTopic", b =>
@@ -1870,17 +1818,6 @@ namespace Kneset.Infrastructure.Migrations
                     b.Navigation("IsraelLaw");
                 });
 
-            modelBuilder.Entity("Kneset.Core.Entities.LawRegulation", b =>
-                {
-                    b.HasOne("Kneset.Core.Entities.IsraelLaw", "IsraelLaw")
-                        .WithMany("Regulations")
-                        .HasForeignKey("IsraelLawId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IsraelLaw");
-                });
-
             modelBuilder.Entity("Kneset.Core.Entities.LawTopic", b =>
                 {
                     b.HasOne("Kneset.Core.Entities.IsraelLaw", "IsraelLaw")
@@ -2102,8 +2039,6 @@ namespace Kneset.Infrastructure.Migrations
                     b.Navigation("Amendments");
 
                     b.Navigation("FullText");
-
-                    b.Navigation("Regulations");
 
                     b.Navigation("Titles");
 

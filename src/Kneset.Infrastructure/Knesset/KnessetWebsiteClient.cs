@@ -69,7 +69,12 @@ public class KnessetWebsiteClient(HttpClient http, ILogger<KnessetWebsiteClient>
                     Blank(c.MagazineNumber),
                     Blank(c.PageNumber),
                     c.PublicationDate,
-                    FilePath(c.FilePath)))
+                    FilePath(c.FilePath),
+                    // Приказ министра публикуется в «קובץ התקנות», закон —
+                    // в «ספר החוקים». Различаем по источнику публикации,
+                    // а не по своей догадке о названии.
+                    c.PublicationSeries?.Contains("תקנות") == true,
+                    c.CorrectionType?.Contains("עקיף") == true))
                 .ToList();
 
             return new LawSiteInfo(
@@ -114,7 +119,9 @@ public class KnessetWebsiteClient(HttpClient http, ILogger<KnessetWebsiteClient>
         string? MagazineNumber,
         string? PageNumber,
         DateTime? PublicationDate,
-        string? DocumentUrl);
+        string? DocumentUrl,
+        bool IsSecondary,
+        bool IsIndirect);
 
     private class LawItem
     {

@@ -759,4 +759,14 @@
   <data name="Laws_Publication" xml:space="preserve"><value>Публикация</value></data>
   <data name="Laws_PublicationPage" xml:space="preserve"><value>с. {0}</value></data>
   <data name="Laws_ActPdf" xml:space="preserve"><value>Текст поправки</value></data>
+  <data name="Laws_TextHeading" xml:space="preserve"><value>Текст закона</value></data>
+  <data name="Laws_TextSource" xml:space="preserve"><value>Сводная редакция из «Открытой книги законов» (Викитека), ревизия от {0}. Кнессет не публикует текст законов в открытых данных и сам ссылается на этот источник. Юридическую силу имеет публикация в «Рэумот».</value></data>
+  <data name="Laws_TextExpand" xml:space="preserve"><value>Показать текст целиком</value></data>
+  <data name="Members_AllFactions" xml:space="preserve"><value>Все фракции и партии</value></data>
+  <data name="Members_GroupFactions" xml:space="preserve"><value>Фракции</value></data>
+  <data name="Members_GroupParties" xml:space="preserve"><value>Партии</value></data>
+  <data name="Members_PartyIsFaction" xml:space="preserve"><value>Показаны все депутаты фракции «{0}»: Кнессет публикует, кто в какой фракции, но не публикует, кто из них от какой партии.</value></data>
+  <data name="Laws_Regulations" xml:space="preserve"><value>Постановления правительства</value></data>
+  <data name="Laws_RegulationsNote" xml:space="preserve"><value>Приказы министров меняют суммы и приложения к закону, не проходя через Кнессет: размер пособия, размер штрафа, пороги. Кнессет показывает их на странице закона, в открытых данных их нет. Это не поправки — они не входят в счёт выше.</value></data>
+  <data name="Laws_RegulationsShow" xml:space="preserve"><value>Показать все</value></data>
 </root>

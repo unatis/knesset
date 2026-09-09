@@ -40,6 +40,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<IsraelLaw> IsraelLaws => Set<IsraelLaw>();
     public DbSet<IsraelLawTitle> IsraelLawTitles => Set<IsraelLawTitle>();
     public DbSet<LawTopic> LawTopics => Set<LawTopic>();
+    public DbSet<IsraelLawText> IsraelLawTexts => Set<IsraelLawText>();
+    public DbSet<LawRegulation> LawRegulations => Set<LawRegulation>();
     public DbSet<LawAct> LawActs => Set<LawAct>();
     public DbSet<LawAmendment> LawAmendments => Set<LawAmendment>();
     public DbSet<NotificationSubscription> NotificationSubscriptions => Set<NotificationSubscription>();
@@ -151,6 +153,30 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             t.Property(x => x.SourceName).HasMaxLength(2000);
             t.HasOne(x => x.Bill).WithMany(b => b.Titles)
              .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<LawRegulation>(r =>
+        {
+            // Один подзаконный акт на закон — ключ приходит из источника.
+            r.HasIndex(x => new { x.IsraelLawId, x.KnessetActId }).IsUnique();
+            r.Property(x => x.Name).HasMaxLength(1000);
+            r.Property(x => x.PublicationSeries).HasMaxLength(100);
+            r.Property(x => x.MagazineNumber).HasMaxLength(50);
+            r.Property(x => x.PageNumber).HasMaxLength(50);
+            r.HasOne(x => x.IsraelLaw).WithMany(l => l.Regulations)
+             .HasForeignKey(x => x.IsraelLawId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<IsraelLawText>(t =>
+        {
+            // Один текст на закон: держим только последнюю сводную редакцию.
+            t.HasIndex(x => x.IsraelLawId).IsUnique();
+            t.Property(x => x.SourceUrl).HasMaxLength(500);
+            t.Property(x => x.SourceTitle).HasMaxLength(500);
+            t.Property(x => x.CleanerVersion).HasMaxLength(32);
+            t.HasOne(x => x.IsraelLaw).WithOne(l => l.FullText)
+             .HasForeignKey<IsraelLawText>(x => x.IsraelLawId)
+             .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<LawTopic>(t =>
@@ -287,6 +313,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
 
         modelBuilder.Entity<IsraelLaw>(l =>
         {
+            l.Property(x => x.SiteDataVersion).HasMaxLength(16);
             l.HasIndex(x => x.KnessetIsraelLawId).IsUnique();
             l.HasIndex(x => x.IsBasicLaw);
             l.Property(x => x.Name).HasMaxLength(2000);

@@ -1264,6 +1264,24 @@ h1:focus {
         text-decoration: none;
     }
 
+.kt-law-text summary {
+    cursor: pointer;
+    color: var(--kt-ember-700);
+}
+
+.kt-law-text-body {
+    white-space: pre-wrap;
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-top: 0.75rem;
+    padding: 1rem;
+    border: 1px solid var(--kt-char-100);
+    border-radius: var(--kt-r-md, 8px);
+    background: var(--kt-paper, #fff);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+}
+
 .kt-law-cite {
     display: flex;
     flex-wrap: wrap;

@@ -759,4 +759,14 @@
   <data name="Laws_Publication" xml:space="preserve"><value>פרסום</value></data>
   <data name="Laws_PublicationPage" xml:space="preserve"><value>עמ' {0}</value></data>
   <data name="Laws_ActPdf" xml:space="preserve"><value>נוסח התיקון</value></data>
+  <data name="Laws_TextHeading" xml:space="preserve"><value>נוסח החוק</value></data>
+  <data name="Laws_TextSource" xml:space="preserve"><value>נוסח משולב מ«ספר החוקים הפתוח» (ויקיטקסט), גרסה מיום {0}. הכנסת אינה מפרסמת את נוסחי החוקים בנתונים הפתוחים ומפנה בעצמה למקור זה. התוקף המשפטי הוא לפרסום ברשומות.</value></data>
+  <data name="Laws_TextExpand" xml:space="preserve"><value>הצג את הנוסח המלא</value></data>
+  <data name="Members_AllFactions" xml:space="preserve"><value>כל הסיעות והמפלגות</value></data>
+  <data name="Members_GroupFactions" xml:space="preserve"><value>סיעות</value></data>
+  <data name="Members_GroupParties" xml:space="preserve"><value>מפלגות</value></data>
+  <data name="Members_PartyIsFaction" xml:space="preserve"><value>מוצגים כל חברי סיעת «{0}»: הכנסת מפרסמת מי שייך לאיזו סיעה, אך אינה מפרסמת מטעם איזו מפלגה כל אחד מהם.</value></data>
+  <data name="Laws_Regulations" xml:space="preserve"><value>תקנות הממשלה</value></data>
+  <data name="Laws_RegulationsNote" xml:space="preserve"><value>צווי שרים משנים סכומים ותוספות לחוק בלי לעבור בכנסת: גובה קצבה, גובה קנס, ספים. הכנסת מציגה אותם בעמוד החוק, ובנתונים הפתוחים הם אינם. אלה אינם תיקונים ואינם נכללים בספירה שלמעלה.</value></data>
+  <data name="Laws_RegulationsShow" xml:space="preserve"><value>הצג הכול</value></data>
 </root>

@@ -154,6 +154,23 @@ else
             </div>
         }
 
+        @* Текст закона. Копия сводной редакции, а не наша сводка: поэтому
+           рядом стоит источник, номер ревизии и оговорка, что юридическую
+           силу имеет публикация в «Рэумот», а не эта страница. Разворот
+           через details — страница остаётся статической, а текст бывает
+           на сорок тысяч знаков. *@
+        @if (_text is not null)
+        {
+            <h5 class="mt-4">@L["Laws_TextHeading"]</h5>
+            <p class="text-muted small" style="max-width:60ch">
+                @string.Format(L["Laws_TextSource"], _text.RevisionAt.ToString("dd.MM.yyyy"))
+            </p>
+            <details class="kt-law-text">
+                <summary>@L["Laws_TextExpand"] · @_text.CharCount</summary>
+                <div class="kt-law-text-body" dir="rtl" lang="he">@_text.Text</div>
+            </details>
+        }
+
         @if (_named.Count > 0)
         {
             <h5>@L["Laws_NamedOnly"] (@_named.Count)</h5>
@@ -214,6 +231,49 @@ else
             </ul>
         }
 
+        @* Подзаконные акты — своим блоком и со своим объяснением.
+           В общий список их класть нельзя: счёт поправок и доля косвенных
+           среди них — главное, ради чего раздел сделан, а приказы министров
+           этот счёт раздули бы втрое. *@
+        @if (_regulations.Count > 0)
+        {
+            <h5 class="mt-4">@L["Laws_Regulations"] (@_regulations.Count)</h5>
+            <p class="text-muted small" style="max-width:70ch">@L["Laws_RegulationsNote"]</p>
+
+            @* Страница статическая, поэтому разворот — details, а не кнопка:
+               у иного закона приказов больше сорока. *@
+            <details class="kt-law-text" open="@(_regulations.Count <= 8)">
+                <summary>@L["Laws_RegulationsShow"] · @_regulations.Count</summary>
+                <ul class="list-group mt-2">
+                @foreach (var r in _regulations)
+                {
+                    <li class="list-group-item">
+                        <span dir="rtl" lang="he">@r.Name</span>
+                        <div class="kt-law-cite">
+                            @if (r.PublicationDate is not null)
+                            {
+                                <small class="text-muted">@r.PublicationDate.Value.ToString("dd.MM.yyyy")</small>
+                            }
+                            @if (r.PublicationSeries is { Length: > 0 } series)
+                            {
+                                <small class="text-muted" dir="rtl" lang="he">
+                                    @series@(r.MagazineNumber is { Length: > 0 } num ? $" {num}" : "")@(
+                                        r.PageNumber is { Length: > 0 } page
+                                            ? ", " + string.Format(L["Laws_PublicationPage"], page)
+                                            : "")
+                                </small>
+                            }
+                            @if (r.DocumentUrl is { Length: > 0 } doc)
+                            {
+                                <a class="kt-law-cite-pdf" href="@doc" target="_blank" rel="noopener">@L["Laws_ActPdf"]</a>
+                            }
+                        </div>
+                    </li>
+                }
+                </ul>
+            </details>
+        }
+
         @if (_unnamedCount > 0)
         {
             @* Честно про пробел в источнике, а не молча пустой список. *@
@@ -233,6 +293,9 @@ else
     private int _unnamedCount;
     private string? _translated;
     private List<TopicLink> _topics = [];
+    private IsraelLawText? _text;
+    private List<LawRegulation> _regulations = [];
+
 
     private sealed record TopicLink(int Id, string Name);
     private bool _loading = true;
@@ -253,6 +316,14 @@ else
                     .Select(t => t.Text)
                     .FirstOrDefaultAsync();
             }
+
+            _regulations = await db.LawRegulations.AsNoTracking()
+                .Where(r => r.IsraelLawId == Id)
+                .OrderByDescending(r => r.PublicationDate)
+                .ToListAsync();
+
+            _text = await db.IsraelLawTexts.AsNoTracking()
+                .FirstOrDefaultAsync(t => t.IsraelLawId == Id);
 
             var topics = await db.LawTopics.AsNoTracking()
                 .Where(t => t.IsraelLawId == Id)

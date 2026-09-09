@@ -759,4 +759,14 @@
   <data name="Laws_Publication" xml:space="preserve"><value>Publication</value></data>
   <data name="Laws_PublicationPage" xml:space="preserve"><value>p. {0}</value></data>
   <data name="Laws_ActPdf" xml:space="preserve"><value>Text of the amendment</value></data>
+  <data name="Laws_TextHeading" xml:space="preserve"><value>Text of the law</value></data>
+  <data name="Laws_TextSource" xml:space="preserve"><value>Consolidated version from the Open Law Book (Wikisource), revision of {0}. The Knesset does not publish law texts in its open data and points to this source itself. Only the publication in Reshumot is legally binding.</value></data>
+  <data name="Laws_TextExpand" xml:space="preserve"><value>Show the full text</value></data>
+  <data name="Members_AllFactions" xml:space="preserve"><value>All factions and parties</value></data>
+  <data name="Members_GroupFactions" xml:space="preserve"><value>Factions</value></data>
+  <data name="Members_GroupParties" xml:space="preserve"><value>Parties</value></data>
+  <data name="Members_PartyIsFaction" xml:space="preserve"><value>Showing all members of the {0} faction: the Knesset publishes who belongs to which faction, but not which party each of them represents.</value></data>
+  <data name="Laws_Regulations" xml:space="preserve"><value>Government regulations</value></data>
+  <data name="Laws_RegulationsNote" xml:space="preserve"><value>Ministerial orders change the amounts and schedules of a law without passing through the Knesset: benefit rates, fines, thresholds. The Knesset lists them on the law's page; they are absent from its open data. These are not amendments and are not included in the counts above.</value></data>
+  <data name="Laws_RegulationsShow" xml:space="preserve"><value>Show all</value></data>
 </root>

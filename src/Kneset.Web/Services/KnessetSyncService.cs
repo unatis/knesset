@@ -15,6 +15,7 @@ public class KnessetSyncService(
     IDbContextFactory<AppDbContext> dbFactory,
     KnessetODataClient client,
     KnessetWebsiteClient websiteClient,
+    WikisourceClient wikisource,
     NotificationDispatchService notifications,
     IConfiguration configuration,
     ILogger<KnessetSyncService> logger) : BackgroundService
@@ -77,6 +78,7 @@ public class KnessetSyncService(
         await RunStepAsync("LawTopics", SyncLawTopicsAsync, ct);
         await RunStepAsync("BillLawLinks", LinkBillsToLawsAsync, ct);
         await RunStepAsync("LawSiteLinks", SyncLawSiteLinksAsync, ct);
+        await RunStepAsync("LawTexts", SyncLawTextsAsync, ct);
 
         // Строго последним: подписка на депутата опирается на BillInitiators,
         // которые заполняются шагом выше. RunStepAsync передаёт сюда время
@@ -910,6 +912,82 @@ public class KnessetSyncService(
     }
 
     /// <summary>
+    /// Сводные тексты законов из «ספר החוקים הפתוח».
+    ///
+    /// Пока — только основные законы, и это решение про место, а не про
+    /// принцип: пятнадцать основных с текстом весят 248 КБ, а весь свод
+    /// из двух тысяч законов — сотни мегабайт при 500 МБ бесплатного
+    /// тарифа, из которых 195 уже заняты. Чтобы расширить охват, достаточно
+    /// снять условие IsBasicLaw — и сначала решить, где хранить.
+    ///
+    /// Перечитываем, когда в источнике новая ревизия или когда сменились
+    /// наши правила чистки разметки.
+    /// </summary>
+    private async Task<int> SyncLawTextsAsync(DateTime? since, CancellationToken ct)
+    {
+        const int PerRun = 30;
+
+        await using var readDb = await dbFactory.CreateDbContextAsync(ct);
+        var due = await readDb.IsraelLaws.AsNoTracking()
+            .Where(l => l.IsBasicLaw && l.OpenBookUrl != null)
+            .Where(l => l.FullText == null || l.FullText.CleanerVersion != WikitextCleaner.Version)
+            .OrderBy(l => l.Id)
+            .Take(PerRun)
+            .Select(l => new { l.Id, l.OpenBookUrl })
+            .ToListAsync(ct);
+
+        // Пишем в лог и пустую очередь: иначе «шаг не дошёл» и «шагу нечего
+        // делать» выглядят одинаково — молчанием, и час уходит на догадки.
+        logger.LogInformation("Тексты законов: в очереди {Due}", due.Count);
+        if (due.Count == 0) return 0;
+
+        var saved = 0;
+        var chars = 0;
+
+        await using var db = await dbFactory.CreateDbContextAsync(ct);
+        var ids = due.Select(x => x.Id).ToList();
+        var existing = await db.IsraelLawTexts
+            .Where(t => ids.Contains(t.IsraelLawId))
+            .ToDictionaryAsync(t => t.IsraelLawId, ct);
+
+        foreach (var law in due)
+        {
+            var title = WikisourceClient.TitleFromUrl(law.OpenBookUrl);
+            if (title is null) continue;
+
+            var revision = await wikisource.GetTextAsync(title, ct);
+            await Task.Delay(TimeSpan.FromSeconds(2), ct);
+            if (revision is null) continue;
+
+            if (!existing.TryGetValue(law.Id, out var row))
+            {
+                row = new IsraelLawText { IsraelLawId = law.Id };
+                db.IsraelLawTexts.Add(row);
+                existing[law.Id] = row;
+            }
+
+            row.SourceUrl = law.OpenBookUrl!;
+            row.SourceTitle = title;
+            row.Revision = revision.Revision;
+            row.RevisionAt = AsUtc(revision.RevisionAt);
+            row.Text = revision.Text;
+            row.CharCount = revision.Text.Length;
+            row.CleanerVersion = WikitextCleaner.Version;
+            row.FetchedAt = DateTime.UtcNow;
+
+            saved++;
+            chars += revision.Text.Length;
+        }
+
+        await db.SaveChangesAsync(ct);
+
+        logger.LogInformation(
+            "Тексты законов: сохранено {Saved} из {Due}, знаков {Chars}", saved, due.Count, chars);
+
+        return saved;
+    }
+
+    /// <summary>
     /// Ссылки со страницы закона на сайте Кнессета: сводный текст
     /// («ספר החוקים הפתוח») и объяснение простыми словами («כל זכות»).
     ///
@@ -919,7 +997,9 @@ public class KnessetSyncService(
     /// правовую консолидацию, то есть другой продукт.
     ///
     /// Тем же запросом приходит история изменений закона — по строке
-    /// на поправку, с публикацией в «Рэумот» и ссылкой на PDF. Этого нет
+    /// на изменение, с публикацией и ссылкой на PDF. Изменения бывают двух
+    /// родов, и они расходятся по разным таблицам: акты Кнессета дополняют
+    /// наши LawAmendments, приказы министров ложатся в LawRegulations. Этого нет
     /// в открытых данных вовсе, а старых актов нет и в KNS_Law: именно
     /// поэтому у части поправок у нас не было даже названия. Строки
     /// привязываются к нашим LawAmendments по идентификатору акта —
@@ -934,13 +1014,25 @@ public class KnessetSyncService(
     private async Task<int> SyncLawSiteLinksAsync(DateTime? since, CancellationToken ct)
     {
         const int PerRun = 150;
+
+        // Что мы забираем со страницы. Версию меняем, когда начинаем брать
+        // больше: тогда законы переспрашиваются сами, и не нужен разовый
+        // сброс отметки времени в миграции.
+        //  site-v1 — ссылки на текст и министерства;
+        //  site-v2 — плюс история изменений: поправки и подзаконные акты.
+        const string SiteDataVersion = "site-v2";
         var stale = DateTime.UtcNow.AddDays(-90);
 
         await using var readDb = await dbFactory.CreateDbContextAsync(ct);
         var due = await readDb.IsraelLaws.AsNoTracking()
-            .Where(l => l.SiteFetchedAt == null || l.SiteFetchedAt < stale)
-            // Законы, на которые ссылаются законопроекты, — вперёд.
-            .OrderByDescending(l => readDb.Bills.Any(b => b.IsraelLawId == l.Id))
+            .Where(l => l.SiteFetchedAt == null
+                        || l.SiteFetchedAt < stale
+                        || l.SiteDataVersion != SiteDataVersion)
+            // Основные законы вперёд: их девятнадцать, они конституционное
+            // ядро и самые читаемые страницы раздела. Следом — законы,
+            // на которые ссылаются живые законопроекты.
+            .OrderByDescending(l => l.IsBasicLaw)
+            .ThenByDescending(l => readDb.Bills.Any(b => b.IsraelLawId == l.Id))
             .ThenByDescending(l => l.ValidityStartDate)
             .Take(PerRun)
             .Select(l => new { l.Id, l.KnessetIsraelLawId })
@@ -951,6 +1043,7 @@ public class KnessetSyncService(
         var found = 0;
         var docs = 0;
         var names = 0;
+        var secondary = 0;
         var unmatched = 0;
 
         foreach (var chunk in due.Chunk(25))
@@ -961,6 +1054,9 @@ public class KnessetSyncService(
             var amendments = await db.LawAmendments
                 .Where(a => ids.Contains(a.IsraelLawId))
                 .ToListAsync(ct);
+            var regulations = await db.LawRegulations
+                .Where(r => ids.Contains(r.IsraelLawId))
+                .ToListAsync(ct);
 
             foreach (var row in chunk)
             {
@@ -970,6 +1066,7 @@ public class KnessetSyncService(
                 // Отметку ставим и на пустой ответ: иначе каждый прогон
                 // спрашивал бы сайт об одних и тех же законах.
                 law.SiteFetchedAt = DateTime.UtcNow;
+                law.SiteDataVersion = SiteDataVersion;
                 if (info is not null)
                 {
                     law.OpenBookUrl = info.OpenBookUrl;
@@ -978,8 +1075,42 @@ public class KnessetSyncService(
                     if (info.OpenBookUrl is not null) found++;
 
                     var mine = amendments.Where(a => a.IsraelLawId == law.Id).ToList();
+                    var mineRegulations = regulations.Where(r => r.IsraelLawId == law.Id).ToList();
+
                     foreach (var correction in info.Corrections)
                     {
+                        // Подзаконный акт — в свою таблицу. Смешивать нельзя:
+                        // на счётчике поправок держится весь раздел про
+                        // косвенные изменения, и приказы министров его
+                        // раздули бы втрое.
+                        if (correction.IsSecondary)
+                        {
+                            var regulation = mineRegulations
+                                .FirstOrDefault(r => r.KnessetActId == correction.ActId);
+
+                            if (regulation is null)
+                            {
+                                regulation = new LawRegulation
+                                {
+                                    IsraelLawId = law.Id,
+                                    KnessetActId = correction.ActId,
+                                };
+                                db.LawRegulations.Add(regulation);
+                                mineRegulations.Add(regulation);
+                            }
+
+                            regulation.Name = correction.Name ?? "";
+                            regulation.IsIndirect = correction.IsIndirect;
+                            regulation.PublicationSeries = correction.PublicationSeries;
+                            regulation.MagazineNumber = correction.MagazineNumber;
+                            regulation.PageNumber = correction.PageNumber;
+                            regulation.PublicationDate = AsUtcNullable(correction.PublicationDate);
+                            regulation.DocumentUrl = correction.DocumentUrl;
+                            regulation.FetchedAt = DateTime.UtcNow;
+                            secondary++;
+                            continue;
+                        }
+
                         var amendment = mine.FirstOrDefault(a => a.KnessetLawId == correction.ActId);
                         if (amendment is null)
                         {
@@ -1018,8 +1149,9 @@ public class KnessetSyncService(
 
         logger.LogInformation(
             "Страницы законов: спрошено {Asked}, текст у {Found}, документов поправок {Docs}, "
-            + "названий восполнено {Names}, не привязалось {Unmatched}",
-            due.Count, found, docs, names, unmatched);
+            + "названий восполнено {Names}, подзаконных актов {Secondary}, "
+            + "не привязалось {Unmatched}",
+            due.Count, found, docs, names, secondary, unmatched);
 
         return due.Count;
     }
