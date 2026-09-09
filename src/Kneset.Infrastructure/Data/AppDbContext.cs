@@ -136,13 +136,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             // Уникальность здесь и есть весь механизм: захват берётся вставкой,
             // и проигравший узнаёт об этом по нарушению ограничения, а не
             // по чтению, которое у двух процессов может совпасть.
-            j.HasIndex(x => new { x.BillId, x.Step }).IsUnique();
+            j.HasIndex(x => new { x.SubjectKind, x.SubjectId, x.Step }).IsUnique();
+            j.Property(x => x.SubjectKind).HasMaxLength(8);
             j.Property(x => x.Step).HasMaxLength(16);
             j.Property(x => x.State).HasMaxLength(16);
             j.Property(x => x.ClaimedBy).HasMaxLength(64);
             j.Property(x => x.Error).HasMaxLength(2000);
-            j.HasOne<Bill>().WithMany()
-             .HasForeignKey(x => x.BillId).OnDelete(DeleteBehavior.Cascade);
+            // Внешнего ключа нет: предметы захвата лежат в разных таблицах
+            // (законопроекты и законы), а строка захвата — служебная запись
+            // о работе. Ценой становится отсутствие каскадного удаления,
+            // и это правильная цена: записи временные.
         });
 
         modelBuilder.Entity<BillTitle>(t =>

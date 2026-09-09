@@ -563,7 +563,7 @@ if (app.Environment.IsDevelopment())
     {
         await using var db = await factory.CreateDbContextAsync(ct);
         return Results.Json(await db.AnalysisJobs.AsNoTracking()
-            .Where(j => billId == null || j.BillId == billId)
+            .Where(j => billId == null || j.SubjectId == billId)
             .OrderByDescending(j => j.ClaimedAt)
             .Take(50)
             .ToListAsync(ct));
@@ -574,12 +574,12 @@ if (app.Environment.IsDevelopment())
     // единственное, что отделяет нас от второй оплаты той же работы.
     app.MapGet("/dev/try-claim", async (
         int billId, string step, AnalysisClaims claims, CancellationToken ct) =>
-        Results.Json(new { billId, step, claimed = await claims.TryClaimAsync(billId, step, ct) }));
+        Results.Json(new { billId, step, claimed = await claims.TryClaimAsync(AnalysisJob.SubjectBill, billId, step, ct) }));
 
     app.MapGet("/dev/release-claim", async (
         int billId, string step, string? error, AnalysisClaims claims, CancellationToken ct) =>
     {
-        await claims.ReleaseAsync(billId, step, error, ct);
+        await claims.ReleaseAsync(AnalysisJob.SubjectBill, billId, step, error, ct);
         return Results.Json(new { billId, step, released = true });
     });
 
@@ -1180,74 +1180,6 @@ if (app.Environment.IsDevelopment())
             chars = result.CharCount,
             error = result.Error,
             head = result.Text.Length > 600 ? result.Text[..600] : result.Text,
-        });
-    });
-
-    // Разбор одного закона по требованию: посмотреть на результат прежде,
-    // чем запускать по всем. Стоит денег, поэтому руками и по одному.
-    app.MapGet("/dev/analyze-law", async (
-        int id, ILawAnalyzer? analyzer, IDbContextFactory<AppDbContext> factory,
-        CancellationToken ct) =>
-    {
-        if (analyzer is null)
-            return Results.Json(new { error = "Ai:Provider не Claude — разборщика законов нет" });
-
-        await using var db = await factory.CreateDbContextAsync(ct);
-        var law = await db.IsraelLaws.AsNoTracking()
-            .Include(l => l.FullText)
-            .FirstOrDefaultAsync(l => l.Id == id, ct);
-
-        if (law is null) return Results.NotFound();
-
-        var amendments = await db.LawAmendments.AsNoTracking()
-            .Where(x => x.IsraelLawId == id && !x.IsOriginal)
-            .Select(x => x.ActPublicationDate)
-            .ToListAsync(ct);
-        var regulations = await db.LawRegulations.AsNoTracking()
-            .CountAsync(x => x.IsraelLawId == id, ct);
-
-        var request = new LawAnalysisRequest
-        {
-            IsraelLawId = law.Id,
-            NameHebrew = law.Name,
-            IsBasicLaw = law.IsBasicLaw,
-            ValidityDesc = law.ValidityDesc,
-            PublicationDate = law.PublicationDate,
-            AmendmentCount = amendments.Count,
-            LastAmendedAt = amendments.Where(d => d != null).Max(),
-            RegulationCount = regulations,
-            FullText = law.FullText?.Text,
-            TextSource = law.FullText?.SourceUrl,
-            TextRevisionAt = law.FullText?.RevisionAt,
-            LanguageCode = "en",
-        };
-
-        var started = DateTime.UtcNow;
-        var result = await analyzer.AnalyzeAsync(request, ct);
-        var json = System.Text.Json.JsonSerializer.Serialize(result);
-
-        var row = await db.IsraelLawAnalyses
-            .FirstOrDefaultAsync(x => x.IsraelLawId == id && x.LanguageCode == "en", ct);
-        if (row is null)
-        {
-            row = new IsraelLawAnalysis { IsraelLawId = id, LanguageCode = "en" };
-            db.IsraelLawAnalyses.Add(row);
-        }
-
-        row.AnalysisJson = json;
-        row.ModelVersion = analyzer.ModelVersion;
-        row.SourceRevision = law.FullText?.Revision ?? 0;
-        row.GeneratedAt = DateTime.UtcNow;
-        row.IsStale = false;
-        await db.SaveChangesAsync(ct);
-
-        return Results.Json(new
-        {
-            law = law.Name,
-            textChars = law.FullText?.Text.Length ?? 0,
-            seconds = (int)(DateTime.UtcNow - started).TotalSeconds,
-            model = analyzer.ModelVersion,
-            analysis = result,
         });
     });
 

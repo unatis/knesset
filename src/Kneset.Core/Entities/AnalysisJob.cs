@@ -17,7 +17,15 @@ public class AnalysisJob
 {
     public int Id { get; set; }
 
-    public int BillId { get; set; }
+    /// <summary>Что разбирается: законопроект или действующий закон.</summary>
+    public string SubjectKind { get; set; } = SubjectBill;
+
+    /// <summary>
+    /// Идентификатор предмета в своей таблице. Внешнего ключа здесь нет
+    /// намеренно: предметы лежат в разных таблицах, а строка захвата —
+    /// служебная запись о работе, а не связь между сущностями.
+    /// </summary>
+    public int SubjectId { get; set; }
 
     /// <summary>
     /// Шаг работы: язык перевода либо <see cref="MasterStep"/> для самого разбора.
@@ -39,6 +47,9 @@ public class AnalysisJob
     /// <summary>Причина неудачи. Нужна не только для журнала: по ней страница
     /// может сказать, что именно не вышло, вместо глухого «недоступен».</summary>
     public string? Error { get; set; }
+
+    public const string SubjectBill = "bill";
+    public const string SubjectLaw = "law";
 
     public const string MasterStep = "master";
     public const string Running = "running";

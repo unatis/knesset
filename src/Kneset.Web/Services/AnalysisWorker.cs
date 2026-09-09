@@ -84,14 +84,14 @@ public class AnalysisWorker(
         var existing = await LoadFreshAsync(db, bill.Id, MasterLang, ct);
         if (existing is not null) return existing;
 
-        if (!await claims.TryClaimAsync(bill.Id, AnalysisJob.MasterStep, ct)) return null;
+        if (!await claims.TryClaimAsync(AnalysisJob.SubjectBill, bill.Id, AnalysisJob.MasterStep, ct)) return null;
 
         // Ещё одна проверка уже под захватом: между чтением выше и захватом
         // мог успеть завершиться другой экземпляр, и тогда платить незачем.
         existing = await LoadFreshAsync(db, bill.Id, MasterLang, ct);
         if (existing is not null)
         {
-            await claims.ReleaseAsync(bill.Id, AnalysisJob.MasterStep, null, ct);
+            await claims.ReleaseAsync(AnalysisJob.SubjectBill, bill.Id, AnalysisJob.MasterStep, null, ct);
             return existing;
         }
 
@@ -124,12 +124,12 @@ public class AnalysisWorker(
             logger.LogInformation(
                 "Мастер-анализ {BillId} сохранён ({Model})", bill.Id, analyzer.ModelVersion);
 
-            await claims.ReleaseAsync(bill.Id, AnalysisJob.MasterStep, null, ct);
+            await claims.ReleaseAsync(AnalysisJob.SubjectBill, bill.Id, AnalysisJob.MasterStep, null, ct);
             return master;
         }
         catch (Exception ex)
         {
-            await claims.ReleaseAsync(bill.Id, AnalysisJob.MasterStep, ex.Message, CancellationToken.None);
+            await claims.ReleaseAsync(AnalysisJob.SubjectBill, bill.Id, AnalysisJob.MasterStep, ex.Message, CancellationToken.None);
             throw;
         }
     }
@@ -142,7 +142,7 @@ public class AnalysisWorker(
             .AnyAsync(a => a.BillId == bill.Id && a.LanguageCode == lang && !a.IsStale, ct);
         if (hasFresh) return;
 
-        if (!await claims.TryClaimAsync(bill.Id, lang, ct)) return;
+        if (!await claims.TryClaimAsync(AnalysisJob.SubjectBill, bill.Id, lang, ct)) return;
 
         // Та же проверка под захватом — именно её отсутствие и стоило нам
         // двух оплаченных русских переводов законопроекта 42.
@@ -150,7 +150,7 @@ public class AnalysisWorker(
             .AnyAsync(a => a.BillId == bill.Id && a.LanguageCode == lang && !a.IsStale, ct);
         if (hasFresh)
         {
-            await claims.ReleaseAsync(bill.Id, lang, null, ct);
+            await claims.ReleaseAsync(AnalysisJob.SubjectBill, bill.Id, lang, null, ct);
             return;
         }
 
@@ -192,11 +192,11 @@ public class AnalysisWorker(
             logger.LogInformation("Перевод анализа {BillId} на {Lang} сохранён ({Model})",
                 bill.Id, lang, translatorVersion);
 
-            await claims.ReleaseAsync(bill.Id, lang, null, ct);
+            await claims.ReleaseAsync(AnalysisJob.SubjectBill, bill.Id, lang, null, ct);
         }
         catch (Exception ex)
         {
-            await claims.ReleaseAsync(bill.Id, lang, ex.Message, CancellationToken.None);
+            await claims.ReleaseAsync(AnalysisJob.SubjectBill, bill.Id, lang, ex.Message, CancellationToken.None);
             throw;
         }
     }
