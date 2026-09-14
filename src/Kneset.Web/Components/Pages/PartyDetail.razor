@@ -16,7 +16,7 @@
 
 @if (_notFound)
 {
-    <p class="text-muted">@L["Party_NotFound"] <a href="/factions">@L["Nav_Factions"]</a></p>
+    <p class="text-muted">@L["Party_NotFound"] <a href="factions">@L["Nav_Factions"]</a></p>
 }
 else if (_name is null)
 {
@@ -26,7 +26,7 @@ else
 {
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/factions">@L["Nav_Factions"]</a></li>
+            <li class="breadcrumb-item"><a href="factions">@L["Nav_Factions"]</a></li>
             <li class="breadcrumb-item active">@_name</li>
         </ol>
     </nav>
@@ -45,7 +45,7 @@ else
 
         <section class="kt-fpage-block">
             <h2 class="kt-eyebrow">@L["Party_InFaction"]</h2>
-            <a class="kt-fpage-faction" href="/factions/@_factionId">
+            <a class="kt-fpage-faction" href="factions/@_factionId">
                 <span class="kt-fpage-seats"><b>@_seats</b> <span>@SeatWord(_seats)</span></span>
                 <b>@_factionName</b>
                 @if (_siblings.Count > 0)
@@ -87,7 +87,7 @@ else
             <div class="kt-fpage-members">
                 @foreach (var m in _members)
                 {
-                    <a href="/members/@m.Id" class="kt-fpage-member">
+                    <a href="members/@m.Id" class="kt-fpage-member">
                         <MemberPhoto Member="m" Size="48" />
                         <span dir="rtl" lang="he">@m.FullName</span>
                     </a>

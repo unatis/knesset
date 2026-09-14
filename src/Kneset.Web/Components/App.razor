@@ -1,4 +1,5 @@
 @using System.Globalization
+@using Kneset.Web.Localization
 
 <!DOCTYPE html>
 <html lang="@Lang" dir="@Dir">
@@ -6,7 +7,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <base href="/" />
+    @* Базовый адрес — с языком: «/ru/». Так относительные ссылки и статика
+       уходят под префикс сами, а хаб «/_blazor» находится под PathBase.
+       Ниже — те же страницы на других языках для поисковиков и ответных
+       машин; x-default ведёт на адрес без языка, где выбор делается
+       по предпочтению читателя. *@
+    <base href="@BaseHref" />
+    @if (HttpContext is not null)
+    {
+        foreach (var culture in CulturePath.Supported)
+        {
+            <link rel="alternate" hreflang="@culture" href="@Absolute(culture)" />
+        }
+        <link rel="alternate" hreflang="x-default" href="@Absolute(null)" />
+        <link rel="canonical" href="@Absolute(Lang)" />
+    }
     <ResourcePreloader />
     @if (Dir == "rtl")
     {
@@ -40,6 +55,22 @@
 </html>
 
 @code {
+    [CascadingParameter] public HttpContext? HttpContext { get; set; }
+
     private static string Lang => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     private static string Dir => Lang is "he" or "ar" ? "rtl" : "ltr";
+
+    private string BaseHref => (HttpContext?.Request.PathBase.Value ?? "") + "/";
+
+    /// <summary>
+    /// Тот же путь и запрос на указанном языке; null — адрес без языка.
+    /// Схема и хост — из запроса: за прокси Render их восстанавливает
+    /// UseForwardedHeaders, и это надёжнее зашитого адреса.
+    /// </summary>
+    private string Absolute(string? culture)
+    {
+        var request = HttpContext!.Request;
+        var prefix = culture is null ? "" : "/" + culture;
+        return $"{request.Scheme}://{request.Host}{prefix}{request.Path.Value}{request.QueryString}";
+    }
 }

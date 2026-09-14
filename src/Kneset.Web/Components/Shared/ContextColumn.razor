@@ -33,7 +33,7 @@
                 @foreach (var item in _closing)
                 {
                     <li>
-                        <a href="/bills/@item.Id" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
+                        <a href="bills/@item.Id" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
                         <span class="kt-num">
                             @Note(item)
                             @if (!item.UntilSession && item.StatusDesc is not null)
@@ -86,7 +86,7 @@
                 @foreach (var item in _initiatives)
                 {
                     <li>
-                        <a href="/initiatives/@item.Id">@item.Title</a>
+                        <a href="initiatives/@item.Id">@item.Title</a>
                         <span class="kt-num">
                             @string.Format(L["Ctx_SignaturesLeft"], item.Left)
                         </span>
@@ -111,7 +111,7 @@
                 @foreach (var item in _debated)
                 {
                     <li>
-                        <a href="/bills/@item.Id" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
+                        <a href="bills/@item.Id" lang="@(item.IsHebrew ? "he" : null)">@item.Title</a>
                         <span class="kt-num">@item.Comments</span>
                     </li>
                 }

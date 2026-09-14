@@ -295,8 +295,12 @@ public class NotificationDispatchService(
                     continue;
                 }
 
+                // Язык теперь в адресе, поэтому ссылка в письме ведёт сразу
+                // на страницу на языке получателя, а не на редирект по cookie,
+                // которой в его почтовом клиенте нет.
                 var message = textBuilder.BuildMessage(
-                    notification, title, user.PreferredLanguage, address, baseUri);
+                    notification, title, user.PreferredLanguage, address,
+                    $"{baseUri.TrimEnd('/')}/{user.PreferredLanguage}");
 
                 DeliveryResult result;
                 try

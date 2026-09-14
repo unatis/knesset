@@ -20,7 +20,7 @@ else
 {
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/initiatives">@L["Nav_Initiatives"]</a></li>
+            <li class="breadcrumb-item"><a href="initiatives">@L["Nav_Initiatives"]</a></li>
             <li class="breadcrumb-item active">№@_initiative.Id</li>
         </ol>
     </nav>
@@ -45,7 +45,7 @@ else
     <h2>@_initiative.Title</h2>
     @if (_initiative.Status != InitiativeStatus.Draft)
     {
-        <ShareMenu Path="@($"/initiatives/{_initiative.Id}")"
+        <ShareMenu Path="@($"initiatives/{_initiative.Id}")"
                    Title="@_initiative.Title"
                    Text="@string.Format(L["Share_InitText"], _initiative.Title)" />
     }

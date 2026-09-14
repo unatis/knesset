@@ -6,7 +6,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-2">
     <h1>@L["Init_Title"]</h1>
-    <a href="/initiatives/new" class="btn btn-primary">@L["Init_Create"]</a>
+    <a href="initiatives/new" class="btn btn-primary">@L["Init_Create"]</a>
 </div>
 
 <div class="alert alert-light border">
@@ -27,7 +27,7 @@ else
         @foreach (var item in _initiatives)
         {
             var percent = Math.Min(100, item.SignatureCount * 100 / Math.Max(1, item.Threshold));
-            <a href="/initiatives/@item.Id" class="list-group-item list-group-item-action">
+            <a href="initiatives/@item.Id" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
                     <h6 class="mb-1">@item.Title</h6>
                     @if (item.Status == InitiativeStatus.ThresholdReached)

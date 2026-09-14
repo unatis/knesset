@@ -31,10 +31,10 @@
                вкладки уже на новом языке, а тело страницы — на прежнем.
                Смена языка должна пересоздавать цепь, то есть перезагружать страницу. *@
             <div class="lang-switch" data-enhance-nav="false">
-                <a href="/set-culture?culture=he&redirectUri=/@CurrentPath">עב</a>
-                <a href="/set-culture?culture=ar&redirectUri=/@CurrentPath">ع</a>
-                <a href="/set-culture?culture=ru&redirectUri=/@CurrentPath">РУ</a>
-                <a href="/set-culture?culture=en&redirectUri=/@CurrentPath">EN</a>
+                <a href="@SwitchTo("he")">עב</a>
+                <a href="@SwitchTo("ar")">ع</a>
+                <a href="@SwitchTo("ru")">РУ</a>
+                <a href="@SwitchTo("en")">EN</a>
             </div>
 
             <AuthorizeView>
@@ -72,4 +72,13 @@
     [Inject] private NavigationManager Navigation { get; set; } = null!;
 
     private string CurrentPath => Navigation.ToBaseRelativePath(Navigation.Uri);
+
+    /// <summary>
+    /// Тот же путь под другим языком — обычная ссылка в один переход.
+    /// Выбор запоминает сам сервер при показе страницы, промежуточного
+    /// запроса больше нет. Полная загрузка документа при этом остаётся
+    /// (data-enhance-nav="false"): меняется базовый адрес, и цепь должна
+    /// пересоздаться на новом языке.
+    /// </summary>
+    private string SwitchTo(string culture) => $"/{culture}/{CurrentPath}";
 }

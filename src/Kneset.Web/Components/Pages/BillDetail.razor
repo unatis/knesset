@@ -23,7 +23,7 @@ else
 {
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/bills">@L["Nav_Bills"]</a></li>
+            <li class="breadcrumb-item"><a href="bills">@L["Nav_Bills"]</a></li>
             <li class="breadcrumb-item active">№@(_bill.Number?.ToString() ?? _bill.KnessetBillId.ToString())</li>
         </ol>
     </nav>
@@ -49,13 +49,13 @@ else
     }
 
     <div class="d-flex flex-wrap align-items-start gap-3">
-        <ShareMenu Path="@($"/bills/{_bill.Id}")"
+        <ShareMenu Path="@($"bills/{_bill.Id}")"
                    Title="@(_bill.NameRu ?? _bill.Name)"
                    Text="@string.Format(L["Share_BillText"], _bill.NameRu ?? _bill.Name)"
                    @rendermode="InteractiveServer" />
         <div>
             <FollowButton Kind="SubscriptionKind.Bill" TargetId="@_bill.Id"
-                          ReturnUrl="@($"/bills/{_bill.Id}")"
+                          ReturnUrl="@($"bills/{_bill.Id}")"
                           @rendermode="InteractiveServer" />
         </div>
     </div>
@@ -174,7 +174,7 @@ else
                        об этом прямо сказано в подсказке. *@
                     <div class="kt-meta-item">
                         <span title="@L["Bill_AmendsLawHint"]">@L["Bill_AmendsLaw"]</span>
-                        <a href="/laws/@_law.Id" dir="@(_lawTitle is null ? "rtl" : null)"
+                        <a href="laws/@_law.Id" dir="@(_lawTitle is null ? "rtl" : null)"
                            lang="@(_lawTitle is null ? "he" : null)">@(_lawTitle ?? _law.Name)</a>
                     </div>
                 }
@@ -192,7 +192,7 @@ else
                 <div class="kt-law-topics mb-3">
                     @foreach (var t in _topics)
                     {
-                        <a class="kt-law-topic" href="/bills?topic=@t.Id">@t.Name</a>
+                        <a class="kt-law-topic" href="bills?topic=@t.Id">@t.Name</a>
                     }
                 </div>
             }
@@ -243,7 +243,7 @@ else
                                     <div class="kt-doc-text-body" dir="rtl" lang="he">@text.Preview</div>
                                     @if (text.CharCount > text.Preview.Length)
                                     {
-                                        <a href="/bills/@_bill.Id/text/@text.DocumentId" class="kt-doc-text-more">
+                                        <a href="bills/@_bill.Id/text/@text.DocumentId" class="kt-doc-text-more">
                                             @L["Bill_DocTextFull"]
                                         </a>
                                     }
@@ -301,7 +301,7 @@ else
                         .OrderByDescending(i => i.IsInitiator).ThenBy(i => i.Ordinal))
                     {
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <a href="/members/@initiator.PersonId" dir="rtl" lang="he">@initiator.Person.FullName</a>
+                            <a href="members/@initiator.PersonId" dir="rtl" lang="he">@initiator.Person.FullName</a>
                             @if (initiator.IsInitiator)
                             {
                                 <span class="kt-eyebrow" style="color: var(--kt-ember-600)">@L["InitiatorBadge"]</span>

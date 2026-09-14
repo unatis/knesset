@@ -69,7 +69,7 @@
         db.CitizenInitiatives.Add(initiative);
         await db.SaveChangesAsync();
 
-        Navigation.NavigateTo($"/initiatives/{initiative.Id}");
+        Navigation.NavigateTo($"initiatives/{initiative.Id}");
     }
 
     private class FormModel

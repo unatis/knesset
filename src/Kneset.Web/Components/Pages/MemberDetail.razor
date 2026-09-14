@@ -12,7 +12,7 @@ else
 {
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/members">@L["Nav_Members"]</a></li>
+            <li class="breadcrumb-item"><a href="members">@L["Nav_Members"]</a></li>
             <li class="breadcrumb-item active" dir="rtl" lang="he">@_member.FullName</li>
         </ol>
     </nav>
@@ -39,7 +39,7 @@ else
                    её компонентов обработчиков нет. Теперь содержимое
                    отрисовывается один раз, а «доживает» только кнопка. *@
                 <FollowButton Kind="SubscriptionKind.Person" TargetId="@_member.Id"
-                              ReturnUrl="@($"/members/{_member.Id}")"
+                              ReturnUrl="@($"members/{_member.Id}")"
                               @rendermode="InteractiveServer" />
             </div>
         </div>
@@ -89,7 +89,7 @@ else
         <div class="list-group">
             @foreach (var bill in _bills)
             {
-                <a href="/bills/@bill.Id" class="list-group-item list-group-item-action">
+                <a href="bills/@bill.Id" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
                         <span dir="rtl" lang="he">@bill.Name</span>
                         <BillStatusBadge StatusDesc="@bill.StatusDesc" />

@@ -19,7 +19,7 @@ else
 {
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/laws">@L["Laws_Title"]</a></li>
+            <li class="breadcrumb-item"><a href="laws">@L["Laws_Title"]</a></li>
         </ol>
     </nav>
 
@@ -53,7 +53,7 @@ else
         <div class="kt-law-topics mb-3">
             @foreach (var t in _topics)
             {
-                <a class="kt-law-topic" href="/laws?topic=@t.Id">@t.Name</a>
+                <a class="kt-law-topic" href="laws?topic=@t.Id">@t.Name</a>
             }
             <small class="text-muted d-block mt-1">@L["Laws_TopicSource"]</small>
         </div>

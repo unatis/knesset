@@ -53,7 +53,7 @@ else
                         @foreach (var item in group.Collapsed)
                         {
                             <li class="mb-1">
-                                <a href="/bills/@item.BillId" @onclick="() => MarkReadAsync(item.Id)"
+                                <a href="bills/@item.BillId" @onclick="() => MarkReadAsync(item.Id)"
                                    @onclick:preventDefault="false">@_titles.GetValueOrDefault(item.BillId, "")</a>
                             </li>
                         }
@@ -67,7 +67,7 @@ else
                     <li class="list-group-item @(item.ReadAt is null ? "border-start border-3 border-primary" : "")">
                         <div class="d-flex justify-content-between align-items-start gap-2">
                             <div>
-                                <a class="fw-semibold" href="/bills/@item.BillId"
+                                <a class="fw-semibold" href="bills/@item.BillId"
                                    @onclick="() => MarkReadAsync(item.Id)" @onclick:preventDefault="false">
                                     @TextBuilder.BuildSubject(item, _titles.GetValueOrDefault(item.BillId, ""), _lang)
                                 </a>
