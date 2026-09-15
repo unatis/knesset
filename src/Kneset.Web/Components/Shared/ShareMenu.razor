@@ -38,7 +38,11 @@
 </div>
 
 @code {
-    /// <summary>Относительный путь страницы, напр. "/bills/35" (можно с якорем).</summary>
+    /// <summary>
+    /// Путь страницы относительно базового адреса, напр. "bills/35" (можно
+    /// с якорем). Без ведущего слэша: базовый адрес несёт язык («/ru/»),
+    /// и ссылка для соцсети должна его сохранить.
+    /// </summary>
     [Parameter, EditorRequired] public string Path { get; set; } = "";
 
     [Parameter] public string Title { get; set; } = "";

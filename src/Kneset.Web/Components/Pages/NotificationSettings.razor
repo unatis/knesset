@@ -140,7 +140,7 @@ else
                             @foreach (var item in _persons)
                             {
                                 <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <a href="/members/@item.PersonId" dir="rtl" lang="he">@item.Title</a>
+                                    <a href="members/@item.PersonId" dir="rtl" lang="he">@item.Title</a>
                                     <button class="btn btn-sm btn-outline-danger"
                                             @onclick="() => RemoveAsync(item.Id)" disabled="@_busy">
                                         @L["Notif_Remove"]
@@ -165,7 +165,7 @@ else
                             @foreach (var item in _bills)
                             {
                                 <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <a href="/bills/@item.BillId" dir="auto">@item.Title</a>
+                                    <a href="bills/@item.BillId" dir="auto">@item.Title</a>
                                     <button class="btn btn-sm btn-outline-danger"
                                             @onclick="() => RemoveAsync(item.Id)" disabled="@_busy">
                                         @L["Notif_Remove"]

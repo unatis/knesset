@@ -11,6 +11,8 @@ using Kneset.Infrastructure.Knesset;
 using Kneset.Infrastructure.Notifications;
 using Kneset.Web.Components;
 using Kneset.Web.Components.Account;
+using Kneset.Web.Localization;
+using Microsoft.AspNetCore.Localization;
 using Kneset.Web.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.Circuits;
@@ -71,6 +73,12 @@ builder.Services.AddAuthentication(options =>
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
     .AddIdentityCookies();
+
+// Путь cookie по умолчанию сужается до PathBase запроса. С языком в адресе
+// это «/ru» — и под «/he» человек оказался бы разлогинен, а форма
+// отвергала бы токен антиподделки. Путь — корень, язык на вход не влияет.
+builder.Services.ConfigureApplicationCookie(options => options.Cookie.Path = "/");
+builder.Services.AddAntiforgery(options => options.Cookie.Path = "/");
 
 builder.Services.AddIdentityCore<AppUser>(options =>
     {
@@ -285,25 +293,36 @@ Kneset.Web.Validation.ValidationLocalizer.Use(
 
 app.UseForwardedHeaders();
 
-string[] supportedCultures = ["ru", "en", "he", "ar"];
-app.UseRequestLocalization(new RequestLocalizationOptions()
-    .SetDefaultCulture("ru")
-    .AddSupportedCultures(supportedCultures)
-    .AddSupportedUICultures(supportedCultures));
+// Язык в адресе — до локализации: middleware снимает префикс в PathBase
+// и кладёт язык в Items, откуда его первым читает провайдер культуры.
+app.UseMiddleware<CulturePathMiddleware>();
 
-// Переключение языка: кладём культуру в cookie и возвращаемся на ту же страницу.
-app.MapGet("/set-culture", (string culture, string? redirectUri, HttpContext http) =>
-{
-    if (supportedCultures.Contains(culture))
-    {
-        http.Response.Cookies.Append(
-            Microsoft.AspNetCore.Localization.CookieRequestCultureProvider.DefaultCookieName,
-            Microsoft.AspNetCore.Localization.CookieRequestCultureProvider.MakeCookieValue(
-                new Microsoft.AspNetCore.Localization.RequestCulture(culture, culture)),
-            new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1), IsEssential = true });
-    }
-    return Results.LocalRedirect(string.IsNullOrEmpty(redirectUri) ? "/" : redirectUri);
-});
+// Маршрутизацию вызываем явно и здесь, а не полагаемся на автоматическую:
+// WebApplication сам ставит UseRouting в самое начало конвейера, и маршрут
+// выбирался бы по исходному пути «/he/laws/45» — до того, как префикс снят.
+// Явный вызов после middleware сопоставляет уже «/laws/45».
+app.UseRouting();
+
+// С явным UseRouting каркас перестаёт сам вставлять аутентификацию
+// и авторизацию, и защищённая страница падает пятисоткой «authorization
+// metadata, but a middleware was not found». Ставим их там, где они
+// и стояли бы автоматически — сразу за маршрутизацией.
+app.UseAuthentication();
+app.UseAuthorization();
+
+var localization = new RequestLocalizationOptions()
+    .SetDefaultCulture(CulturePath.Default)
+    .AddSupportedCultures(CulturePath.Supported)
+    .AddSupportedUICultures(CulturePath.Supported);
+
+// Адрес авторитетнее cookie и заголовка браузера: они остаются запасными
+// для запросов вне языка (картинки для соцсетей, служебные точки).
+localization.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(context =>
+    Task.FromResult(context.Items.TryGetValue(CulturePath.ItemKey, out var value) && value is string culture
+        ? new ProviderCultureResult(culture)
+        : null)));
+
+app.UseRequestLocalization(localization);
 
 if (!app.Environment.IsDevelopment())
 {

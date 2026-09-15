@@ -114,7 +114,7 @@ else
                         <div class="kt-fmap-level">
                             @foreach (var party in u.Parties)
                             {
-                                <a class="kt-fmap-party" href="/parties/@party.Slug">
+                                <a class="kt-fmap-party" href="parties/@party.Slug">
                                     <span class="kt-eyebrow">@L["Factions_PartyOne"]</span>
                                     <b dir="@(party.IsHebrew ? "rtl" : null)"
                                        lang="@(party.IsHebrew ? "he" : null)">@party.Name</b>
@@ -170,7 +170,7 @@ else
                         {
                             @* Карточка — ссылка на страницу фракции,
                                кубик партии — на страницу партии. *@
-                            <a class="kt-fmap-card" href="/factions/@f.Id">
+                            <a class="kt-fmap-card" href="factions/@f.Id">
                                 <span class="kt-fmap-seats">
                                     <b>@f.Seats</b>
                                     <span>@SeatWord(f.Seats)</span>

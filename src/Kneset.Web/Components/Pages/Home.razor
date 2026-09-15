@@ -412,7 +412,7 @@
             .Take(FeedSize)
             .Select(b => new FeedItem(
                 b.FirstSeenAt, "feed-kind-bill", "Feed_NewBill",
-                b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
+                b.NameRu ?? b.Name, $"bills/{b.Id}", b.NameRu == null,
                 b.Id, b.StatusDesc, null, null, null,
                 b.NameRu == null ? null : b.Name,
                 null, b.Id, null, b.KnessetNum))
@@ -428,7 +428,7 @@
             .Take(FeedSize)
             .Select(b => new FeedItem(
                 b.StatusChangedAt!.Value, "feed-kind-status", "Feed_StatusChanged",
-                b.NameRu ?? b.Name, $"/bills/{b.Id}", b.NameRu == null,
+                b.NameRu ?? b.Name, $"bills/{b.Id}", b.NameRu == null,
                 b.Id, b.StatusDesc, null, null, null,
                 b.NameRu == null ? null : b.Name,
                 null, b.Id, null, b.KnessetNum))
@@ -447,7 +447,7 @@
             .Take(InitiativeSlots)
             .Select(i => new FeedItem(
                 i.PublishedAt!.Value, "feed-kind-initiative", "Feed_NewInitiative",
-                i.Title, $"/initiatives/{i.Id}", false,
+                i.Title, $"initiatives/{i.Id}", false,
                 null, null, null,
                 i.Signatures.Count, i.SignatureThreshold, null, null, null,
                 i.Id))
@@ -464,8 +464,8 @@
             .Select(c => new FeedItem(
                 c.CreatedAt, "feed-kind-comment", "Feed_NewComment",
                 c.Bill != null ? (c.Bill.NameRu ?? c.Bill.Name) : c.Initiative!.Title,
-                c.BillId != null ? $"/bills/{c.BillId}#comment-{c.Id}"
-                                 : $"/initiatives/{c.InitiativeId}#comment-{c.Id}",
+                c.BillId != null ? $"bills/{c.BillId}#comment-{c.Id}"
+                                 : $"initiatives/{c.InitiativeId}#comment-{c.Id}",
                 c.Bill != null && c.Bill.NameRu == null,
                 // BillId намеренно пустой: карточка обсуждения показывает цитату,
                 // а не бейдж окна с баром реакций. Закон события — в SourceBillId.

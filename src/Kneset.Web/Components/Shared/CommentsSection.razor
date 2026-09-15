@@ -112,7 +112,9 @@
 
     private record CommentRow(int Id, string UserId, string? AuthorName, CommentKind Kind, string Text, DateTime CreatedAt);
 
-    private string ReturnUrl => BillId is not null ? $"/bills/{BillId}" : $"/initiatives/{InitiativeId}";
+    // Без ведущего слэша: базовый адрес несёт язык («/ru/»), и возврат после
+    // входа должен на него же и вернуть.
+    private string ReturnUrl => BillId is not null ? $"bills/{BillId}" : $"initiatives/{InitiativeId}";
 
     private List<CommentRow> Filtered =>
         _comments is null ? [] : _filter is null ? _comments : _comments.Where(c => c.Kind == _filter).ToList();
